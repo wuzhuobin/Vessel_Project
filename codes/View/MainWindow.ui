@@ -766,8 +766,13 @@
       <string>Recent Image</string>
      </property>
     </widget>
-    <addaction name="actionOpenImage"/>
+    <addaction name="actionImport_DICOM"/>
     <addaction name="menuRecentImage"/>
+    <addaction name="actionImport_T2"/>
+    <addaction name="actionImport_MRA"/>
+    <addaction name="actionExport_T2"/>
+    <addaction name="actionExport_MRA"/>
+    <addaction name="actionExport_Report"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -775,8 +780,6 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="actionAbout"/>
-    <addaction name="actionInformation"/>
-    <addaction name="actionHelp"/>
    </widget>
    <widget class="QMenu" name="menuInteraction">
     <property name="title">
@@ -785,7 +788,7 @@
     <addaction name="actionNavigation"/>
     <addaction name="actionWindowLevel"/>
     <addaction name="actionRuler"/>
-    <addaction name="actionROI"/>
+    <addaction name="actionSelect_VOI"/>
     <addaction name="actionSeedsPlacer"/>
     <addaction name="actionContour"/>
     <addaction name="actionBrush"/>
@@ -824,11 +827,34 @@
     <addaction name="actionOpenContour"/>
     <addaction name="actionCenterlineAlgorithm"/>
    </widget>
+   <widget class="QMenu" name="menuImage">
+    <property name="title">
+     <string>Image</string>
+    </property>
+    <addaction name="actionNavigation"/>
+    <addaction name="actionSelect_VOI"/>
+   </widget>
+   <widget class="QMenu" name="menuDiagnosis">
+    <property name="title">
+     <string>Diagnosis</string>
+    </property>
+    <widget class="QMenu" name="menuVBD_diagnosis">
+     <property name="title">
+      <string>VBD diagnosis</string>
+     </property>
+     <addaction name="actionSmoker_standard"/>
+     <addaction name="actionUbogo_standard"/>
+    </widget>
+    <addaction name="actionICDA_diagnosis"/>
+    <addaction name="menuVBD_diagnosis"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuImage"/>
+   <addaction name="menuDiagnosis"/>
+   <addaction name="menuHelp"/>
    <addaction name="menuView"/>
    <addaction name="menuInteraction"/>
    <addaction name="menuSegmentation"/>
-   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="ActionToolBar">
@@ -854,7 +880,7 @@
    <addaction name="actionWindowLevel"/>
    <addaction name="actionRuler"/>
    <addaction name="separator"/>
-   <addaction name="actionROI"/>
+   <addaction name="actionSelect_VOI"/>
    <addaction name="actionSeedsPlacer"/>
    <addaction name="actionContour"/>
    <addaction name="actionBrush"/>
@@ -1199,7 +1225,7 @@
     <string>Remove</string>
    </property>
   </action>
-  <action name="actionROI">
+  <action name="actionSelect_VOI">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1208,7 +1234,10 @@
      <normaloff>:/icons/roi.png</normaloff>:/icons/roi.png</iconset>
    </property>
    <property name="text">
-    <string>Select ROI</string>
+    <string>Select VOI</string>
+   </property>
+   <property name="toolTip">
+    <string>Select VOI</string>
    </property>
   </action>
   <action name="actionStatistics">
@@ -1273,6 +1302,51 @@
   <action name="actionSaveContour">
    <property name="text">
     <string>Save Contour</string>
+   </property>
+  </action>
+  <action name="actionImport_DICOM">
+   <property name="text">
+    <string>Import DICOM</string>
+   </property>
+  </action>
+  <action name="actionImport_T2">
+   <property name="text">
+    <string>Import T2</string>
+   </property>
+  </action>
+  <action name="actionImport_MRA">
+   <property name="text">
+    <string>Import MRA</string>
+   </property>
+  </action>
+  <action name="actionExport_T2">
+   <property name="text">
+    <string>Export T2</string>
+   </property>
+  </action>
+  <action name="actionExport_MRA">
+   <property name="text">
+    <string>Export MRA</string>
+   </property>
+  </action>
+  <action name="actionExport_Report">
+   <property name="text">
+    <string>Export Report</string>
+   </property>
+  </action>
+  <action name="actionICDA_diagnosis">
+   <property name="text">
+    <string>ICDA diagnosis</string>
+   </property>
+  </action>
+  <action name="actionSmoker_standard">
+   <property name="text">
+    <string>Smoker standard</string>
+   </property>
+  </action>
+  <action name="actionUbogo_standard">
+   <property name="text">
+    <string>Ubogo standard</string>
    </property>
   </action>
  </widget>
