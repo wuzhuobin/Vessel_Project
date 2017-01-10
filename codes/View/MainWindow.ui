@@ -23,11 +23,7 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>PlaqueQuant</string>
-  </property>
-  <property name="windowIcon">
-   <iconset resource="../../resources/MainWindow.qrc">
-    <normaloff>:/icons/plaqueQuant.png</normaloff>:/icons/plaqueQuant.png</iconset>
+   <string/>
   </property>
   <property name="dockOptions">
    <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks|QMainWindow::VerticalTabs</set>
@@ -108,7 +104,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
+              <iconset resource="../../resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/expandwin.png</normaloff>:/icons/expandwin.png</iconset>
              </property>
              <property name="iconSize">
@@ -137,7 +133,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
+              <iconset resource="../../resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
              </property>
              <property name="iconSize">
@@ -173,7 +169,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
+              <iconset resource="../../resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/downarrow.png</normaloff>:/icons/downarrow.png</iconset>
              </property>
              <property name="iconSize">
@@ -252,7 +248,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
+              <iconset resource="../../resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/expandwin.png</normaloff>:/icons/expandwin.png</iconset>
              </property>
              <property name="iconSize">
@@ -281,7 +277,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
+              <iconset resource="../../resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
              </property>
              <property name="iconSize">
@@ -498,7 +494,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
+              <iconset resource="../../resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/expandwin.png</normaloff>:/icons/expandwin.png</iconset>
              </property>
              <property name="iconSize">
@@ -545,7 +541,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
+              <iconset resource="../../resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
              </property>
              <property name="iconSize">
@@ -584,7 +580,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
+              <iconset resource="../../resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/downarrow.png</normaloff>:/icons/downarrow.png</iconset>
              </property>
              <property name="iconSize">
@@ -663,7 +659,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
+              <iconset resource="../../resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/expandwin.png</normaloff>:/icons/expandwin.png</iconset>
              </property>
              <property name="iconSize">
@@ -692,7 +688,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
+              <iconset resource="../../resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
              </property>
              <property name="iconSize">
@@ -728,7 +724,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
+              <iconset resource="../../resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/downarrow.png</normaloff>:/icons/downarrow.png</iconset>
              </property>
              <property name="iconSize">
@@ -786,9 +782,9 @@
      <string>Interaction</string>
     </property>
     <addaction name="actionNavigation"/>
-    <addaction name="actionWindowLevel"/>
-    <addaction name="actionRuler"/>
-    <addaction name="actionSelect_VOI"/>
+    <addaction name="actionWindow_level"/>
+    <addaction name="actionDistance_measure"/>
+    <addaction name="acitonVOI_selection"/>
     <addaction name="actionSeedsPlacer"/>
     <addaction name="actionContour"/>
     <addaction name="actionBrush"/>
@@ -832,21 +828,16 @@
      <string>Image</string>
     </property>
     <addaction name="actionNavigation"/>
-    <addaction name="actionSelect_VOI"/>
+    <addaction name="actionWindow_level"/>
+    <addaction name="actionDistance_measure"/>
+    <addaction name="acitonVOI_selection"/>
    </widget>
    <widget class="QMenu" name="menuDiagnosis">
     <property name="title">
      <string>Diagnosis</string>
     </property>
-    <widget class="QMenu" name="menuVBD_diagnosis">
-     <property name="title">
-      <string>VBD diagnosis</string>
-     </property>
-     <addaction name="actionSmoker_standard"/>
-     <addaction name="actionUbogo_standard"/>
-    </widget>
     <addaction name="actionICDA_diagnosis"/>
-    <addaction name="menuVBD_diagnosis"/>
+    <addaction name="actionVBD_diagnosis"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuImage"/>
@@ -877,10 +868,10 @@
    <addaction name="actionSaveSegmentation"/>
    <addaction name="separator"/>
    <addaction name="actionNavigation"/>
-   <addaction name="actionWindowLevel"/>
-   <addaction name="actionRuler"/>
+   <addaction name="actionWindow_level"/>
+   <addaction name="actionDistance_measure"/>
    <addaction name="separator"/>
-   <addaction name="actionSelect_VOI"/>
+   <addaction name="acitonVOI_selection"/>
    <addaction name="actionSeedsPlacer"/>
    <addaction name="actionContour"/>
    <addaction name="actionBrush"/>
@@ -954,7 +945,7 @@
   </widget>
   <action name="actionOpenImage">
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/OpenImage.png</normaloff>:/icons/OpenImage.png</iconset>
    </property>
    <property name="text">
@@ -971,7 +962,7 @@
   </action>
   <action name="actionSaveSegmentation">
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Save.png</normaloff>:/icons/Save.png</iconset>
    </property>
    <property name="text">
@@ -991,19 +982,22 @@
     <string>Help</string>
    </property>
   </action>
-  <action name="actionRuler">
+  <action name="actionDistance_measure">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Ruler.png</normaloff>:/icons/Ruler.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Ruler</string>
+    <string>Distance measure</string>
+   </property>
+   <property name="toolTip">
+    <string>Distance measure</string>
    </property>
   </action>
-  <action name="actionWindowLevel">
+  <action name="actionWindow_level">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1011,11 +1005,14 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/WindowLevel.png</normaloff>:/icons/WindowLevel.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;WindowLevel</string>
+    <string>Window level</string>
+   </property>
+   <property name="toolTip">
+    <string>Window level</string>
    </property>
   </action>
   <action name="actionNavigation">
@@ -1026,7 +1023,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Navigation.png</normaloff>:/icons/Navigation.png</iconset>
    </property>
    <property name="text">
@@ -1041,7 +1038,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
    </property>
    <property name="text">
@@ -1089,7 +1086,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/contour.png</normaloff>:/icons/contour.png</iconset>
    </property>
    <property name="text">
@@ -1122,7 +1119,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/UpperLeftView.png</normaloff>:/icons/UpperLeftView.png</iconset>
    </property>
    <property name="text">
@@ -1140,7 +1137,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/UpperRightView.png</normaloff>:/icons/UpperRightView.png</iconset>
    </property>
    <property name="text">
@@ -1152,7 +1149,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/LowerLeftView.png</normaloff>:/icons/LowerLeftView.png</iconset>
    </property>
    <property name="text">
@@ -1164,7 +1161,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/LowerRightView.png</normaloff>:/icons/LowerRightView.png</iconset>
    </property>
    <property name="text">
@@ -1176,7 +1173,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/dl_sagittal.png</normaloff>:/icons/dl_sagittal.png</iconset>
    </property>
    <property name="text">
@@ -1197,7 +1194,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/dl_coronal.png</normaloff>:/icons/dl_coronal.png</iconset>
    </property>
    <property name="text">
@@ -1209,7 +1206,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/dl_axial copy.png</normaloff>:/icons/dl_axial copy.png</iconset>
    </property>
    <property name="text">
@@ -1218,26 +1215,26 @@
   </action>
   <action name="actionRemoveContour">
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/magicdrawdelete.png</normaloff>:/icons/magicdrawdelete.png</iconset>
    </property>
    <property name="text">
     <string>Remove</string>
    </property>
   </action>
-  <action name="actionSelect_VOI">
+  <action name="acitonVOI_selection">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/roi.png</normaloff>:/icons/roi.png</iconset>
    </property>
    <property name="text">
-    <string>Select VOI</string>
+    <string>VOI selection</string>
    </property>
    <property name="toolTip">
-    <string>Select VOI</string>
+    <string>VOI selection</string>
    </property>
   </action>
   <action name="actionStatistics">
@@ -1250,7 +1247,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Draw.png</normaloff>:/icons/Draw.png</iconset>
    </property>
    <property name="text">
@@ -1262,7 +1259,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/LayoutMultiPlanar.png</normaloff>:/icons/LayoutMultiPlanar.png</iconset>
    </property>
    <property name="text">
@@ -1284,7 +1281,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../../resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/1476453573_Wand.ico</normaloff>:/icons/1476453573_Wand.ico</iconset>
    </property>
    <property name="text">
@@ -1349,6 +1346,11 @@
     <string>Ubogo standard</string>
    </property>
   </action>
+  <action name="actionVBD_diagnosis">
+   <property name="text">
+    <string>VBD diagnosis</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1358,7 +1360,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../resources/MainWindow.qrc"/>
+  <include location="../../resources/IADE_Analyzer.qrc"/>
  </resources>
  <connections/>
 </ui>

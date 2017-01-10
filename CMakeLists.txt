@@ -72,16 +72,18 @@ set(
 	MAIN_INCLUDE_DIRECTORIES
 	### Directories for MOC Sources ###
 	${CMAKE_BINARY_DIR}
+	${CMAKE_BINARY_DIR}/codes/Main
+	${CMAKE_BINARY_DIR}/codes/Core
 	${CMAKE_BINARY_DIR}/codes/View
-	${PROJECT_BINARY_DIR}/codes/Controller
-	${PROJECT_BINARY_DIR}/codes/Main
-	${PROJECT_BINARY_DIR}/codes/Model
+	${CMAKE_BINARY_DIR}/codes/Controller
+	${CMAKE_BINARY_DIR}/codes/Model
 
 	### Directories for headers ###
 	${CMAKE_SOURCE_DIR}
+	${CMAKE_SOURCE_DIR}/codes/Main
+	${CMAKE_SOURCE_DIR}/codes/Core
 	${CMAKE_SOURCE_DIR}/codes/View
 	${CMAKE_SOURCE_DIR}/codes/Controller
-	${CMAKE_SOURCE_DIR}/codes/Main
 	${CMAKE_SOURCE_DIR}/codes/Model
 	)
 
@@ -94,6 +96,7 @@ set(
 	Qt5::Widgets 
 	# Qt5::PrintSupport
 	View
+	Core
 	# Controller
 	# Model
 )
@@ -108,6 +111,7 @@ include_directories(
 
 add_subdirectory(codes/Main)
 add_subdirectory(codes/View)
+add_subdirectory(codes/Core)
 # add_subdirectory(codes/Contorller)
 # add_subdirectory(codes/Model)
 

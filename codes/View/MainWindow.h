@@ -1,5 +1,5 @@
 /**
-* API class for using the Vikey USB authentication
+* MainWindow of 
 * API class for using the Vikey USB authentication system. The class is derived from
 * QWidget. And this API class can only be used under Windows OS.
 *
@@ -27,7 +27,7 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	MainWindow(QWidget *parent = 0);
+	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
 private:
