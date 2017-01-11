@@ -97,8 +97,8 @@ set(
 	# Qt5::PrintSupport
 	View
 	Core
-	# Controller
-	# Model
+	Controller
+	Model
 )
 
 include_directories(
@@ -112,8 +112,8 @@ include_directories(
 add_subdirectory(codes/Main)
 add_subdirectory(codes/View)
 add_subdirectory(codes/Core)
-# add_subdirectory(codes/Contorller)
-# add_subdirectory(codes/Model)
+add_subdirectory(codes/Controller)
+add_subdirectory(codes/Model)
 
 
 
