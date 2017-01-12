@@ -48,7 +48,7 @@ class DirectoryPage : public QWizardPage
 
 public:
     DirectoryPage(QString dir = QString(), QWidget *parent = nullptr);
-	DirectoryPage(QWidget *parent = nullptr);
+	DirectoryPage(QWidget *parent);
 
     int nextId() const;
 	void setDirectory(QString dir);
@@ -69,7 +69,7 @@ class ImagePage : public QWizardPage
 
 public:
 	ImagePage(int numOfImages = 2, QWidget *parent = 0);
-	ImagePage(QWidget *parent = 0);
+	ImagePage(QWidget *parent);
 
 	void setImageModalityNames(QStringList imageModalityNames);
 
@@ -83,6 +83,13 @@ public:
 public slots:
 	void onUpdateTree(QTreeWidgetItem*,QStringList*);
 	void onUpdateProgressBar(int);
+	
+	void setImages();
+
+	void removeImages();
+
+
+
 	void setImage1();
 	void setImage2();
 	void setImage3();
@@ -202,8 +209,10 @@ public:
 		int numOfImages = 2,
 		QWidget *parent = nullptr);
 	RegistrationWizard(
-		QString dir = QString(),
+		int numOfImages,
 		QWidget *parent = nullptr);
+	RegistrationWizard(
+		QWidget *parent);
 	/**
 	 * Destructor. 
 	 */

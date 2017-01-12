@@ -64,8 +64,13 @@ RegistrationWizard::RegistrationWizard(
 	directoryPage->setDirectory(dir);
 }
 
-RegistrationWizard::RegistrationWizard(QString dir, QWidget * parent)
-	:RegistrationWizard(dir, 2, parent)
+RegistrationWizard::RegistrationWizard(int numOfImages, QWidget * parent)
+	:RegistrationWizard(QString(), numOfImages, parent)
+{
+}
+
+RegistrationWizard::RegistrationWizard(QWidget * parent)
+	: RegistrationWizard(2, parent)
 {
 }
 
@@ -272,20 +277,20 @@ ImagePage::ImagePage(int numOfImages, QWidget *parent)
 
 	// initialization 
 	for (int i = 0; i < numOfImages; ++i) {
-		m_imageLineEdits[i] = new QLineEdit(this);
+		m_imageLineEdits << new QLineEdit(this);
 		m_imageLineEdits[i]->setReadOnly(true);
 
-		m_imageLabels[i] = new QLabel(this);
+		m_imageLabels << new QLabel(this);
 		m_imageLabels[i]->setBuddy(m_imageLineEdits[i]);
 		
 
-		m_imageSetBtns[i] = new QPushButton("<<", this);
+		m_imageSetBtns <<new QPushButton("<<", this);
 		m_imageSetBtns[i]->setFixedSize(30, 30);
 
-		m_imageRemoveBtns[i] = new QPushButton("X", this);
+		m_imageRemoveBtns << new QPushButton("X", this);
 		m_imageRemoveBtns[i]->setFixedSize(30, 30);
 
-		m_imageSpinBoxs[i] = new QSpinBox(this);
+		m_imageSpinBoxs << new QSpinBox(this);
 
 		QHBoxLayout* hBoxLayout = new QHBoxLayout(this);
 		hBoxLayout->addWidget(m_imageLabels[i]);
@@ -626,6 +631,25 @@ void ImagePage::onUpdateTree(QTreeWidgetItem* item,QStringList* list)
 void ImagePage::onUpdateProgressBar(int value)
 {	
 	progressBar->setValue(value);
+}
+
+void ImagePage::setImages()
+{
+	QPushButton* setButton = dynamic_cast<QPushButton*>(sender());
+	if (setButton == nullptr) 
+		return;
+
+	int index = m_imageSetBtns.indexOf(setButton);
+	if (index < 0)
+		return;
+
+
+
+
+}
+
+void ImagePage::removeImages()
+{
 }
 
 ConclusionPage::ConclusionPage(QWidget *parent)
