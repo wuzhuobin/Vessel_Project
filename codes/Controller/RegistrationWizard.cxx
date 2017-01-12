@@ -38,6 +38,9 @@ RegistrationWizard::RegistrationWizard(
 	QString dir, int numOfImages, QWidget *parent)
 	: m_numOfImages(numOfImages), QWizard(parent)
 {
+	for (int i = 0; i < m_numOfImages; ++i) {
+		m_imageModalityNames << QString();
+	}
 	directoryPage	= new DirectoryPage;
 	imagePage		= new ImagePage;
 	conclusionPage	= new ConclusionPage;
@@ -69,11 +72,15 @@ RegistrationWizard::RegistrationWizard(QString dir, QWidget * parent)
 RegistrationWizard::~RegistrationWizard()
 {
 	// clear the m_fileNamesList
-	while (!m_fileNamesList.isEmpty())
-	{
-		delete m_fileNamesList.back();
-		m_fileNamesList.pop_back();
+	m_fileNamesList.clear();
+}
+
+void RegistrationWizard::setImageModalityNames(unsigned int i, QString imageModalityName)
+{
+	if (i<0 || i>m_imageModalityNames.size()) {
+		return;
 	}
+	m_imageModalityNames[i] = imageModalityName;
 }
 
 void RegistrationWizard::showHelp()
@@ -171,17 +178,13 @@ int RegistrationWizard::getTotalFileNo()
 	return num;
 }
 
-void RegistrationWizard::setImageNumber(int num)
-{
-
-}
 
 QStringList* RegistrationWizard::getFileNames(unsigned int i)
 {
 	if (i<0 || i>m_fileNamesList.size())
 		return nullptr;
 	else
-		return m_fileNamesList[i];
+		return m_fileNamesList[i].data();
 }
 
 const QString RegistrationWizard::getDirectory()
@@ -210,17 +213,17 @@ DirectoryPage::DirectoryPage(QString dir, QWidget *parent)
 {
 	setTitle(tr("Set Image Directory"));
 
-	m_imageDirectoryLineEdit = new QLineEdit;
+	m_imageDirectoryLineEdit = new QLineEdit(this);
 	m_imageDirectoryLineEdit->setText(dir);
 	registerField("directory.path*", m_imageDirectoryLineEdit);
 
-	m_imageDirectoryLabel = new QLabel(tr("&Image Directory:"));
+	m_imageDirectoryLabel = new QLabel(tr("&Image Directory:"), this);
 	m_imageDirectoryLabel->setBuddy(m_imageDirectoryLineEdit);
 
-	browseBtn = new QPushButton("Browse");
+	browseBtn = new QPushButton("Browse", this);
 
 
-	QHBoxLayout* layout = new QHBoxLayout;
+	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->addWidget(m_imageDirectoryLabel);
 	layout->addWidget(m_imageDirectoryLineEdit);
 	layout->addWidget(browseBtn);
@@ -264,23 +267,39 @@ ImagePage::ImagePage(int numOfImages, QWidget *parent)
 	: QWizardPage(parent)
 {
 	setTitle(tr("Select image series"));
+	QVBoxLayout* vBoxLayout = new QVBoxLayout(this);
 
-	m_imageLabels = new QLabel[numOfImages];
-	m_imageLineEdits = new QLineEdit[numOfImages];
-	m_imageSetBtns = new QPushButton[numOfImages];
-	m_imageRemoveBtns = new QPushButton[numOfImages];
-	m_imageSpinBoxs = new QSpinBox[numOfImages];
+
 	// initialization 
 	for (int i = 0; i < numOfImages; ++i) {
-		m_imageLabels[i] = new QLabel();
-		m_imageLineEdits = new QLineEdit();
-		m_
+		m_imageLineEdits[i] = new QLineEdit(this);
+		m_imageLineEdits[i]->setReadOnly(true);
+
+		m_imageLabels[i] = new QLabel(this);
+		m_imageLabels[i]->setBuddy(m_imageLineEdits[i]);
+		
+
+		m_imageSetBtns[i] = new QPushButton("<<", this);
+		m_imageSetBtns[i]->setFixedSize(30, 30);
+
+		m_imageRemoveBtns[i] = new QPushButton("X", this);
+		m_imageRemoveBtns[i]->setFixedSize(30, 30);
+
+		m_imageSpinBoxs[i] = new QSpinBox(this);
+
+		QHBoxLayout* hBoxLayout = new QHBoxLayout(this);
+		hBoxLayout->addWidget(m_imageLabels[i]);
+		hBoxLayout->addWidget(m_imageLineEdits[i]);
+		hBoxLayout->addWidget(m_imageSetBtns[i]);
+		hBoxLayout->addWidget(m_imageRemoveBtns[i]);
+		hBoxLayout->addWidget(m_imageSpinBoxs[i]);
+
 	}
 
 	//Image 1
-	image1Label = new QLabel(tr("CUBE T1:"));
-	image1LineEdit = new QLineEdit;
-	image1SetBtn = new QPushButton(tr("<<"));
+	image1Label = new QLabel(tr("CUBE T1:"), this);
+	image1LineEdit = new QLineEdit(this);
+	image1SetBtn = new QPushButton(tr("<<"), this);
 	image1RemoveBtn = new QPushButton(tr("X"));
 	image1SpinBox = new QSpinBox;
 	image1Label->setBuddy(image1LineEdit);
@@ -438,13 +457,15 @@ ImagePage::ImagePage(QWidget *parent)
     
 }
 
+void ImagePage::setImageModalityNames(QStringList imageModalityNames)
+{
+	for (int i = 0; i < m_imageLabels.size() || i < imageModalityNames.size(); ++i) {
+		m_imageLabels[i]->setText(imageModalityNames[i]);
+	}
+}
+
 ImagePage::~ImagePage()
 {
-	delete[] m_imageLabels;
-	delete[] m_imageLineEdits;
-	delete[] imageSetBtns;
-	delete[] imageRemoveBtns;
-	delete[] imageSpinBoxs;
 }
 
 void ImagePage::setImage1()

@@ -77,6 +77,7 @@ set(
 	${CMAKE_BINARY_DIR}/codes/View
 	${CMAKE_BINARY_DIR}/codes/Controller
 	${CMAKE_BINARY_DIR}/codes/Model
+	${CMAKE_BINARY_DIR}/codes/RegistrationWizard
 
 	### Directories for headers ###
 	${CMAKE_SOURCE_DIR}
@@ -85,6 +86,7 @@ set(
 	${CMAKE_SOURCE_DIR}/codes/View
 	${CMAKE_SOURCE_DIR}/codes/Controller
 	${CMAKE_SOURCE_DIR}/codes/Model
+	${CMAKE_SOURCE_DIR}/code/RegistrationWizard
 	)
 
 set(
@@ -99,6 +101,7 @@ set(
 	Core
 	Controller
 	Model
+	RegistrationWizard
 )
 
 include_directories(
@@ -114,6 +117,7 @@ add_subdirectory(codes/View)
 add_subdirectory(codes/Core)
 add_subdirectory(codes/Controller)
 add_subdirectory(codes/Model)
+add_subdirectory(codes/RegistrationWizard)
 
 
 

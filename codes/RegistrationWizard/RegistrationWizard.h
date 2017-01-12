@@ -3,6 +3,7 @@
 
 #include <QWizard>
 #include <QThread>
+#include <qlist.h>
 
 #include <qsharedpointer.h>
 
@@ -16,9 +17,10 @@ class QTableWidget;
 class QThread;
 class QTreeWidgetItem;
 class QTabWidget;
-class QSpinBox;
+//class QSpinBox;
 class QGroupBox;
 class QRadioButton;
+class ImagePage;
 
 class FindImageThread : public QThread
 {
@@ -29,16 +31,22 @@ public:
 	void run();
 	void setDirectory(QString dir);
 
+	void setImagePage(ImagePage* imagePage);
+	void updateTreeWidget(QStringList* imagePath, QString format);
+
+
+signals:
+	void updateProgressBar(int);
+
 public slots:
 	void forceStop();
 
-signals:
-	void updateTree(QTreeWidgetItem*, QStringList* );
-	void updateProgressBar(int);
-
 private:
+
+	ImagePage* m_imagePage;
 	QString m_dir;
 	bool m_stop;
+
 
 };
 
@@ -48,7 +56,7 @@ class DirectoryPage : public QWizardPage
 
 public:
     DirectoryPage(QString dir = QString(), QWidget *parent = nullptr);
-	DirectoryPage(QWidget *parent = nullptr);
+	DirectoryPage(QWidget *parent);
 
     int nextId() const;
 	void setDirectory(QString dir);
@@ -68,12 +76,13 @@ class ImagePage : public QWizardPage
     Q_OBJECT
 
 public:
-	ImagePage(int numOfImages = 2, QWidget *parent = 0);
-	ImagePage(QWidget *parent = 0);
+	ImagePage(int numOfImages = 2, QWidget* parent = nullptr);
+	ImagePage(QWidget *parent);
 
-	void setImageModalityNames(QStringList imageModalityNames);
+	QList<QSharedPointer<QStringList>>* m_imagePaths;
+	QList<int>* m_selectedImages;
 
-	~ImagePage();
+	void setImageModalityNames(unsigned int i, QString imageModalityName);
 
     int nextId() const;
 
@@ -81,18 +90,11 @@ public:
 	virtual bool validatePage();
 
 public slots:
-	void onUpdateTree(QTreeWidgetItem*,QStringList*);
 	void onUpdateProgressBar(int);
-	void setImage1();
-	void setImage2();
-	void setImage3();
-    void setImage4();
-	void setImage5();
-	void removeImage1();
-	void removeImage2();
-	void removeImage3();
-    void removeImage4();
-	void removeImage5();
+	
+	void setImages();
+
+	void removeImages();
 
 private:
 	QProgressBar *progressBar;
@@ -102,40 +104,11 @@ private:
 	QList<QLineEdit*> m_imageLineEdits;
 	QList<QPushButton*> m_imageSetBtns;
 	QList<QPushButton*> m_imageRemoveBtns;
-	QList<QSpinBox*> m_imageSpinBoxs;
+	//QList<QSpinBox*> m_imageSpinBoxs;
 
-
-	QLabel		 *image1Label;
-	QLineEdit	 *image1LineEdit;
-	QPushButton  *image1SetBtn;
-	QPushButton	 *image1RemoveBtn;
-	QSpinBox	 *image1SpinBox;
-
-	QLabel		 *image2Label;
-	QLineEdit	 *image2LineEdit;
-	QPushButton  *image2SetBtn;
-	QPushButton	 *image2RemoveBtn;
-	QSpinBox	 *image2SpinBox;
-
-	QLabel		 *image3Label;
-	QLineEdit	 *image3LineEdit;
-	QPushButton  *image3SetBtn;
-	QPushButton	 *image3RemoveBtn;
-	QSpinBox	 *image3SpinBox;
-    
-    QLabel		 *image4Label;
-    QLineEdit	 *image4LineEdit;
-    QPushButton  *image4SetBtn;
-    QPushButton	 *image4RemoveBtn;
-    QSpinBox	 *image4SpinBox;
-	
-	QLabel		 *image5Label;
-    QLineEdit	 *image5LineEdit;
-    QPushButton  *image5SetBtn;
-    QPushButton	 *image5RemoveBtn;
-    QSpinBox	 *image5SpinBox;
 
 	QString lastDirectory;
+	friend FindImageThread;
 	FindImageThread* thread;
 };
 
@@ -145,30 +118,23 @@ class ConclusionPage : public QWizardPage
     Q_OBJECT
 
 public:
-    ConclusionPage(QWidget *parent = 0);
+    ConclusionPage(int numOfImages = 2, QWidget* parent = nullptr);
+	ConclusionPage(QWidget* parent);
+
+	//QList<QSharedPointer<QMap<QString, QString>>>* m_DICOMHeaders;
+	QList<QSharedPointer<QStringList>>* m_imagePaths;
+	QList<int>* m_selectedImages;
+
+
 
     void initializePage();
     int nextId() const;
-    void setVisible(bool visible);
 
-	void setTable1();
-	void setTable2();
-	void setTable3();
-    void setTable4();
-	void setTable5();
 private:
-    QLabel       *groupBoxLabel;
     QLabel		 *bottomLabel;
-    QGroupBox    *groupBox;
-    QRadioButton *sagittalButton;
-    QRadioButton *coronalButton;
-    QRadioButton *axialButton;
 	QTabWidget	 *tabWidget;
-	QTableWidget *table1Widget;
-	QTableWidget *table2Widget;
-	QTableWidget *table3Widget;
-    QTableWidget *table4Widget;
-	QTableWidget *table5Widget;
+
+	QList<QTableWidget*> m_tableWidgets;
 };
 
 
@@ -202,8 +168,10 @@ public:
 		int numOfImages = 2,
 		QWidget *parent = nullptr);
 	RegistrationWizard(
-		QString dir = QString(),
+		int numOfImages,
 		QWidget *parent = nullptr);
+	RegistrationWizard(
+		QWidget *parent);
 	/**
 	 * Destructor. 
 	 */
@@ -218,15 +186,6 @@ public:
 	 * @return	number of images, #m_numberOfImages. 
 	 */
 	int getNumberOfImages();
-
-
-	QList<QStringList*> *fileNameList;
-	QStringList* getFileNamesN(int n);
-	QStringList* getFileNames1();
-	QStringList* getFileNames2();
-	QStringList* getFileNames3();
-    QStringList* getFileNames4();
-	QStringList* getFileNames5();
 	int getTotalFileNo();
     
 private slots:
@@ -236,13 +195,14 @@ private:
 
 
 	int m_numOfImages;
-	QStringList m_imageModalityNames;
 
 	DirectoryPage	*directoryPage;
 	ImagePage		*imagePage;
 	ConclusionPage	*conclusionPage;
 
 	QList<QSharedPointer<QStringList>> m_fileNamesList;
+	QList<QSharedPointer<QStringList>> m_imagePaths;
+	QList<int> m_selectedImages;
 
 };
 
