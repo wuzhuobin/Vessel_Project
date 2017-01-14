@@ -104,7 +104,6 @@ private:
 	QList<QLineEdit*> m_imageLineEdits;
 	QList<QPushButton*> m_imageSetBtns;
 	QList<QPushButton*> m_imageRemoveBtns;
-	//QList<QSpinBox*> m_imageSpinBoxs;
 
 
 	QString lastDirectory;
@@ -200,7 +199,6 @@ private:
 	ImagePage		*imagePage;
 	ConclusionPage	*conclusionPage;
 
-	QList<QSharedPointer<QStringList>> m_fileNamesList;
 	QList<QSharedPointer<QStringList>> m_imagePaths;
 	QList<int> m_selectedImages;
 

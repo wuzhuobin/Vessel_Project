@@ -75,7 +75,7 @@ RegistrationWizard::RegistrationWizard(QWidget * parent)
 RegistrationWizard::~RegistrationWizard()
 {
 	// clear the m_fileNamesList
-	m_fileNamesList.clear();
+	//m_fileNamesList.clear();
 }
 
 void RegistrationWizard::setImageModalityNames(unsigned int i, QString imageModalityName)
@@ -107,10 +107,12 @@ void RegistrationWizard::showHelp()
 
 QStringList* RegistrationWizard::getFileNames(unsigned int i)
 {
-	if (i<0 || i >= m_fileNamesList.size())
+	if (i < 0 || i >= m_numOfImages)
+		return nullptr;
+	else if (m_selectedImages[i] == -1)
 		return nullptr;
 	else
-		return m_fileNamesList[i].data();
+		return m_imagePaths[m_selectedImages[i]].data();
 }
 
 const QString RegistrationWizard::getDirectory()
