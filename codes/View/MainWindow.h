@@ -20,7 +20,10 @@
 
 #include <QtWidgets/QMainWindow>
 
+
+
 namespace Ui { class MainWindow; }
+//class RegistrationWizard;
 
 class MainWindow : public QMainWindow
 {
@@ -30,8 +33,41 @@ public:
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
+
+signals:
+	void signalImageImportInitialize();
+	void signalImageImportAdd(QStringList*);
+	void signalImageImportLoad();
+
+
+private slots:
+	
+	void slotOpenRecentImage();
+	void slotOpenNewImage();
+
+
+
+
+
+
 private:
+	void imageImport(QString path);
+
+
+	void setEnabled(bool flag);
+
+	//Recent File
+	const static int MAX_RECENT_IMAGE = 10;
+	QList<QAction*> recentFileActionList;
+	void createRecentImageActions();
+	void adjustForCurrentFile(const QString& filePath);
+	void updateRecentActionList();
+
+
+
+
 	Ui::MainWindow* ui;
+	//RegistrationWizard* m_rw;
 };
 
 #endif // !__MAIN_WINDOW_H__

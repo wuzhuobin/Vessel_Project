@@ -18,52 +18,56 @@ class IOManager:public QObject
 {
 	Q_OBJECT
 public:
-	typedef itk::Image<float, 3> ImageType;
-	IOManager(QWidget* parent = nullptr);
-	IOManager(QObject* parent = nullptr, QWidget* mainWindow = nullptr);
+	typedef itk::Image<double, 3> ImageType;
+	IOManager(QObject* parent = nullptr);
 	~IOManager();
 
 	void enableRegistration(bool flag);
-	void setMyImageManager(MyImageManager* myImageManager);
+	//void setMyImageManager(MyImageManager* myImageManager);
 	//void setUniqueKeys(QStringList keys);
 
 	/**
 	 * @brief	add a file name to #listOfFileNames
 	 * @param	fileNames	a image fileName.
 	 */
-	void addToListOfFileNames(QStringList fileNames);
-	void cleanListsOfFileNames();
+	//void addToListOfFileNames(QStringList fileNames);
+	//void addToListOfFileNames(QStringList* fileNames);
+	//void cleanListsOfFileNames();
 	const QList<QStringList> getListOfFileNames();
 
-	void setFilePath(QString filePath);
-	const QString getFilePath();
+	//void setFilePath(QString filePath);
+	//const QString getFilePath();
 
 public slots:
 
-	void slotOpenWithWizard();
-
-	void slotOpenWithWizard(QString dir);
+	/**
+	 * @brief	add a file name to #listOfFileNames
+	 * @param	fileNames	a image fileName.
+	 */
+	void addToListOfFileNames(QStringList fileNames);
+	void addToListOfFileNames(QStringList* fileNames);
+	void cleanListsOfFileNames();
 
 	void slotOpenMultiImages();
 
 	void slotOpenOneImage(QStringList fileNames);
 
-	void slotOpenSegmentationWithDiaglog();
+	//void slotOpenSegmentationWithDiaglog();
 
-	void slotOpenSegmentation(QString fileName);
+	//void slotOpenSegmentation(QString fileName);
 
-	void slotSaveSegmentaitonWithDiaglog();
+	//void slotSaveSegmentaitonWithDiaglog();
 
-	void slotSaveSegmentation(QString path);
+	//void slotSaveSegmentation(QString path);
 
-	void slotSaveContourWithDiaglog();
-	
-	void slotSaveContour(QString fileName);
+	//void slotSaveContourWithDiaglog();
+	//
+	//void slotSaveContour(QString fileName);
 
 signals:
 	void finishOpenMultiImages();
 	void finishOpenOneImage();
-	void finishOpenSegmentation();
+	//void finishOpenSegmentation();
 
 protected:
 	bool loadImageData(QStringList fileNames);
@@ -74,8 +78,7 @@ protected:
 
 private:
 	QList<QStringList> listOfFileNames;
-	QString filePath;
-	QStringList uniqueKeys; 
+	//QString filePath;
 	MyImageManager* myImageManager;
 	bool registrationFlag = false;
 	ImageRegistration registration;

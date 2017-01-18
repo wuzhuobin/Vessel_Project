@@ -25,10 +25,12 @@ include_directories(
 SET(
 	MODEL_SRC
 	${PROJECT_SOURCE_DIR}/ImageManager.cpp
+	${PROJECT_SOURCE_DIR}/IVtkImageData.cpp
 	)
 SET(
 	MODEL_H
 	${PROJECT_SOURCE_DIR}/ImageManager.h
+	${PROJECT_SOURCE_DIR}/IVtkImageData.h
 	)
 
 qt5_wrap_cpp(

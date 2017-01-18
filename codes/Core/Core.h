@@ -4,6 +4,7 @@
 #include <qobject.h>
 
 #include "MainWindow.h"
+#include "IOManager.h"
 
 class Core: public QObject
 {
@@ -15,6 +16,7 @@ public:
 
 private:
 	MainWindow mainWindow;
+	IOManager ioManager;
 
 };
 

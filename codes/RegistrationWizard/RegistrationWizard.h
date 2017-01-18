@@ -4,10 +4,9 @@
 #include <QWizard>
 #include <QThread>
 #include <qlist.h>
-
 #include <qsharedpointer.h>
+#include <qmutex.h>
 
-class QCheckBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
@@ -15,48 +14,15 @@ class QProgressBar;
 class QTreeWidget;
 class QTableWidget;
 class QThread;
-class QTreeWidgetItem;
 class QTabWidget;
-//class QSpinBox;
-class QGroupBox;
-class QRadioButton;
-class ImagePage;
-
-class FindImageThread : public QThread
-{
-	Q_OBJECT
-
-public:
-	explicit FindImageThread(QObject *parent = 0);
-	void run();
-	void setDirectory(QString dir);
-
-	void setImagePage(ImagePage* imagePage);
-	void updateTreeWidget(QStringList* imagePath, QString format);
-
-
-signals:
-	void updateProgressBar(int);
-
-public slots:
-	void forceStop();
-
-private:
-
-	ImagePage* m_imagePage;
-	QString m_dir;
-	bool m_stop;
-
-
-};
+class FindImageThread;
 
 class DirectoryPage : public QWizardPage
 {
     Q_OBJECT
 
 public:
-    DirectoryPage(QString dir = QString(), QWidget *parent = nullptr);
-	DirectoryPage(QWidget *parent);
+	DirectoryPage(QWidget *parent = nullptr);
 
     int nextId() const;
 	void setDirectory(QString dir);
@@ -78,6 +44,7 @@ class ImagePage : public QWizardPage
 public:
 	ImagePage(int numOfImages = 2, QWidget* parent = nullptr);
 	ImagePage(QWidget *parent);
+	~ImagePage();
 
 	QList<QSharedPointer<QStringList>>* m_imagePaths;
 	QList<int>* m_selectedImages;
@@ -105,12 +72,29 @@ private:
 	QList<QPushButton*> m_imageSetBtns;
 	QList<QPushButton*> m_imageRemoveBtns;
 
+	QMutex m_mutex;
 
 	QString lastDirectory;
 	friend FindImageThread;
 	FindImageThread* thread;
 };
 
+class FindImageThread : public QThread
+{
+	Q_OBJECT
+
+public:
+	FindImageThread(ImagePage *parent = 0);
+	void run();
+	void updateTreeWidget(QStringList* imagePath);
+
+	ImagePage* m_imagePage;
+	bool m_stop;
+
+
+signals:
+	void updateProgressBar(int);
+};
 
 class ConclusionPage : public QWizardPage
 {
@@ -120,7 +104,6 @@ public:
     ConclusionPage(int numOfImages = 2, QWidget* parent = nullptr);
 	ConclusionPage(QWidget* parent);
 
-	//QList<QSharedPointer<QMap<QString, QString>>>* m_DICOMHeaders;
 	QList<QSharedPointer<QStringList>>* m_imagePaths;
 	QList<int>* m_selectedImages;
 
@@ -178,14 +161,14 @@ public:
 
 	void setImageModalityNames(unsigned int i, QString imageModalityName = QString());
     
-	QStringList* getFileNames(unsigned int i);
+	QSharedPointer<QStringList> getFileNames(unsigned int i);
+	void setDirectory(QString directory);
 	const QString getDirectory();
 	/**
 	 * Get the number of images needs to be loaded.
 	 * @return	number of images, #m_numberOfImages. 
 	 */
 	int getNumberOfImages();
-	int getTotalFileNo();
     
 private slots:
 	void showHelp();

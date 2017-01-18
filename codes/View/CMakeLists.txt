@@ -12,7 +12,9 @@ find_package(Qt5Widgets)
 include_directories(
 	${PROJECT_SOURCE_DIR}
 	${PROJECT_BINARY_DIR}
+	# ${MAIN_INCLUDE_DIRECTORIES}
 	)
+
 
 set(
 	VIEW_H
@@ -53,7 +55,7 @@ target_link_libraries(
 	View
 	Qt5::Core
 	Qt5::Widgets
-	${LINK_LIBRARIE}
+	# ${MAIN_LINK_LIBRARIES}
 	)
 
 #Grouping in MSVC

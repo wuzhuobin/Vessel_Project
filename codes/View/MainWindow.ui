@@ -762,10 +762,8 @@
       <string>Recent Image</string>
      </property>
     </widget>
-    <addaction name="actionImport_DICOM"/>
+    <addaction name="actionImport_images"/>
     <addaction name="menuRecentImage"/>
-    <addaction name="actionImport_T2"/>
-    <addaction name="actionImport_MRA"/>
     <addaction name="actionExport_T2"/>
     <addaction name="actionExport_MRA"/>
     <addaction name="actionExport_Report"/>
@@ -1301,9 +1299,12 @@
     <string>Save Contour</string>
    </property>
   </action>
-  <action name="actionImport_DICOM">
+  <action name="actionImport_images">
    <property name="text">
-    <string>Import DICOM</string>
+    <string>Import images</string>
+   </property>
+   <property name="toolTip">
+    <string>Import images</string>
    </property>
   </action>
   <action name="actionImport_T2">

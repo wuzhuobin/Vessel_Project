@@ -24,19 +24,19 @@ include_directories(
 
 SET(
 	CONTROLLER_SRC
-	${PROJECT_SOURCE_DIR}/MyImageManager.cpp
+	# ${PROJECT_SOURCE_DIR}/MyImageManager.cpp
 	${PROJECT_SOURCE_DIR}/IOManager.cpp
 	${PROJECT_SOURCE_DIR}/ImageRegistration.cxx
-	${PROJECT_SOURCE_DIR}/Overlay.cxx
-	${PROJECT_SOURCE_DIR}/RegistrationWizard.cxx
+	# ${PROJECT_SOURCE_DIR}/Overlay.cxx
+	# ${PROJECT_SOURCE_DIR}/RegistrationWizard.cxx
 	)
 SET(
 	CONTROLLER_H
-	${PROJECT_SOURCE_DIR}/MyImageManager.h
+	# ${PROJECT_SOURCE_DIR}/MyImageManager.h
 	${PROJECT_SOURCE_DIR}/IOManager.h
 	${PROJECT_SOURCE_DIR}/ImageRegistration.h
-	${PROJECT_SOURCE_DIR}/Overlay.h
-	${PROJECT_SOURCE_DIR}/RegistrationWizard.h
+	# ${PROJECT_SOURCE_DIR}/Overlay.h
+	# ${PROJECT_SOURCE_DIR}/RegistrationWizard.h
 	)
 
 qt5_wrap_cpp(
