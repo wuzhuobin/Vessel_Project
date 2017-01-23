@@ -86,7 +86,7 @@ set(
 	${CMAKE_SOURCE_DIR}/codes/View
 	${CMAKE_SOURCE_DIR}/codes/Controller
 	${CMAKE_SOURCE_DIR}/codes/Model
-	${CMAKE_SOURCE_DIR}/code/RegistrationWizard
+	${CMAKE_SOURCE_DIR}/codes/RegistrationWizard
 	)
 
 set(
@@ -105,7 +105,7 @@ set(
 )
 
 include_directories(
-	${MAIN_INCLUDE_DIRS}
+	${MAIN_INCLUDE_DIRECTORIES}
 )
 
 # link_directories(

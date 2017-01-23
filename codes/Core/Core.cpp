@@ -3,7 +3,6 @@
 Core::Core(QObject * parent)
 	:QObject(parent)
 {
-	mainWindow.show();
 
 	connect(&mainWindow, SIGNAL(signalImageImportInitialize()),
 		&ioManager, SLOT(cleanListsOfFileNames()));
@@ -12,7 +11,7 @@ Core::Core(QObject * parent)
 	connect(&mainWindow, SIGNAL(signalImageImportLoad()),
 		&ioManager, SLOT(slotOpenMultiImages()));
 
-
+	mainWindow.show();
 }
 
 Core::~Core()

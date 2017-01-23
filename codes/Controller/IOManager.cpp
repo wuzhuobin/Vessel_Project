@@ -188,7 +188,8 @@ void IOManager::slotOpenMultiImages()
 		else {
 			this->registrationFlag = _flag;
 		}
-		slotOpenOneImage(*cit);
+		loadImageData(*cit);
+		//slotOpenOneImage(*cit);
 	}
 	//this->myImageManager->overlay->Initialize(
 	//	this->myImageManager->listOfVtkImages[0]);
@@ -198,7 +199,10 @@ void IOManager::slotOpenMultiImages()
 
 void IOManager::slotOpenOneImage(QStringList fileNames)
 {
+	bool _flag = this->registrationFlag;
+	this->registrationFlag = false;
 	loadImageData(fileNames);
+	this->registrationFlag = _flag;
 	emit finishOpenOneImage();
 }
 

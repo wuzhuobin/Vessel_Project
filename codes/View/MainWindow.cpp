@@ -48,7 +48,6 @@ void MainWindow::imageImport(QString path)
 	RegistrationWizard rw(path, 2, this);
 	rw.setImageModalityNames(0, "T2 image ");
 	rw.setImageModalityNames(1, "MRA image");
-	//rw.setDirectory("");
 	if (QWizard::Accepted == rw.exec()) {
 
 		if (rw.getFileNames(0)) {
