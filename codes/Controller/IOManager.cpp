@@ -38,6 +38,17 @@ void IOManager::enableRegistration(bool flag)
 	this->registrationFlag = flag;
 }
 
+void IOManager::addToListOfFileNamesAndOpen(QList<QStringList>* listOfFileNames)
+{
+	cleanListsOfFileNames();
+	
+	for (int i = 0; i < listOfFileNames->size(); ++i) {
+		addToListOfFileNames(listOfFileNames->at(i));
+	}
+
+	slotOpenMultiImages();
+}
+
 void IOManager::addToListOfFileNames(QStringList fileNames)
 {
 	this->listOfFileNames.append(fileNames);

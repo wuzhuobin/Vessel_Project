@@ -1,7 +1,10 @@
 #include "Core.h"
 
 Core::Core(QObject * parent)
-	:QObject(parent)
+	:
+	imageManager(2, parent),
+	ioManager(parent),
+	QObject(parent)
 {
 
 	connect(&mainWindow, SIGNAL(signalImageImportInitialize()),
@@ -10,6 +13,10 @@ Core::Core(QObject * parent)
 		&ioManager, SLOT(addToListOfFileNames(QStringList*)));
 	connect(&mainWindow, SIGNAL(signalImageImportLoad()),
 		&ioManager, SLOT(slotOpenMultiImages()));
+
+	connect(&mainWindow, SIGNAL(signalImageImportLoad(QList<QStringList>*)),
+		&ioManager, SLOT(addToListOfFileNamesAndOpen(QList<QStringList>*)));
+
 
 	mainWindow.show();
 }

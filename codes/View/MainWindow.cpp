@@ -44,21 +44,25 @@ void MainWindow::slotOpenNewImage()
 
 void MainWindow::imageImport(QString path)
 {
-	emit signalImageImportInitialize();
 	RegistrationWizard rw(path, 2, this);
 	rw.setImageModalityNames(0, "T2 image ");
 	rw.setImageModalityNames(1, "MRA image");
+
+	QList<QStringList> _listOfFileNames;
+
 	if (QWizard::Accepted == rw.exec()) {
 
 		if (rw.getFileNames(0)) {
 			qDebug() << *rw.getFileNames(0);
-			emit signalImageImportAdd(rw.getFileNames(0).data());
+			_listOfFileNames << *rw.getFileNames(0);
 		}
 		if (rw.getFileNames(1)) {
 			qDebug() << *rw.getFileNames(1);
-			emit signalImageImportAdd(rw.getFileNames(1).data());
+			_listOfFileNames << *rw.getFileNames(1);
 		}
-		emit signalImageImportLoad();
+
+		emit signalImageImportLoad(&_listOfFileNames);
+
 		qDebug() << rw.getDirectory();
 		adjustForCurrentFile(rw.getDirectory());
 

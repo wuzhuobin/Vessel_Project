@@ -40,6 +40,7 @@ public:
 
 public slots:
 
+	void addToListOfFileNamesAndOpen(QList<QStringList>* listOfFileNames);
 	/**
 	 * @brief	add a file name to #listOfFileNames
 	 * @param	fileNames	a image fileName.

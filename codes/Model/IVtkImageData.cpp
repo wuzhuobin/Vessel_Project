@@ -3,19 +3,16 @@
 #include <vtkObjectFactory.h>
 
 #include <itkVTKImageToImageFilter.h>
+#include <itkImageToVTKImageFilter.h>
 
 vtkStandardNewMacro(IVtkImageData);
 
 void IVtkImageData::PrintSelf(ostream & os, vtkIndent indent)
 {
+	os << indent << "VTK Image information: " << "\n";
 	vtkImageData::PrintSelf(os, indent);
-	m_itkImage->Print(os);
-}
-
-void IVtkImageData::setVtkInput(vtkImageData * vtkImage)
-{
-	this->ShallowCopy(vtkImage);
-	update();
+	os << indent << "ITK Image information:" << std::endl;
+	m_itkImage->Print(os, 0);
 }
 
 void IVtkImageData::ShallowCopy(vtkDataObject * dataObject)
@@ -25,7 +22,7 @@ void IVtkImageData::ShallowCopy(vtkDataObject * dataObject)
 	if (imageData != NULL)
 	{
 		vtkImageData::ShallowCopy(imageData);
-		update();
+		updateITKImage();
 	}
 
 }
@@ -37,16 +34,19 @@ void IVtkImageData::DeepCopy(vtkDataObject * dataObject)
 	if (imageData != NULL)
 	{
 		vtkImageData::DeepCopy(imageData);
-		update();
+		updateITKImage();
 	}
 }
 
-void IVtkImageData::Graft(itkImageData::Pointer dataObject)
+void IVtkImageData::Graft(itkImageType::Pointer dataObject)
 {
+	m_itkImage->Graft(dataObject);
+	
+	updateVTKImage();
 
 }
 
-itkImageData::Pointer IVtkImageData::GetItkOutput()
+itkImageType::Pointer IVtkImageData::GetItkImage()
 {
 	return m_itkImage;
 }
@@ -54,30 +54,43 @@ itkImageData::Pointer IVtkImageData::GetItkOutput()
 //void IVtkImageData::operator=(vtkImageData * vtkImage)
 //{
 //	m_vtkImage->ShallowCopy(vtkImage);
-//	update();
+//	updateITKImage();
 //}
 
 IVtkImageData::IVtkImageData()
 {
 	//m_vtkImage = (vtkSmartPointer<vtkImageData>::New());
 	//m_vtkImage = this;
-	//m_itkImage = (itkImageData::New());
+	//m_itkImage = (itkImageType::New());
 
 
-	update();
+	//updateITKImage();
 }
 
 IVtkImageData::~IVtkImageData()
 {
 }
 
-void IVtkImageData::update()
+void IVtkImageData::updateITKImage()
 {
-	typedef itk::VTKImageToImageFilter<itkImageData> VTKImageToImageType;
+	typedef itk::VTKImageToImageFilter<itkImageType> VTKImageToImageType;
 
 	VTKImageToImageType::Pointer vtkImageToImageFilter = VTKImageToImageType::New();
 	vtkImageToImageFilter->SetInput(this);
 	vtkImageToImageFilter->Update();
-	m_itkImage = vtkImageToImageFilter->GetOutput();
+	vtkImageToImageFilter->GetOutput()->SetDirection(m_itkImage->GetDirection());
+	m_itkImage->Graft(vtkImageToImageFilter->GetOutput());
+
+}
+
+void IVtkImageData::updateVTKImage()
+{
+	typedef itk::ImageToVTKImageFilter<itkImageType> ImageToVTKImageFilter;
+
+	ImageToVTKImageFilter::Pointer imageToVTKImageFilter =
+		ImageToVTKImageFilter::New();
+	imageToVTKImageFilter->SetInput(m_itkImage);
+	imageToVTKImageFilter->Update();
+	vtkImageData::ShallowCopy(imageToVTKImageFilter->GetOutput());
 
 }

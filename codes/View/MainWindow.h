@@ -38,6 +38,7 @@ signals:
 	void signalImageImportInitialize();
 	void signalImageImportAdd(QStringList*);
 	void signalImageImportLoad();
+	void signalImageImportLoad(QList<QStringList>*);
 
 
 private slots:
