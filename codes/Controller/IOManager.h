@@ -7,51 +7,48 @@
 #include <QStringList>
 
 #include <itkImage.h>
+#include <itkGDCMImageIO.h>
 
 #include "ImageRegistration.h"
-
-
-class MyImageManager;
 
 
 class IOManager:public QObject
 {
 	Q_OBJECT
 public:
-	typedef itk::Image<double, 3> ImageType;
+	typedef itk::Image<float, 3> ImageType;
+
 	IOManager(QObject* parent = nullptr);
 	~IOManager();
 
 	void enableRegistration(bool flag);
-	//void setMyImageManager(MyImageManager* myImageManager);
-	//void setUniqueKeys(QStringList keys);
 
-	/**
-	 * @brief	add a file name to #listOfFileNames
-	 * @param	fileNames	a image fileName.
-	 */
-	//void addToListOfFileNames(QStringList fileNames);
-	//void addToListOfFileNames(QStringList* fileNames);
-	//void cleanListsOfFileNames();
 	const QList<QStringList> getListOfFileNames();
 
-	//void setFilePath(QString filePath);
-	//const QString getFilePath();
+	const QList<ImageType::Pointer> getListOfItkImages() const;
+
+	const QList<itk::GDCMImageIO::Pointer> getListOfDicomIOs() const;
 
 public slots:
 
-	void addToListOfFileNamesAndOpen(QList<QStringList>* listOfFileNames);
+	void slotAddToListOfFileNamesAndOpen(QList<QStringList>* listOfFileNames);
 	/**
 	 * @brief	add a file name to #listOfFileNames
 	 * @param	fileNames	a image fileName.
 	 */
-	void addToListOfFileNames(QStringList fileNames);
-	void addToListOfFileNames(QStringList* fileNames);
-	void cleanListsOfFileNames();
+	void slotAddToListOfFileNames(QStringList fileNames);
+
+	void slotAddToListOfFileNames(QStringList* fileNames);
+	/**
+	 * clean the list of FileNames, #listOfFileNames
+	 */
+	void slotCleanListsOfFileNames();
 
 	void slotOpenMultiImages();
 
 	void slotOpenOneImage(QStringList fileNames);
+
+	void slotCleanImagesAndDicomIOs();
 
 	//void slotOpenSegmentationWithDiaglog();
 
@@ -66,8 +63,11 @@ public slots:
 	//void slotSaveContour(QString fileName);
 
 signals:
-	void finishOpenMultiImages();
-	void finishOpenOneImage();
+	void signalFinishOpenMultiImages();
+
+	void signalFinishOpenMultiImages(QList<ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>*);
+
+	void signalFinishOpenOneImage();
 	//void finishOpenSegmentation();
 
 protected:
@@ -79,8 +79,10 @@ protected:
 
 private:
 	QList<QStringList> listOfFileNames;
+	QList<ImageType::Pointer> listOfItkImages;
+	QList<itk::GDCMImageIO::Pointer> listOfDicomIOs;
+
 	//QString filePath;
-	MyImageManager* myImageManager;
 	bool registrationFlag = false;
 	ImageRegistration registration;
 

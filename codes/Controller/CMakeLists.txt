@@ -20,13 +20,19 @@ endif()
 include_directories(
 	${PROJECT_SOURCE_DIR}
 	${PROJECT_BINARY_DIR}
+	InteractorStyles
 	)
+
+add_subdirectory(InteractorStyles)
 
 SET(
 	CONTROLLER_SRC
 	# ${PROJECT_SOURCE_DIR}/MyImageManager.cpp
 	${PROJECT_SOURCE_DIR}/IOManager.cpp
 	${PROJECT_SOURCE_DIR}/ImageRegistration.cxx
+	${PROJECT_SOURCE_DIR}/ImageViewer.cxx
+	${PROJECT_SOURCE_DIR}/InteractorStyleSwitch.cxx
+	# ${PROJECT_SOURCE_DIR}/InteractorStyleSwitch3D.cxx
 	# ${PROJECT_SOURCE_DIR}/Overlay.cxx
 	# ${PROJECT_SOURCE_DIR}/RegistrationWizard.cxx
 	)
@@ -35,6 +41,10 @@ SET(
 	# ${PROJECT_SOURCE_DIR}/MyImageManager.h
 	${PROJECT_SOURCE_DIR}/IOManager.h
 	${PROJECT_SOURCE_DIR}/ImageRegistration.h
+	${PROJECT_SOURCE_DIR}/ImageViewer.h
+	${PROJECT_SOURCE_DIR}/InteractorStyleSwitch.h
+	# ${PROJECT_SOURCE_DIR}/InteractorStyleSwitch3D.h
+	${PROJECT_SOURCE_DIR}/StyleSwitchMacro.h
 	# ${PROJECT_SOURCE_DIR}/Overlay.h
 	# ${PROJECT_SOURCE_DIR}/RegistrationWizard.h
 	)
@@ -46,6 +56,7 @@ qt5_wrap_cpp(
 
 add_library(
 	Controller
+	SHARED
 	${CONTROLLER_SRC}
 	${CONTROLLER_H}
 	${CONTROLLER_MOC}
@@ -57,6 +68,14 @@ target_link_libraries(
 	${VTK_LIBRARIES}
 	Qt5::Core
 	Qt5::Widgets
+	InteractorStyles
+)
+
+set_target_properties(
+    Controller
+    PROPERTIES
+    WINDOWS_EXPORT_ALL_SYMBOLS 
+    true
 )
 
 source_group(

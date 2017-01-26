@@ -41,7 +41,7 @@ add_library(
 target_link_libraries(
 	Core
 	Qt5::Core
-	${LINK_LIBRARIE}
+	${MAIN_LINK_LIBRARIES}
 	)
 
 #Grouping in MSVC

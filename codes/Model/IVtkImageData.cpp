@@ -6,23 +6,32 @@
 #include <itkImageToVTKImageFilter.h>
 
 vtkStandardNewMacro(IVtkImageData);
+typedef itk::Image<float, 3> itkImageType;
 
 void IVtkImageData::PrintSelf(ostream & os, vtkIndent indent)
 {
-	os << indent << "VTK Image information: " << "\n";
+	os << indent << "VTK Image information: " << std::endl;
 	vtkImageData::PrintSelf(os, indent);
 	os << indent << "ITK Image information:" << std::endl;
 	m_itkImage->Print(os, 0);
+	//os << indent << "ITK GDCMImageIO information:" << std::endl;
+	//m_dicomIO->Print(os, 0);
 }
 
 void IVtkImageData::ShallowCopy(vtkDataObject * dataObject)
 {
-	vtkImageData *imageData = vtkImageData::SafeDownCast(dataObject);
+	IVtkImageData* ivtkImageData = IVtkImageData::SafeDownCast(dataObject);
+	if (ivtkImageData) {
+		m_itkImage->Graft(ivtkImageData->GetItkImage());
+		return;
+	}
 
+	vtkImageData *imageData = vtkImageData::SafeDownCast(dataObject);
 	if (imageData != NULL)
 	{
 		vtkImageData::ShallowCopy(imageData);
 		updateITKImage();
+		return;
 	}
 
 }
@@ -30,7 +39,6 @@ void IVtkImageData::ShallowCopy(vtkDataObject * dataObject)
 void IVtkImageData::DeepCopy(vtkDataObject * dataObject)
 {
 	vtkImageData *imageData = vtkImageData::SafeDownCast(dataObject);
-
 	if (imageData != NULL)
 	{
 		vtkImageData::DeepCopy(imageData);
@@ -61,10 +69,9 @@ IVtkImageData::IVtkImageData()
 {
 	//m_vtkImage = (vtkSmartPointer<vtkImageData>::New());
 	//m_vtkImage = this;
-	//m_itkImage = (itkImageType::New());
+	m_itkImage = (itkImageType::New());
 
-
-	//updateITKImage();
+	updateVTKImage();
 }
 
 IVtkImageData::~IVtkImageData()

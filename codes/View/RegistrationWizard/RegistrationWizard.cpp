@@ -105,9 +105,10 @@ void RegistrationWizard::showHelp()
 QSharedPointer<QStringList> RegistrationWizard::getFileNames(unsigned int i)
 {
 	if (i < 0 || i >= m_numOfImages)
-		return QSharedPointer<QStringList>();
+		return QSharedPointer<QStringList>::create();
+	// if the QLineEdit has not any input, return a null QSharedPointer
 	else if (m_selectedImages[i] == -1)
-		return QSharedPointer<QStringList>();
+		return QSharedPointer<QStringList>::create();
 	else
 		return m_imagePaths[m_selectedImages[i]];
 }

@@ -5,6 +5,9 @@
   <property name="windowModality">
    <enum>Qt::WindowModal</enum>
   </property>
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -29,6 +32,9 @@
    <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks|QMainWindow::VerticalTabs</set>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
      <horstretch>0</horstretch>
@@ -104,7 +110,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/IADE_Analyzer.qrc">
+              <iconset resource="../Main/resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/expandwin.png</normaloff>:/icons/expandwin.png</iconset>
              </property>
              <property name="iconSize">
@@ -133,7 +139,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/IADE_Analyzer.qrc">
+              <iconset resource="../Main/resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
              </property>
              <property name="iconSize">
@@ -169,7 +175,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/IADE_Analyzer.qrc">
+              <iconset resource="../Main/resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/downarrow.png</normaloff>:/icons/downarrow.png</iconset>
              </property>
              <property name="iconSize">
@@ -248,7 +254,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/IADE_Analyzer.qrc">
+              <iconset resource="../Main/resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/expandwin.png</normaloff>:/icons/expandwin.png</iconset>
              </property>
              <property name="iconSize">
@@ -277,7 +283,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/IADE_Analyzer.qrc">
+              <iconset resource="../Main/resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
              </property>
              <property name="iconSize">
@@ -494,7 +500,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/IADE_Analyzer.qrc">
+              <iconset resource="../Main/resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/expandwin.png</normaloff>:/icons/expandwin.png</iconset>
              </property>
              <property name="iconSize">
@@ -541,7 +547,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/IADE_Analyzer.qrc">
+              <iconset resource="../Main/resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
              </property>
              <property name="iconSize">
@@ -580,7 +586,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/IADE_Analyzer.qrc">
+              <iconset resource="../Main/resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/downarrow.png</normaloff>:/icons/downarrow.png</iconset>
              </property>
              <property name="iconSize">
@@ -659,7 +665,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/IADE_Analyzer.qrc">
+              <iconset resource="../Main/resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/expandwin.png</normaloff>:/icons/expandwin.png</iconset>
              </property>
              <property name="iconSize">
@@ -688,7 +694,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/IADE_Analyzer.qrc">
+              <iconset resource="../Main/resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
              </property>
              <property name="iconSize">
@@ -724,7 +730,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../../resources/IADE_Analyzer.qrc">
+              <iconset resource="../Main/resources/IADE_Analyzer.qrc">
                <normaloff>:/icons/downarrow.png</normaloff>:/icons/downarrow.png</iconset>
              </property>
              <property name="iconSize">
@@ -745,6 +751,9 @@
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -776,6 +785,9 @@
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuInteraction">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Interaction</string>
     </property>
@@ -788,6 +800,9 @@
     <addaction name="actionBrush"/>
    </widget>
    <widget class="QMenu" name="menuView">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>&amp;View</string>
     </property>
@@ -812,6 +827,9 @@
     <addaction name="menuOrientation"/>
    </widget>
    <widget class="QMenu" name="menuSegmentation">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Segmentation</string>
     </property>
@@ -822,6 +840,9 @@
     <addaction name="actionCenterlineAlgorithm"/>
    </widget>
    <widget class="QMenu" name="menuImage">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Image</string>
     </property>
@@ -831,6 +852,9 @@
     <addaction name="acitonVOI_selection"/>
    </widget>
    <widget class="QMenu" name="menuDiagnosis">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Diagnosis</string>
     </property>
@@ -847,6 +871,9 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="ActionToolBar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -943,7 +970,7 @@
   </widget>
   <action name="actionOpenImage">
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/OpenImage.png</normaloff>:/icons/OpenImage.png</iconset>
    </property>
    <property name="text">
@@ -960,7 +987,7 @@
   </action>
   <action name="actionSaveSegmentation">
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Save.png</normaloff>:/icons/Save.png</iconset>
    </property>
    <property name="text">
@@ -985,7 +1012,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Ruler.png</normaloff>:/icons/Ruler.png</iconset>
    </property>
    <property name="text">
@@ -1003,7 +1030,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/WindowLevel.png</normaloff>:/icons/WindowLevel.png</iconset>
    </property>
    <property name="text">
@@ -1018,10 +1045,10 @@
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Navigation.png</normaloff>:/icons/Navigation.png</iconset>
    </property>
    <property name="text">
@@ -1036,7 +1063,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
    </property>
    <property name="text">
@@ -1084,7 +1111,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/contour.png</normaloff>:/icons/contour.png</iconset>
    </property>
    <property name="text">
@@ -1117,7 +1144,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/UpperLeftView.png</normaloff>:/icons/UpperLeftView.png</iconset>
    </property>
    <property name="text">
@@ -1135,7 +1162,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/UpperRightView.png</normaloff>:/icons/UpperRightView.png</iconset>
    </property>
    <property name="text">
@@ -1147,7 +1174,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/LowerLeftView.png</normaloff>:/icons/LowerLeftView.png</iconset>
    </property>
    <property name="text">
@@ -1159,7 +1186,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/LowerRightView.png</normaloff>:/icons/LowerRightView.png</iconset>
    </property>
    <property name="text">
@@ -1171,7 +1198,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/dl_sagittal.png</normaloff>:/icons/dl_sagittal.png</iconset>
    </property>
    <property name="text">
@@ -1192,7 +1219,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/dl_coronal.png</normaloff>:/icons/dl_coronal.png</iconset>
    </property>
    <property name="text">
@@ -1204,7 +1231,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/dl_axial copy.png</normaloff>:/icons/dl_axial copy.png</iconset>
    </property>
    <property name="text">
@@ -1213,7 +1240,7 @@
   </action>
   <action name="actionRemoveContour">
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/magicdrawdelete.png</normaloff>:/icons/magicdrawdelete.png</iconset>
    </property>
    <property name="text">
@@ -1225,7 +1252,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/roi.png</normaloff>:/icons/roi.png</iconset>
    </property>
    <property name="text">
@@ -1245,7 +1272,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Draw.png</normaloff>:/icons/Draw.png</iconset>
    </property>
    <property name="text">
@@ -1257,7 +1284,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/LayoutMultiPlanar.png</normaloff>:/icons/LayoutMultiPlanar.png</iconset>
    </property>
    <property name="text">
@@ -1279,7 +1306,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/IADE_Analyzer.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/1476453573_Wand.ico</normaloff>:/icons/1476453573_Wand.ico</iconset>
    </property>
    <property name="text">
@@ -1361,7 +1388,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../resources/IADE_Analyzer.qrc"/>
+  <include location="../Main/resources/IADE_Analyzer.qrc"/>
  </resources>
  <connections/>
 </ui>

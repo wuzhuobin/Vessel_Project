@@ -4,13 +4,16 @@
 #include <vtkImageData.h>
 
 #include <itkImage.h>
+//#include <itkGDCMImageIO.h>
 
-typedef itk::Image<float, 3> itkImageType;
 
 class IVtkImageData : public vtkImageData
 {
 
+
 public:
+	typedef itk::Image<float, 3> itkImageType;
+
 	vtkTypeMacro(IVtkImageData, vtkImageData);
 	static IVtkImageData* New();
 	void PrintSelf(ostream& os, vtkIndent indent);
@@ -20,6 +23,7 @@ public:
 	// Shallow and Deep copy.
 	virtual void ShallowCopy(vtkDataObject *dataObject);
 	virtual void DeepCopy(vtkDataObject *dataObject);
+
 	virtual void Graft(itkImageType::Pointer dataObject);
 
 	itkImageType::Pointer GetItkImage();
@@ -40,7 +44,7 @@ private:
 
 										   //vtkSmartPointer<vtkImageData> m_vtkImage;
 	itkImageType::Pointer m_itkImage;
-
+	//itk::GDCMImageIO::Pointer m_dicomIO;
 
 };
 

@@ -4,13 +4,13 @@
 #include "ImageRegistration.h"
 
 #include <QFileDialog>
+#include <qdebug.h>
 
 #include <itkImageFileReader.h>
 #include <itkMetaDataDictionary.h>
 #include <itkOrientImageFilter.h>
 #include <itkGDCMImageIO.h>
 #include <itkImageSeriesReader.h>
-#include <itkImageToVTKImageFilter.h>
 #include <itkImageFileWriter.h>
 
 #include <vtkAppendPolyData.h>
@@ -21,7 +21,9 @@
 using itk::GDCMImageIO;
 using itk::ImageFileReader;
 using itk::ImageSeriesReader;
-typedef itk::Image<double, 3> ImageType;
+typedef itk::Image<float, 3> ImageType;
+typedef itk::OrientImageFilter<ImageType, ImageType> OrientImageFilter;
+typedef itk::Image<float, 3> ImageType;
 
 
 IOManager::IOManager(QObject* parent)
@@ -38,28 +40,28 @@ void IOManager::enableRegistration(bool flag)
 	this->registrationFlag = flag;
 }
 
-void IOManager::addToListOfFileNamesAndOpen(QList<QStringList>* listOfFileNames)
+void IOManager::slotAddToListOfFileNamesAndOpen(QList<QStringList>* listOfFileNames)
 {
-	cleanListsOfFileNames();
+	slotCleanListsOfFileNames();
 	
 	for (int i = 0; i < listOfFileNames->size(); ++i) {
-		addToListOfFileNames(listOfFileNames->at(i));
+		slotAddToListOfFileNames(listOfFileNames->at(i));
 	}
 
 	slotOpenMultiImages();
 }
 
-void IOManager::addToListOfFileNames(QStringList fileNames)
+void IOManager::slotAddToListOfFileNames(QStringList fileNames)
 {
 	this->listOfFileNames.append(fileNames);
 }
 
-void IOManager::addToListOfFileNames(QStringList * fileNames)
+void IOManager::slotAddToListOfFileNames(QStringList * fileNames)
 {
-	addToListOfFileNames(*fileNames);
+	slotAddToListOfFileNames(*fileNames);
 }
 
-void IOManager::cleanListsOfFileNames()
+void IOManager::slotCleanListsOfFileNames()
 {
 	this->listOfFileNames.clear();
 }
@@ -69,41 +71,47 @@ const QList<QStringList> IOManager::getListOfFileNames()
 	return this->listOfFileNames;
 }
 
-//void IOManager::setFilePath(QString filePath)
-//{
-//	this->filePath = filePath;
-//}
-//
-//const QString IOManager::getFilePath()
-//{
-//	return this->filePath;
-//}
+const QList<ImageType::Pointer> IOManager::getListOfItkImages() const
+{
+	return this->listOfItkImages;
+}
+
+const QList<GDCMImageIO::Pointer> IOManager::getListOfDicomIOs() const
+{
+	return this->listOfDicomIOs;
+}
 
 bool IOManager::loadImageData(QStringList fileNames)
 {
+
 	ImageType::Pointer _itkImage = nullptr;
 	GDCMImageIO::Pointer _dicomIO = nullptr;
-	//vtkSmartPointer<vtkImageData> _vtkImage = nullptr;
-	//vtkSmartPointer<vtkImageData> _vtkImageCopy = nullptr;
-	// QMAP saving DICOM imformation
-	//QMap<QString, QString>* DICOMHeader = nullptr;
+
 	if (fileNames.isEmpty() || fileNames.value(0) == QString()) {
 		_itkImage = nullptr;
 		_dicomIO = nullptr;
-		//_vtkImage = nullptr;
-		//DICOMHeader = nullptr;
-		//_vtkImageCopy = nullptr;
 	}
 	// load Nifti Data
 	else if (fileNames.size() == 1) {
-		_dicomIO = GDCMImageIO::New();
-		ImageFileReader<ImageType>::Pointer reader =
-			ImageFileReader<ImageType>::New();
-		reader->SetFileName(fileNames[0].toStdString());
-		reader->SetImageIO(_dicomIO);
-		reader->Update();
-		_itkImage = reader->GetOutput();
-		//DICOMHeader = nullptr;
+		ImageFileReader<ImageType>::Pointer reader;
+
+		try {
+			reader = ImageFileReader<ImageType>::New();
+			reader->SetFileName(fileNames[0].toStdString());
+			reader->SetImageIO(_dicomIO);
+			reader->Update();
+			_itkImage = reader->GetOutput();
+
+		}
+		catch (itk::ImageFileReaderException& e) {
+			qDebug() << "Fail to read Dicom header";
+			qDebug() << e.what();
+			qDebug() << "Description: " << e.GetDescription();
+			reader = ImageFileReader<ImageType>::New();
+			reader->SetFileName(fileNames[0].toStdString());
+			reader->Update();
+			_itkImage = reader->GetOutput();
+		}
 	}
 	// Load Dicom Data
 	else {
@@ -112,7 +120,7 @@ bool IOManager::loadImageData(QStringList fileNames)
 			constIterator != fileNames.constEnd(); ++constIterator) {
 			_fileNames.push_back(constIterator->toStdString());
 		}
-		//GDCMImageIO::Pointer dicomIO = GDCMImageIO::New();
+		_dicomIO = GDCMImageIO::New();
 
 		ImageSeriesReader<ImageType>::Pointer reader =
 			ImageSeriesReader<ImageType>::New();
@@ -121,46 +129,27 @@ bool IOManager::loadImageData(QStringList fileNames)
 		reader->Update();
 		_itkImage = reader->GetOutput();
 
-		//DICOMHeader = new QMap<QString, QString>;
-		//const  MetaDataDictionary& dictionary = dicomIO->GetMetaDataDictionary();
-		//for (MetaDataDictionary::ConstIterator cit = dictionary.Begin();
-		//	cit != dictionary.End(); ++cit) {
-		//	MetaDataObjectBase::Pointer  entry = cit->second;
-		//	MetaDataObject<std::string>::Pointer entryvalue =
-		//		dynamic_cast<MetaDataObject<std::string>*>(entry.GetPointer());
-		//	if (entryvalue)
-		//	{
-		//		DICOMHeader->insert(QString::fromStdString(cit->first),
-		//			QString::fromStdString(entryvalue->GetMetaDataObjectValue()));
-		//	}
-		//}
 	}
-	//if (_itkImage.IsNotNull()) {
-	//	// using the same m_orientation ITK_COORDINATE_ORIENTATION_RAI
-	//	OrientImageFilter<ImageType, ImageType>::Pointer orienter =
-	//		OrientImageFilter<ImageType, ImageType>::New();
-	//	orienter->UseImageDirectionOn();
-	//	orienter->SetDesiredCoordinateOrientation(
-	//		itk::SpatialOrientation::ITK_COORDINATE_ORIENTATION_RAI);
-	//	orienter->SetInput(_itkImage);
-	//	orienter->Update();
-	//	_itkImage = orienter->GetOutput();
-	//	// Image Registration
-	//	if (this->registrationFlag) {
-	//		_itkImage = imageAlignment(this->myImageManager->listOfItkImages[0], _itkImage);
-	//	}
+	if (_itkImage.IsNotNull()) {
+		// using the same m_orientation ITK_COORDINATE_ORIENTATION_RAI
+		OrientImageFilter::Pointer orienter =
+			OrientImageFilter::New();
+		orienter->UseImageDirectionOn();
+		orienter->SetDesiredCoordinateOrientation(
+			itk::SpatialOrientation::ITK_COORDINATE_ORIENTATION_RAI);
+		orienter->SetInput(_itkImage);
+		orienter->Update();
+		_itkImage = orienter->GetOutput();
+		// Image Registration
+		if (this->registrationFlag && 
+			this->listOfItkImages.size() > 0 && 
+			this->listOfItkImages[0].IsNotNull()) {
+			_itkImage = imageAlignment(this->listOfItkImages[0], _itkImage);
+		}
 
-	//	ImageToVTKImageFilter<ImageType>::Pointer connector =
-	//		ImageToVTKImageFilter<ImageType>::New();
-	//	connector->SetInput(_itkImage);
-	//	connector->Update();
-	//	_vtkImage = connector->GetOutput();
-	//}
-
-	//this->myImageManager->listOfItkImages.append( _itkImage);
-	//this->myImageManager->listOfVtkImages.append(_vtkImage);
-	//this->myImageManager->listOfDICOMHeader.append(DICOMHeader);
-
+	}
+	listOfItkImages << _itkImage;
+	listOfDicomIOs << _dicomIO;
 	return true;
 }
 
@@ -173,11 +162,6 @@ IOManager::ImageType::Pointer IOManager::imageAlignment(ImageType::Pointer align
 	//return registration.GetOutput();
 	return nullptr;
 }
-//
-//void IOManager::setMyImageManager(MyImageManager * myImageManager)
-//{
-//	this->myImageManager = myImageManager;
-//}
 
 void IOManager::slotOpenMultiImages()
 {
@@ -188,6 +172,8 @@ void IOManager::slotOpenMultiImages()
 	//this->myImageManager->listOfModalityNames += "CUBE T1+C";
 	//this->myImageManager->listOfModalityNames += "2D DIR/QIR";
 	//this->myImageManager->listOfModalityNames += "MPRAGE";
+
+	slotCleanImagesAndDicomIOs();
 
 	bool _flag = this->registrationFlag;
 	for (QList<QStringList>::const_iterator cit = this->listOfFileNames.constBegin();
@@ -205,7 +191,8 @@ void IOManager::slotOpenMultiImages()
 	//this->myImageManager->overlay->Initialize(
 	//	this->myImageManager->listOfVtkImages[0]);
 
-	emit finishOpenMultiImages();
+	emit signalFinishOpenMultiImages();
+	emit signalFinishOpenMultiImages(&this->listOfItkImages, &this->listOfDicomIOs);
 }
 
 void IOManager::slotOpenOneImage(QStringList fileNames)
@@ -214,7 +201,13 @@ void IOManager::slotOpenOneImage(QStringList fileNames)
 	this->registrationFlag = false;
 	loadImageData(fileNames);
 	this->registrationFlag = _flag;
-	emit finishOpenOneImage();
+	emit signalFinishOpenOneImage();
+}
+
+void IOManager::slotCleanImagesAndDicomIOs()
+{
+	this->listOfDicomIOs.clear();
+	this->listOfItkImages.clear();
 }
 
 //void IOManager::slotOpenSegmentationWithDiaglog()

@@ -23,16 +23,28 @@
 
 
 namespace Ui { class MainWindow; }
-//class RegistrationWizard;
+class vtkRenderWindow;
 
 class MainWindow : public QMainWindow
 {
-	Q_OBJECT
+	Q_OBJECT;
+
 
 public:
+
+	const static unsigned short NUM_OF_2D_VIEWERS = 3;
+	const static unsigned short NUM_OF_3D_VIEWERS = 1;
+
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
+
+	void initialization();
+
+	Ui::MainWindow* geUi() { return ui; }
+
+	void setRenderWindow(unsigned short i, vtkRenderWindow* renderWindow);
+	//vtkRenderWindow* getRenderWindow(unsigned short i);
 
 signals:
 	void signalImageImportInitialize();
@@ -46,6 +58,10 @@ private slots:
 	void slotOpenRecentImage();
 	void slotOpenNewImage();
 
+	/**
+	* four viewers and maximum
+	*/
+	void slotImage();
 
 
 

@@ -39,12 +39,12 @@ set(
 
 set(
 	VIEW_RC
-	${CMAKE_SOURCE_DIR}/resources/IADE_Analyzer.rc
+	${PROJECT_SOURCE_DIR}/resources/IADE_Analyzer.rc
 )
 
 set(
 	VIEW_QRC
-	${CMAKE_SOURCE_DIR}/resources/IADE_Analyzer.qrc
+	${PROJECT_SOURCE_DIR}/resources/IADE_Analyzer.qrc
 )
 qt5_add_resources(
 	VIEW_QRC_CPP

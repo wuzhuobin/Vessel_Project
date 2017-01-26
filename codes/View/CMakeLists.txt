@@ -9,12 +9,15 @@ project(View)
 find_package(Qt5Core)
 find_package(Qt5Widgets)
 
+
+
 include_directories(
 	${PROJECT_SOURCE_DIR}
 	${PROJECT_BINARY_DIR}
-	# ${MAIN_INCLUDE_DIRECTORIES}
+	RegistrationWizard
 	)
 
+add_subdirectory(RegistrationWizard)
 
 set(
 	VIEW_H
@@ -43,6 +46,7 @@ qt5_wrap_ui(
 
 add_library(
 	View
+	SHARED
 	${VIEW_H}
 	${VIEW_SRC}
 	${VIEW_UI}
@@ -55,8 +59,15 @@ target_link_libraries(
 	View
 	Qt5::Core
 	Qt5::Widgets
-	# ${MAIN_LINK_LIBRARIES}
+	RegistrationWizard
 	)
+
+set_target_properties(
+    View
+    PROPERTIES
+    WINDOWS_EXPORT_ALL_SYMBOLS 
+    true
+)
 
 #Grouping in MSVC
 SOURCE_GROUP(

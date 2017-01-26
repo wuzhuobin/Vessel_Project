@@ -11,6 +11,8 @@ if (NOT ITK_FOUND)
 	message(FATAL_ERROR "error: ITK is not found")
 endif()
 include(${ITK_USE_FILE})
+
+#QT5
 find_package(Qt5Core)
 find_package(Qt5Widgets REQUIRED)
 if(NOT Qt5Widgets_FOUND)
@@ -40,6 +42,7 @@ qt5_wrap_cpp(
 
 add_library(
 	Model
+	SHARED
 	${MODEL_SRC}
 	${MODEL_H}
 	${MODEL_MOC}
@@ -51,6 +54,13 @@ target_link_libraries(
 	${VTK_LIBRARIES}
 	Qt5::Core
 	Qt5::Widgets
+)
+
+set_target_properties(
+    Model
+    PROPERTIES
+    WINDOWS_EXPORT_ALL_SYMBOLS 
+    true
 )
 
 source_group(
