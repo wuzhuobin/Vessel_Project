@@ -1,6 +1,8 @@
 #include "ImageManager.h"
 
+#include "Overlay.h"
 #include "IVtkImageData.h"
+#include <itkCastImageFilter.h>
 
 ImageManager::ImageManager(unsigned int numOfImages, QObject * parent)
 {
@@ -23,7 +25,44 @@ void ImageManager::setNumOfImages(unsigned int num)
 	}
 }
 
-bool ImageManager::setImage(unsigned int i, IVtkImageData::itkImageType * image)
+bool ImageManager::setOverlay()
+{
+	if (m_images[0] != nullptr) {
+		setOverlay(m_images[0]);
+		return true;
+	}
+	else
+		return false;
+}
+
+bool ImageManager::setOverlay(IVtkImageData * image)
+{
+	if (image != nullptr) {
+		setOverlay(image->GetItkImage());
+		return true;
+	}
+	else
+		return false;
+}
+
+bool ImageManager::setOverlay(IVtkImageData::itkImageType::Pointer image)
+{
+	typedef itk::CastImageFilter<IVtkImageData::itkImageType, Overlay::OverlayImageData::itkImageType> CastImageFilter;
+	
+	if (image != nullptr) {
+		CastImageFilter::Pointer castImageFilter = CastImageFilter::New();
+		castImageFilter->SetInput(image);
+		castImageFilter->Update();
+
+		m_overlay = QSharedPointer<Overlay>(new Overlay(castImageFilter->GetOutput()));
+
+		return true;
+	}
+	else
+		return false;
+}
+
+bool ImageManager::setImage(unsigned int i, IVtkImageData::itkImageType::Pointer image)
 {
 	if (i >= m_images.size()) {
 		return false;
@@ -34,7 +73,6 @@ bool ImageManager::setImage(unsigned int i, IVtkImageData::itkImageType * image)
 	vtkSmartPointer<IVtkImageData> _image =
 		vtkSmartPointer<IVtkImageData>::New();
 	_image->Graft(image);
-	_image->Print(cout);
 	m_images[i] = _image;
 	return true;
 }
@@ -77,8 +115,12 @@ IVtkImageData * ImageManager::getImage(unsigned int i) const
 	if (i >= m_images.size()) {
 		return nullptr;
 	}
-	//m_images[i]->Print(cout);
 	return m_images[i];
+}
+
+Overlay * ImageManager::getOverlay() const
+{
+	return m_overlay.data();
 }
 
 const QString ImageManager::getModalityName(unsigned int i) const

@@ -11,7 +11,7 @@ Copyright (C) 2016
 */
 #include "InteractorStyleSwitch.h"
 
-#include "InteractorStyleNavigation.h"
+#include "QInteractorStyleNavigation.h"
 #include "InteractorStyleWindowLevel.h"
 
 #include <vtkCommand.h>
@@ -31,7 +31,7 @@ InteractorStyleSwitch::InteractorStyleSwitch()
 	InteractorStyleTesting = vtkInteractorStyleImage::New();
 	// The first instance of QInteractorStyleNavigation should have control 
 	// of the ui
-	Navigation = InteractorStyleNavigation::New();
+	Navigation = QInteractorStyleNavigation::New();
 	WindowLevel = InteractorStyleWindowLevel::New();
 	//PolygonDraw = QInteractorStyleVesselSegmentation::New();
 	//SeedsPlacer = QInteractorStyleLumenSeedsPlacer::New();

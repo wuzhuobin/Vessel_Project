@@ -1,11 +1,15 @@
 #include "Core.h"
 
 #include "ImageViewer.h"
+#include "InteractorStyles\QInteractorStyleNavigation.h"
+#include "Overlay.h"
+#include "ui_MainWindow.h"
+
 
 #include <qdebug.h>
 
 #include <vtkRenderWindowInteractor.h>
-#include <ui_MainWindow.h>
+#include <vtkLookupTable.h>
 
 Core::Core(QObject * parent)
 	:
@@ -13,6 +17,9 @@ Core::Core(QObject * parent)
 	ioManager(parent),
 	QObject(parent)
 {
+
+	imageManager.setModalityName(0, "T2 Image");
+	imageManager.setModalityName(1, "MRA Image");
 
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractor[i] = vtkRenderWindowInteractor::New();
@@ -30,6 +37,8 @@ Core::Core(QObject * parent)
 
 		mainWindow.setRenderWindow(i, imageViewers[i]->GetRenderWindow());
 	}
+	mainWindow.geUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
+
 
 	// connect changing mode
 	connect(mainWindow.geUi()->actionNavigation, SIGNAL(triggered()),
@@ -38,13 +47,15 @@ Core::Core(QObject * parent)
 		this, SLOT(slotWindowLevel()));
 
 
-	connect(&mainWindow, SIGNAL(signalImageImportInitialize()),
-		&ioManager, SLOT(slotCleanListsOfFileNames()));
-	connect(&mainWindow, SIGNAL(signalImageImportAdd(QStringList*)),
-		&ioManager, SLOT(slotAddToListOfFileNames(QStringList*)));
-	connect(&mainWindow, SIGNAL(signalImageImportLoad()),
-		&ioManager, SLOT(slotOpenMultiImages()));
+	//connect(&mainWindow, SIGNAL(signalImageImportInitialize()),
+	//	&ioManager, SLOT(slotCleanListsOfFileNames()));
+	//connect(&mainWindow, SIGNAL(signalImageImportAdd(QStringList*)),
+	//	&ioManager, SLOT(slotAddToListOfFileNames(QStringList*)));
+	//connect(&mainWindow, SIGNAL(signalImageImportLoad()),
+	//	&ioManager, SLOT(slotOpenMultiImages()));
 
+	connect(&mainWindow, SIGNAL(signalImageImportLoad(QList<QStringList>*)),
+		&ioManager, SLOT(slotAddToListOfFileNamesAndOpen(QList<QStringList>*)));
 	connect(&mainWindow, SIGNAL(signalImageImportLoad(QList<QStringList>*)),
 		&ioManager, SLOT(slotAddToListOfFileNamesAndOpen(QList<QStringList>*)));
 
@@ -52,6 +63,8 @@ Core::Core(QObject * parent)
 	//	this, SLOT(slotIOManagerToImageManager(QList<IOManager::ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>* dicoms)));
 	connect(&ioManager, SIGNAL(signalFinishOpenMultiImages()),
 		this, SLOT(slotIOManagerToImageManager()));
+	connect(&ioManager, SIGNAL(signalFinishOpenOverlay()),
+		this, SLOT(slotOverlayToImageManager()));
 
 	//connect(mainWindow.geUi()->actionNavigation, SIGNAL(toggled(bool)),
 	//	this, SLOT(slotTest(bool)));
@@ -66,7 +79,17 @@ Core::Core(QObject * parent)
 Core::~Core()
 {
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		
+		imageInteractorStyle[i]->Delete();
+		imageInteractorStyle[i] = nullptr;
+
+		imageInteractor[i]->SetInteractorStyle(nullptr);
+		imageInteractor[i]->Delete();
+		imageInteractor[i] = nullptr;
+		
 		imageViewers[i]->Delete();
+		imageViewers[i] = nullptr;
+
 		mainWindow.setRenderWindow(i, nullptr);
 	}
 }
@@ -74,8 +97,6 @@ Core::~Core()
 void Core::slotIOManagerToImageManager()
 {
 	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
-		qDebug() << __LINE__;
-		qDebug() << __FUNCTION__;
 		//if (ioManager.getListOfItkImages()->at(i)) {
 			imageManager.setImage(i, ioManager.getListOfItkImages()[i]);
 		//}
@@ -83,15 +104,15 @@ void Core::slotIOManagerToImageManager()
 			imageManager.setDicomIO(i, ioManager.getListOfDicomIOs()[i]);
 		//}
 	}
-
+	ioManager.slotInitializeOverlay();
 	// set input to image viewer
-	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-		imageViewers[i]->SetInputData(imageManager.getImage(0));
-		imageViewers[i]->Render();
-		imageViewers[i]->SetSlice(imageViewers[i]->GetSliceMax() / 2);
-		imageViewers[i]->Render();
-	}
+	slotMultiPlanarView();
 	mainWindow.initialization();
+}
+
+void Core::slotOverlayToImageManager()
+{
+	imageManager.setOverlay(ioManager.getOverlay());
 }
 
 void Core::slotNavigation()
@@ -106,6 +127,74 @@ void Core::slotWindowLevel()
 {
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetCurrentStyleToWindowLevel();
+	}
+}
+
+void Core::slotMultiPlanarView()
+{
+	slotChangeView(MULTIPLANAR_VIEW);
+}
+
+void Core::slotAllAxialView()
+{
+	slotChangeView(ALL_AXIAL_VIEW);
+}
+void Core::slotChangeView(unsigned int viewMode)
+{
+	if (m_viewMode == viewMode)
+		return;
+	switch (viewMode)
+	{
+	case MULTIPLANAR_VIEW:
+		// MULTIPLANAR_VIEW
+		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+			// Change input to same image, default 0
+			// SetupInteractor should be ahead of InitializeHeader
+			imageViewers[i]->SetInputData(imageManager.getImage(DEFAULT_IMAGE));
+			imageViewers[i]->SetInputDataLayer(imageManager.getOverlay()->getData());
+			imageViewers[i]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
+			imageViewers[i]->SetSliceOrientation(i);
+			imageViewers[i]->Render();
+			imageViewers[i]->InitializeHeader(imageManager.getModalityName(DEFAULT_IMAGE).toStdString());
+			imageViewers[i]->Render();
+			// else only change input and viewer m_orientation
+			//imageViewers[i]->GetRenderWindow()->GetInteractor()->Enable();
+			// Show view props for overlay
+			//m_2DimageViewer[i]->SetAllBlack(false);
+
+		}
+		break;
+	case ALL_AXIAL_VIEW:
+		// ALL_AXIAL_VIEW
+		//	// i1 for looping all 5 vtkImage, while i2 for looping all 3 m_2DimageViewer
+		//	for (int i1 = 0, i2 = 0; i2 < NUMBER_OF_2DVIEWERS; ++i2)
+		//	{
+		//		for (; i1 < this->m_imageManager->getListOfVtkImages().size() && i2 < NUMBER_OF_2DVIEWERS;
+		//			++i1) {
+		//			// skip the NULL image
+		//			if (this->m_imageManager->getListOfVtkImages()[i1] != NULL) {
+		//				// SetupInteractor should be ahead of InitializeHeader
+		//				this->m_2DimageViewer[i2]->SetInputData(
+		//					this->m_imageManager->getListOfVtkImages()[i1]);
+		//				this->m_2DimageViewer[i2]->SetSliceOrientation(MyImageViewer::SLICE_ORIENTATION_XY);
+		//				this->m_2DimageViewer[i2]->Render();
+		//				this->m_2DimageViewer[i2]->InitializeHeader(m_imageManager->getModalityName(i2));
+
+		//				++i2;
+		//			}
+		//		}
+		//		if (i1 >= m_imageManager->getListOfVtkImages().size() && i2 < NUMBER_OF_2DVIEWERS) {
+		//			this->m_2DimageViewer[i2]->GetRenderWindow()->GetInteractor()->Disable();
+		//			// disable view props
+		//			m_2DimageViewer[i2]->SetAllBlack(true);
+
+		//		}
+
+		//	}
+
+		break;
+	default:
+		break;
 	}
 }
 

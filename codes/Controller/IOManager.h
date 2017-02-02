@@ -23,11 +23,13 @@ public:
 
 	void enableRegistration(bool flag);
 
-	const QList<QStringList> getListOfFileNames();
+	const QList<QStringList> getListOfFileNames() const;
 
 	const QList<ImageType::Pointer> getListOfItkImages() const;
 
 	const QList<itk::GDCMImageIO::Pointer> getListOfDicomIOs() const;
+
+	const ImageType::Pointer getOverlay() const;
 
 public slots:
 
@@ -50,6 +52,10 @@ public slots:
 
 	void slotCleanImagesAndDicomIOs();
 
+	void slotInitializeOverlay();
+
+	void slotInitializeOverlay(ImageType::Pointer image);
+
 	//void slotOpenSegmentationWithDiaglog();
 
 	//void slotOpenSegmentation(QString fileName);
@@ -68,6 +74,8 @@ signals:
 	void signalFinishOpenMultiImages(QList<ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>*);
 
 	void signalFinishOpenOneImage();
+
+	void signalFinishOpenOverlay();
 	//void finishOpenSegmentation();
 
 protected:
@@ -81,6 +89,8 @@ private:
 	QList<QStringList> listOfFileNames;
 	QList<ImageType::Pointer> listOfItkImages;
 	QList<itk::GDCMImageIO::Pointer> listOfDicomIOs;
+
+	ImageType::Pointer overlay;
 
 	//QString filePath;
 	bool registrationFlag = false;

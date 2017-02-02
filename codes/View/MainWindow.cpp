@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
 	QActionGroup* actionGroup = new QActionGroup(this);
 	actionGroup->addAction(ui->actionNavigation);
 	actionGroup->addAction(ui->actionWindow_level);
+	actionGroup->addAction(ui->acitonVOI_selection);
 	actionGroup->setExclusive(true);
 
 

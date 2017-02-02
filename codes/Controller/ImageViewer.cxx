@@ -85,7 +85,7 @@ ImageViewer::ImageViewer(/*QObject* parent*/)
 	//RenderWindow->SetNumberOfLayers(2);
 
 	this->InstallPipeline();
-	this->OverlayActor->SetVisibility(false);
+	//this->OverlayActor->SetVisibility(false);
 	// Error blocking fot windowLevel
 	// temporary fixation
 	//vtkSmartPointer<vtkCallbackCommand> windowLevelErrorBlocker =
@@ -159,11 +159,12 @@ ImageViewer::~ImageViewer()
 void ImageViewer::UpdateDisplayExtent()
 {
 	vtkImageViewer2::UpdateDisplayExtent();
-	vtkAlgorithm *input = this->GetInputAlgorithm();
-	if (!input || !this->ImageActor)
+	vtkAlgorithm *input = this->WindowLevel->GetInputAlgorithm();
+	if (!input || !this->OverlayActor)
 	{
 		return;
 	}
+	input->UpdateInformation();
 	vtkInformation* outInfo = input->GetOutputInformation(0);
 	int *w_ext = outInfo->Get(
 		vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
@@ -321,9 +322,9 @@ void ImageViewer::SetInputData(vtkImageData *in)
 {
 	vtkImageViewer2::SetInputData(in);
 	//Color Map
-	//double* range = in->GetScalarRange();
-	//this->SetColorWindow(range[1] - range[0]);
-	//this->SetColorLevel((range[1] + range[0])*0.5);
+	double* range = in->GetScalarRange();
+	this->SetColorWindow(range[1] - range[0]);
+	this->SetColorLevel((range[1] + range[0])*0.5);
 
 	//DefaultWindowLevel[0] = this->GetColorWindow();
 	//DefaultWindowLevel[1] = this->GetColorLevel();

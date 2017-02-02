@@ -599,8 +599,6 @@ void FindImageThread::run()
 			nameGenerator->SetDirectory(allDir.at(i).toStdString().c_str());
 			//nameGenerator->AddSeriesRestriction("0008|0021");
 			nameGenerator->GetInputFileNames();
-			nameGenerator->GlobalWarningDisplayOff();
-			itk::Object::GlobalWarningDisplayOff();
 
 			qDebug() << "The directory: ";
 			qDebug() << allDir.at(i);

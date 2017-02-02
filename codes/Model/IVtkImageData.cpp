@@ -38,11 +38,18 @@ void IVtkImageData::ShallowCopy(vtkDataObject * dataObject)
 
 void IVtkImageData::DeepCopy(vtkDataObject * dataObject)
 {
+	IVtkImageData* ivtkImageData = IVtkImageData::SafeDownCast(dataObject);
+	if (ivtkImageData) {
+		m_itkImage->Graft(ivtkImageData->GetItkImage());
+		return;
+	}
+
 	vtkImageData *imageData = vtkImageData::SafeDownCast(dataObject);
 	if (imageData != NULL)
 	{
 		vtkImageData::DeepCopy(imageData);
 		updateITKImage();
+		return;
 	}
 }
 

@@ -6,9 +6,8 @@
 #include "MainWindow.h"
 #include "ImageManager.h"
 #include "IOManager.h"
-#include "ImageViewer.h"
+#include "IADEImageManager.h"
 #include "InteractorStyleSwitch.h"
-#include "InteractorStyles\InteractorStyleWindowLevel.h"
 
 
 
@@ -18,6 +17,12 @@ class Core: public QObject
 public:
 
 	const static unsigned short NUM_OF_IMAGES = 2;
+	const static unsigned short DEFAULT_IMAGE = 0;
+	const static enum VIEW_MODE
+	{
+		MULTIPLANAR_VIEW = 0,
+		ALL_AXIAL_VIEW = 1
+	};
 
 	Core(QObject* parent = nullptr);
 	~Core();
@@ -27,22 +32,29 @@ private slots:
 	void slotIOManagerToImageManager(QList<IOManager::ImageType::Pointer>* images,
 		QList<itk::GDCMImageIO::Pointer>* dicoms);
 	void slotIOManagerToImageManager();
+	void slotOverlayToImageManager();
 
 	void slotNavigation();
 	void slotWindowLevel();
+
+	void slotMultiPlanarView();
+	void slotAllAxialView();
+	void slotChangeView(unsigned int viewMode);
 
 	//void slotTest(bool flag);
 
 private:
 	MainWindow mainWindow;
 	IOManager ioManager;
-	ImageManager imageManager;
+	IADEImageManager imageManager;
 
 	ImageViewer* imageViewers[MainWindow::NUM_OF_2D_VIEWERS];
 	vtkRenderWindowInteractor* imageInteractor[MainWindow::NUM_OF_2D_VIEWERS];
 	InteractorStyleSwitch* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
 	//InteractorStyleWindowLevel* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
 
+
+	unsigned int m_viewMode = -1;
 };
 
 

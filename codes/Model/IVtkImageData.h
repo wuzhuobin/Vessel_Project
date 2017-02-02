@@ -44,6 +44,7 @@ private:
 
 										   //vtkSmartPointer<vtkImageData> m_vtkImage;
 	itkImageType::Pointer m_itkImage;
+	std::string m_modalityName;
 	//itk::GDCMImageIO::Pointer m_dicomIO;
 
 };

@@ -66,7 +66,7 @@ void IOManager::slotCleanListsOfFileNames()
 	this->listOfFileNames.clear();
 }
 
-const QList<QStringList> IOManager::getListOfFileNames()
+const QList<QStringList> IOManager::getListOfFileNames() const
 {
 	return this->listOfFileNames;
 }
@@ -79,6 +79,11 @@ const QList<ImageType::Pointer> IOManager::getListOfItkImages() const
 const QList<GDCMImageIO::Pointer> IOManager::getListOfDicomIOs() const
 {
 	return this->listOfDicomIOs;
+}
+
+const ImageType::Pointer IOManager::getOverlay() const
+{
+	return overlay;
 }
 
 bool IOManager::loadImageData(QStringList fileNames)
@@ -208,6 +213,26 @@ void IOManager::slotCleanImagesAndDicomIOs()
 {
 	this->listOfDicomIOs.clear();
 	this->listOfItkImages.clear();
+}
+
+void IOManager::slotInitializeOverlay()
+{
+	if (listOfItkImages.size() > 1 && listOfItkImages[0].IsNotNull()){
+		slotInitializeOverlay(listOfItkImages[0]);
+	}
+}
+
+void IOManager::slotInitializeOverlay(ImageType::Pointer image)
+{
+	overlay = ImageType::New();
+	overlay->SetRegions(image->GetLargestPossibleRegion());
+	overlay->SetDirection(image->GetDirection());
+	overlay->SetOrigin(image->GetOrigin());
+	overlay->SetSpacing(image->GetSpacing());
+	overlay->Allocate();
+	overlay->FillBuffer(0);
+
+	emit signalFinishOpenOverlay();
 }
 
 //void IOManager::slotOpenSegmentationWithDiaglog()

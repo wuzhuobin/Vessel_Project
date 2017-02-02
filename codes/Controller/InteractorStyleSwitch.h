@@ -19,13 +19,6 @@ Copyright (C) 2016
 
 #include <list>
 
-//#include "InteractorStyleNavigation.h"
-//#include "InteractorStyleWindowLevel.h"
-//#include "QInteractorStyleVesselSegmentation.h"
-//#include "QInteractorStyleLumenSeedsPlacer.h"
-//#include "QInteractorStylePaintBrush.h"
-//#include "QInteractorStyleROI.h"
-//#include "QInteractorStyleRuler.h"
 #include "StyleSwitchMacro.h"
 
 #ifndef SET_CURRENT_STYLE_TO_MACRO
@@ -51,7 +44,7 @@ void InteractorStyleSwitch::SetCurrentStyleTo##style(){ \
 class ImageViewer;
 class vtkInteractorStyleImage;
 class InteractorStyleWindowLevel;
-class InteractorStyleNavigation;
+class QInteractorStyleNavigation;
 
 class InteractorStyleSwitch : public vtkInteractorStyleSwitchBase
 {
@@ -62,7 +55,7 @@ public:
 
 	vtkGetMacro(InteractorStyleTesting, vtkInteractorStyleImage*);
 	vtkGetMacro(WindowLevel, InteractorStyleWindowLevel*);
-	vtkGetMacro(Navigation, InteractorStyleNavigation*);
+	vtkGetMacro(Navigation, QInteractorStyleNavigation*);
 	//vtkGetMacro(PolygonDraw, QInteractorStyleVesselSegmentation*);
 	//vtkGetMacro(SeedsPlacer, QInteractorStyleLumenSeedsPlacer*);
 	//vtkGetMacro(PaintBrush, QInteractorStylePaintBrush*);
@@ -112,7 +105,7 @@ protected:
 private:
 
 	vtkInteractorStyleImage* InteractorStyleTesting;
-	InteractorStyleNavigation*	Navigation;
+	QInteractorStyleNavigation*	Navigation;
 	InteractorStyleWindowLevel* WindowLevel;
 	//QInteractorStyleVesselSegmentation* PolygonDraw;
 	//QInteractorStyleLumenSeedsPlacer* SeedsPlacer;
