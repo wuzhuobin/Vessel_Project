@@ -67,9 +67,10 @@ bool ImageManager::setImage(unsigned int i, IVtkImageData::itkImageType::Pointer
 	if (i >= m_images.size()) {
 		return false;
 	}
-	//if (!image) {
-	//	return false;
-	//}
+	if (!image) {
+		m_images[i] = nullptr;
+		return false;
+	}
 	vtkSmartPointer<IVtkImageData> _image =
 		vtkSmartPointer<IVtkImageData>::New();
 	_image->Graft(image);
@@ -82,9 +83,10 @@ bool ImageManager::setImage(unsigned int i, vtkImageData * image)
 	if (i >= m_images.size()) {
 		return false;
 	}
-	//if (!image) {
-	//	return false;
-	//}
+	if (!image) {
+		m_images[i] = nullptr;
+		return false;
+	}
 	vtkSmartPointer<IVtkImageData> _image =
 		vtkSmartPointer<IVtkImageData>::New();
 	_image->ShallowCopy(image);

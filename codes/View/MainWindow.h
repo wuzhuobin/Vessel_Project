@@ -24,6 +24,8 @@
 
 namespace Ui { class MainWindow; }
 class vtkRenderWindow;
+class QMenu;
+class QSettings;
 
 class MainWindow : public QMainWindow
 {
@@ -38,9 +40,13 @@ public:
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
-
 	void initialization();
 
+	void addModalityNames(QString name);
+	void setModalityNamesVisible(unsigned int num, bool flag);
+	void clearModalityNames();
+
+	
 	Ui::MainWindow* geUi() { return ui; }
 
 	void setRenderWindow(unsigned short i, vtkRenderWindow* renderWindow);
@@ -64,9 +70,6 @@ private slots:
 	void slotImage();
 
 
-
-
-
 private:
 	void imageImport(QString path);
 
@@ -82,8 +85,14 @@ private:
 
 
 
-
 	Ui::MainWindow* ui;
+
+	QList<QMenu*> selectImgMenus;
+
+	QStringList modalityNames;
+
+
+	QSettings* settings;
 	//RegistrationWizard* m_rw;
 };
 

@@ -5,7 +5,6 @@
 
 #include <vtkRenderWindow.h>
 
-
 #include "RegistrationWizard.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -14,6 +13,14 @@ MainWindow::MainWindow(QWidget *parent)
 	ui = new Ui::MainWindow;
 	ui->setupUi(this);
 
+	settings = new QSettings("Setting.ini", QSettings::IniFormat, this);
+
+	for (int i = 0; i < NUM_OF_2D_VIEWERS; ++i) {
+		selectImgMenus << new QMenu(this);
+	}
+	ui->ULSelectImgBtn->setMenu(selectImgMenus[0]);
+	ui->URSelectImgBtn->setMenu(selectImgMenus[1]);
+	ui->LLSelectImgBtn->setMenu(selectImgMenus[2]);
 
 	connect(ui->ULBtn, SIGNAL(clicked()), ui->actionImage1, SLOT(trigger()));
 	connect(ui->URBtn, SIGNAL(clicked()), ui->actionImage2, SLOT(trigger()));
@@ -170,8 +177,8 @@ void MainWindow::slotImage()
 void MainWindow::imageImport(QString path)
 {
 	RegistrationWizard rw(path, 2, this);
-	rw.setImageModalityNames(0, "T2 image ");
-	rw.setImageModalityNames(1, "MRA image");
+	rw.setImageModalityNames(0, modalityNames[0]);
+	rw.setImageModalityNames(1, modalityNames[1]);
 
 	QList<QStringList> _listOfFileNames;
 
@@ -189,6 +196,7 @@ void MainWindow::imageImport(QString path)
 		emit signalImageImportLoad(&_listOfFileNames);
 
 		qDebug() << rw.getDirectory();
+
 		adjustForCurrentFile(rw.getDirectory());
 
 	}
@@ -217,6 +225,31 @@ void MainWindow::initialization()
 
 }
 
+void MainWindow::addModalityNames(QString name)
+{
+	modalityNames << name;
+	for (int i = 0; i < NUM_OF_2D_VIEWERS; ++i) {
+			selectImgMenus[i]->addAction(new QAction(name, selectImgMenus[i]));
+	}
+}
+
+void MainWindow::setModalityNamesVisible(unsigned int num, bool flag)
+{
+	for (int i = 0; i < NUM_OF_2D_VIEWERS; ++i) {
+		QList<QAction*> actions = selectImgMenus[i]->actions();
+		actions[num]->setVisible(flag);
+	}
+}
+
+void MainWindow::clearModalityNames()
+{
+	modalityNames.clear();
+	for (int i = 0; i < NUM_OF_2D_VIEWERS; ++i) {
+		selectImgMenus[i]->clear();
+	}
+}
+
+
 void MainWindow::setEnabled(bool flag)
 {
 	ui->actionAbout->setEnabled(true);
@@ -240,14 +273,13 @@ void MainWindow::createRecentImageActions()
 
 void MainWindow::adjustForCurrentFile(const QString &filePath)
 {
-	QSettings settings("DIIR", "IADE_Analyzer");
-	QStringList recentFilePaths = settings.value("recentFiles").toStringList();
+	QStringList recentFilePaths = settings->value("recentFiles").toStringList();
 
 	recentFilePaths.removeAll(filePath);
 	recentFilePaths.prepend(filePath);
 	while (recentFilePaths.size() > MAX_RECENT_IMAGE)
 		recentFilePaths.removeLast();
-	settings.setValue("recentFiles", recentFilePaths);
+	settings->setValue("recentFiles", recentFilePaths);
 
 	// see note
 	updateRecentActionList();
@@ -255,9 +287,8 @@ void MainWindow::adjustForCurrentFile(const QString &filePath)
 
 void MainWindow::updateRecentActionList()
 {
-	QSettings settings("DIIR", "IADE_Analyzer");
 	QStringList recentFilePaths =
-		settings.value("recentFiles").toStringList();
+		settings->value("recentFiles").toStringList();
 
 	int itEnd = 0;
 	if (recentFilePaths.size() <= MAX_RECENT_IMAGE)

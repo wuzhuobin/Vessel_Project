@@ -20,6 +20,9 @@ Core::Core(QObject * parent)
 
 	imageManager.setModalityName(0, "T2 Image");
 	imageManager.setModalityName(1, "MRA Image");
+	mainWindow.addModalityNames("T2 Image");
+	mainWindow.addModalityNames("MRA Image");
+
 
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractor[i] = vtkRenderWindowInteractor::New();
@@ -63,6 +66,8 @@ Core::Core(QObject * parent)
 	//	this, SLOT(slotIOManagerToImageManager(QList<IOManager::ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>* dicoms)));
 	connect(&ioManager, SIGNAL(signalFinishOpenMultiImages()),
 		this, SLOT(slotIOManagerToImageManager()));
+	//connect(&ioManager, SIGNAL(signalFinishOpenMultiImages()),
+	//	&ioManager, SLOT(slotInitializeOverlay()));
 	connect(&ioManager, SIGNAL(signalFinishOpenOverlay()),
 		this, SLOT(slotOverlayToImageManager()));
 
@@ -107,6 +112,16 @@ void Core::slotIOManagerToImageManager()
 	ioManager.slotInitializeOverlay();
 	// set input to image viewer
 	slotMultiPlanarView();
+
+	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
+		if (imageManager.getImage(i) == nullptr) {
+			mainWindow.setModalityNamesVisible(i, false);
+		}
+		else {
+			mainWindow.setModalityNamesVisible(i, true);
+
+		}
+	}
 	mainWindow.initialization();
 }
 
