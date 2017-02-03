@@ -233,7 +233,7 @@ void MainWindow::addModalityNames(QString name)
 	}
 }
 
-void MainWindow::setModalityNamesVisible(unsigned int num, bool flag)
+void MainWindow::setSelectImgMenuVisible(unsigned int num, bool flag)
 {
 	for (int i = 0; i < NUM_OF_2D_VIEWERS; ++i) {
 		QList<QAction*> actions = selectImgMenus[i]->actions();

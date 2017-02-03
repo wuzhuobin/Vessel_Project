@@ -43,7 +43,7 @@ public:
 	void initialization();
 
 	void addModalityNames(QString name);
-	void setModalityNamesVisible(unsigned int num, bool flag);
+	void setSelectImgMenuVisible(unsigned int num, bool flag);
 	void clearModalityNames();
 
 	

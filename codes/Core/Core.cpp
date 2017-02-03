@@ -102,24 +102,20 @@ Core::~Core()
 void Core::slotIOManagerToImageManager()
 {
 	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
-		//if (ioManager.getListOfItkImages()->at(i)) {
 			imageManager.setImage(i, ioManager.getListOfItkImages()[i]);
-		//}
-		//if (ioManager.getListOfDicomIOs()->at(i)) {
 			imageManager.setDicomIO(i, ioManager.getListOfDicomIOs()[i]);
-		//}
 	}
 	ioManager.slotInitializeOverlay();
 	// set input to image viewer
 	slotMultiPlanarView();
 
+	// update selectImgMenus 
 	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
 		if (imageManager.getImage(i) == nullptr) {
 			mainWindow.setModalityNamesVisible(i, false);
 		}
 		else {
 			mainWindow.setModalityNamesVisible(i, true);
-
 		}
 	}
 	mainWindow.initialization();
@@ -154,6 +150,7 @@ void Core::slotAllAxialView()
 {
 	slotChangeView(ALL_AXIAL_VIEW);
 }
+
 void Core::slotChangeView(unsigned int viewMode)
 {
 	if (m_viewMode == viewMode)
@@ -166,8 +163,10 @@ void Core::slotChangeView(unsigned int viewMode)
 			// Change input to same image, default 0
 			// SetupInteractor should be ahead of InitializeHeader
 			imageViewers[i]->SetInputData(imageManager.getImage(DEFAULT_IMAGE));
+			// Overlay settings
 			imageViewers[i]->SetInputDataLayer(imageManager.getOverlay()->getData());
 			imageViewers[i]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
+			
 			imageViewers[i]->SetSliceOrientation(i);
 			imageViewers[i]->Render();
 			imageViewers[i]->InitializeHeader(imageManager.getModalityName(DEFAULT_IMAGE).toStdString());
@@ -180,32 +179,32 @@ void Core::slotChangeView(unsigned int viewMode)
 		}
 		break;
 	case ALL_AXIAL_VIEW:
-		// ALL_AXIAL_VIEW
-		//	// i1 for looping all 5 vtkImage, while i2 for looping all 3 m_2DimageViewer
-		//	for (int i1 = 0, i2 = 0; i2 < NUMBER_OF_2DVIEWERS; ++i2)
-		//	{
-		//		for (; i1 < this->m_imageManager->getListOfVtkImages().size() && i2 < NUMBER_OF_2DVIEWERS;
-		//			++i1) {
-		//			// skip the NULL image
-		//			if (this->m_imageManager->getListOfVtkImages()[i1] != NULL) {
-		//				// SetupInteractor should be ahead of InitializeHeader
-		//				this->m_2DimageViewer[i2]->SetInputData(
-		//					this->m_imageManager->getListOfVtkImages()[i1]);
-		//				this->m_2DimageViewer[i2]->SetSliceOrientation(MyImageViewer::SLICE_ORIENTATION_XY);
-		//				this->m_2DimageViewer[i2]->Render();
-		//				this->m_2DimageViewer[i2]->InitializeHeader(m_imageManager->getModalityName(i2));
+		 // ALL_AXIAL_VIEW
+			// i1 for looping all 5 vtkImage, while i2 for looping all 3 m_2DimageViewer
+			for (int i1 = 0, i2 = 0; i2 < MainWindow::NUM_OF_2D_VIEWERS; ++i2)
+			{
+				for (; i1 < NUM_OF_IMAGES && i2 < MainWindow::NUM_OF_2D_VIEWERS;
+					++i1) {
+					// skip the NULL image
+					if (this->imageManager.getImage(i1) != nullptr) {
+						// SetupInteractor should be ahead of InitializeHeader
+						this->imageViewers[i2]->SetInputData(
+							this->imageManager.getImage(i1));
+						this->imageViewers[i2]->SetSliceOrientation(ImageViewer::SLICE_ORIENTATION_XY);
+						this->imageViewers[i2]->Render();
+						this->imageViewers[i2]->InitializeHeader(imageManager.getModalityName(i2).toStdString());
 
-		//				++i2;
-		//			}
-		//		}
-		//		if (i1 >= m_imageManager->getListOfVtkImages().size() && i2 < NUMBER_OF_2DVIEWERS) {
-		//			this->m_2DimageViewer[i2]->GetRenderWindow()->GetInteractor()->Disable();
-		//			// disable view props
-		//			m_2DimageViewer[i2]->SetAllBlack(true);
+						++i2;
+					}
+				}
+				if (i1 >= NUM_OF_IMAGES && i2 < MainWindow::NUM_OF_2D_VIEWERS) {
+					//this->imageViewers[i2]->GetRenderWindow()->GetInteractor()->Disable();
+					//// disable view props
+					//imageViewers[i2]->SetAllBlack(true);
 
-		//		}
+				}
 
-		//	}
+			}
 
 		break;
 	default:
