@@ -112,10 +112,10 @@ void Core::slotIOManagerToImageManager()
 	// update selectImgMenus 
 	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
 		if (imageManager.getImage(i) == nullptr) {
-			mainWindow.setModalityNamesVisible(i, false);
+			mainWindow.setSelectImgMenuVisible(i, false);
 		}
 		else {
-			mainWindow.setModalityNamesVisible(i, true);
+			mainWindow.setSelectImgMenuVisible(i, true);
 		}
 	}
 	mainWindow.initialization();
