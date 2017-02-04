@@ -21,9 +21,14 @@ if(NOT Qt5Widgets_FOUND)
 	message(FATAL_ERROR "error: Qt5Widgets is not found")
 endif()
 
-include_directories(
-	${PROJECT_SOURCE_DIR}
-	${PROJECT_BINARY_DIR}
+set(
+	IMAGE_VIEWER_SRC
+	${PROJECT_SOURCE_DIR}/ImageViewer.cxx
+)
+
+set(
+	IMAGE_VIEWER_H
+	${PROJECT_SOURCE_DIR}/ImageViewer.h
 )
 
 file(
@@ -75,6 +80,8 @@ qt5_wrap_ui(
 )
 add_library(
 	InteractorStyles
+	${IMAGE_VIEWER_SRC}
+	${IMAGE_VIEWER_H}
 	${ABSTRACT_INTERACTORS_SRC}
 	${ABSTRACT_INTERACTORS_H}
 	${INTERACTORS_INC}
@@ -94,15 +101,24 @@ target_link_libraries(
 	Qt5::Widgets
 )
 
+target_include_directories(
+	InteractorStyles
+	PUBLIC
+	${PROJECT_SOURCE_DIR}
+	${PROJECT_BINARY_DIR}
+)
+
 source_group(
 	"Header Files" 
 	FILES 
+	${IMAGE_VIEWER_H}
 	${ABSTRACT_INTERACTORS_H}
 	${INTERACTORS_INC}
 	)
 source_group(
 	"Source Files"
 	FILES
+	${IMAGE_VIEWER_SRC}
 	${ABSTRACT_INTERACTORS_SRC}
 	${INTERACTORS_SRC}
 	)

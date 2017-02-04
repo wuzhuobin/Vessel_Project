@@ -17,21 +17,16 @@ if(NOT Qt5Widgets_FOUND)
 	message(FATAL_ERROR "error: Qt5Widgets is not found")
 endif()
 
-include_directories(
-	${PROJECT_SOURCE_DIR}
-	${PROJECT_BINARY_DIR}
+add_subdirectory(
 	InteractorStyles
-	)
-
-add_subdirectory(InteractorStyles)
+)
 
 SET(
 	CONTROLLER_SRC
 	# ${PROJECT_SOURCE_DIR}/MyImageManager.cpp
 	${PROJECT_SOURCE_DIR}/IOManager.cpp
 	${PROJECT_SOURCE_DIR}/ImageRegistration.cxx
-	${PROJECT_SOURCE_DIR}/ImageViewer.cxx
-	${PROJECT_SOURCE_DIR}/InteractorStyleSwitch.cxx
+	${PROJECT_SOURCE_DIR}/IADEInteractorStyleSwitch.cxx
 	# ${PROJECT_SOURCE_DIR}/InteractorStyleSwitch3D.cxx
 	# ${PROJECT_SOURCE_DIR}/Overlay.cxx
 	# ${PROJECT_SOURCE_DIR}/RegistrationWizard.cxx
@@ -41,10 +36,8 @@ SET(
 	# ${PROJECT_SOURCE_DIR}/MyImageManager.h
 	${PROJECT_SOURCE_DIR}/IOManager.h
 	${PROJECT_SOURCE_DIR}/ImageRegistration.h
-	${PROJECT_SOURCE_DIR}/ImageViewer.h
-	${PROJECT_SOURCE_DIR}/InteractorStyleSwitch.h
+	${PROJECT_SOURCE_DIR}/IADEInteractorStyleSwitch.h
 	# ${PROJECT_SOURCE_DIR}/InteractorStyleSwitch3D.h
-	${PROJECT_SOURCE_DIR}/StyleSwitchMacro.h
 	# ${PROJECT_SOURCE_DIR}/Overlay.h
 	# ${PROJECT_SOURCE_DIR}/RegistrationWizard.h
 	)
@@ -69,6 +62,13 @@ target_link_libraries(
 	Qt5::Core
 	Qt5::Widgets
 	InteractorStyles
+)
+
+target_include_directories(
+	Controller
+	PUBLIC
+	${PROJECT_SOURCE_DIR}
+	${PROJECT_BINARY_DIR}
 )
 
 set_target_properties(

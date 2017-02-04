@@ -7,8 +7,7 @@
 #include "ImageManager.h"
 #include "IOManager.h"
 #include "IADEImageManager.h"
-#include "InteractorStyleSwitch.h"
-
+#include "IADEInteractorStyleSwitch.h"
 
 
 class Core: public QObject
@@ -50,7 +49,7 @@ private:
 
 	ImageViewer* imageViewers[MainWindow::NUM_OF_2D_VIEWERS];
 	vtkRenderWindowInteractor* imageInteractor[MainWindow::NUM_OF_2D_VIEWERS];
-	InteractorStyleSwitch* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
+	IADEInteractorStyleSwitch* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
 	//InteractorStyleWindowLevel* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
 
 

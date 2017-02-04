@@ -1,7 +1,7 @@
 #include "Core.h"
 
 #include "ImageViewer.h"
-#include "InteractorStyles\QInteractorStyleNavigation.h"
+#include "QInteractorStyleNavigation.h"
 #include "Overlay.h"
 #include "ui_MainWindow.h"
 
@@ -30,7 +30,7 @@ Core::Core(QObject * parent)
 		imageViewers[i] = ImageViewer::New();
 		imageViewers[i]->SetupInteractor(imageInteractor[i]);
 		
-		imageInteractorStyle[i] = InteractorStyleSwitch::New();
+		imageInteractorStyle[i] = IADEInteractorStyleSwitch::New();
 		//imageInteractorStyle[i] = InteractorStyleWindowLevel::New();
 		imageInteractorStyle[i]->SetImageViewer(imageViewers[i]);
 		
@@ -129,7 +129,7 @@ void Core::slotOverlayToImageManager()
 void Core::slotNavigation()
 {
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-		imageInteractorStyle[i]->SetCurrentStyleToNavigation();
+		imageInteractorStyle[i]->SetInteractorStyleToNavigation();
 	}
 
 }
@@ -137,7 +137,7 @@ void Core::slotNavigation()
 void Core::slotWindowLevel()
 {
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-		imageInteractorStyle[i]->SetCurrentStyleToWindowLevel();
+		imageInteractorStyle[i]->SetInteractorStyleToWindowLevel();
 	}
 }
 

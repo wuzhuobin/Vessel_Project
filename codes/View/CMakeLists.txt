@@ -10,13 +10,6 @@ find_package(Qt5Core)
 find_package(Qt5Widgets)
 
 
-
-include_directories(
-	${PROJECT_SOURCE_DIR}
-	${PROJECT_BINARY_DIR}
-	RegistrationWizard
-	)
-
 add_subdirectory(RegistrationWizard)
 
 set(
@@ -61,6 +54,13 @@ target_link_libraries(
 	Qt5::Widgets
 	RegistrationWizard
 	)
+
+target_include_directories(
+	View
+	PUBLIC
+	${PROJECT_SOURCE_DIR}
+	${PROJECT_BINARY_DIR}
+)
 
 set_target_properties(
     View

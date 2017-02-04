@@ -11,9 +11,6 @@ Copyright (C) 2016
 */
 #include "InteractorStyleSwitch.h"
 
-#include "QInteractorStyleNavigation.h"
-#include "InteractorStyleWindowLevel.h"
-
 #include <vtkCommand.h>
 #include <vtkCallbackCommand.h>	
 #include <vtkObjectFactory.h>
@@ -21,33 +18,16 @@ Copyright (C) 2016
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
 
-vtkStandardNewMacro(InteractorStyleSwitch);
+#include "AbstractNavigation.h"
 
-SET_CURRENT_STYLE_TO_MACRO_CPP(Navigation);
-SET_CURRENT_STYLE_TO_MACRO_CPP(WindowLevel);
+vtkStandardNewMacro(InteractorStyleSwitch);
+//SET_CURRENT_STYLE_TO_MACRO_CPP(InteractorStyleTesting);
 
 InteractorStyleSwitch::InteractorStyleSwitch()
 {
 	InteractorStyleTesting = vtkInteractorStyleImage::New();
-	// The first instance of QInteractorStyleNavigation should have control 
-	// of the ui
-	Navigation = QInteractorStyleNavigation::New();
-	WindowLevel = InteractorStyleWindowLevel::New();
-	//PolygonDraw = QInteractorStyleVesselSegmentation::New();
-	//SeedsPlacer = QInteractorStyleLumenSeedsPlacer::New();
-	//PaintBrush = QInteractorStylePaintBrush::New();
-	//ROI = QInteractorStyleROI::New();
-	//Ruler = QInteractorStyleRuler::New();
 
 	allStyles.push_back(InteractorStyleTesting);
-	allStyles.push_back(WindowLevel);
-	allStyles.push_back(Navigation);
-	//allStyles.push_back(PolygonDraw);
-	//allStyles.push_back(SeedsPlacer);
-	//allStyles.push_back(PaintBrush);
-	//allStyles.push_back(ROI);
-	//allStyles.push_back(Ruler);
-
 	this->CurrentStyle = 0;
 }
 
@@ -83,38 +63,6 @@ void InteractorStyleSwitch::InternalUpdate()
 		}
 
 	}
-	//if (this->CurrentStyle != this->Navigation)
-	//	this->Navigation->SetNavigationModeEnabled(false);
-	//if (this->CurrentStyle != this->WindowLevel)
-	//	this->WindowLevel->SetWindowLevelModeEnabled(false);
-	//if (this->CurrentStyle != this->PolygonDraw) 
-	//	this->PolygonDraw->SetPolygonModeEnabled(false);
-	//if (this->CurrentStyle != this->SeedsPlacer)
-	//	this->SeedsPlacer->SetSeedsPlacerEnable(false);
-
-	//if (this->CurrentStyle != this->PaintBrush)
-	//	this->PaintBrush->SetPaintBrushModeEnabled(false);
-	//if (this->CurrentStyle != this->Ruler)
-	//	this->Ruler->SetDistanceWidgetEnabled(false);
-	//if (this->CurrentStyle != this->ROI)
-	//	this->ROI->SetROIWidgetEnabled(false);
-
-	//// some special cases need to use InternalUpdate() to enabled
-	//if (this->CurrentStyle == this->Navigation)
-	//	this->Navigation->SetNavigationModeEnabled(true);
-	//if (this->CurrentStyle == this->WindowLevel)
-	//	this->WindowLevel->SetWindowLevelModeEnabled(true);
-	//if (this->CurrentStyle == this->PolygonDraw)
-	//	this->PolygonDraw->SetPolygonModeEnabled(true);
-	//if (this->CurrentStyle == this->SeedsPlacer)
-	//	this->SeedsPlacer->SetSeedsPlacerEnable(true);
-
-	//if (this->CurrentStyle == this->ROI)
-	//	this->ROI->SetROIWidgetEnabled(true);
-	//if (this->CurrentStyle == this->PaintBrush)
-	//	this->PaintBrush->SetPaintBrushModeEnabled(true);
-	//if (this->CurrentStyle == this->Ruler)
-	//	this->Ruler->SetDistanceWidgetEnabled(true);
 }
 
 void InteractorStyleSwitch::SetAutoAdjustCameraClippingRange(int value)
@@ -219,20 +167,4 @@ void InteractorStyleSwitch::SetInteractor(vtkRenderWindowInteractor *iren)
 			this->Priority);
 	}
 }
-
-//void InteractorStyleSwitch::SetInteractorStyleToNavigation()
-//{
-//
-//	if (!this->CurrentStyleIsNavigation()) {
-//		if (this->CurrentStyle) {
-//			this->CurrentStyle->SetInteractor(0);
-//		}
-//		this->CurrentStyle = (vtkInteractorStyle*) this->Navigation;
-//	}
-//	if (this->CurrentStyle) {
-//		this->CurrentStyle->SetInteractor(this->Interactor);
-//		this->CurrentStyle->SetTDxStyle(this->TDxStyle);
-//	}
-//	this->InternalUpdate();
-//}
 

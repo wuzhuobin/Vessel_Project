@@ -16,6 +16,7 @@ Copyright (C) 2016
 
 #include <vtkSetGet.h>
 #include <vtkInteractorStyleSwitchBase.h>
+#include <vtkInteractorStyleImage.h>
 
 #include <list>
 
@@ -43,8 +44,6 @@ void InteractorStyleSwitch::SetCurrentStyleTo##style(){ \
 
 class ImageViewer;
 class vtkInteractorStyleImage;
-class InteractorStyleWindowLevel;
-class QInteractorStyleNavigation;
 
 class InteractorStyleSwitch : public vtkInteractorStyleSwitchBase
 {
@@ -54,37 +53,13 @@ public:
 	virtual void PrintSelf(ostream& os, vtkIndent indent);
 
 	vtkGetMacro(InteractorStyleTesting, vtkInteractorStyleImage*);
-	vtkGetMacro(WindowLevel, InteractorStyleWindowLevel*);
-	vtkGetMacro(Navigation, QInteractorStyleNavigation*);
-	//vtkGetMacro(PolygonDraw, QInteractorStyleVesselSegmentation*);
-	//vtkGetMacro(SeedsPlacer, QInteractorStyleLumenSeedsPlacer*);
-	//vtkGetMacro(PaintBrush, QInteractorStylePaintBrush*);
-	//vtkGetMacro(ROI, QInteractorStyleROI*);
-	//vtkGetMacro(Ruler, QInteractorStyleRuler*);
+	SetInteractorStyleMacro(InteractorStyleTesting);
+	CurrentStyleMacro(InteractorStyleTesting);
 
 	void SetInteractor(vtkRenderWindowInteractor *iren);
 
 
-	SET_CURRENT_STYLE_TO_MACRO_H(Navigation);
-	SET_CURRENT_STYLE_TO_MACRO_H(WindowLevel);
-	//SetInteractorStyleMacro(InteractorStyleTesting);
-	//SetInteractorStyleMacro(Navigation);
-	//void SetInteractorStyleToNavigation();
-	//SetInteractorStyleMacro(WindowLevel);
-	//SetInteractorStyleMacro(PolygonDraw);
-	//SetInteractorStyleMacro(SeedsPlacer);
-	//SetInteractorStyleMacro(PaintBrush);
-	//SetInteractorStyleMacro(ROI);
-	//SetInteractorStyleMacro(Ruler);
-
-	//CurrentStyleMacro(InteractorStyleTesting);
-	//CurrentStyleMacro(Navigation);
-	//CurrentStyleMacro(WindowLevel);
-	//CurrentStyleMacro(PolygonDraw);
-	//CurrentStyleMacro(SeedsPlacer);
-	//CurrentStyleMacro(PaintBrush);
-	//CurrentStyleMacro(ROI);
-	//CurrentStyleMacro(Ruler);
+	//SET_CURRENT_STYLE_TO_MACRO_H(InteractorStyleTesting);
 
 	virtual void SetDefaultRenderer(vtkRenderer* renderer);
 	virtual void SetCurrentRenderer(vtkRenderer* renderer);
@@ -102,16 +77,8 @@ protected:
 	void InternalUpdate();
 	void SetAutoAdjustCameraClippingRange(int value);
 
-private:
 
 	vtkInteractorStyleImage* InteractorStyleTesting;
-	QInteractorStyleNavigation*	Navigation;
-	InteractorStyleWindowLevel* WindowLevel;
-	//QInteractorStyleVesselSegmentation* PolygonDraw;
-	//QInteractorStyleLumenSeedsPlacer* SeedsPlacer;
-	//QInteractorStylePaintBrush*	PaintBrush;
-	//QInteractorStyleROI* ROI;
-	//QInteractorStyleRuler* Ruler;
 	vtkInteractorStyle*	CurrentStyle;
 	std::list<vtkInteractorStyle*> allStyles;
 };

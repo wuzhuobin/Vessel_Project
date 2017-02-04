@@ -17,11 +17,6 @@ if(NOT Qt5Widgets_FOUND)
 	message(FATAL_ERROR "error: Qt5Widgets is not found")
 endif()
 
-include_directories(
-	${PROJECT_SOURCE_DIR}
-	${PROJECT_BINARY_DIR}
-	)
-
 SET(
 	REGISTRATION_WIZARD_SRC
 	${PROJECT_SOURCE_DIR}/RegistrationWizard.cpp
@@ -49,6 +44,13 @@ target_link_libraries(
 	${VTK_LIBRARIES}
 	Qt5::Core
 	Qt5::Widgets
+)
+
+target_include_directories(
+	RegistrationWizard
+	INTERFACE
+	${PROJECT_SOURCE_DIR}
+	${PROJECT_BINARY_DIR}	
 )
 
 add_executable(

@@ -19,10 +19,6 @@ if(NOT Qt5Widgets_FOUND)
 	message(FATAL_ERROR "error: Qt5Widgets is not found")
 endif()
 
-include_directories(
-	${PROJECT_SOURCE_DIR}
-	${PROJECT_BINARY_DIR}
-	)
 
 SET(
 	MODEL_SRC
@@ -58,6 +54,13 @@ target_link_libraries(
 	${VTK_LIBRARIES}
 	Qt5::Core
 	Qt5::Widgets
+)
+
+target_include_directories(
+	Model
+	PUBLIC
+	${PROJECT_SOURCE_DIR}
+	${PROJECT_BINARY_DIR}
 )
 
 set_target_properties(

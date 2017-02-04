@@ -14,7 +14,7 @@ Copyright (C) 2016
 
 #define SetInteractorStyleMacro(style) \
 void SetInteractorStyleTo##style () { \
-	if (!(CurrentStyle == ##style)) { \
+	if (CurrentStyle != ##style) { \
 		if (this->CurrentStyle) { \
 			this->CurrentStyle->SetInteractor(0); \
 	} \
