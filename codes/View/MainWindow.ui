@@ -797,7 +797,7 @@
     <addaction name="acitonVOI_selection"/>
     <addaction name="actionSeedsPlacer"/>
     <addaction name="actionContour"/>
-    <addaction name="actionBrush"/>
+    <addaction name="actionPaint_brush"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="enabled">
@@ -828,11 +828,12 @@
    </widget>
    <widget class="QMenu" name="menuSegmentation">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="title">
      <string>Segmentation</string>
     </property>
+    <addaction name="actionPaint_brush"/>
     <addaction name="actionSaveSegmentation"/>
     <addaction name="actionOpenSegmentation"/>
     <addaction name="actionSaveContour"/>
@@ -863,11 +864,11 @@
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuImage"/>
+   <addaction name="menuSegmentation"/>
    <addaction name="menuDiagnosis"/>
    <addaction name="menuHelp"/>
    <addaction name="menuView"/>
    <addaction name="menuInteraction"/>
-   <addaction name="menuSegmentation"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="ActionToolBar">
@@ -899,12 +900,12 @@
    <addaction name="acitonVOI_selection"/>
    <addaction name="actionSeedsPlacer"/>
    <addaction name="actionContour"/>
-   <addaction name="actionBrush"/>
+   <addaction name="actionPaint_brush"/>
    <addaction name="separator"/>
    <addaction name="actionMultiPlanarView"/>
    <addaction name="actionAllAxialView"/>
   </widget>
-  <widget class="QDockWidget" name="widgetDockWidget">
+  <widget class="QDockWidget" name="moduleWidgetDockWidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
      <horstretch>0</horstretch>
@@ -927,7 +928,7 @@
     <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="windowTitle">
-    <string>Widget</string>
+    <string>ModuleWidget</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
@@ -986,6 +987,9 @@
    </property>
   </action>
   <action name="actionSaveSegmentation">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Save.png</normaloff>:/icons/Save.png</iconset>
@@ -1267,7 +1271,7 @@
     <string>Statistics</string>
    </property>
   </action>
-  <action name="actionBrush">
+  <action name="actionPaint_brush">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1276,7 +1280,10 @@
      <normaloff>:/icons/Draw.png</normaloff>:/icons/Draw.png</iconset>
    </property>
    <property name="text">
-    <string>Paint Brush</string>
+    <string>Paint brush</string>
+   </property>
+   <property name="toolTip">
+    <string>Paint brush</string>
    </property>
   </action>
   <action name="actionMultiPlanarView">

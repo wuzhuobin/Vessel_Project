@@ -26,6 +26,7 @@ SET(
 	${PROJECT_SOURCE_DIR}/IADEImageManager.cpp
 	${PROJECT_SOURCE_DIR}/IVtkImageData.cpp
 	${PROJECT_SOURCE_DIR}/Overlay.cpp
+	${PROJECT_SOURCE_DIR}/IADEOverlay.cpp
 	)
 SET(
 	MODEL_H
@@ -33,6 +34,7 @@ SET(
 	${PROJECT_SOURCE_DIR}/IADEImageManager.h
 	${PROJECT_SOURCE_DIR}/IVtkImageData.h
 	${PROJECT_SOURCE_DIR}/Overlay.h
+	${PROJECT_SOURCE_DIR}/IADEOverlay.h
 	)
 
 qt5_wrap_cpp(

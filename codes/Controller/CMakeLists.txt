@@ -25,6 +25,7 @@ SET(
 	CONTROLLER_SRC
 	# ${PROJECT_SOURCE_DIR}/MyImageManager.cpp
 	${PROJECT_SOURCE_DIR}/IOManager.cpp
+	${PROJECT_SOURCE_DIR}/IADEIOManager.cpp
 	${PROJECT_SOURCE_DIR}/ImageRegistration.cxx
 	${PROJECT_SOURCE_DIR}/IADEInteractorStyleSwitch.cxx
 	# ${PROJECT_SOURCE_DIR}/InteractorStyleSwitch3D.cxx
@@ -35,6 +36,7 @@ SET(
 	CONTROLLER_H
 	# ${PROJECT_SOURCE_DIR}/MyImageManager.h
 	${PROJECT_SOURCE_DIR}/IOManager.h
+	${PROJECT_SOURCE_DIR}/IADEIOManager.h
 	${PROJECT_SOURCE_DIR}/ImageRegistration.h
 	${PROJECT_SOURCE_DIR}/IADEInteractorStyleSwitch.h
 	# ${PROJECT_SOURCE_DIR}/InteractorStyleSwitch3D.h

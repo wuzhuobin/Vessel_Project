@@ -32,55 +32,28 @@ vtkStandardNewMacro(InteractorStyleWindowLevel);
 
 void InteractorStyleWindowLevel::SetWindow(double window)
 {
-	m_window = window;
-	for (std::list<ImageViewer*>::iterator it = m_synchronalViewers.begin();
-		it != m_synchronalViewers.end(); ++it) {
-		// using the input address to figure out whether they are the same image
-		/*if (m_imageViewer->GetOriginalInput() == (*it)->GetOriginalInput())*/ {
-			(*it)->GetImageActor()->GetProperty()->SetColorWindow(
-				m_window);
-			(*it)->GetImageActor()->GetProperty()->SetColorLevel(
-				m_level);
-			(*it)->Render();
-		}
-
+	if (m_window != window) {
+		m_window = window;
+		m_imageViewer->GetImageActor()->GetProperty()->SetColorWindow(
+			m_window);
+		m_imageViewer->Render();
 	}
 }
 
 void InteractorStyleWindowLevel::SetLevel(double level)
 {
-	m_level = level;
-	for (std::list<ImageViewer*>::iterator it = m_synchronalViewers.begin();
-		it != m_synchronalViewers.end(); ++it) {
-		// using the input address to figure out whether they are the same image
-		if (m_imageViewer->GetInput() == (*it)->GetInput()) {
-			(*it)->GetImageActor()->GetProperty()->SetColorWindow(
-				m_window);
-			(*it)->GetImageActor()->GetProperty()->SetColorLevel(
-				m_level);
-			(*it)->Render();
-		}
-
+	if (m_level != level) {
+		m_level = level;
+		m_imageViewer->GetImageActor()->GetProperty()->SetColorLevel(
+			m_level);
+		m_imageViewer->Render();
 	}
 }
 
 void InteractorStyleWindowLevel::SetWindowLevel(double window, double level)
 {
-	m_window = window;
-	m_level = level;
-	for (std::list<ImageViewer*>::iterator it = m_synchronalViewers.begin();
-		it != m_synchronalViewers.end(); ++it) {
-		// using the input address to figure out whether they are the same image
-		if (m_imageViewer->GetInput() == (*it)->GetInput()) {
-			(*it)->GetImageActor()->GetProperty()->SetColorWindow(
-				m_window);
-			(*it)->GetImageActor()->GetProperty()->SetColorLevel(
-				m_level);
-			(*it)->Render();
-		}
-
-	}
-
+	SetWindow(window);
+	SetLevel(level);
 }
 
 InteractorStyleWindowLevel::InteractorStyleWindowLevel()
@@ -145,8 +118,19 @@ void InteractorStyleWindowLevel::OnLeftButtonUp()
 void InteractorStyleWindowLevel::WindowLevel()
 {
 	vtkInteractorStyleImage::WindowLevel();
-	SetWindowLevel(CurrentImageProperty->GetColorWindow(),
-		CurrentImageProperty->GetColorLevel());
+	m_window = CurrentImageProperty->GetColorWindow();
+	m_level = CurrentImageProperty->GetColorLevel();
+
+	for (std::list<AbstractInteractorStyle*>::const_iterator cit =
+		m_abstractInteractorStyles.cbegin();
+		cit != m_abstractInteractorStyles.cend(); ++cit) {
+		InteractorStyleWindowLevel* windowLevel =
+			dynamic_cast<InteractorStyleWindowLevel*>(*cit);
+		if (windowLevel != nullptr && 
+			m_imageViewer->GetInput() == windowLevel->m_imageViewer->GetInput()) {
+			windowLevel->SetWindowLevel(m_window, m_level);
+		}
+	}
 }
 
 //void InteractorStyleWindowLevel::OnKeyPress()
@@ -212,7 +196,17 @@ void InteractorStyleWindowLevel::OnChar()
 	case 'r':
 	case 'R':
 		SetWindowLevel(255,
-			123);
+			122.5);
+		for (std::list<AbstractInteractorStyle*>::const_iterator cit =
+			m_abstractInteractorStyles.cbegin();
+			cit != m_abstractInteractorStyles.cend(); ++cit) {
+			InteractorStyleWindowLevel* windowLevel =
+				dynamic_cast<InteractorStyleWindowLevel*>(*cit);
+			if (windowLevel != nullptr &&
+				m_imageViewer->GetInput() == windowLevel->m_imageViewer->GetInput()) {
+				windowLevel->SetWindowLevel(m_window, m_level);
+			}
+		}
 		//AbstractNavigation::OnChar();
 		//SynchronalZooming();
 		break;

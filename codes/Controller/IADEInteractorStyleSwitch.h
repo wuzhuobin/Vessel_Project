@@ -17,11 +17,8 @@ Copyright (C) 2016
 #include "InteractorStyleSwitch.h"
 
 #include "QInteractorStyleNavigation.h"
-#include "InteractorStyleWindowLevel.h"
-
-
-class InteractorStyleWindowLevel;
-class QInteractorStyleNavigation;
+#include "QInteractorStyleWindowLevel.h"
+#include "QInteractorStylePaintBrush.h"
 
 class IADEInteractorStyleSwitch : public InteractorStyleSwitch
 {
@@ -30,7 +27,7 @@ public:
 	vtkTypeMacro(IADEInteractorStyleSwitch, InteractorStyleSwitch);
 
 
-	vtkGetMacro(WindowLevel, InteractorStyleWindowLevel*);
+	vtkGetMacro(WindowLevel, QInteractorStyleWindowLevel*);
 	SetInteractorStyleMacro(WindowLevel);
 	CurrentStyleMacro(WindowLevel);
 
@@ -39,7 +36,9 @@ public:
 	CurrentStyleMacro(Navigation);
 	//vtkGetMacro(PolygonDraw, QInteractorStyleVesselSegmentation*);
 	//vtkGetMacro(SeedsPlacer, QInteractorStyleLumenSeedsPlacer*);
-	//vtkGetMacro(PaintBrush, QInteractorStylePaintBrush*);
+	vtkGetMacro(PaintBrush, QInteractorStylePaintBrush*);
+	SetInteractorStyleMacro(PaintBrush);
+	CurrentStyleMacro(PaintBrush);
 	//vtkGetMacro(ROI, QInteractorStyleROI*);
 	//vtkGetMacro(Ruler, QInteractorStyleRuler*);
 
@@ -50,7 +49,6 @@ public:
 	//SetInteractorStyleMacro(WindowLevel);
 	//SetInteractorStyleMacro(PolygonDraw);
 	//SetInteractorStyleMacro(SeedsPlacer);
-	//SetInteractorStyleMacro(PaintBrush);
 	//SetInteractorStyleMacro(ROI);
 	//SetInteractorStyleMacro(Ruler);
 
@@ -59,7 +57,6 @@ public:
 	//CurrentStyleMacro(WindowLevel);
 	//CurrentStyleMacro(PolygonDraw);
 	//CurrentStyleMacro(SeedsPlacer);
-	//CurrentStyleMacro(PaintBrush);
 	//CurrentStyleMacro(ROI);
 	//CurrentStyleMacro(Ruler);
 
@@ -67,10 +64,10 @@ protected:
 	IADEInteractorStyleSwitch();
 
 	QInteractorStyleNavigation*	Navigation;
-	InteractorStyleWindowLevel* WindowLevel;
+	QInteractorStyleWindowLevel* WindowLevel;
 	//QInteractorStyleVesselSegmentation* PolygonDraw;
 	//QInteractorStyleLumenSeedsPlacer* SeedsPlacer;
-	//QInteractorStylePaintBrush*	PaintBrush;
+	QInteractorStylePaintBrush*	PaintBrush;
 	//QInteractorStyleROI* ROI;
 	//QInteractorStyleRuler* Ruler;
 };

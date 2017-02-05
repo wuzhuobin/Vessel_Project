@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroup->addAction(ui->actionNavigation);
 	actionGroup->addAction(ui->actionWindow_level);
 	actionGroup->addAction(ui->acitonVOI_selection);
+	actionGroup->addAction(ui->actionPaint_brush);
 	actionGroup->setExclusive(true);
 
 
@@ -224,6 +225,11 @@ void MainWindow::initialization()
 	ui->actionNavigation->trigger();
 
 }
+
+//void MainWindow::setModuleWidget(QWidget * moduleWidget)
+//{
+//	ui->moduleWidgetDockWidget->setWidget(moduleWidget);
+//}
 
 void MainWindow::addModalityNames(QString name)
 {

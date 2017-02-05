@@ -2,7 +2,7 @@
 #include "ui_qinteractorstylenavigation.h"
 #include "ui_QAbstractNavigation.h"
 
-#include "vtkObjectFactory.h"
+#include <vtkObjectFactory.h>
 
 vtkStandardNewMacro(QInteractorStyleNavigation);
 QSETUP_UI_SRC(QInteractorStyleNavigation);

@@ -3,9 +3,11 @@
 
 #include <qobject.h>
 
+
 #include "MainWindow.h"
+#include "ModuleWidget.h"
 #include "ImageManager.h"
-#include "IOManager.h"
+#include "IADEIOManager.h"
 #include "IADEImageManager.h"
 #include "IADEInteractorStyleSwitch.h"
 
@@ -35,6 +37,7 @@ private slots:
 
 	void slotNavigation();
 	void slotWindowLevel();
+	void slotPaintBrush();
 
 	void slotMultiPlanarView();
 	void slotAllAxialView();
@@ -44,7 +47,8 @@ private slots:
 
 private:
 	MainWindow mainWindow;
-	IOManager ioManager;
+	ModuleWidget moduleWiget;
+	IADEIOManager ioManager;
 	IADEImageManager imageManager;
 
 	ImageViewer* imageViewers[MainWindow::NUM_OF_2D_VIEWERS];

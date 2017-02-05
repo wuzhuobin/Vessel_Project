@@ -27,10 +27,10 @@ IADEInteractorStyleSwitch::IADEInteractorStyleSwitch()
 	// The first instance of QInteractorStyleNavigation should have control 
 	// of the ui
 	Navigation = QInteractorStyleNavigation::New();
-	WindowLevel = InteractorStyleWindowLevel::New();
+	WindowLevel = QInteractorStyleWindowLevel::New();
 	//PolygonDraw = QInteractorStyleVesselSegmentation::New();
 	//SeedsPlacer = QInteractorStyleLumenSeedsPlacer::New();
-	//PaintBrush = QInteractorStylePaintBrush::New();
+	PaintBrush = QInteractorStylePaintBrush::New();
 	//ROI = QInteractorStyleROI::New();
 	//Ruler = QInteractorStyleRuler::New();
 
@@ -38,7 +38,7 @@ IADEInteractorStyleSwitch::IADEInteractorStyleSwitch()
 	allStyles.push_back(Navigation);
 	//allStyles.push_back(PolygonDraw);
 	//allStyles.push_back(SeedsPlacer);
-	//allStyles.push_back(PaintBrush);
+	allStyles.push_back(PaintBrush);
 	//allStyles.push_back(ROI);
 	//allStyles.push_back(Ruler);
 

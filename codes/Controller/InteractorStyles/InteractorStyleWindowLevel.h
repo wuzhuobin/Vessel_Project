@@ -54,7 +54,6 @@ protected:
 	//virtual void OnKeyUp();
 	virtual void OnChar();
 
-private:
 	double m_window;
 	double m_level;
 	

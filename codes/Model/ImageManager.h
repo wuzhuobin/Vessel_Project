@@ -27,9 +27,9 @@ public:
 
 	void setNumOfImages(unsigned int num);
 
-	bool setOverlay();
-	bool setOverlay(IVtkImageData* image);
-	bool setOverlay(IVtkImageData::itkImageType::Pointer image);
+	virtual bool setOverlay();
+	virtual bool setOverlay(IVtkImageData* image);
+	virtual bool setOverlay(IVtkImageData::itkImageType::Pointer image);
 	bool setImage(unsigned int i, IVtkImageData::itkImageType::Pointer image);
 	bool setImage(unsigned int i, vtkImageData* image);
 	bool setModalityName(unsigned int i, QString name);
@@ -40,7 +40,7 @@ public:
 	const QString getModalityName(unsigned int i) const;
 	const itk::GDCMImageIO::Pointer getDicomIO(unsigned int i) const;
 
-private:
+protected:
 
 	QList<vtkSmartPointer<IVtkImageData>> m_images;
 	QList<QString> m_modalityNames;

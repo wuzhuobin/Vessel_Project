@@ -61,7 +61,7 @@ public:
 	OverlayImageData* getData() const;
 	vtkLookupTable* getLookupTable() const;
 
-private:
+protected:
 	vtkSmartPointer<OverlayImageData> m_data;
 	vtkSmartPointer<vtkLookupTable> m_lookupTable;
 

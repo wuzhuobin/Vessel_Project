@@ -2,6 +2,7 @@
 
 #include "ImageViewer.h"
 #include "QInteractorStyleNavigation.h"
+#include "QInteractorStyleWindowLevel.h"
 #include "Overlay.h"
 #include "ui_MainWindow.h"
 
@@ -24,6 +25,7 @@ Core::Core(QObject * parent)
 	mainWindow.addModalityNames("MRA Image");
 
 
+
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractor[i] = vtkRenderWindowInteractor::New();
 		
@@ -40,15 +42,22 @@ Core::Core(QObject * parent)
 
 		mainWindow.setRenderWindow(i, imageViewers[i]->GetRenderWindow());
 	}
-	mainWindow.geUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
+	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
+	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
+	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
+	//imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel()->show();
+	//moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
+	
+	mainWindow.getUi()->moduleWidgetDockWidget->setWidget(&moduleWiget);
 
 
 	// connect changing mode
-	connect(mainWindow.geUi()->actionNavigation, SIGNAL(triggered()),
+	connect(mainWindow.getUi()->actionNavigation, SIGNAL(triggered()),
 		this, SLOT(slotNavigation()));
-	connect(mainWindow.geUi()->actionWindow_level, SIGNAL(triggered()),
+	connect(mainWindow.getUi()->actionWindow_level, SIGNAL(triggered()),
 		this, SLOT(slotWindowLevel()));
-
+	connect(mainWindow.getUi()->actionPaint_brush, SIGNAL(triggered()),
+		this, SLOT(slotPaintBrush()));
 
 	//connect(&mainWindow, SIGNAL(signalImageImportInitialize()),
 	//	&ioManager, SLOT(slotCleanListsOfFileNames()));
@@ -71,7 +80,7 @@ Core::Core(QObject * parent)
 	connect(&ioManager, SIGNAL(signalFinishOpenOverlay()),
 		this, SLOT(slotOverlayToImageManager()));
 
-	//connect(mainWindow.geUi()->actionNavigation, SIGNAL(toggled(bool)),
+	//connect(mainWindow.getUi()->actionNavigation, SIGNAL(toggled(bool)),
 	//	this, SLOT(slotTest(bool)));
 
 
@@ -131,7 +140,7 @@ void Core::slotNavigation()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToNavigation();
 	}
-
+	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
 }
 
 void Core::slotWindowLevel()
@@ -139,6 +148,16 @@ void Core::slotWindowLevel()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToWindowLevel();
 	}
+	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
+}
+
+void Core::slotPaintBrush()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		imageInteractorStyle[i]->SetInteractorStyleToPaintBrush();
+	}
+	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
+
 }
 
 void Core::slotMultiPlanarView()

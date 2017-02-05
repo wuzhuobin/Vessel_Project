@@ -20,6 +20,7 @@ namespace Ui {class QInteractorStyleWindowLevel;}
 * @brief	window level.
 * using cursor to change window level.
 */
+class QSpinBox;
 class QInteractorStyleWindowLevel : public QAbstractNavigation,
 	public InteractorStyleWindowLevel
 {
@@ -41,6 +42,24 @@ public:
 	* @param	i, j, k	to set the focal point
 	*/
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
+
+	public slots:
+	/**
+	 * @override
+	 * @brief	function to set the window width spinbox
+	 */
+	virtual void SetWindow(int window);
+	virtual void SetWindow(double window);
+
+	/**
+	* @override
+	* @brief	function to set the window level spinbox
+	*/
+	virtual void SetLevel(int level);
+	virtual void SetLevel(double level);
+
+
+
 protected:
 
 	/**
@@ -57,6 +76,8 @@ protected:
 private:
 	///< the pointer of the navigation ui.
 	Ui::QInteractorStyleWindowLevel *ui = nullptr;
+	QSpinBox* m_spinBoxWindowLevel;
+	QSpinBox* m_spinBoxWindowWidth;
 };
 
 

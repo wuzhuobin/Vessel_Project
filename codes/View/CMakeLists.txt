@@ -15,16 +15,22 @@ add_subdirectory(RegistrationWizard)
 set(
 	VIEW_H
 	MainWindow.h
+	LabelWidget.h
+	ModuleWidget.h
 )
 
 set(
 	VIEW_SRC
 	MainWindow.cpp
+	LabelWidget.cpp
+	ModuleWidget.cpp
 )
 
 set(
 	VIEW_UI
 	MainWindow.ui
+	LabelWidget.ui
+	ModuleWidget.ui
 )
 #Generate moc and ui file
 qt5_wrap_cpp(

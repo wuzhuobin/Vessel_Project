@@ -27,6 +27,7 @@ class vtkRenderWindow;
 class QMenu;
 class QSettings;
 
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT;
@@ -41,13 +42,14 @@ public:
 	~MainWindow();
 
 	void initialization();
+	//void setModuleWidget(QWidget* moduleWidget);
 
 	void addModalityNames(QString name);
 	void setSelectImgMenuVisible(unsigned int num, bool flag);
 	void clearModalityNames();
 
 	
-	Ui::MainWindow* geUi() { return ui; }
+	Ui::MainWindow* getUi() { return ui; }
 
 	void setRenderWindow(unsigned short i, vtkRenderWindow* renderWindow);
 	//vtkRenderWindow* getRenderWindow(unsigned short i);

@@ -14,7 +14,7 @@
 
 class IOManager:public QObject
 {
-	Q_OBJECT
+	Q_OBJECT;
 public:
 	typedef itk::Image<float, 3> ImageType;
 

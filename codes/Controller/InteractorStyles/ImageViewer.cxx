@@ -98,6 +98,8 @@ ImageViewer::ImageViewer(/*QObject* parent*/)
 	//	vtkCommand::ErrorEvent, windowLevelErrorBlocker);
 	//this->OverlayWindowLevel->GetInputAlgorithm()->AddObserver(
 	//	vtkCommand::ErrorEvent, windowLevelErrorBlocker);
+	OverlayActor->VisibilityOff();
+	ImageActor->VisibilityOff();
 }
 
 //----------------------------------------------------------------------------
