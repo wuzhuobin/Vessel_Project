@@ -5,11 +5,17 @@
 
 class vtkImageData;
 class vtkAlgorithmOutput;
+class vtkAlgorithm;
+class vtkInformation;
 class vtkActor;
+class vtkPolyDataMapper;
 class vtkRenderWindow;
 class vtkRenderer;
 class vtkRenderWindowInteractor;
 class vtkInteractorStyle;
+class vtkDiscreteMarchingCubes;
+class vtkLookupTable;
+class vtkWindowedSincPolyDataFilter;
 
 class SurfaceViewer: public vtkObject
 {
@@ -32,6 +38,29 @@ public:
 	virtual vtkImageData *GetInput();
 	virtual void SetInputConnection(vtkAlgorithmOutput* input);
 
+	virtual void UpdateDisplayExtent();
+
+	virtual void SetLookupTable(vtkLookupTable* lookupTable);
+	virtual vtkLookupTable* GetLookupTable();
+
+	// Description:
+	// Get the internal render window, renderer, image actor, and
+	// image map instances.
+	vtkGetObjectMacro(RenderWindow, vtkRenderWindow);
+	vtkGetObjectMacro(Renderer, vtkRenderer);
+	vtkGetObjectMacro(SurfaceActor, vtkActor);
+	vtkGetObjectMacro(MarchingCubes, vtkDiscreteMarchingCubes);
+	vtkGetObjectMacro(InteractorStyle, vtkInteractorStyle);
+
+	// Description:
+	// Set your own renderwindow and renderer
+	virtual void SetRenderWindow(vtkRenderWindow *arg);
+	virtual void SetRenderer(vtkRenderer *arg);
+
+	// Description:
+	// Attach an interactor for the internal render window.
+	virtual void SetupInteractor(vtkRenderWindowInteractor* arg);
+
 protected:
 
 	SurfaceViewer();
@@ -42,11 +71,23 @@ protected:
 
 
 	//vtkImageMapToWindowLevelColors  *WindowLevel;
+
+	vtkDiscreteMarchingCubes* MarchingCubes;
+	vtkWindowedSincPolyDataFilter* WindowedSincPolyDataFilter;
 	vtkRenderWindow                 *RenderWindow;
 	vtkRenderer                     *Renderer;
 	vtkActor* SurfaceActor;
+	vtkPolyDataMapper* SurfaceMapper;
 	vtkRenderWindowInteractor       *Interactor;
 	vtkInteractorStyle         *InteractorStyle;
+
+	vtkLookupTable* LookupTable = nullptr;
+
+	bool FirstRender;
+
+
+	vtkAlgorithm* GetInputAlgorithm();
+	vtkInformation* GetInputInformation();
 
 private:
 

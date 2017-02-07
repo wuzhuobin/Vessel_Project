@@ -10,6 +10,8 @@
 #include "IADEIOManager.h"
 #include "IADEImageManager.h"
 #include "IADEInteractorStyleSwitch.h"
+#include "SurfaceViewer.h"
+#include <vtkInteractorStyleSwitch.h>
 
 
 class Core: public QObject
@@ -44,6 +46,8 @@ private slots:
 	void slotAllAxialView();
 	void slotChangeView(unsigned int viewMode);
 
+	void slotUpdateSurfaceView();
+
 	//void slotTest(bool flag);
 
 private:
@@ -55,7 +59,10 @@ private:
 	ImageViewer* imageViewers[MainWindow::NUM_OF_2D_VIEWERS];
 	vtkRenderWindowInteractor* imageInteractor[MainWindow::NUM_OF_2D_VIEWERS];
 	IADEInteractorStyleSwitch* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
-	//InteractorStyleWindowLevel* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
+
+	SurfaceViewer* surfaceViewer;
+	vtkRenderWindowInteractor* surfaceInteractor;
+	vtkInteractorStyleSwitch* surfaceInteractorStyle;
 
 
 	unsigned int m_viewMode = -1;

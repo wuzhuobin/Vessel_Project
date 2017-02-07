@@ -33,6 +33,27 @@ QInteractorStyleWindowLevel::~QInteractorStyleWindowLevel()
 	QDELETE_UI();
 }
 
+void QInteractorStyleWindowLevel::uniqueCall()
+{
+	QAbstractNavigation::uniqueCall();
+}
+
+void QInteractorStyleWindowLevel::SetWindowByViewer(double window)
+{
+	InteractorStyleWindowLevel::SetWindowByViewer(window);
+	//if (int(m_window + 0.5) != window) {
+		m_spinBoxWindowWidth->setValue(window);
+	//}
+}
+
+void QInteractorStyleWindowLevel::SetLevelByViewer(double level)
+{
+	InteractorStyleWindowLevel::SetLevelByViewer(level);
+	//if (int(m_level + 0.5) != level) {
+		m_spinBoxWindowLevel->setValue(level);
+	//}
+}
+
 void QInteractorStyleWindowLevel::SetCustomEnabled(bool flag)
 {
 	InteractorStyleWindowLevel::SetCustomEnabled(flag);
@@ -49,24 +70,13 @@ void QInteractorStyleWindowLevel::SetWindow(int window)
 {
 	if (int(m_window + 0.5) != window) {
 		InteractorStyleWindowLevel::SetWindow(window);
-		m_spinBoxWindowWidth->setValue(window);
 	}
-}
-
-void QInteractorStyleWindowLevel::SetWindow(double window)
-{
-	QInteractorStyleWindowLevel::SetWindow((int)window);
 }
 
 void QInteractorStyleWindowLevel::SetLevel(int level)
 {
 	if (int(m_level + 0.5) != level) {
 		InteractorStyleWindowLevel::SetLevel(level);
-		m_spinBoxWindowLevel->setValue(level);
 	}
 }
 
-void QInteractorStyleWindowLevel::SetLevel(double level)
-{
-	QInteractorStyleWindowLevel::SetLevel((int)level);
-}

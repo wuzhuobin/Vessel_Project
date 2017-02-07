@@ -5,6 +5,9 @@
 #include "QInteractorStyleWindowLevel.h"
 #include "Overlay.h"
 #include "ui_MainWindow.h"
+#include "SurfaceViewer.h"
+
+#include <vtkInteractorStyleSwitch.h>
 
 
 #include <qdebug.h>
@@ -25,7 +28,6 @@ Core::Core(QObject * parent)
 	mainWindow.addModalityNames("MRA Image");
 
 
-
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractor[i] = vtkRenderWindowInteractor::New();
 		
@@ -42,6 +44,19 @@ Core::Core(QObject * parent)
 
 		mainWindow.setRenderWindow(i, imageViewers[i]->GetRenderWindow());
 	}
+
+	surfaceInteractor = vtkRenderWindowInteractor::New();
+
+	surfaceViewer = SurfaceViewer::New();
+	surfaceViewer->SetupInteractor(surfaceInteractor);
+
+	surfaceInteractorStyle = vtkInteractorStyleSwitch::New();
+	surfaceInteractorStyle->SetCurrentStyleToTrackballCamera();
+	surfaceInteractor->SetInteractorStyle(surfaceInteractorStyle);
+
+	mainWindow.setRenderWindow(3, surfaceViewer->GetRenderWindow());
+
+
 	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
 	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
@@ -85,8 +100,9 @@ Core::Core(QObject * parent)
 	connect(&ioManager, SIGNAL(signalFinishOpenOverlay()),
 		this, SLOT(slotOverlayToImageManager()));
 
-	//connect(mainWindow.getUi()->actionNavigation, SIGNAL(toggled(bool)),
-	//	this, SLOT(slotTest(bool)));
+	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
+		this, SLOT(slotUpdateSurfaceView()));
+
 
 
 
@@ -258,6 +274,17 @@ void Core::slotChangeView(unsigned int viewMode)
 	default:
 		break;
 	}
+}
+
+
+void Core::slotUpdateSurfaceView()
+{
+	// temporary fix for real time updated.
+	vtkSmartPointer<vtkImageData> image = vtkSmartPointer<vtkImageData>::New();
+	image->ShallowCopy(imageManager.getOverlay()->getData());
+	surfaceViewer->SetInputData(image);
+	surfaceViewer->SetLookupTable(imageManager.getOverlay()->getLookupTable());
+	surfaceViewer->Render();
 }
 
 

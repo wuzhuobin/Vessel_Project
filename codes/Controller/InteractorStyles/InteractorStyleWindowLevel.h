@@ -32,7 +32,6 @@ public:
 	virtual void SetWindow(double window);
 	virtual void SetLevel(double level);
 	virtual void WindowLevel();
-	virtual void SetWindowLevel(double window, double level);
 
 protected:
 	InteractorStyleWindowLevel();
@@ -54,8 +53,13 @@ protected:
 	//virtual void OnKeyUp();
 	virtual void OnChar();
 
+	virtual void SetWindowByViewer(double window);
+	virtual void SetLevelByViewer(double level);
+	virtual void SetWindowLevelByViewer(double window, double level);
+
 	double m_window;
 	double m_level;
+
 	
 
 };

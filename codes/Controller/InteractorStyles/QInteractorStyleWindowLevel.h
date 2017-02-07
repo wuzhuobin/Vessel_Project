@@ -49,14 +49,12 @@ public:
 	 * @brief	function to set the window width spinbox
 	 */
 	virtual void SetWindow(int window);
-	virtual void SetWindow(double window);
 
 	/**
 	* @override
 	* @brief	function to set the window level spinbox
 	*/
 	virtual void SetLevel(int level);
-	virtual void SetLevel(double level);
 
 
 
@@ -72,6 +70,18 @@ protected:
 	 * @brief	Destructor. 
 	 */
 	virtual ~QInteractorStyleWindowLevel();
+	/**
+	* @override
+	* @brief	abstract funtion to call once.
+	* @see #uniqueInvoke()
+	*
+	* The #uniqueCall() function used to guarantee only call once.
+	* For updating the spinbox's boundaries.
+	*/
+	virtual void uniqueCall();
+	virtual void SetWindowByViewer(double window);
+	virtual void SetLevelByViewer(double level);
+
 
 private:
 	///< the pointer of the navigation ui.
