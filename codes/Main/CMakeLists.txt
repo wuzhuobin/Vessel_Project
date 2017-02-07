@@ -5,10 +5,7 @@ IF(COMMAND CMAKE_POLICY)
 ENDIF(COMMAND CMAKE_POLICY)
 
 project(Main)
-# include all headers
-include_directories(
-	${MAIN_INCLUDE_DIRECTORIES}
-)
+
 #Link all libraries
 link_directories(
    	${MAIN_LINK_DIRECTORIES}
@@ -61,7 +58,17 @@ add_executable(
 
 target_link_libraries(
 	Main
-	${MAIN_LINK_LIBRARIES}
+	Core
+	${ITK_LIBRARIES}
+	${VTK_LIBRARIES}
+	Qt5::Core
+	Qt5::Widgets
+)
+target_include_directories(
+	Main
+	PUBLIC
+	${PROJECT_SOURCE_DIR}
+	${PROJECT_BINARY_DIR}
 )
 
 #Grouping in MSVC

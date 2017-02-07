@@ -5,31 +5,44 @@
 #include <vtkLookupTable.h>
 #include <vtkObjectFactory.h>
 
-vtkStandardNewMacro(Overlay::OverlayImageData);
+#include <qdebug.h>
+
+vtkStandardNewMacro(OverlayImageData);
+vtkStandardNewMacro(OverlayModifiedObserver);
 
 Overlay::Overlay(QObject * parent)
 	:QObject(parent)
 {
-	m_data = vtkSmartPointer<Overlay::OverlayImageData>::New();
+	m_data = vtkSmartPointer<OverlayImageData>::New();
+
+	m_modifiedObserver = vtkSmartPointer<OverlayModifiedObserver>::New();
+	m_modifiedObserver->overlay = this;
+	m_data->AddObserver(vtkCommand::ModifiedEvent, m_modifiedObserver);
+
 	m_lookupTable = vtkSmartPointer<vtkLookupTable>::New();
 	m_lookupTable->SetNumberOfTableValues(1);
 	m_lookupTable->Build();
 	m_lookupTable->SetTableValue(0, 0, 0, 0, 0);
 }
 
-Overlay::Overlay(Overlay::OverlayImageData::itkImageType::Pointer data, QObject * parent)
+Overlay::Overlay(OverlayImageData::itkImageType::Pointer data, QObject * parent)
 	:Overlay(parent)
 {
 	m_data->Graft(data);
 }
 
-Overlay::Overlay(Overlay::OverlayImageData * data, QObject * parent)
+Overlay::Overlay(OverlayImageData * data, QObject * parent)
 	: Overlay(parent)
 {
 	m_data->ShallowCopy(data);
 }
 
-Overlay::OverlayImageData * Overlay::getData() const
+Overlay::~Overlay()
+{
+	m_data->RemoveAllObservers();
+}
+
+OverlayImageData * Overlay::getData() const
 {
 	return m_data;
 }
@@ -39,7 +52,12 @@ vtkLookupTable * Overlay::getLookupTable() const
 	return m_lookupTable;
 }
 
-void Overlay::OverlayImageData::PrintSelf(ostream & os, vtkIndent indent)
+void Overlay::modified()
+{
+	qDebug() << "Modified";
+}
+
+void OverlayImageData::PrintSelf(ostream & os, vtkIndent indent)
 {
 	os << indent << "VTK Image information: " << std::endl;
 	vtkImageData::PrintSelf(os, indent);
@@ -47,7 +65,7 @@ void Overlay::OverlayImageData::PrintSelf(ostream & os, vtkIndent indent)
 	m_itkImage->Print(os, 0);
 }
 
-void Overlay::OverlayImageData::ShallowCopy(vtkDataObject * dataObject)
+void OverlayImageData::ShallowCopy(vtkDataObject * dataObject)
 {
 	OverlayImageData* overlayImageData = OverlayImageData::SafeDownCast(dataObject);
 	if (overlayImageData) {
@@ -64,7 +82,7 @@ void Overlay::OverlayImageData::ShallowCopy(vtkDataObject * dataObject)
 	}
 }
 
-void Overlay::OverlayImageData::DeepCopy(vtkDataObject * dataObject)
+void OverlayImageData::DeepCopy(vtkDataObject * dataObject)
 {
 
 	OverlayImageData* overlayImageData = OverlayImageData::SafeDownCast(dataObject);
@@ -82,30 +100,30 @@ void Overlay::OverlayImageData::DeepCopy(vtkDataObject * dataObject)
 	}
 }
 
-void Overlay::OverlayImageData::Graft(itkImageType::Pointer dataObject)
+void OverlayImageData::Graft(itkImageType::Pointer dataObject)
 {
 	m_itkImage->Graft(dataObject);
 
 	updateVTKImage();
 }
 
-Overlay::OverlayImageData::itkImageType::Pointer Overlay::OverlayImageData::GetItkImage()
+OverlayImageData::itkImageType::Pointer OverlayImageData::GetItkImage()
 {
 	return m_itkImage;
 }
 
-Overlay::OverlayImageData::OverlayImageData()
+OverlayImageData::OverlayImageData()
 {
 	m_itkImage = (itkImageType::New());
 
 	updateVTKImage();
 }
 
-Overlay::OverlayImageData::~OverlayImageData()
+OverlayImageData::~OverlayImageData()
 {
 }
 
-void Overlay::OverlayImageData::updateITKImage()
+void OverlayImageData::updateITKImage()
 {
 	typedef itk::VTKImageToImageFilter<itkImageType> VTKImageToImageType;
 
@@ -116,7 +134,7 @@ void Overlay::OverlayImageData::updateITKImage()
 	m_itkImage->Graft(vtkImageToImageFilter->GetOutput());
 }
 
-void Overlay::OverlayImageData::updateVTKImage()
+void OverlayImageData::updateVTKImage()
 {
 	typedef itk::ImageToVTKImageFilter<itkImageType> ImageToVTKImageFilter;
 
@@ -125,4 +143,9 @@ void Overlay::OverlayImageData::updateVTKImage()
 	imageToVTKImageFilter->SetInput(m_itkImage);
 	imageToVTKImageFilter->Update();
 	vtkImageData::ShallowCopy(imageToVTKImageFilter->GetOutput());
+}
+
+void OverlayModifiedObserver::Execute(vtkObject * caller, unsigned long eventId, void * callData)
+{
+	overlay->modified();
 }

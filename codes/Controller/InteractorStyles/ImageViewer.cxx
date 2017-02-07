@@ -85,6 +85,7 @@ ImageViewer::ImageViewer(/*QObject* parent*/)
 	//RenderWindow->SetNumberOfLayers(2);
 
 	this->InstallPipeline();
+	UpdateOrientation();
 	//this->OverlayActor->SetVisibility(false);
 	// Error blocking fot windowLevel
 	// temporary fixation
@@ -98,8 +99,6 @@ ImageViewer::ImageViewer(/*QObject* parent*/)
 	//	vtkCommand::ErrorEvent, windowLevelErrorBlocker);
 	//this->OverlayWindowLevel->GetInputAlgorithm()->AddObserver(
 	//	vtkCommand::ErrorEvent, windowLevelErrorBlocker);
-	OverlayActor->VisibilityOff();
-	ImageActor->VisibilityOff();
 }
 
 //----------------------------------------------------------------------------
@@ -333,7 +332,6 @@ void ImageViewer::SetInputData(vtkImageData *in)
 
 	//Cursor
 	this->InitializeCursorBoundary();
-
 }
 
 void ImageViewer::SetInputDataLayer(vtkImageData *in)
@@ -349,7 +347,7 @@ void ImageViewer::SetInputDataLayer(vtkImageData *in)
 	//	OverlayWindowLevel->SetWindow(num - 1 );
 	//	OverlayWindowLevel->SetLevel((num - 1)*0.5);
 	//}
-	this->UpdateDisplayExtent();
+	//this->UpdateDisplayExtent();
 
 }
 //----------------------------------------------------------------------------
@@ -394,18 +392,19 @@ void ImageViewer::InitializeCursorBoundary()
 	// but it will lead to the canvas source behaviour very strange.
 
 	//this->GetInputAlgorithm()->Update();
-	const double* spacing = GetInput()->GetSpacing();
-	const double* origin = GetInput()->GetOrigin();
-	const int* extent = GetInput()->GetExtent();
-	double bound[6];
-	bound[0] = origin[0] + extent[0] * spacing[0];
-	bound[1] = origin[0] + extent[1] * spacing[0];
-	bound[2] = origin[1] + extent[2] * spacing[1];
-	bound[3] = origin[1] + extent[3] * spacing[1];
-	bound[4] = origin[2] + extent[4] * spacing[2];
-	bound[5] = origin[2] + extent[5] * spacing[2];
+	//const double* spacing = GetInput()->GetSpacing();
+	//const double* origin = GetInput()->GetOrigin();
+	//const int* extent = GetInput()->GetExtent();
+	//double bound[6];
+	//bound[0] = origin[0] + extent[0] * spacing[0];
+	//bound[1] = origin[0] + extent[1] * spacing[0];
+	//bound[2] = origin[1] + extent[2] * spacing[1];
+	//bound[3] = origin[1] + extent[3] * spacing[1];
+	//bound[4] = origin[2] + extent[4] * spacing[2];
+	//bound[5] = origin[2] + extent[5] * spacing[2];
 
-	Cursor3D->SetModelBounds(bound);
+	//Cursor3D->SetModelBounds(bound);
+	Cursor3D->SetModelBounds(GetInput()->GetBounds());
 	Cursor3D->Update();
 }
 

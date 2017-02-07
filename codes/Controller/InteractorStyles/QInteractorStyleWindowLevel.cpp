@@ -22,7 +22,6 @@ QInteractorStyleWindowLevel::QInteractorStyleWindowLevel(int uiType, QWidget * p
 	};
 	m_spinBoxWindowLevel = spinBoxWindowLevel[numOfMyself - 1];
 	m_spinBoxWindowWidth = spinBoxWindowWidth[numOfMyself - 1];
-	qDebug() << numOfMyself;
 	connect(m_spinBoxWindowLevel, SIGNAL(valueChanged(int)),
 		this, SLOT(SetLevel(int)), Qt::UniqueConnection);
 	connect(m_spinBoxWindowWidth, SIGNAL(valueChanged(int)),

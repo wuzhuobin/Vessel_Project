@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 #include <qdebug.h>
 #include <qsettings.h>
+#include <qfiledialog.h>
 
 #include <vtkRenderWindow.h>
 
@@ -41,13 +42,15 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroup->addAction(ui->actionWindow_level);
 	actionGroup->addAction(ui->acitonVOI_selection);
 	actionGroup->addAction(ui->actionPaint_brush);
+	actionGroup->addAction(ui->actionSeeds_placer);
 	actionGroup->setExclusive(true);
 
 
 	// Connection
 	connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
 	connect(ui->actionImport_images, SIGNAL(triggered()), this, SLOT(slotOpenNewImage()));
-
+	connect(ui->actionImport_segmentation, SIGNAL(triggered()),
+		this, SLOT(slotOpenOverlay()));
 	createRecentImageActions();
 
 }
@@ -116,6 +119,14 @@ void MainWindow::slotOpenRecentImage()
 void MainWindow::slotOpenNewImage()
 {
 	imageImport("");
+}
+
+void MainWindow::slotOpenOverlay()
+{
+		QString path = QFileDialog::getOpenFileName((this), 
+			QString(tr("Save Segmentation")), ".", tr("NIFTI Images (*.nii)"));
+		if (path.isEmpty())	return;
+		emit signalOverlayImportLoad(path);
 }
 
 void MainWindow::slotImage()

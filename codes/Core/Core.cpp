@@ -45,6 +45,7 @@ Core::Core(QObject * parent)
 	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
 	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
+	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
 	//imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel()->show();
 	//moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	
@@ -58,6 +59,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotWindowLevel()));
 	connect(mainWindow.getUi()->actionPaint_brush, SIGNAL(triggered()),
 		this, SLOT(slotPaintBrush()));
+	connect(mainWindow.getUi()->actionSeeds_placer, SIGNAL(triggered()),
+		this, SLOT(slotSeedsPlacer()));
 
 	//connect(&mainWindow, SIGNAL(signalImageImportInitialize()),
 	//	&ioManager, SLOT(slotCleanListsOfFileNames()));
@@ -68,8 +71,8 @@ Core::Core(QObject * parent)
 
 	connect(&mainWindow, SIGNAL(signalImageImportLoad(QList<QStringList>*)),
 		&ioManager, SLOT(slotAddToListOfFileNamesAndOpen(QList<QStringList>*)));
-	connect(&mainWindow, SIGNAL(signalImageImportLoad(QList<QStringList>*)),
-		&ioManager, SLOT(slotAddToListOfFileNamesAndOpen(QList<QStringList>*)));
+	//connect(&mainWindow, SIGNAL(signalImageImportLoad(QList<QStringList>*)),
+	//	&ioManager, SLOT(slotAddToListOfFileNamesAndOpen(QList<QStringList>*)));
 
 	//connect(&ioManager, SIGNAL(signalFinishOpenMultiImages(QList<ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>*)),
 	//	this, SLOT(slotIOManagerToImageManager(QList<IOManager::ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>* dicoms)));
@@ -77,6 +80,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotIOManagerToImageManager()));
 	//connect(&ioManager, SIGNAL(signalFinishOpenMultiImages()),
 	//	&ioManager, SLOT(slotInitializeOverlay()));
+	connect(&mainWindow, SIGNAL(signalOverlayImportLoad(QString)), 
+		&ioManager, SLOT(slotOpenSegmentation(QString)));
 	connect(&ioManager, SIGNAL(signalFinishOpenOverlay()),
 		this, SLOT(slotOverlayToImageManager()));
 
@@ -114,8 +119,10 @@ void Core::slotIOManagerToImageManager()
 			imageManager.setImage(i, ioManager.getListOfItkImages()[i]);
 			imageManager.setDicomIO(i, ioManager.getListOfDicomIOs()[i]);
 	}
-	ioManager.slotInitializeOverlay();
+
 	// set input to image viewer
+	ioManager.slotInitializeOverlay();
+
 	slotMultiPlanarView();
 
 	// update selectImgMenus 
@@ -128,11 +135,23 @@ void Core::slotIOManagerToImageManager()
 		}
 	}
 	mainWindow.initialization();
+	// clear the memory later, sometimes it will clear too early
+	ioManager.clearListOfItkImages();
+	ioManager.clearListOfDicoms();
 }
 
 void Core::slotOverlayToImageManager()
 {
 	imageManager.setOverlay(ioManager.getOverlay());
+
+
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		// Overlay settings
+		imageViewers[i]->SetInputDataLayer(imageManager.getOverlay()->getData());
+		imageViewers[i]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
+	}
+	// clear the memory later, sometimes it will clear too early
+	ioManager.clearOverlay();
 }
 
 void Core::slotNavigation()
@@ -155,8 +174,18 @@ void Core::slotPaintBrush()
 {
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToPaintBrush();
+		//imageInteractorStyle[i]->GetPaintBrush()->SetOverlay(imageManager.getOverlay()->getData());
 	}
 	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
+
+}
+
+void Core::slotSeedsPlacer()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		imageInteractorStyle[i]->SetInteractorStyleToLumenSeedsPlacer();
+	}
+	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
 
 }
 
@@ -183,8 +212,8 @@ void Core::slotChangeView(unsigned int viewMode)
 			// SetupInteractor should be ahead of InitializeHeader
 			imageViewers[i]->SetInputData(imageManager.getImage(DEFAULT_IMAGE));
 			// Overlay settings
-			imageViewers[i]->SetInputDataLayer(imageManager.getOverlay()->getData());
-			imageViewers[i]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
+			//imageViewers[i]->SetInputDataLayer(imageManager.getOverlay()->getData());
+			//imageViewers[i]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
 			
 			imageViewers[i]->SetSliceOrientation(i);
 			imageViewers[i]->Render();

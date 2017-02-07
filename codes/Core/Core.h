@@ -38,6 +38,7 @@ private slots:
 	void slotNavigation();
 	void slotWindowLevel();
 	void slotPaintBrush();
+	void slotSeedsPlacer();
 
 	void slotMultiPlanarView();
 	void slotAllAxialView();

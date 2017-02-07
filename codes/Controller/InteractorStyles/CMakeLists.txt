@@ -22,13 +22,15 @@ if(NOT Qt5Widgets_FOUND)
 endif()
 
 set(
-	IMAGE_VIEWER_SRC
+	VIEWER_SRC
 	${PROJECT_SOURCE_DIR}/ImageViewer.cxx
+	${PROJECT_SOURCE_DIR}/SurfaceViewer.cxx
 )
 
 set(
-	IMAGE_VIEWER_H
+	VIEWER_H
 	${PROJECT_SOURCE_DIR}/ImageViewer.h
+	${PROJECT_SOURCE_DIR}/SurfaceViewer.h	
 )
 
 file(
@@ -80,8 +82,8 @@ qt5_wrap_ui(
 )
 add_library(
 	InteractorStyles
-	${IMAGE_VIEWER_SRC}
-	${IMAGE_VIEWER_H}
+	${VIEWER_SRC}
+	${VIEWER_H}
 	${ABSTRACT_INTERACTORS_SRC}
 	${ABSTRACT_INTERACTORS_H}
 	${INTERACTORS_INC}
@@ -99,6 +101,7 @@ target_link_libraries(
 	${VTK_LIBRARIES}
 	Qt5::Core
 	Qt5::Widgets
+	LumenExtraction
 )
 
 target_include_directories(

@@ -11,7 +11,7 @@ IADEImageManager::IADEImageManager(unsigned int numOfImages, QObject * parent)
 
 bool IADEImageManager::setOverlay(IVtkImageData::itkImageType::Pointer image)
 {
-	typedef itk::CastImageFilter<IVtkImageData::itkImageType, Overlay::OverlayImageData::itkImageType> CastImageFilter;
+	typedef itk::CastImageFilter<IVtkImageData::itkImageType, OverlayImageData::itkImageType> CastImageFilter;
 
 	if (image != nullptr) {
 		CastImageFilter::Pointer castImageFilter = CastImageFilter::New();

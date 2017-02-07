@@ -8,12 +8,6 @@ project(Core)
 
 find_package(Qt5Core)
 
-include_directories(
-	${MAIN_INCLUDE_DIRECTORIES}
-	${PROJECT_SOURCE_DIR}
-	${PROJECT_BINARY_DIR}
-	)
-
 set(
 	CORE_H
 	Core.h
@@ -40,9 +34,20 @@ add_library(
 #link libraries
 target_link_libraries(
 	Core
+	${ITK_LIBRARIES}
+	${VTK_LIBRARIES}
 	Qt5::Core
-	${MAIN_LINK_LIBRARIES}
+	Qt5::Widgets
+	Controller
+	Model
+	View
 	)
+target_include_directories(
+	Core
+	PUBLIC
+	${PROJECT_SOURCE_DIR}
+	${PROJECT_BINARY_DIR}
+)
 
 #Grouping in MSVC
 SOURCE_GROUP(

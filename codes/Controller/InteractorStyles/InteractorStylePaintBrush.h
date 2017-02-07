@@ -22,7 +22,6 @@ Copyright (C) 2016
 
 #include "AbstractNavigation.h"
 
-
 //Extra
 
 
@@ -31,6 +30,7 @@ class vtkImageCanvasSource2D;
 class vtkBorderWidget;
 class vtkBorderRepresentation;
 class vtkImageActor;
+class vtkRenderer;
 
 class InteractorStylePaintBrush : public AbstractNavigation
 {
@@ -42,7 +42,8 @@ public:
 	};
 	vtkTypeMacro(InteractorStylePaintBrush, AbstractNavigation);
 	static InteractorStylePaintBrush* New();
-	virtual void SetPaintBrushModeEnabled(bool b);
+	virtual void SetCustomEnabled(bool b);
+	//virtual void SetOverlay(vtkImageData* overlay);
 	virtual void SetPaintBrushLabel(int paintBrushLabel);
 	virtual void SetDrawColor(int r, int g, int b);
 	virtual void SetDrawColor(const int* rgb);
@@ -83,11 +84,12 @@ private:
 
 
 
-
-	vtkBorderWidget*				m_borderWidget;
-	vtkBorderRepresentation*		m_retangleRep;
+	//vtkImageData* m_overlay;
+	vtkBorderWidget* m_borderWidget;
+	vtkBorderRepresentation* m_retangleRep;
 	vtkImageCanvasSource2D* m_brush;
 	vtkImageActor* m_brushActor;
+	vtkRenderer* m_brushRenderer;
 
 	int paintBrushLabel;
 	int draw_index_old[3];
@@ -95,7 +97,6 @@ private:
 	int m_opacity;
 	int m_brushSize;
 	bool m_isDraw;
-	bool m_paintBrushEnabled;
 	int m_brushShape = SQUARE;
 	bool m_eraserModeFlag = false;
 

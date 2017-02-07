@@ -10,9 +10,8 @@
 #include <itkGDCMImageIO.h>
 
 #include "IVtkImageData.h"
-//#include "Overlay.h"
+#include "Overlay.h"
 
-class Overlay;
 
 class ImageManager: public QObject
 {

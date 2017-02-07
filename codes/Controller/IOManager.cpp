@@ -42,7 +42,7 @@ void IOManager::enableRegistration(bool flag)
 
 void IOManager::slotAddToListOfFileNamesAndOpen(QList<QStringList>* listOfFileNames)
 {
-	slotCleanListsOfFileNames();
+	clearListsOfFileNames();
 	
 	for (int i = 0; i < listOfFileNames->size(); ++i) {
 		slotAddToListOfFileNames(listOfFileNames->at(i));
@@ -61,7 +61,7 @@ void IOManager::slotAddToListOfFileNames(QStringList * fileNames)
 	slotAddToListOfFileNames(*fileNames);
 }
 
-void IOManager::slotCleanListsOfFileNames()
+void IOManager::clearListsOfFileNames()
 {
 	this->listOfFileNames.clear();
 }
@@ -76,14 +76,29 @@ const QList<ImageType::Pointer> IOManager::getListOfItkImages() const
 	return this->listOfItkImages;
 }
 
+void IOManager::clearListOfItkImages()
+{
+	this->listOfItkImages.clear();
+}
+
 const QList<GDCMImageIO::Pointer> IOManager::getListOfDicomIOs() const
 {
 	return this->listOfDicomIOs;
 }
 
+void IOManager::clearListOfDicoms()
+{
+	this->listOfDicomIOs.clear();
+}
+
 const ImageType::Pointer IOManager::getOverlay() const
 {
 	return overlay;
+}
+
+void IOManager::clearOverlay()
+{
+	overlay = nullptr;
 }
 
 bool IOManager::loadImageData(QStringList fileNames)
@@ -244,33 +259,28 @@ void IOManager::slotInitializeOverlay(ImageType::Pointer image)
 //	emit finishOpenSegmentation();
 //}
 //
-//void IOManager::slotOpenSegmentation(QString fileName)
-//{
-//	Overlay::OverlayImageType::Pointer _itkImage;
-//	ImageFileReader<Overlay::OverlayImageType>::Pointer reader =
-//		ImageFileReader<Overlay::OverlayImageType>::New();
-//	reader->SetFileName(fileName.toStdString());
-//	reader->Update();
-//	_itkImage = reader->GetOutput();
-//	this->myImageManager->overlay->SetInputImageData(_itkImage);
-//
-//	//if (_itkImage.IsNotnullptr()) {
-//	//	// using the same m_orientation ITK_COORDINATE_ORIENTATION_RAI
-//	//	OrientImageFilter<Image<float, 3>, Image<float, 3>>::Pointer orienter =
-//	//		OrientImageFilter<Image<float, 3>, Image<float, 3>>::New();
-//	//	orienter->UseImageDirectionOn();
-//	//	orienter->SetDesiredCoordinateOrientation(
-//	//		itk::SpatialOrientation::ITK_COORDINATE_ORIENTATION_RAI);
-//	//	orienter->SetInput(_itkImage);
-//	//	orienter->Update();
-//	//	_itkImage = orienter->GetOutput();
-//	//	ImageToVTKImageFilter<Image<float, 3>>::Pointer connector =
-//	//		ImageToVTKImageFilter<Image<float, 3>>::New();
-//	//	connector->SetInput(_itkImage);
-//	//	connector->Update();
-//	//	_vtkImage = connector->GetOutput();
-//	//}
-//}
+void IOManager::slotOpenSegmentation(QString fileName)
+{
+	overlay = ImageType::New();
+	ImageFileReader<ImageType>::Pointer reader =
+		ImageFileReader<ImageType>::New();
+	reader->SetFileName(fileName.toStdString());
+	reader->Update();
+	overlay = reader->GetOutput();
+
+	// using the same m_orientation ITK_COORDINATE_ORIENTATION_RAI
+	OrientImageFilter::Pointer orienter =
+		OrientImageFilter::New();
+	orienter->UseImageDirectionOn();
+	orienter->SetDesiredCoordinateOrientation(
+		itk::SpatialOrientation::ITK_COORDINATE_ORIENTATION_RAI);
+	orienter->SetInput(overlay);
+	orienter->Update();
+	overlay = orienter->GetOutput();
+
+	emit signalFinishOpenOverlay();
+
+}
 //
 //void IOManager::slotSaveSegmentaitonWithDiaglog()
 //{

@@ -25,11 +25,25 @@ public:
 
 	const QList<QStringList> getListOfFileNames() const;
 
+	/**
+	* clean the list of FileNames, #listOfFileNames
+	*/
+	void clearListsOfFileNames();
+
 	const QList<ImageType::Pointer> getListOfItkImages() const;
+
+	/**
+	 * 
+	 */
+	void clearListOfItkImages();
 
 	const QList<itk::GDCMImageIO::Pointer> getListOfDicomIOs() const;
 
+	void clearListOfDicoms();
+
 	const ImageType::Pointer getOverlay() const;
+
+	void clearOverlay();
 
 public slots:
 
@@ -41,10 +55,7 @@ public slots:
 	void slotAddToListOfFileNames(QStringList fileNames);
 
 	void slotAddToListOfFileNames(QStringList* fileNames);
-	/**
-	 * clean the list of FileNames, #listOfFileNames
-	 */
-	void slotCleanListsOfFileNames();
+
 
 	void slotOpenMultiImages();
 
@@ -58,7 +69,7 @@ public slots:
 
 	//void slotOpenSegmentationWithDiaglog();
 
-	//void slotOpenSegmentation(QString fileName);
+	void slotOpenSegmentation(QString fileName);
 
 	//void slotSaveSegmentaitonWithDiaglog();
 

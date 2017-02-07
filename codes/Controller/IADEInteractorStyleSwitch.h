@@ -19,6 +19,7 @@ Copyright (C) 2016
 #include "QInteractorStyleNavigation.h"
 #include "QInteractorStyleWindowLevel.h"
 #include "QInteractorStylePaintBrush.h"
+#include "QInteractorStyleLumenSeedsPlacer.h"
 
 class IADEInteractorStyleSwitch : public InteractorStyleSwitch
 {
@@ -35,10 +36,13 @@ public:
 	SetInteractorStyleMacro(Navigation);
 	CurrentStyleMacro(Navigation);
 	//vtkGetMacro(PolygonDraw, QInteractorStyleVesselSegmentation*);
-	//vtkGetMacro(SeedsPlacer, QInteractorStyleLumenSeedsPlacer*);
 	vtkGetMacro(PaintBrush, QInteractorStylePaintBrush*);
 	SetInteractorStyleMacro(PaintBrush);
 	CurrentStyleMacro(PaintBrush);
+
+	vtkGetMacro(LumenSeedsPlacer, QInteractorStyleLumenSeedsPlacer*);
+	SetInteractorStyleMacro(LumenSeedsPlacer);
+	CurrentStyleMacro(LumenSeedsPlacer);
 	//vtkGetMacro(ROI, QInteractorStyleROI*);
 	//vtkGetMacro(Ruler, QInteractorStyleRuler*);
 
@@ -48,7 +52,6 @@ public:
 	//void SetInteractorStyleToNavigation();
 	//SetInteractorStyleMacro(WindowLevel);
 	//SetInteractorStyleMacro(PolygonDraw);
-	//SetInteractorStyleMacro(SeedsPlacer);
 	//SetInteractorStyleMacro(ROI);
 	//SetInteractorStyleMacro(Ruler);
 
@@ -56,7 +59,6 @@ public:
 	//CurrentStyleMacro(Navigation);
 	//CurrentStyleMacro(WindowLevel);
 	//CurrentStyleMacro(PolygonDraw);
-	//CurrentStyleMacro(SeedsPlacer);
 	//CurrentStyleMacro(ROI);
 	//CurrentStyleMacro(Ruler);
 
@@ -66,7 +68,7 @@ protected:
 	QInteractorStyleNavigation*	Navigation;
 	QInteractorStyleWindowLevel* WindowLevel;
 	//QInteractorStyleVesselSegmentation* PolygonDraw;
-	//QInteractorStyleLumenSeedsPlacer* SeedsPlacer;
+	QInteractorStyleLumenSeedsPlacer* LumenSeedsPlacer;
 	QInteractorStylePaintBrush*	PaintBrush;
 	//QInteractorStyleROI* ROI;
 	//QInteractorStyleRuler* Ruler;

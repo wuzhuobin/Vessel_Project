@@ -1,7 +1,5 @@
 #include "ImageManager.h"
 
-#include "Overlay.h"
-#include "IVtkImageData.h"
 #include <itkCastImageFilter.h>
 
 ImageManager::ImageManager(unsigned int numOfImages, QObject * parent)
@@ -47,7 +45,7 @@ bool ImageManager::setOverlay(IVtkImageData * image)
 
 bool ImageManager::setOverlay(IVtkImageData::itkImageType::Pointer image)
 {
-	typedef itk::CastImageFilter<IVtkImageData::itkImageType, Overlay::OverlayImageData::itkImageType> CastImageFilter;
+	typedef itk::CastImageFilter<IVtkImageData::itkImageType, OverlayImageData::itkImageType> CastImageFilter;
 	
 	if (image != nullptr) {
 		CastImageFilter::Pointer castImageFilter = CastImageFilter::New();

@@ -773,6 +773,8 @@
     </widget>
     <addaction name="actionImport_images"/>
     <addaction name="menuRecentImage"/>
+    <addaction name="actionImport_segmentation"/>
+    <addaction name="actionExport_segmentation"/>
     <addaction name="actionExport_T2"/>
     <addaction name="actionExport_MRA"/>
     <addaction name="actionExport_Report"/>
@@ -795,7 +797,7 @@
     <addaction name="actionWindow_level"/>
     <addaction name="actionDistance_measure"/>
     <addaction name="acitonVOI_selection"/>
-    <addaction name="actionSeedsPlacer"/>
+    <addaction name="actionSeeds_placer"/>
     <addaction name="actionContour"/>
     <addaction name="actionPaint_brush"/>
    </widget>
@@ -834,8 +836,8 @@
      <string>Segmentation</string>
     </property>
     <addaction name="actionPaint_brush"/>
-    <addaction name="actionSaveSegmentation"/>
-    <addaction name="actionOpenSegmentation"/>
+    <addaction name="actionSeeds_placer"/>
+    <addaction name="actionImport_segmentation"/>
     <addaction name="actionSaveContour"/>
     <addaction name="actionOpenContour"/>
     <addaction name="actionCenterlineAlgorithm"/>
@@ -891,14 +893,14 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenImage"/>
-   <addaction name="actionSaveSegmentation"/>
+   <addaction name="actionExport_segmentation"/>
    <addaction name="separator"/>
    <addaction name="actionNavigation"/>
    <addaction name="actionWindow_level"/>
    <addaction name="actionDistance_measure"/>
    <addaction name="separator"/>
    <addaction name="acitonVOI_selection"/>
-   <addaction name="actionSeedsPlacer"/>
+   <addaction name="actionSeeds_placer"/>
    <addaction name="actionContour"/>
    <addaction name="actionPaint_brush"/>
    <addaction name="separator"/>
@@ -986,7 +988,7 @@
     <string>&amp;Exit</string>
    </property>
   </action>
-  <action name="actionSaveSegmentation">
+  <action name="actionExport_segmentation">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -995,7 +997,10 @@
      <normaloff>:/icons/Save.png</normaloff>:/icons/Save.png</iconset>
    </property>
    <property name="text">
-    <string>Save Segmentation</string>
+    <string>Export segmentation</string>
+   </property>
+   <property name="toolTip">
+    <string>Export segmentation</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -1298,9 +1303,12 @@
     <string>Multi-Planar View</string>
    </property>
   </action>
-  <action name="actionOpenSegmentation">
+  <action name="actionImport_segmentation">
    <property name="text">
-    <string>Open Segmentation</string>
+    <string>Import segmentation</string>
+   </property>
+   <property name="toolTip">
+    <string>Import segmentation</string>
    </property>
   </action>
   <action name="actionCenterlineAlgorithm">
@@ -1308,7 +1316,7 @@
     <string>Centerline Algorithm</string>
    </property>
   </action>
-  <action name="actionSeedsPlacer">
+  <action name="actionSeeds_placer">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1317,10 +1325,10 @@
      <normaloff>:/icons/1476453573_Wand.ico</normaloff>:/icons/1476453573_Wand.ico</iconset>
    </property>
    <property name="text">
-    <string>Seeds Placer</string>
+    <string>Seeds placer</string>
    </property>
    <property name="toolTip">
-    <string>Seeds Placer</string>
+    <string>Seeds placer</string>
    </property>
   </action>
   <action name="actionOpenContour">

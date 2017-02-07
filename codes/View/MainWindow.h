@@ -59,12 +59,15 @@ signals:
 	void signalImageImportAdd(QStringList*);
 	void signalImageImportLoad();
 	void signalImageImportLoad(QList<QStringList>*);
+	void signalOverlayImportLoad(QString);
 
 
 private slots:
 	
 	void slotOpenRecentImage();
 	void slotOpenNewImage();
+
+	void slotOpenOverlay();
 
 	/**
 	* four viewers and maximum
