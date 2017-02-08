@@ -57,11 +57,11 @@ private:
 	IADEImageManager imageManager;
 
 	ImageViewer* imageViewers[MainWindow::NUM_OF_2D_VIEWERS];
-	vtkRenderWindowInteractor* imageInteractor[MainWindow::NUM_OF_2D_VIEWERS];
+	//vtkRenderWindowInteractor* imageInteractor[MainWindow::NUM_OF_2D_VIEWERS];
 	IADEInteractorStyleSwitch* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
 
 	SurfaceViewer* surfaceViewer;
-	vtkRenderWindowInteractor* surfaceInteractor;
+	//vtkRenderWindowInteractor* surfaceInteractor;
 	vtkInteractorStyleSwitch* surfaceInteractorStyle;
 
 

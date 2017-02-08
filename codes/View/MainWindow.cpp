@@ -60,27 +60,27 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::setRenderWindow(unsigned short i, vtkRenderWindow * renderWindow)
-{
-	switch (i)
-	{
-	case 0:
-		ui->image1View->SetRenderWindow(renderWindow);
-		break;
-	case 1:
-		ui->image2View->SetRenderWindow(renderWindow);
-		break;
-	case 2:
-		ui->image3View->SetRenderWindow(renderWindow);
-		break;
-	case 3:
-		ui->image4View->SetRenderWindow(renderWindow);
-		break;
-
-	default:
-		break;
-	}
-}
+//void MainWindow::setRenderWindow(unsigned short i, vtkRenderWindow * renderWindow)
+//{
+//	switch (i)
+//	{
+//	case 0:
+//		ui->image1View->SetRenderWindow(renderWindow);
+//		break;
+//	case 1:
+//		ui->image2View->SetRenderWindow(renderWindow);
+//		break;
+//	case 2:
+//		ui->image3View->SetRenderWindow(renderWindow);
+//		break;
+//	case 3:
+//		ui->image4View->SetRenderWindow(renderWindow);
+//		break;
+//
+//	default:
+//		break;
+//	}
+//}
 
 //vtkRenderWindow * MainWindow::getRenderWindow(unsigned short i)
 //{

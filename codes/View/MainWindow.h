@@ -51,7 +51,7 @@ public:
 	
 	Ui::MainWindow* getUi() { return ui; }
 
-	void setRenderWindow(unsigned short i, vtkRenderWindow* renderWindow);
+	//void setRenderWindow(unsigned short i, vtkRenderWindow* renderWindow);
 	//vtkRenderWindow* getRenderWindow(unsigned short i);
 
 signals:

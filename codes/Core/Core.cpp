@@ -28,33 +28,37 @@ Core::Core(QObject * parent)
 	mainWindow.addModalityNames("MRA Image");
 
 
+	QVTKWidget* uiViewers[] = {
+		mainWindow.getUi()->image1View,
+		mainWindow.getUi()->image2View,
+		mainWindow.getUi()->image3View,
+		mainWindow.getUi()->image4View
+	};
+	
+
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-		imageInteractor[i] = vtkRenderWindowInteractor::New();
 		
 		imageViewers[i] = ImageViewer::New();
-		imageViewers[i]->SetupInteractor(imageInteractor[i]);
-		
+		imageViewers[i]->SetupInteractor(uiViewers[i]->GetInteractor());
 		imageInteractorStyle[i] = IADEInteractorStyleSwitch::New();
-		//imageInteractorStyle[i] = InteractorStyleWindowLevel::New();
 		imageInteractorStyle[i]->SetImageViewer(imageViewers[i]);
 		
 		// Never use below method to set the interactorsyle
 		//imageInteractorStyle[i]->SetInteractor(imageInteractor[i]);
-		imageInteractor[i]->SetInteractorStyle(imageInteractorStyle[i]);
-
-		mainWindow.setRenderWindow(i, imageViewers[i]->GetRenderWindow());
+		uiViewers[i]->GetInteractor()->SetInteractorStyle(imageInteractorStyle[i]);
+		uiViewers[i]->SetRenderWindow(imageViewers[i]->GetRenderWindow());
 	}
 
-	surfaceInteractor = vtkRenderWindowInteractor::New();
+	//surfaceInteractor = vtkRenderWindowInteractor::New();
 
 	surfaceViewer = SurfaceViewer::New();
-	surfaceViewer->SetupInteractor(surfaceInteractor);
+	surfaceViewer->SetupInteractor(uiViewers[3]->GetInteractor());
 
 	surfaceInteractorStyle = vtkInteractorStyleSwitch::New();
 	surfaceInteractorStyle->SetCurrentStyleToTrackballCamera();
-	surfaceInteractor->SetInteractorStyle(surfaceInteractorStyle);
-
-	mainWindow.setRenderWindow(3, surfaceViewer->GetRenderWindow());
+	
+	uiViewers[3]->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle);
+	uiViewers[3]->SetRenderWindow(surfaceViewer->GetRenderWindow());
 
 
 	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
@@ -118,14 +122,15 @@ Core::~Core()
 		imageInteractorStyle[i]->Delete();
 		imageInteractorStyle[i] = nullptr;
 
-		imageInteractor[i]->SetInteractorStyle(nullptr);
-		imageInteractor[i]->Delete();
-		imageInteractor[i] = nullptr;
+		
+		imageViewers[i]->GetInteractor()->SetInteractorStyle(nullptr);
+		//imageInteractor[i]->Delete();
+		//imageInteractor[i] = nullptr;
 		
 		imageViewers[i]->Delete();
 		imageViewers[i] = nullptr;
 
-		mainWindow.setRenderWindow(i, nullptr);
+		//mainWindow.setRenderWindow(i, nullptr);
 	}
 }
 
