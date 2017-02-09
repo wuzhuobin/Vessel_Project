@@ -46,18 +46,18 @@ include_directories(
 	)
 
 SET(WIDGET_SRC
-	${CMAKE_CURRENT_SOURCE_DIR}/Distance3DWidget.cxx
-	${CMAKE_CURRENT_SOURCE_DIR}/MyBorderWidget.cxx
-	${CMAKE_CURRENT_SOURCE_DIR}/MyWidgetManager.cxx
-	${CMAKE_CURRENT_SOURCE_DIR}/MyPlaneWidget.cxx
+#	${CMAKE_CURRENT_SOURCE_DIR}/Distance3DWidget.cxx
+#	${CMAKE_CURRENT_SOURCE_DIR}/MyBorderWidget.cxx
+#	${CMAKE_CURRENT_SOURCE_DIR}/MyWidgetManager.cxx
+#	${CMAKE_CURRENT_SOURCE_DIR}/MyPlaneWidget.cxx
 	${CMAKE_CURRENT_SOURCE_DIR}/vtkROIWidget.cxx
 	)
 
 SET(WIDGET_INC 
-	${CMAKE_CURRENT_SOURCE_DIR}/Distance3DWidget.h
-	${CMAKE_CURRENT_SOURCE_DIR}/MyBorderWidget.h	
-	${CMAKE_CURRENT_SOURCE_DIR}/MyWidgetManager.h
-	${CMAKE_CURRENT_SOURCE_DIR}/MyPlaneWidget.h
+#	${CMAKE_CURRENT_SOURCE_DIR}/Distance3DWidget.h
+#	${CMAKE_CURRENT_SOURCE_DIR}/MyBorderWidget.h	
+#	${CMAKE_CURRENT_SOURCE_DIR}/MyWidgetManager.h
+#	${CMAKE_CURRENT_SOURCE_DIR}/MyPlaneWidget.h
 	${CMAKE_CURRENT_SOURCE_DIR}/vtkROIWidget.h
 	)
 
@@ -69,10 +69,21 @@ ADD_LIBRARY(
 	${WIDGET_INC}
 	${WIDGET_SRC_MOC}
 	)
+
 target_link_libraries(
 	Widgets 
-	${LINK_LIBRARIE}
+	Qt5::Core
+	Qt5::Widgets
+	${ITK_LIBRARIES}
+	${VTK_LIBRARIES}
 	)
+
+target_include_directories(
+	Widgets 
+	PUBLIC
+	${PROJECT_SOURCE_DIR}
+	${PROJECT_BINARY_DIR}
+)
 
 #Grouping in MSVC
 SOURCE_GROUP(

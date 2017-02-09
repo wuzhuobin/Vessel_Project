@@ -13,7 +13,7 @@
 #include <vtkMath.h>
 
 #include "vtkROIWidget.h"
-#include "MainWindow.h"
+//#include "MainWindow.h"
 
 /// Implementation for ROIBorderWidget
 vtkStandardNewMacro(vtkROIBorderWidget);
@@ -300,7 +300,7 @@ vtkStandardNewMacro(vtkROIWidget);
 
 vtkROIWidget::vtkROIWidget() : vtkBoxWidget2()
 {
-	MainWindow* mainwnd = MainWindow::GetMainWindow();
+	//MainWindow* mainwnd = MainWindow::GetMainWindow();
 
 	for (int i = 0; i < 3;i++)
 	{

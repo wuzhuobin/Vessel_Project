@@ -41,12 +41,17 @@ private slots:
 	void slotWindowLevel();
 	void slotPaintBrush();
 	void slotSeedsPlacer();
+	void slotVOI();
 
 	void slotMultiPlanarView();
 	void slotAllAxialView();
 	void slotChangeView(unsigned int viewMode);
 
 	void slotUpdateSurfaceView();
+
+	// label opacity
+	void slotChangeOpacity(int opacity);
+	void slotUpdateOpacity(int opacity);
 
 	//void slotTest(bool flag);
 
@@ -64,6 +69,7 @@ private:
 	//vtkRenderWindowInteractor* surfaceInteractor;
 	vtkInteractorStyleSwitch* surfaceInteractorStyle;
 
+	void RenderALlViewers();
 
 	unsigned int m_viewMode = -1;
 };

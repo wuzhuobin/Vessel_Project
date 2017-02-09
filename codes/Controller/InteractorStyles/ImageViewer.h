@@ -256,6 +256,8 @@ protected:
 	// All Black flag
 	bool AllBlackFlag = false;
 
+	int DisplayExtent[6] = { -1 };
+
 private:
 	ImageViewer(const ImageViewer&);  // Not implemented.
 	void operator=(const ImageViewer&);  // Not implemented.

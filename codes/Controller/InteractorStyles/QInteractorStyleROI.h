@@ -3,9 +3,12 @@
 
 #include "QAbstractNavigation.h"
 #include "InteractorStyleNavigation.h"
-#include "vtkROIWidget.h"
+
+#include <vtkSmartPointer.h>
 
 namespace Ui { class QInteractorStyleROI; }
+class vtkRenderWindow;
+class vtkROIWidget;
 
 class QInteractorStyleROI :	
 	public QAbstractNavigation,	public InteractorStyleNavigation
@@ -15,7 +18,8 @@ class QInteractorStyleROI :
 public:
 	vtkTypeMacro(QInteractorStyleROI, InteractorStyleNavigation);
 	static QInteractorStyleROI* New();
-	virtual void SetROIWidgetEnabled(bool flag);
+	virtual void SetCustomEnabled(bool flag);
+
 
 public slots:
 	virtual void slotUpdateROISpinBoxes(double* values);

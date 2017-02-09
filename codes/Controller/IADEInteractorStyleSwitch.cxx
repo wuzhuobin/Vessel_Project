@@ -31,7 +31,7 @@ IADEInteractorStyleSwitch::IADEInteractorStyleSwitch()
 	//PolygonDraw = QInteractorStyleVesselSegmentation::New();
 	LumenSeedsPlacer = QInteractorStyleLumenSeedsPlacer::New();
 	PaintBrush = QInteractorStylePaintBrush::New();
-	//ROI = QInteractorStyleROI::New();
+	VOI = QInteractorStyleROI::New();
 	//Ruler = QInteractorStyleRuler::New();
 
 	allStyles.push_back(WindowLevel);
@@ -39,7 +39,7 @@ IADEInteractorStyleSwitch::IADEInteractorStyleSwitch()
 	//allStyles.push_back(PolygonDraw);
 	allStyles.push_back(LumenSeedsPlacer);
 	allStyles.push_back(PaintBrush);
-	//allStyles.push_back(ROI);
+	allStyles.push_back(VOI);
 	//allStyles.push_back(Ruler);
 
 	this->CurrentStyle = 0;

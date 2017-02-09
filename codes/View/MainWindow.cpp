@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroup->addAction(ui->acitonVOI_selection);
 	actionGroup->addAction(ui->actionPaint_brush);
 	actionGroup->addAction(ui->actionSeeds_placer);
+
 	actionGroup->setExclusive(true);
 
 

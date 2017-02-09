@@ -66,6 +66,7 @@ Core::Core(QObject * parent)
 	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
 	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
+	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
 	//imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel()->show();
 	//moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	
@@ -81,6 +82,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotPaintBrush()));
 	connect(mainWindow.getUi()->actionSeeds_placer, SIGNAL(triggered()),
 		this, SLOT(slotSeedsPlacer()));
+	connect(mainWindow.getUi()->acitonVOI_selection, SIGNAL(triggered()),
+		this, SLOT(slotVOI()));
 
 	//connect(&mainWindow, SIGNAL(signalImageImportInitialize()),
 	//	&ioManager, SLOT(slotCleanListsOfFileNames()));
@@ -108,8 +111,11 @@ Core::Core(QObject * parent)
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
 		this, SLOT(slotUpdateSurfaceView()));
 
-	// opacity 
-	//connect(moduleWiget.getUi()->opacitySpinBox, SIGNAL(valueChanged(int)), )
+	// Opacity
+	connect(moduleWiget.getUi()->opacitySpinBox, SIGNAL(valueChanged(int)),
+		this, SLOT(slotChangeOpacity(int)));
+	connect(moduleWiget.getUi()->labelComboBox, SIGNAL(currentIndexChanged(int)),
+		this, SLOT(slotUpdateOpacity(int)));
 
 
 
@@ -174,7 +180,6 @@ void Core::slotOverlayToImageManager()
 {
 	imageManager.setOverlay(ioManager.getOverlay());
 
-
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		// Overlay settings
 		imageViewers[i]->SetInputDataLayer(imageManager.getOverlay()->getData());
@@ -216,6 +221,15 @@ void Core::slotSeedsPlacer()
 		imageInteractorStyle[i]->SetInteractorStyleToLumenSeedsPlacer();
 	}
 	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
+
+}
+
+void Core::slotVOI()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		imageInteractorStyle[i]->SetInteractorStyleToVOI();
+	}
+	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
 
 }
 
@@ -299,6 +313,35 @@ void Core::slotUpdateSurfaceView()
 	surfaceViewer->SetInputData(image);
 	surfaceViewer->SetLookupTable(imageManager.getOverlay()->getLookupTable());
 	surfaceViewer->Render();
+}
+
+void Core::RenderALlViewers()
+{
+	imageViewers[0]->Render();
+	imageViewers[1]->Render();
+	imageViewers[2]->Render();
+	surfaceViewer->Render();
+}
+
+void Core::slotChangeOpacity(int opacity)
+{
+	int color = moduleWiget.getUi()->labelComboBox->currentIndex() + 1;
+	if (imageManager.getOverlay()->getOpacity(color) == opacity) {
+		return;
+	}
+	imageManager.getOverlay()->setOpacity(color, opacity);
+	RenderALlViewers();
+}
+
+void Core::slotUpdateOpacity(int opacity)
+{
+	int color = moduleWiget.getUi()->labelComboBox->currentIndex() + 1;
+	if (imageManager.getOverlay()->getOpacity(color) == opacity) {
+		return;
+	}
+	;
+	moduleWiget.getUi()->opacitySpinBox->setValue(imageManager.getOverlay()->getOpacity(color));
+
 }
 
 

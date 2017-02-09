@@ -74,8 +74,8 @@ public:
 	OverlayImageData* getData() const;
 	vtkLookupTable* getLookupTable() const;
 
-	void setOpacity(unsigned int color, unsigned int opacity);
-	unsigned int getOpacity(unsigned int color);
+	int getOpacity(int color);
+	void setOpacity(int color, int opacity);
 
 
 protected:

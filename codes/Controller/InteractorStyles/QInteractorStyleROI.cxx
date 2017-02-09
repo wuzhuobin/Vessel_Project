@@ -1,8 +1,15 @@
 #include "QInteractorStyleROI.h"
 #include "ui_QInteractorStyleROI.h"
+#include "vtkROIWidget.h"
 
 #include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
+#include <vtkObjectFactory.h>
+#include <ImageViewer.h>
+#include <vtkImageData.h>
+#include <vtkImageActor.h>
+
 
 vtkStandardNewMacro(QInteractorStyleROI);
 QSETUP_UI_SRC(QInteractorStyleROI);
@@ -10,9 +17,9 @@ vtkSmartPointer<vtkROIWidget> QInteractorStyleROI::m_roi = nullptr;
 vtkSmartPointer<vtkRenderWindow> QInteractorStyleROI::m_renderWindow = nullptr;
 
 
-void QInteractorStyleROI::SetROIWidgetEnabled(bool flag)
+void QInteractorStyleROI::SetCustomEnabled(bool flag)
 {
-	InteractorStyleNavigation::SetNavigationModeEnabled(flag);
+	InteractorStyleNavigation::SetCustomEnabled(flag);
 	if (flag) {
 		m_roi->SetBorderWidgetsInteractor(m_uniqueROIId  - 1, this->Interactor);
 		m_roi->GetRepresentation()->PlaceWidget(
@@ -76,14 +83,17 @@ void QInteractorStyleROI::ExtractVOI()
 		//extent[i*2] = extent[i*2] > GetExtent()[i*2] ? extent[i*2] : GetExtent()[i*2];
 		//extent[i*2 + 1] = extent[i*2 + 1] < GetExtent()[i*2 + 1] ? extent[i*2 + 1] : GetExtent()[i*2 +1];
 	}
-	m_imageViewer->SetImageVOI(extent);
-	m_imageViewer->SetOverlayVOI(extent);
+	m_imageViewer->GetImageActor()->SetDisplayExtent(extent);
+	m_imageViewer->GetOverlayActor()->SetDisplayExtent(extent);
+	//m_imageViewer->SetImageVOI(extent);
+	//m_imageViewer->SetOverlayVOI(extent);
 }
 
 void QInteractorStyleROI::ResetVOI()
 {
-	m_imageViewer->ResetImageVOI();
-	m_imageViewer->ResetOverlayVOI();
+	m_imageViewer->UpdateDisplayExtent();
+	//m_imageViewer->ResetImageVOI();
+	//m_imageViewer->ResetOverlayVOI();
 }
 
 QInteractorStyleROI::QInteractorStyleROI(int uiType, QWidget * parent)

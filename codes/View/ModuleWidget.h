@@ -22,7 +22,11 @@ public:
 
 public slots:
 	void slotChangeOpacity(int opactiy);
-	void slotUpdateOpacity();
+	void slotUpdateOpacity(int opacity);
+
+signals:
+
+	void signalChangeOpacity(int, int);
 
 
     

@@ -159,14 +159,78 @@ ImageViewer::~ImageViewer()
 //----------------------------------------------------------------------------
 void ImageViewer::UpdateDisplayExtent()
 {
-	vtkImageViewer2::UpdateDisplayExtent();
-	vtkAlgorithm *input = this->WindowLevel->GetInputAlgorithm();
+	vtkAlgorithm *input = this->GetInputAlgorithm();
+	if (!input || !this->ImageActor)
+	{
+		return;
+	}
+
+	input->UpdateInformation();
+	vtkInformation* outInfo = input->GetOutputInformation(0);
+	int *w_ext = outInfo->Get(
+		vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
+
+	// Is the slice in range ? If not, fix it
+
+	int slice_min = w_ext[this->SliceOrientation * 2];
+	int slice_max = w_ext[this->SliceOrientation * 2 + 1];
+	if (this->Slice < slice_min || this->Slice > slice_max)
+	{
+		this->Slice = static_cast<int>((slice_min + slice_max) * 0.5);
+	}
+
+	// Set the image actor
+
+	switch (this->SliceOrientation)
+	{
+	case vtkImageViewer2::SLICE_ORIENTATION_XY:
+		this->ImageActor->SetDisplayExtent(
+			w_ext[0], w_ext[1], w_ext[2], w_ext[3], this->Slice, this->Slice);
+		break;
+
+	case vtkImageViewer2::SLICE_ORIENTATION_XZ:
+		this->ImageActor->SetDisplayExtent(
+			w_ext[0], w_ext[1], this->Slice, this->Slice, w_ext[4], w_ext[5]);
+		break;
+
+	case vtkImageViewer2::SLICE_ORIENTATION_YZ:
+		this->ImageActor->SetDisplayExtent(
+			this->Slice, this->Slice, w_ext[2], w_ext[3], w_ext[4], w_ext[5]);
+		break;
+	}
+
+	// Figure out the correct clipping range
+
+	if (this->Renderer)
+	{
+		if (this->InteractorStyle &&
+			this->InteractorStyle->GetAutoAdjustCameraClippingRange())
+		{
+			this->Renderer->ResetCameraClippingRange();
+		}
+		else
+		{
+			vtkCamera *cam = this->Renderer->GetActiveCamera();
+			if (cam)
+			{
+				double bounds[6];
+				this->ImageActor->GetBounds(bounds);
+				double spos = bounds[this->SliceOrientation * 2];
+				double cpos = cam->GetPosition()[this->SliceOrientation];
+				double range = fabs(spos - cpos);
+				double *spacing = outInfo->Get(vtkDataObject::SPACING());
+				double avg_spacing =
+					(spacing[0] + spacing[1] + spacing[2]) / 3.0;
+				cam->SetClippingRange(
+					range - avg_spacing * 3.0, range + avg_spacing * 3.0);
+			}
+		}
+	}
+	///
 	if (!input || !this->OverlayActor)
 	{
 		return;
 	}
-	input->UpdateInformation();
-	vtkInformation* outInfo = input->GetOutputInformation(0);
 	int *w_ext = outInfo->Get(
 		vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
 	if (this->GetInputLayer())
