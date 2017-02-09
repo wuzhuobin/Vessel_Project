@@ -448,7 +448,7 @@ void ImageViewer::InitializeCursorBoundary()
 	//bound[5] = origin[2] + extent[5] * spacing[2];
 
 	//Cursor3D->SetModelBounds(bound);
-	Cursor3D->SetModelBounds(GetImageActor()->GetBounds());
+	Cursor3D->SetModelBounds(GetInput()->GetBounds());
 	Cursor3D->Update();
 }
 
