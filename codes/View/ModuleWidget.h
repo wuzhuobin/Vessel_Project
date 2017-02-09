@@ -18,6 +18,7 @@ public:
 	void ClearWidget();
 	void addWidget(QWidget* style);
 	void setWidget(QWidget* style);
+	Ui::ModuleWidget* getUi() { return ui; }
 
 public slots:
 	void slotChangeOpacity(int opactiy);

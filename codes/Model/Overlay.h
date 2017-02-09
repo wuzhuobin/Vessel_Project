@@ -74,6 +74,10 @@ public:
 	OverlayImageData* getData() const;
 	vtkLookupTable* getLookupTable() const;
 
+	void setOpacity(unsigned int color, unsigned int opacity);
+	unsigned int getOpacity(unsigned int color);
+
+
 protected:
 	vtkSmartPointer<OverlayImageData> m_data;
 	vtkSmartPointer<vtkLookupTable> m_lookupTable;

@@ -5,6 +5,7 @@
 #include "QInteractorStyleWindowLevel.h"
 #include "Overlay.h"
 #include "ui_MainWindow.h"
+#include "ui_ModuleWidget.h"
 #include "SurfaceViewer.h"
 
 #include <vtkInteractorStyleSwitch.h>
@@ -107,7 +108,8 @@ Core::Core(QObject * parent)
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
 		this, SLOT(slotUpdateSurfaceView()));
 
-
+	// opacity 
+	//connect(moduleWiget.getUi()->opacitySpinBox, SIGNAL(valueChanged(int)), )
 
 
 
@@ -117,13 +119,20 @@ Core::Core(QObject * parent)
 
 Core::~Core()
 {
+	QVTKWidget* uiViewers[] = {
+		mainWindow.getUi()->image1View,
+		mainWindow.getUi()->image2View,
+		mainWindow.getUi()->image3View,
+		mainWindow.getUi()->image4View
+	};
+
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		
 		imageInteractorStyle[i]->Delete();
 		imageInteractorStyle[i] = nullptr;
 
 		
-		imageViewers[i]->GetInteractor()->SetInteractorStyle(nullptr);
+		uiViewers[i]->GetInteractor()->SetInteractorStyle(nullptr);
 		//imageInteractor[i]->Delete();
 		//imageInteractor[i] = nullptr;
 		

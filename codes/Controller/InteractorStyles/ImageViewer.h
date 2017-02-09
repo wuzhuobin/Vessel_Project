@@ -1,8 +1,8 @@
 #ifndef __IMAGE_VIEWER_H__
 #define __IMAGE_VIEWER_H__
 
-#include <vtkResliceImageViewer.h>
-#include <vtkResliceImageViewer.h>
+#include <vtkImageViewer2.h>
+#include <vtkImageViewer2.h>
 
 class vtkLookupTable;
 class vtkTextActor;
@@ -22,11 +22,11 @@ class vtkActor;
  * @since	
  */
 
-class ImageViewer: public vtkResliceImageViewer
+class ImageViewer: public vtkImageViewer2
 {
 public:
 	static ImageViewer *New();
-	vtkTypeMacro(ImageViewer, vtkResliceImageViewer);
+	vtkTypeMacro(ImageViewer, vtkImageViewer2);
 	/**
 	 * @override
 	 * @param	os,
@@ -260,11 +260,11 @@ private:
 	ImageViewer(const ImageViewer&);  // Not implemented.
 	void operator=(const ImageViewer&);  // Not implemented.
 	inline vtkAlgorithm* GetInputAlgorithm() {
-		return vtkResliceImageViewer::GetInputAlgorithm(); }
+		return vtkImageViewer2::GetInputAlgorithm(); }
 	inline vtkInformation* GetInputInformation() { 
-		return vtkResliceImageViewer::GetInputInformation(); }
+		return vtkImageViewer2::GetInputInformation(); }
 	inline void SetInputConnection(vtkAlgorithmOutput* input) {
-		return vtkResliceImageViewer::SetInputConnection(input);
+		return vtkImageViewer2::SetInputConnection(input);
 	}
 
 

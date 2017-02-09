@@ -52,6 +52,20 @@ vtkLookupTable * Overlay::getLookupTable() const
 	return m_lookupTable;
 }
 
+void Overlay::setOpacity(unsigned int color, unsigned int opacity)
+{
+	double* value = m_lookupTable->GetTableValue(color);
+	value[3] = opacity * 0.01;
+	m_lookupTable->SetTableValue(color, value);
+	m_lookupTable->Build();
+}
+
+unsigned int Overlay::getOpacity(unsigned int color)
+{
+	double* value = m_lookupTable->GetTableValue(color);
+	return value[3]*0.01;
+}
+
 void Overlay::modified()
 {
 	qDebug() << "Modified";
