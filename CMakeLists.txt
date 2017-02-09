@@ -116,6 +116,7 @@ add_subdirectory(codes/Core)
 add_subdirectory(codes/Controller)
 add_subdirectory(codes/Model)
 add_subdirectory(codes/LumenExtraction)
+add_subdirectory(codes/Widgets)
 
 
 
