@@ -91,8 +91,9 @@ public:
 	//virtual void SetOverlay(Overlay* overlay);
 	//virtual Overlay* GetOverlay();
 
-
-
+	vtkSetVector6Macro(DisplayExtent, int);
+	vtkGetVector6Macro(DisplayExtent, int);
+	//virtual void SetDisplayExtent();
 	//virtual void SetImageVOI(int* extent);
 	//virtual void ResetImageVOI();
 

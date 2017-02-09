@@ -1,6 +1,7 @@
 ﻿#include "QInteractorStyleNavigation.h"
 #include "ui_qinteractorstylenavigation.h"
 #include "ui_QAbstractNavigation.h"
+#include "ImageViewer.h"
 
 #include <vtkObjectFactory.h>
 
@@ -34,7 +35,7 @@ void QInteractorStyleNavigation::uniqueCall()
 {
 	// checking whether extent is equal to the old extent
 	// if different, update the maximum and minimum of the ui
-	const int* extent = GetExtent();
+	const int* extent = m_imageViewer->GetDisplayExtent();
 	for (int i = 0; i < 6; ++i) {
 		if (extent[i] != m_oldExtent[i]) {
 			memcpy(m_oldExtent, extent, sizeof(m_oldExtent));

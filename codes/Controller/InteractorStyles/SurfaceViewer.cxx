@@ -13,6 +13,7 @@
 #include <vtkPolyDataMapper.h>
 #include <vtkLookupTable.h>
 #include <vtkWindowedSincPolyDataFilter.h>
+#include <vtkImageResample.h>
 
 #include <algorithm>
 
@@ -68,18 +69,19 @@ void SurfaceViewer::Render(void)
 
 void SurfaceViewer::SetInputData(vtkImageData * in)
 {
-	this->MarchingCubes->SetInputData(in);
+	this->ImageResample->SetInputData(in);
+	//this->MarchingCubes->SetInputData(in);
 	UpdateDisplayExtent();
 }
 
 vtkImageData * SurfaceViewer::GetInput()
 {
-	return vtkImageData::SafeDownCast(this->MarchingCubes->GetInput());
+	return vtkImageData::SafeDownCast(this->ImageResample->GetInput());
 }
 
 void SurfaceViewer::SetInputConnection(vtkAlgorithmOutput * input)
 {
-	this->MarchingCubes->SetInputConnection(input);
+	this->ImageResample->SetInputConnection(input);
 	UpdateDisplayExtent();
 }
 
@@ -209,15 +211,22 @@ SurfaceViewer::SurfaceViewer()
 	this->Renderer = nullptr;
 	this->SurfaceActor = vtkActor::New();
 	this->SurfaceMapper = vtkPolyDataMapper::New();
+	this->ImageResample = vtkImageResample::New();
+	this->ImageResample->SetInterpolationModeToCubic();
+	this->ImageResample->SetDimensionality(3);
+	this->ImageResample->SetOutputSpacing(0.3,0.3,0.3);
 	this->MarchingCubes = vtkDiscreteMarchingCubes::New();
+	this->MarchingCubes->SetInputConnection(ImageResample->GetOutputPort());
 	this->MarchingCubes->ComputeGradientsOff();
 	this->MarchingCubes->ComputeNormalsOff();
 	this->MarchingCubes->ComputeScalarsOn();
 	this->WindowedSincPolyDataFilter = vtkWindowedSincPolyDataFilter::New();
 	this->WindowedSincPolyDataFilter->SetInputConnection(MarchingCubes->GetOutputPort());
-	this->WindowedSincPolyDataFilter->SetNumberOfIterations(5);
 	this->WindowedSincPolyDataFilter->BoundarySmoothingOff();
 	this->WindowedSincPolyDataFilter->FeatureEdgeSmoothingOff();
+	this->WindowedSincPolyDataFilter->NonManifoldSmoothingOn();
+	this->WindowedSincPolyDataFilter->NormalizeCoordinatesOn();
+	this->WindowedSincPolyDataFilter->SetNumberOfIterations(15);
 	this->WindowedSincPolyDataFilter->SetFeatureAngle(120.0);
 	this->WindowedSincPolyDataFilter->SetPassBand(0.001);
 
@@ -249,6 +258,10 @@ SurfaceViewer::SurfaceViewer()
 
 SurfaceViewer::~SurfaceViewer()
 {
+	if (this->ImageResample) {
+		this->ImageResample->Delete();
+		this->ImageResample = nullptr;
+	}
 	if (this->MarchingCubes)
 	{
 		this->MarchingCubes->Delete();
@@ -358,10 +371,10 @@ void SurfaceViewer::UnInstallPipeline()
 
 vtkAlgorithm * SurfaceViewer::GetInputAlgorithm()
 {
-	return this->MarchingCubes->GetInputAlgorithm();
+	return this->ImageResample->GetInputAlgorithm();
 }
 
 vtkInformation * SurfaceViewer::GetInputInformation()
 {
-	return this->MarchingCubes->GetInputInformation();
+	return this->ImageResample->GetInputInformation();
 }

@@ -160,7 +160,7 @@ ImageViewer::~ImageViewer()
 void ImageViewer::UpdateDisplayExtent()
 {
 	vtkAlgorithm *input = this->GetInputAlgorithm();
-	if (!input || !this->ImageActor)
+	if (!input || !this->ImageActor || !this->OverlayActor)
 	{
 		return;
 	}
@@ -169,7 +169,12 @@ void ImageViewer::UpdateDisplayExtent()
 	vtkInformation* outInfo = input->GetOutputInformation(0);
 	int *w_ext = outInfo->Get(
 		vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
-
+	if (FirstRender) {
+		memcpy(DisplayExtent, w_ext, sizeof(DisplayExtent));
+	}
+	else {
+		memcpy(w_ext, DisplayExtent, sizeof(DisplayExtent));
+	}
 	// Is the slice in range ? If not, fix it
 
 	int slice_min = w_ext[this->SliceOrientation * 2];
@@ -186,19 +191,25 @@ void ImageViewer::UpdateDisplayExtent()
 	case vtkImageViewer2::SLICE_ORIENTATION_XY:
 		this->ImageActor->SetDisplayExtent(
 			w_ext[0], w_ext[1], w_ext[2], w_ext[3], this->Slice, this->Slice);
+		this->OverlayActor->SetDisplayExtent(
+			w_ext[0], w_ext[1], w_ext[2], w_ext[3], this->Slice, this->Slice);
 		break;
 
 	case vtkImageViewer2::SLICE_ORIENTATION_XZ:
 		this->ImageActor->SetDisplayExtent(
+			w_ext[0], w_ext[1], this->Slice, this->Slice, w_ext[4], w_ext[5]);
+		this->OverlayActor->SetDisplayExtent(
 			w_ext[0], w_ext[1], this->Slice, this->Slice, w_ext[4], w_ext[5]);
 		break;
 
 	case vtkImageViewer2::SLICE_ORIENTATION_YZ:
 		this->ImageActor->SetDisplayExtent(
 			this->Slice, this->Slice, w_ext[2], w_ext[3], w_ext[4], w_ext[5]);
+		this->OverlayActor->SetDisplayExtent(
+			this->Slice, this->Slice, w_ext[2], w_ext[3], w_ext[4], w_ext[5]);
 		break;
 	}
-
+	InitializeCursorBoundary();
 	// Figure out the correct clipping range
 
 	if (this->Renderer)
@@ -226,34 +237,6 @@ void ImageViewer::UpdateDisplayExtent()
 			}
 		}
 	}
-	///
-	if (!input || !this->OverlayActor)
-	{
-		return;
-	}
-	int *w_ext = outInfo->Get(
-		vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
-	if (this->GetInputLayer())
-	{
-		switch (this->SliceOrientation)
-		{
-		case ImageViewer::SLICE_ORIENTATION_XY:
-			this->OverlayActor->SetDisplayExtent(
-				w_ext[0], w_ext[1], w_ext[2], w_ext[3], this->Slice, this->Slice);
-			break;
-
-		case ImageViewer::SLICE_ORIENTATION_XZ:
-			this->OverlayActor->SetDisplayExtent(
-				w_ext[0], w_ext[1], this->Slice, this->Slice, w_ext[4], w_ext[5]);
-			break;
-
-		case ImageViewer::SLICE_ORIENTATION_YZ:
-			this->OverlayActor->SetDisplayExtent(
-				this->Slice, this->Slice, w_ext[2], w_ext[3], w_ext[4], w_ext[5]);
-			break;
-		}
-	}
-
 }
 
 void ImageViewer::SetColorLevel(double level)
@@ -393,9 +376,6 @@ void ImageViewer::SetInputData(vtkImageData *in)
 
 	//DefaultWindowLevel[0] = this->GetColorWindow();
 	//DefaultWindowLevel[1] = this->GetColorLevel();
-
-	//Cursor
-	this->InitializeCursorBoundary();
 }
 
 void ImageViewer::SetInputDataLayer(vtkImageData *in)
@@ -468,7 +448,7 @@ void ImageViewer::InitializeCursorBoundary()
 	//bound[5] = origin[2] + extent[5] * spacing[2];
 
 	//Cursor3D->SetModelBounds(bound);
-	Cursor3D->SetModelBounds(GetInput()->GetBounds());
+	Cursor3D->SetModelBounds(GetImageActor()->GetBounds());
 	Cursor3D->Update();
 }
 

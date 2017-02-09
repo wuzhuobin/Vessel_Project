@@ -19,7 +19,7 @@ Copyright (C) 2016
 #include "QInteractorStyleNavigation.h"
 #include "QInteractorStyleWindowLevel.h"
 #include "QInteractorStylePaintBrush.h"
-#include "QInteractorStyleROI.h"
+#include "QInteractorStyleVOI.h"
 #include "QInteractorStyleLumenSeedsPlacer.h"
 
 class IADEInteractorStyleSwitch : public InteractorStyleSwitch
@@ -45,7 +45,7 @@ public:
 	SetInteractorStyleMacro(LumenSeedsPlacer);
 	CurrentStyleMacro(LumenSeedsPlacer);
 
-	vtkGetMacro(VOI, QInteractorStyleROI*);
+	vtkGetMacro(VOI, QInteractorStyleVOI*);
 	SetInteractorStyleMacro(VOI);
 	CurrentStyleMacro(VOI);
 	//vtkGetMacro(Ruler, QInteractorStyleRuler*);
@@ -72,7 +72,7 @@ protected:
 	//QInteractorStyleVesselSegmentation* PolygonDraw;
 	QInteractorStyleLumenSeedsPlacer* LumenSeedsPlacer;
 	QInteractorStylePaintBrush*	PaintBrush;
-	QInteractorStyleROI* VOI;
+	QInteractorStyleVOI* VOI;
 	//QInteractorStyleRuler* Ruler;
 };
 

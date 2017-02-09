@@ -31,7 +31,7 @@ IADEInteractorStyleSwitch::IADEInteractorStyleSwitch()
 	//PolygonDraw = QInteractorStyleVesselSegmentation::New();
 	LumenSeedsPlacer = QInteractorStyleLumenSeedsPlacer::New();
 	PaintBrush = QInteractorStylePaintBrush::New();
-	VOI = QInteractorStyleROI::New();
+	VOI = QInteractorStyleVOI::New();
 	//Ruler = QInteractorStyleRuler::New();
 
 	allStyles.push_back(WindowLevel);

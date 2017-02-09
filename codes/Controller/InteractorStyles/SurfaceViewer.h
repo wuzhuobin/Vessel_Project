@@ -15,6 +15,7 @@ class vtkRenderWindowInteractor;
 class vtkInteractorStyle;
 class vtkDiscreteMarchingCubes;
 class vtkLookupTable;
+class vtkImageResample;
 class vtkWindowedSincPolyDataFilter;
 
 class SurfaceViewer: public vtkObject
@@ -72,6 +73,7 @@ protected:
 
 	//vtkImageMapToWindowLevelColors  *WindowLevel;
 
+	vtkImageResample* ImageResample;
 	vtkDiscreteMarchingCubes* MarchingCubes;
 	vtkWindowedSincPolyDataFilter* WindowedSincPolyDataFilter;
 	vtkRenderWindow                 *RenderWindow;

@@ -1,5 +1,5 @@
-#include "QInteractorStyleROI.h"
-#include "ui_QInteractorStyleROI.h"
+#include "QInteractorStyleVOI.h"
+#include "ui_QInteractorStyleVOI.h"
 #include "vtkROIWidget.h"
 
 #include <vtkRenderWindow.h>
@@ -11,15 +11,15 @@
 #include <vtkImageActor.h>
 
 
-vtkStandardNewMacro(QInteractorStyleROI);
-QSETUP_UI_SRC(QInteractorStyleROI);
-vtkSmartPointer<vtkROIWidget> QInteractorStyleROI::m_roi = nullptr;
-vtkSmartPointer<vtkRenderWindow> QInteractorStyleROI::m_renderWindow = nullptr;
+vtkStandardNewMacro(QInteractorStyleVOI);
+QSETUP_UI_SRC(QInteractorStyleVOI);
+vtkSmartPointer<vtkROIWidget> QInteractorStyleVOI::m_roi = nullptr;
+vtkSmartPointer<vtkRenderWindow> QInteractorStyleVOI::m_renderWindow = nullptr;
 
 
-void QInteractorStyleROI::SetCustomEnabled(bool flag)
+void QInteractorStyleVOI::SetCustomEnabled(bool flag)
 {
-	InteractorStyleNavigation::SetCustomEnabled(flag);
+	QInteractorStyleNavigation::SetCustomEnabled(flag);
 	if (flag) {
 		m_roi->SetBorderWidgetsInteractor(m_uniqueROIId  - 1, this->Interactor);
 		m_roi->GetRepresentation()->PlaceWidget(
@@ -34,7 +34,7 @@ void QInteractorStyleROI::SetCustomEnabled(bool flag)
 	m_imageViewer->Render();
 	uniqueInvoke(flag);
 }
-void QInteractorStyleROI::slotUpdateROISpinBoxes(double * values)
+void QInteractorStyleVOI::slotUpdateVOISpinBoxes(double * values)
 {
 	int extent[6];
 	double realSize[3];
@@ -72,7 +72,7 @@ void QInteractorStyleROI::slotUpdateROISpinBoxes(double * values)
 	this->ui->volumeDoubleSpinBox->setValue(realSize[0] * realSize[1] * realSize[2] / 1000.);
 }
 
-void QInteractorStyleROI::ExtractVOI()
+void QInteractorStyleVOI::ExtractVOI()
 {
 	int extent[6];
 	const double* bounds = m_roi->GetRepresentation()->GetBounds();
@@ -83,20 +83,22 @@ void QInteractorStyleROI::ExtractVOI()
 		//extent[i*2] = extent[i*2] > GetExtent()[i*2] ? extent[i*2] : GetExtent()[i*2];
 		//extent[i*2 + 1] = extent[i*2 + 1] < GetExtent()[i*2 + 1] ? extent[i*2 + 1] : GetExtent()[i*2 +1];
 	}
-	m_imageViewer->GetImageActor()->SetDisplayExtent(extent);
-	m_imageViewer->GetOverlayActor()->SetDisplayExtent(extent);
+	m_imageViewer->SetDisplayExtent(extent);
+	m_imageViewer->UpdateDisplayExtent();
 	//m_imageViewer->SetImageVOI(extent);
 	//m_imageViewer->SetOverlayVOI(extent);
 }
 
-void QInteractorStyleROI::ResetVOI()
+void QInteractorStyleVOI::ResetVOI()
 {
+	int* extent = GetExtent();
+	m_imageViewer->SetDisplayExtent(extent);
 	m_imageViewer->UpdateDisplayExtent();
 	//m_imageViewer->ResetImageVOI();
 	//m_imageViewer->ResetOverlayVOI();
 }
 
-QInteractorStyleROI::QInteractorStyleROI(int uiType, QWidget * parent)
+QInteractorStyleVOI::QInteractorStyleVOI(int uiType, QWidget * parent)
 {
 	QNEW_UI();
 	if (m_roi == nullptr) {
@@ -115,7 +117,7 @@ QInteractorStyleROI::QInteractorStyleROI(int uiType, QWidget * parent)
 	if (numOfMyself == 1) {
 		/// ROI
 		connect(m_roi, SIGNAL(signalROIBounds(double*)),
-			this, SLOT(slotUpdateROISpinBoxes(double*)));
+			this, SLOT(slotUpdateVOISpinBoxes(double*)));
 	}
 	connect(ui->resetROIPushButton, SIGNAL(clicked()),
 		this, SLOT(ResetVOI()));
@@ -124,7 +126,7 @@ QInteractorStyleROI::QInteractorStyleROI(int uiType, QWidget * parent)
 
 }
 
-QInteractorStyleROI::~QInteractorStyleROI()
+QInteractorStyleVOI::~QInteractorStyleVOI()
 {
 	QDELETE_UI();
 	m_renderWindow = nullptr;
