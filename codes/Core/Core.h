@@ -41,6 +41,7 @@ private slots:
 	void slotNavigation();
 	void slotWindowLevel();
 	void slotPaintBrush();
+	void slotTesting();
 	void slotSeedsPlacer();
 	void slotVOI();
 

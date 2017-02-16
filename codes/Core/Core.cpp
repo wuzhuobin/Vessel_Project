@@ -82,6 +82,8 @@ Core::Core(QObject * parent)
 
 
 	// connect changing mode
+	connect(mainWindow.getUi()->actionTesting, SIGNAL(triggered()),
+		this, SLOT(slotTesting()));
 	connect(mainWindow.getUi()->actionNavigation, SIGNAL(triggered()),
 		this, SLOT(slotNavigation()));
 	connect(mainWindow.getUi()->actionWindow_level, SIGNAL(triggered()),
@@ -234,6 +236,15 @@ void Core::slotPaintBrush()
 		//imageInteractorStyle[i]->GetPaintBrush()->SetOverlay(imageManager.getOverlay()->getData());
 	}
 	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
+
+}
+
+void Core::slotTesting()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		imageInteractorStyle[i]->SetInteractorStyleToInteractorStyleTesting();
+	}
+	moduleWiget.setWidget(nullptr);
 
 }
 

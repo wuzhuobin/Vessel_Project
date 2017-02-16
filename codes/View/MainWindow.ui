@@ -859,6 +859,7 @@
     <property name="title">
      <string>Image</string>
     </property>
+    <addaction name="actionTesting"/>
     <addaction name="actionNavigation"/>
     <addaction name="actionWindow_level"/>
     <addaction name="actionDistance_measure"/>
@@ -1455,6 +1456,17 @@
    </property>
    <property name="toolTip">
     <string>Center line</string>
+   </property>
+  </action>
+  <action name="actionTesting">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Testing</string>
+   </property>
+   <property name="toolTip">
+    <string>Testing</string>
    </property>
   </action>
  </widget>
