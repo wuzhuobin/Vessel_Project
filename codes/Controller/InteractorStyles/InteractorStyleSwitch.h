@@ -27,7 +27,7 @@ void SetInteractorStyleTo##style () { \
 			this->InternalUpdate(false);\
 			this->CurrentStyle->SetInteractor(0); \
 	} \
-		this->CurrentStyle =(vtkInteractorStyle*) this->##style;\
+		this->CurrentStyle = this->##style;\
 	} \
 	if (this->CurrentStyle) { \
 		this->CurrentStyle->SetInteractor(this->Interactor);\
@@ -62,7 +62,6 @@ void InteractorStyleSwitch::SetCurrentStyleTo##style(){ \
 
 
 class ImageViewer;
-class vtkInteractorStyleImage;
 
 class InteractorStyleSwitch : public vtkInteractorStyleSwitchBase
 {
@@ -91,7 +90,7 @@ public:
 
 protected:
 	InteractorStyleSwitch();
-	~InteractorStyleSwitch();
+	virtual ~InteractorStyleSwitch();
 
 	void InternalUpdate(bool flag);
 	void SetAutoAdjustCameraClippingRange(int value);

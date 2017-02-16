@@ -845,7 +845,7 @@
    </widget>
    <widget class="QMenu" name="menuImage">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="title">
      <string>Image</string>
@@ -854,6 +854,8 @@
     <addaction name="actionWindow_level"/>
     <addaction name="actionDistance_measure"/>
     <addaction name="acitonVOI_selection"/>
+    <addaction name="actionPaint_brush"/>
+    <addaction name="actionSeeds_placer"/>
    </widget>
    <widget class="QMenu" name="menuDiagnosis">
     <property name="enabled">
@@ -866,8 +868,15 @@
     <addaction name="actionVBD_diagnosis"/>
     <addaction name="actionVBD_Smoker"/>
    </widget>
+   <widget class="QMenu" name="menuSurface">
+    <property name="title">
+     <string>Surface</string>
+    </property>
+    <addaction name="actionTraceball_camera"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuImage"/>
+   <addaction name="menuSurface"/>
    <addaction name="menuSegmentation"/>
    <addaction name="menuDiagnosis"/>
    <addaction name="menuHelp"/>
@@ -1414,6 +1423,17 @@
    </property>
    <property name="toolTip">
     <string>New segmentation</string>
+   </property>
+  </action>
+  <action name="actionTraceball_camera">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Traceball camera</string>
+   </property>
+   <property name="toolTip">
+    <string>Traceball camera</string>
    </property>
   </action>
  </widget>

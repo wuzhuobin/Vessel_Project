@@ -50,7 +50,9 @@ void InteractorStyleSwitch::InternalUpdate(bool flag)
 
 	// using enable update to call #EnabledOn() and #EnabledOff()
 	AbstractInteractorStyle* _style = dynamic_cast<AbstractInteractorStyle*>(this->CurrentStyle);
-	_style->SetCustomEnabled(flag);
+	if (_style) {
+		_style->SetCustomEnabled(flag);
+	}
 	//for (std::list<vtkInteractorStyle*>::const_iterator cit = allStyles.cbegin();
 	//	cit != allStyles.cend(); ++cit) {
 

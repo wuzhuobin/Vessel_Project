@@ -22,7 +22,6 @@ using itk::GDCMImageIO;
 using itk::ImageFileReader;
 using itk::ImageSeriesReader;
 typedef itk::Image<float, 3> ImageType;
-typedef itk::OrientImageFilter<ImageType, ImageType> OrientImageFilter;
 typedef itk::Image<float, 3> ImageType;
 
 
@@ -91,7 +90,7 @@ void IOManager::clearListOfDicoms()
 	this->listOfDicomIOs.clear();
 }
 
-const ImageType::Pointer IOManager::getOverlay() const
+const IOManager::OverlayType::Pointer IOManager::getOverlay() const
 {
 	return overlay;
 }
@@ -151,6 +150,8 @@ bool IOManager::loadImageData(QStringList fileNames)
 
 	}
 	if (_itkImage.IsNotNull()) {
+		typedef itk::OrientImageFilter<ImageType, ImageType> OrientImageFilter;
+
 		// using the same m_orientation ITK_COORDINATE_ORIENTATION_RAI
 		OrientImageFilter::Pointer orienter =
 			OrientImageFilter::New();
@@ -239,7 +240,7 @@ void IOManager::slotInitializeOverlay()
 
 void IOManager::slotInitializeOverlay(ImageType::Pointer image)
 {
-	overlay = ImageType::New();
+	overlay = OverlayType::New();
 	overlay->SetRegions(image->GetLargestPossibleRegion());
 	overlay->SetDirection(image->GetDirection());
 	overlay->SetOrigin(image->GetOrigin());
@@ -261,9 +262,11 @@ void IOManager::slotInitializeOverlay(ImageType::Pointer image)
 //
 void IOManager::slotOpenSegmentation(QString fileName)
 {
-	overlay = ImageType::New();
-	ImageFileReader<ImageType>::Pointer reader =
-		ImageFileReader<ImageType>::New();
+	typedef itk::OrientImageFilter<OverlayType, OverlayType> OrientImageFilter;
+
+	overlay = OverlayType::New();
+	ImageFileReader<OverlayType>::Pointer reader =
+		ImageFileReader<OverlayType>::New();
 	reader->SetFileName(fileName.toStdString());
 	reader->Update();
 	overlay = reader->GetOutput();
@@ -283,7 +286,7 @@ void IOManager::slotOpenSegmentation(QString fileName)
 }
 void IOManager::slotSaveSegmentation(QString path)
 {
-	slotSaveSegmentation(overlay2, path);
+	slotSaveSegmentation(overlay, path);
 }
 void IOManager::slotSaveSegmentation(OverlayType::Pointer input, QString path)
 {

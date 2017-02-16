@@ -37,15 +37,20 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(ui->actionImage4, SIGNAL(triggered()), this, SLOT(slotImage()));
 	connect(ui->actionFourViews, SIGNAL(triggered()), this, SLOT(slotImage()));
 
-	QActionGroup* actionGroup = new QActionGroup(this);
-	actionGroup->addAction(ui->actionNavigation);
-	actionGroup->addAction(ui->actionWindow_level);
-	actionGroup->addAction(ui->acitonVOI_selection);
-	actionGroup->addAction(ui->actionPaint_brush);
-	actionGroup->addAction(ui->actionSeeds_placer);
-	actionGroup->addAction(ui->actionVBD_Smoker);
+	QActionGroup* actionGroupImage = new QActionGroup(this);
+	actionGroupImage->addAction(ui->actionNavigation);
+	actionGroupImage->addAction(ui->actionWindow_level);
+	actionGroupImage->addAction(ui->acitonVOI_selection);
+	actionGroupImage->addAction(ui->actionPaint_brush);
+	actionGroupImage->addAction(ui->actionSeeds_placer);
+	actionGroupImage->addAction(ui->actionVBD_Smoker);
 
-	actionGroup->setExclusive(true);
+	actionGroupImage->setExclusive(true);
+
+
+	QActionGroup* actionGroupSurface = new QActionGroup(this);
+	actionGroupSurface->addAction(ui->actionTraceball_camera);
+	actionGroupSurface->setExclusive(true);
 
 
 	// Connection

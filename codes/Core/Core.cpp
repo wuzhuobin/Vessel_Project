@@ -8,7 +8,9 @@
 #include "ui_ModuleWidget.h"
 #include "SurfaceViewer.h"
 
-#include <vtkInteractorStyleSwitch.h>
+#include <vtkRenderer.h>
+
+//#include <vtkInteractorStyleSwitch.h>
 
 
 #include <qdebug.h>
@@ -59,8 +61,9 @@ Core::Core(QObject * parent)
 	surfaceViewer = SurfaceViewer::New();
 	surfaceViewer->SetupInteractor(uiViewers[3]->GetInteractor());
 
-	surfaceInteractorStyle = vtkInteractorStyleSwitch::New();
-	surfaceInteractorStyle->SetCurrentStyleToTrackballCamera();
+	surfaceInteractorStyle = IADEInteractorStyleSwitch3D::New();
+	surfaceInteractorStyle->SetSurfaceViewer(surfaceViewer);
+	//surfaceInteractorStyle->SetCurrentStyleToTrackballCamera();
 	
 	uiViewers[3]->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle);
 	uiViewers[3]->SetRenderWindow(surfaceViewer->GetRenderWindow());
@@ -92,6 +95,10 @@ Core::Core(QObject * parent)
 	connect(mainWindow.getUi()->actionVBD_Smoker, SIGNAL(triggered()),
 		this, SLOT(slotVBDSmoker()));
 
+	// surface action
+	connect(mainWindow.getUi()->actionTraceball_camera, SIGNAL(triggered()),
+		this, SLOT(slotTrackballCamera()));
+
 	//connect(&mainWindow, SIGNAL(signalImageImportInitialize()),
 	//	&ioManager, SLOT(slotCleanListsOfFileNames()));
 	//connect(&mainWindow, SIGNAL(signalImageImportAdd(QStringList*)),
@@ -115,10 +122,12 @@ Core::Core(QObject * parent)
 	connect(&ioManager, SIGNAL(signalFinishOpenOverlay()),
 		this, SLOT(slotOverlayToImageManager()));
 	connect(&mainWindow, SIGNAL(signalOverlayExportSave(QString)),
-		&ioManager, SLOT(slotOpenSegmentation(QString)));
+		&ioManager, SLOT(slotSaveSegmentation(QString)));
 
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
 		this, SLOT(slotUpdateSurfaceView()));
+	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
+		mainWindow.getUi()->actionTraceball_camera, SLOT(trigger()));
 
 	// Opacity
 	connect(moduleWiget.getUi()->opacitySpinBox, SIGNAL(valueChanged(int)),
@@ -244,6 +253,11 @@ void Core::slotVOI()
 
 }
 
+void Core::slotTrackballCamera()
+{
+	surfaceInteractorStyle->SetInteractorStyleTo3DTrackballCamera();
+}
+
 void Core::slotVBDSmoker()
 {
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
@@ -331,6 +345,8 @@ void Core::slotUpdateSurfaceView()
 	image->ShallowCopy(imageManager.getOverlay()->getData());
 	surfaceViewer->SetInputData(image);
 	surfaceViewer->SetLookupTable(imageManager.getOverlay()->getLookupTable());
+	surfaceViewer->GetRenderer()->ResetCameraClippingRange();
+	surfaceViewer->GetRenderer()->ResetCamera();
 	surfaceViewer->Render();
 }
 

@@ -42,7 +42,7 @@ public:
 
 	void clearListOfDicoms();
 
-	const ImageType::Pointer getOverlay() const;
+	const OverlayType::Pointer getOverlay() const;
 
 	void clearOverlay();
 
@@ -105,8 +105,8 @@ private:
 	QList<ImageType::Pointer> listOfItkImages;
 	QList<itk::GDCMImageIO::Pointer> listOfDicomIOs;
 
-	ImageType::Pointer overlay;
-	OverlayType::Pointer overlay2;
+	//ImageType::Pointer overlay;
+	OverlayType::Pointer overlay;
 
 	//QString filePath;
 	bool registrationFlag = false;

@@ -10,8 +10,9 @@
 #include "IADEIOManager.h"
 #include "IADEImageManager.h"
 #include "IADEInteractorStyleSwitch.h"
+#include "IADEInteractorStyleSwitch3D.h"
 #include "SurfaceViewer.h"
-#include <vtkInteractorStyleSwitch.h>
+//#include <vtkInteractorStyleSwitch.h>
 
 
 class Core: public QObject
@@ -36,12 +37,15 @@ private slots:
 		QList<itk::GDCMImageIO::Pointer>* dicoms);
 	void slotIOManagerToImageManager();
 	void slotOverlayToImageManager();
-
+	// Image interactorstyle
 	void slotNavigation();
 	void slotWindowLevel();
 	void slotPaintBrush();
 	void slotSeedsPlacer();
 	void slotVOI();
+
+	// Surface interactorStyle
+	void slotTrackballCamera();
 
 	// IADE specified
 	void slotVBDSmoker();
@@ -70,7 +74,7 @@ private:
 
 	SurfaceViewer* surfaceViewer;
 	//vtkRenderWindowInteractor* surfaceInteractor;
-	vtkInteractorStyleSwitch* surfaceInteractorStyle;
+	IADEInteractorStyleSwitch3D* surfaceInteractorStyle;
 
 	void RenderALlViewers();
 

@@ -30,7 +30,7 @@ bool IADEImageManager::setOverlay(OverlayImageData::itkImageType::Pointer image)
 {
 
 	if (image.IsNotNull()) {
-		m_overlay = QSharedPointer<Overlay>(new Overlay(image));
+		m_overlay = QSharedPointer<Overlay>(new IADEOverlay(image));
 		return true;
 	}
 	else
