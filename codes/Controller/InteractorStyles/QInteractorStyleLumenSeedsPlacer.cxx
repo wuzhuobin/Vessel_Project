@@ -6,6 +6,7 @@
 #include <vtkCleanPolyData.h>
 #include <vtkObjectFactory.h>
 #include <vtkImageData.h>
+#include <vtkExtractVOI.h>
 
 #include "LumenExtractionFilter.h"
 #include "ImageViewer.h"
@@ -48,16 +49,12 @@ void QInteractorStyleLumenSeedsPlacer::UpdateWidgetToSeeds(int * oldImagePos, in
 {
 	InteractorStyleSeedsPlacer::UpdateWidgetToSeeds(oldImagePos, newImagePos);
 	ui->listWidgetSeedList->clear();
-	QList<int*> _seeds = QList<int*>::fromStdList(m_seeds);
-	//for (QList<int*>::ConstIterator cit = _seeds.cbegin(); cit != _seeds.cend(); ++cit) {
-	//	ui->listWidgetSeedList->insertItem()
-	//}
-	for (int i = 0; i < _seeds.size(); ++i) {
+	for (list<int*>::const_iterator cit = m_seeds.cbegin(); cit != m_seeds.cend(); ++cit) {
 		QString listItem = "Seed Index: [" +
-			QString::number(_seeds[i][0]) + "," +
-			QString::number(_seeds[i][1]) + "," +
-			QString::number(_seeds[i][2]) + "]";
-		ui->listWidgetSeedList->insertItem(i, listItem);
+			QString::number((*cit)[0]) + "," +
+			QString::number((*cit)[1]) + "," +
+			QString::number((*cit)[2]) + "]";
+		ui->listWidgetSeedList->addItem(listItem);
 	}
 }
 
@@ -113,16 +110,12 @@ void QInteractorStyleLumenSeedsPlacer::SaveWidgetToSeeds()
 {
 	InteractorStyleSeedsPlacer::SaveWidgetToSeeds();
 	ui->listWidgetSeedList->clear();
-	QList<int*> _seeds = QList<int*>::fromStdList(m_seeds);
-	//for (QList<int*>::ConstIterator cit = _seeds.cbegin(); cit != _seeds.cend(); ++cit) {
-	//	ui->listWidgetSeedList->insertItem()
-	//}
-	for (int i = 0; i < _seeds.size(); ++i) {
+	for (list<int*>::const_iterator cit = m_seeds.cbegin(); cit != m_seeds.cend(); ++cit) {
 		QString listItem = "Seed Index: [" +
-			QString::number(_seeds[i][0]) + "," +
-			QString::number(_seeds[i][1]) + "," +
-			QString::number(_seeds[i][2]) + "]";
-		ui->listWidgetSeedList->insertItem(i, listItem);
+			QString::number((*cit)[0]) + "," +
+			QString::number((*cit)[1]) + "," +
+			QString::number((*cit)[2]) + "]";
+		ui->listWidgetSeedList->addItem(listItem);
 	}
 }
 
@@ -134,30 +127,46 @@ void QInteractorStyleLumenSeedsPlacer::DropSeed()
 void QInteractorStyleLumenSeedsPlacer::ExtractLumen()
 {
 	typedef itk::Index<3> IndexType;
+	int index = m_listOfModalityNames.indexOf(ui->comboBoxTargeImage->currentText());
 
+	vtkSmartPointer<vtkExtractVOI> extractVOI =
+		vtkSmartPointer<vtkExtractVOI>::New();
+	extractVOI->SetInputData(m_imageViewer->GetInput());
+	extractVOI->SetVOI(m_imageViewer->GetDisplayExtent());
+	extractVOI->Update();
 
 	vtkSmartPointer<LumenExtractionFilter> lumenExtractionFilter =
 		vtkSmartPointer<LumenExtractionFilter>::New();
 	lumenExtractionFilter->CoreFilter->SetNumberOfIterations(m_numberOfIteractions);
 	lumenExtractionFilter->CoreFilter->SetMultiplier(m_multiplier);
 	lumenExtractionFilter->CoreFilter->SetInitialNeighborhoodRadius(2);
-
-	QList<int*> _seeds = QList<int*>::fromStdList(m_seeds);
-	for (int i = 0; i < _seeds.size(); ++i) {
-		IndexType index = {_seeds[i][0], _seeds[i][1], _seeds[i][2]};
+	for (list<int*>::const_iterator cit = m_seeds.cbegin(); cit != m_seeds.cend(); ++cit) {
+		IndexType index = {
+			(*cit)[0], (*cit)[1], (*cit)[2] };
 		lumenExtractionFilter->CoreFilter->AddSeed(index);
 	}
-	//lumenExtractionFilter->SetInputData(m_imageViewer->GetOriginalInput());
-
-	int index = m_listOfModalityNames.indexOf(ui->comboBoxTargeImage->currentText());
 	//lumenExtractionFilter->SetInputData(m_listOfVtkImages[index]);
-	lumenExtractionFilter->SetInputData(m_imageViewer->GetInput());
-
-
+	lumenExtractionFilter->SetInputConnection(extractVOI->GetOutputPort());
 	lumenExtractionFilter->Update();
 
-	m_imageViewer->GetInputLayer()->ShallowCopy(
-		lumenExtractionFilter->GetOutput());
+
+
+
+	for (int i = m_imageViewer->GetDisplayExtent()[0];
+		i <= m_imageViewer->GetDisplayExtent()[1]; ++i) {
+		for (int j = m_imageViewer->GetDisplayExtent()[2];
+			j <= m_imageViewer->GetDisplayExtent()[3]; ++j) {
+			for (int k = m_imageViewer->GetDisplayExtent()[4];
+				k <= m_imageViewer->GetDisplayExtent()[5]; ++k) {
+				unsigned char* pixelLayer = static_cast<unsigned char*>
+					(m_imageViewer->GetInputLayer()->GetScalarPointer(i, j, k));
+				unsigned char* pixel = static_cast<unsigned char*>
+					(lumenExtractionFilter->GetOutput()->GetScalarPointer(i, j, k));
+				*pixelLayer = *pixel;
+			}
+		}
+	}
+
 	m_imageViewer->GetInputLayer()->Modified();
 	MY_VIEWER_CONSTITERATOR(Render());
 

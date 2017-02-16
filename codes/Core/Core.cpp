@@ -25,8 +25,12 @@ Core::Core(QObject * parent)
 
 	imageManager.setModalityName(0, "T2 Image");
 	imageManager.setModalityName(1, "MRA Image");
+	imageManager.setModalityName(2, "Image 2");
+	imageManager.setModalityName(3, "Image 3");
 	mainWindow.addModalityNames("T2 Image");
 	mainWindow.addModalityNames("MRA Image");
+	mainWindow.addModalityNames("Image 2");
+	mainWindow.addModalityNames("Image 3");
 
 
 	QVTKWidget* uiViewers[] = {
@@ -67,6 +71,7 @@ Core::Core(QObject * parent)
 	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
 	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
 	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
+	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
 	//imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel()->show();
 	//moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	
@@ -84,6 +89,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotSeedsPlacer()));
 	connect(mainWindow.getUi()->acitonVOI_selection, SIGNAL(triggered()),
 		this, SLOT(slotVOI()));
+	connect(mainWindow.getUi()->actionVBD_Smoker, SIGNAL(triggered()),
+		this, SLOT(slotVBDSmoker()));
 
 	//connect(&mainWindow, SIGNAL(signalImageImportInitialize()),
 	//	&ioManager, SLOT(slotCleanListsOfFileNames()));
@@ -101,12 +108,14 @@ Core::Core(QObject * parent)
 	//	this, SLOT(slotIOManagerToImageManager(QList<IOManager::ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>* dicoms)));
 	connect(&ioManager, SIGNAL(signalFinishOpenMultiImages()),
 		this, SLOT(slotIOManagerToImageManager()));
-	//connect(&ioManager, SIGNAL(signalFinishOpenMultiImages()),
-	//	&ioManager, SLOT(slotInitializeOverlay()));
+	connect(mainWindow.getUi()->actionNew_segmentation, SIGNAL(triggered()),
+		&ioManager, SLOT(slotInitializeOverlay()));
 	connect(&mainWindow, SIGNAL(signalOverlayImportLoad(QString)), 
 		&ioManager, SLOT(slotOpenSegmentation(QString)));
 	connect(&ioManager, SIGNAL(signalFinishOpenOverlay()),
 		this, SLOT(slotOverlayToImageManager()));
+	connect(&mainWindow, SIGNAL(signalOverlayExportSave(QString)),
+		&ioManager, SLOT(slotOpenSegmentation(QString)));
 
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
 		this, SLOT(slotUpdateSurfaceView()));
@@ -172,8 +181,9 @@ void Core::slotIOManagerToImageManager()
 	}
 	mainWindow.initialization();
 	// clear the memory later, sometimes it will clear too early
-	ioManager.clearListOfItkImages();
-	ioManager.clearListOfDicoms();
+	// make no different, if it has not been clear
+	//ioManager.clearListOfItkImages();
+	//ioManager.clearListOfDicoms();
 }
 
 void Core::slotOverlayToImageManager()
@@ -186,7 +196,8 @@ void Core::slotOverlayToImageManager()
 		imageViewers[i]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
 	}
 	// clear the memory later, sometimes it will clear too early
-	ioManager.clearOverlay();
+	// make no different, if it has not been clear
+	//ioManager.clearOverlay();
 }
 
 void Core::slotNavigation()
@@ -231,6 +242,14 @@ void Core::slotVOI()
 	}
 	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
 
+}
+
+void Core::slotVBDSmoker()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		imageInteractorStyle[i]->SetInteractorStyleToVBDSmoker();
+	}
+	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
 }
 
 void Core::slotMultiPlanarView()

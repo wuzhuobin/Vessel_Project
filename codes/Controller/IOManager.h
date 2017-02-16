@@ -17,6 +17,7 @@ class IOManager:public QObject
 	Q_OBJECT;
 public:
 	typedef itk::Image<float, 3> ImageType;
+	typedef itk::Image<unsigned char, 3> OverlayType;
 
 	IOManager(QObject* parent = nullptr);
 	~IOManager();
@@ -73,7 +74,10 @@ public slots:
 
 	//void slotSaveSegmentaitonWithDiaglog();
 
-	//void slotSaveSegmentation(QString path);
+	void slotSaveSegmentation(QString path);
+
+	void slotSaveSegmentation(OverlayType::Pointer input, QString path);
+
 
 	//void slotSaveContourWithDiaglog();
 	//
@@ -102,6 +106,7 @@ private:
 	QList<itk::GDCMImageIO::Pointer> listOfDicomIOs;
 
 	ImageType::Pointer overlay;
+	OverlayType::Pointer overlay2;
 
 	//QString filePath;
 	bool registrationFlag = false;

@@ -24,40 +24,9 @@ Copyright (C) 2016
 #include <vtkSeedWidget.h>
 #include <vtkSeedRepresentation.h>
 
-class InteractorStyleSeedsPlacer;
-class vtkImageActorPointPlacer;
-class SeedsPlacerRepresentation : public vtkSeedRepresentation
-{
-public:
-	vtkTypeMacro(SeedsPlacerRepresentation, vtkSeedRepresentation);
-	static SeedsPlacerRepresentation* New();
-	
-	vtkImageActorPointPlacer* GetImagePointPlacer();
-protected:
-	SeedsPlacerRepresentation();
+class SeedsPlacerWidget;
+class SeedsPlacerRepresentation;
 
-};
-
-class SeedsPlacerWidget : public vtkSeedWidget
-{
-public:
-	vtkTypeMacro(SeedsPlacerWidget, vtkSeedWidget);
-	static SeedsPlacerWidget* New();
-protected:
-	SeedsPlacerWidget();
-	//static void MoveAction(vtkAbstractWidget *w){
-	//	w->InvokeEvent(vtkCommand::LeftButtonPressEvent);
-	//}
-	//static void DeleteAction(vtkAbstractWidget *w) {}
-	//static void CompletedAction(vtkAbstractWidget *w) {}
-
-private:
-	friend class InteractorStyleSeedsPlacer;
-	InteractorStyleSeedsPlacer* seedsPlacer;
-	static void CallbackSave(vtkObject* caller,
-		unsigned long eid, void* clientdata, void *calldata);
-	static int oldImagePos[3];
-};
 
 class InteractorStyleSeedsPlacer : public AbstractNavigation
 {

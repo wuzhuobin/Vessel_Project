@@ -19,7 +19,7 @@ class Core: public QObject
 	Q_OBJECT
 public:
 
-	const static unsigned short NUM_OF_IMAGES = 2;
+	const static unsigned short NUM_OF_IMAGES = 4;
 	const static unsigned short DEFAULT_IMAGE = 0;
 	const static enum VIEW_MODE
 	{
@@ -42,6 +42,9 @@ private slots:
 	void slotPaintBrush();
 	void slotSeedsPlacer();
 	void slotVOI();
+
+	// IADE specified
+	void slotVBDSmoker();
 
 	void slotMultiPlanarView();
 	void slotAllAxialView();

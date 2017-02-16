@@ -227,8 +227,13 @@ ImagePage::ImagePage(int numOfImages, QWidget *parent)
 		hBoxLayout->addWidget(m_imageRemoveBtns[i]);
 		vBoxLayout->addLayout(hBoxLayout);
 
-		//* mean compulsory , otherwise optional 
-		registerField("image.set" + QString::number(i), m_imageLineEdits[i]);
+		if (i == 0) {
+			//* mean compulsory , otherwise optional 
+			registerField("image.set" + QString::number(i) + "*", m_imageLineEdits[i]);
+		}
+		else {
+			registerField("image.set" + QString::number(i), m_imageLineEdits[i]);
+		}
 
 		connect(m_imageSetBtns[i], SIGNAL(clicked()), this, SLOT(setImages()), Qt::UniqueConnection);
 		connect(m_imageRemoveBtns[i], SIGNAL(clicked()), this, SLOT(removeImages()), Qt::UniqueConnection);

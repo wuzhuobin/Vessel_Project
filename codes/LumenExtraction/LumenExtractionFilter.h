@@ -71,10 +71,15 @@ public:
 	typedef itk::LumenExtractionFilter<InputImageType> LEFilter;
 	LEFilter::Pointer CoreFilter = nullptr;
 
-
 	static LumenExtractionFilter* New();
 	vtkTypeMacro(LumenExtractionFilter, vtkImageAlgorithm);
 	void PrintSelf(ostream& os, vtkIndent indent);
+
+	// Description:
+	// Specify i-j-k (min,max) pairs to extract. The resulting structured points
+	// dataset can be of any topological dimension (i.e., point, line, image,
+	// or volume).
+
 
 protected:
 
@@ -88,8 +93,6 @@ protected:
 		vtkInformationVector** inputVector,
 		vtkInformationVector* outputVector);
 
-
-private:
 	LumenExtractionFilter();
 	~LumenExtractionFilter();
 

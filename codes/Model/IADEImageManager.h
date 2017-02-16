@@ -15,6 +15,7 @@ public:
 
 
 	virtual bool setOverlay(IVtkImageData::itkImageType::Pointer image);
+	virtual bool setOverlay(OverlayImageData::itkImageType::Pointer image);
 	IADEOverlay* getIADEOverlay() const;
 
 

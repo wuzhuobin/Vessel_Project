@@ -60,6 +60,7 @@ signals:
 	void signalImageImportLoad();
 	void signalImageImportLoad(QList<QStringList>*);
 	void signalOverlayImportLoad(QString);
+	void signalOverlayExportSave(QString);
 
 
 private slots:
@@ -68,6 +69,7 @@ private slots:
 	void slotOpenNewImage();
 
 	void slotOpenOverlay();
+	void slotSaveOverlay();
 
 	/**
 	* four viewers and maximum

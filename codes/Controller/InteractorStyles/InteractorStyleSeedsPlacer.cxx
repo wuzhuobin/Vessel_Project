@@ -29,13 +29,49 @@ Copyright (C) 2016
 
 #include <algorithm>
 
+
+
 using namespace std;
+
+class SeedsPlacerRepresentation : public vtkSeedRepresentation
+{
+public:
+	vtkTypeMacro(SeedsPlacerRepresentation, vtkSeedRepresentation);
+	static SeedsPlacerRepresentation* New();
+
+	vtkImageActorPointPlacer* GetImagePointPlacer();
+protected:
+	SeedsPlacerRepresentation();
+
+};
+
+class SeedsPlacerWidget : public vtkSeedWidget
+{
+public:
+	vtkTypeMacro(SeedsPlacerWidget, vtkSeedWidget);
+	static SeedsPlacerWidget* New();
+protected:
+	SeedsPlacerWidget();
+	//static void MoveAction(vtkAbstractWidget *w){
+	//	w->InvokeEvent(vtkCommand::LeftButtonPressEvent);
+	//}
+	//static void DeleteAction(vtkAbstractWidget *w) {}
+	//static void CompletedAction(vtkAbstractWidget *w) {}
+
+private:
+	friend class InteractorStyleSeedsPlacer;
+	InteractorStyleSeedsPlacer* seedsPlacer;
+	static void CallbackSave(vtkObject* caller,
+		unsigned long eid, void* clientdata, void *calldata);
+	static int oldImagePos[3];
+};
+
 vtkStandardNewMacro(SeedsPlacerRepresentation);
 vtkStandardNewMacro(SeedsPlacerWidget);
 vtkStandardNewMacro(InteractorStyleSeedsPlacer);
 
-std::list<int*> InteractorStyleSeedsPlacer::m_seeds;
 int InteractorStyleSeedsPlacer::m_oldSeedsSize = 0;
+std::list<int*> InteractorStyleSeedsPlacer::m_seeds;
 
 void InteractorStyleSeedsPlacer::SetCustomEnabled(bool flag)
 {
@@ -132,7 +168,7 @@ void InteractorStyleSeedsPlacer::OnLeftButtonUp()
 	for (list<AbstractInteractorStyle*>::const_iterator cit =
 		m_abstractInteractorStyles.cbegin(); cit != m_abstractInteractorStyles.cend(); ++cit) {
 		InteractorStyleSeedsPlacer* _style = dynamic_cast<InteractorStyleSeedsPlacer*>(*cit);
-		if (_style != nullptr && _style != this) {
+		if (_style != nullptr && _style->m_customFlag && _style != this ) {
 			_style->GenerateWidgetFromSeeds();
 		}
 	}

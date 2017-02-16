@@ -92,9 +92,10 @@ void QInteractorStyleVOI::ExtractVOI()
 
 void QInteractorStyleVOI::ResetVOI()
 {
-	int* extent = GetExtent();
-	m_imageViewer->SetDisplayExtent(extent);
-	m_imageViewer->UpdateDisplayExtent();
+	//int* extent = GetExtent();
+	//m_imageViewer->SetDisplayExtent(extent);
+	//m_imageViewer->UpdateDisplayExtent();
+	m_imageViewer->ResetDisplayExtent();
 	m_imageViewer->Render();
 	//m_imageViewer->ResetImageVOI();
 	//m_imageViewer->ResetOverlayVOI();

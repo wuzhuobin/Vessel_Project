@@ -773,6 +773,7 @@
     </widget>
     <addaction name="actionImport_images"/>
     <addaction name="menuRecentImage"/>
+    <addaction name="actionNew_segmentation"/>
     <addaction name="actionImport_segmentation"/>
     <addaction name="actionExport_segmentation"/>
     <addaction name="actionExport_T2"/>
@@ -856,13 +857,14 @@
    </widget>
    <widget class="QMenu" name="menuDiagnosis">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="title">
      <string>Diagnosis</string>
     </property>
     <addaction name="actionICDA_diagnosis"/>
     <addaction name="actionVBD_diagnosis"/>
+    <addaction name="actionVBD_Smoker"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuImage"/>
@@ -875,7 +877,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="ActionToolBar">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="windowTitle">
     <string>toolBar</string>
@@ -901,6 +903,7 @@
    <addaction name="separator"/>
    <addaction name="acitonVOI_selection"/>
    <addaction name="actionSeeds_placer"/>
+   <addaction name="actionVBD_Smoker"/>
    <addaction name="actionContour"/>
    <addaction name="actionPaint_brush"/>
    <addaction name="separator"/>
@@ -1392,6 +1395,25 @@
   <action name="actionVBD_diagnosis">
    <property name="text">
     <string>VBD diagnosis</string>
+   </property>
+  </action>
+  <action name="actionVBD_Smoker">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>VBD Smoker</string>
+   </property>
+   <property name="toolTip">
+    <string>VBD Smoker</string>
+   </property>
+  </action>
+  <action name="actionNew_segmentation">
+   <property name="text">
+    <string>New segmentation</string>
+   </property>
+   <property name="toolTip">
+    <string>New segmentation</string>
    </property>
   </action>
  </widget>

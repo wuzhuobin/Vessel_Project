@@ -281,6 +281,20 @@ void IOManager::slotOpenSegmentation(QString fileName)
 	emit signalFinishOpenOverlay();
 
 }
+void IOManager::slotSaveSegmentation(QString path)
+{
+	slotSaveSegmentation(overlay2, path);
+}
+void IOManager::slotSaveSegmentation(OverlayType::Pointer input, QString path)
+{
+	typedef itk::ImageFileWriter<OverlayType> ImageFileWriter;
+		ImageFileWriter::Pointer writer =
+			ImageFileWriter::New();
+		writer->SetInput(input);
+		writer->SetFileName(path.toStdString().c_str());
+		writer->Write();
+}
+
 //
 //void IOManager::slotSaveSegmentaitonWithDiaglog()
 //{

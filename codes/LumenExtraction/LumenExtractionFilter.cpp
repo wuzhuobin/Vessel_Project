@@ -6,6 +6,7 @@
 #include <vtkStreamingDemandDrivenPipeline.h>
 #include <vtkImageCast.h>
 
+
 #include <itkImageToVTKImageFilter.h>
 #include <itkVTKImageToImageFilter.h>
 
@@ -63,10 +64,13 @@ int LumenExtractionFilter::RequestData(vtkInformation* request,
 
 	typedef itk::VTKImageToImageFilter<InputImageType> VTKImageToImageFilter;
 	typedef itk::ImageToVTKImageFilter<InputImageType> ImageToVtkImageFilter;
+	using std::max;
+	using std::min;
 
 	// get the info objects
 	vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
 	vtkInformation *outInfo = outputVector->GetInformationObject(0);
+
 
 	// get the input and output
 	vtkImageData *input = vtkImageData::SafeDownCast(
@@ -77,9 +81,12 @@ int LumenExtractionFilter::RequestData(vtkInformation* request,
 	VTKImageToImageFilter::Pointer vtkToItk =
 		VTKImageToImageFilter::New();
 	vtkToItk->SetInput(input);
+	//vtkToItk->GetOutput()->SetRequestedRegion(region);
 	vtkToItk->Update();
 
+
 	CoreFilter->SetInput(vtkToItk->GetOutput());
+	//CoreFilter->GetOutput()->SetRequestedRegion(region);
 	CoreFilter->Update();
 
 	ImageToVtkImageFilter::Pointer itkToVtk =

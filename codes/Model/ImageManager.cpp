@@ -47,12 +47,24 @@ bool ImageManager::setOverlay(IVtkImageData::itkImageType::Pointer image)
 {
 	typedef itk::CastImageFilter<IVtkImageData::itkImageType, OverlayImageData::itkImageType> CastImageFilter;
 	
-	if (image != nullptr) {
+	if (image.IsNotNull()) {
 		CastImageFilter::Pointer castImageFilter = CastImageFilter::New();
 		castImageFilter->SetInput(image);
 		castImageFilter->Update();
 
 		m_overlay = QSharedPointer<Overlay>(new Overlay(castImageFilter->GetOutput()));
+
+		return true;
+	}
+	else
+		return false;
+}
+
+bool ImageManager::setOverlay(OverlayImageData::itkImageType::Pointer image)
+{
+
+	if (image.IsNotNull()) {
+		m_overlay = QSharedPointer<Overlay>(new Overlay(image));
 
 		return true;
 	}

@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroup->addAction(ui->acitonVOI_selection);
 	actionGroup->addAction(ui->actionPaint_brush);
 	actionGroup->addAction(ui->actionSeeds_placer);
+	actionGroup->addAction(ui->actionVBD_Smoker);
 
 	actionGroup->setExclusive(true);
 
@@ -52,6 +53,8 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(ui->actionImport_images, SIGNAL(triggered()), this, SLOT(slotOpenNewImage()));
 	connect(ui->actionImport_segmentation, SIGNAL(triggered()),
 		this, SLOT(slotOpenOverlay()));
+	connect(ui->actionExport_segmentation, SIGNAL(triggered()), 
+		this, SLOT(slotSaveOverlay()));
 	createRecentImageActions();
 
 }
@@ -125,9 +128,17 @@ void MainWindow::slotOpenNewImage()
 void MainWindow::slotOpenOverlay()
 {
 		QString path = QFileDialog::getOpenFileName((this), 
-			QString(tr("Save Segmentation")), ".", tr("NIFTI Images (*.nii)"));
+			QString(tr("Import Segmentation")), ".", tr("NIFTI Images (*.nii)"));
 		if (path.isEmpty())	return;
 		emit signalOverlayImportLoad(path);
+}
+
+void MainWindow::slotSaveOverlay()
+{
+	QString path = QFileDialog::getSaveFileName((this),
+		QString(tr("Export Segmentation")), ".", tr("NIFTI Images (*.nii)"));
+	if (path.isEmpty())	return;
+	emit signalOverlayExportSave(path);
 }
 
 void MainWindow::slotImage()
@@ -189,21 +200,19 @@ void MainWindow::slotImage()
 
 void MainWindow::imageImport(QString path)
 {
-	RegistrationWizard rw(path, 2, this);
-	rw.setImageModalityNames(0, modalityNames[0]);
-	rw.setImageModalityNames(1, modalityNames[1]);
-
+	RegistrationWizard rw(path, modalityNames.size(), this);
+	for (int i = 0; i < modalityNames.size(); ++i) {
+		rw.setImageModalityNames(i, modalityNames[i]);
+	}
 	QList<QStringList> _listOfFileNames;
 
 	if (QWizard::Accepted == rw.exec()) {
 
-		if (rw.getFileNames(0)) {
-			qDebug() << *rw.getFileNames(0);
-			_listOfFileNames << *rw.getFileNames(0);
-		}
-		if (rw.getFileNames(1)) {
-			qDebug() << *rw.getFileNames(1);
-			_listOfFileNames << *rw.getFileNames(1);
+		for (int i = 0; i < modalityNames.size(); ++i) {
+			if (rw.getFileNames(i)) {
+				qDebug() << *rw.getFileNames(i);
+				_listOfFileNames << *rw.getFileNames(i);
+			}
 		}
 
 		emit signalImageImportLoad(&_listOfFileNames);

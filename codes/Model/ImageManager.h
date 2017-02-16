@@ -29,6 +29,7 @@ public:
 	virtual bool setOverlay();
 	virtual bool setOverlay(IVtkImageData* image);
 	virtual bool setOverlay(IVtkImageData::itkImageType::Pointer image);
+	virtual bool setOverlay(OverlayImageData::itkImageType::Pointer image);
 	bool setImage(unsigned int i, IVtkImageData::itkImageType::Pointer image);
 	bool setImage(unsigned int i, vtkImageData* image);
 	bool setModalityName(unsigned int i, QString name);

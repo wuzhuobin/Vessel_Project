@@ -37,7 +37,7 @@ void InteractorStyleWindowLevel::SetWindow(double window)
 		cit != m_abstractInteractorStyles.cend(); ++cit) {
 		InteractorStyleWindowLevel* windowLevel =
 			dynamic_cast<InteractorStyleWindowLevel*>(*cit);
-		if (windowLevel != nullptr &&
+		if (windowLevel != nullptr && windowLevel->m_customFlag &&
 			m_imageViewer->GetInput() == windowLevel->m_imageViewer->GetInput()) {
 			windowLevel->SetWindowByViewer(window);
 		}
@@ -51,7 +51,7 @@ void InteractorStyleWindowLevel::SetLevel(double level)
 		cit != m_abstractInteractorStyles.cend(); ++cit) {
 		InteractorStyleWindowLevel* windowLevel =
 			dynamic_cast<InteractorStyleWindowLevel*>(*cit);
-		if (windowLevel != nullptr &&
+		if (windowLevel != nullptr && windowLevel->m_customFlag &&
 			m_imageViewer->GetInput() == windowLevel->m_imageViewer->GetInput()) {
 			windowLevel->SetLevelByViewer(level);
 		}

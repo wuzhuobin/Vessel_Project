@@ -20,8 +20,27 @@ Copyright (C) 2016
 
 #include <list>
 
-#include "StyleSwitchMacro.h"
+#define SetInteractorStyleMacro(style) \
+void SetInteractorStyleTo##style () { \
+	if (CurrentStyle != ##style) { \
+		if (this->CurrentStyle) { \
+			this->InternalUpdate(false);\
+			this->CurrentStyle->SetInteractor(0); \
+	} \
+		this->CurrentStyle =(vtkInteractorStyle*) this->##style;\
+	} \
+	if (this->CurrentStyle) { \
+		this->CurrentStyle->SetInteractor(this->Interactor);\
+		this->CurrentStyle->SetTDxStyle(this->TDxStyle);\
+		this->InternalUpdate(true);\
+	} \
+}
 
+#define CurrentStyleMacro(style) \
+bool CurrentStyleIs##style () {\
+	return CurrentStyle == ##style; \
+}
+#define SET_CURRENT_STYLE_TO_MACRO
 #ifndef SET_CURRENT_STYLE_TO_MACRO
 #define SET_CURRENT_STYLE_TO_MACRO_H(style) \
 void SetCurrentStyleTo##style();
@@ -74,7 +93,7 @@ protected:
 	InteractorStyleSwitch();
 	~InteractorStyleSwitch();
 
-	void InternalUpdate();
+	void InternalUpdate(bool flag);
 	void SetAutoAdjustCameraClippingRange(int value);
 
 

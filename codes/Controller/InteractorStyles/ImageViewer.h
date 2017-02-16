@@ -143,6 +143,7 @@ public:
 	// the new whole extent. Calling this method will ensure that the display
 	// extent is reset properly.
 	virtual void UpdateDisplayExtent();
+	virtual void ResetDisplayExtent();
 
 //public slots:
 	/**

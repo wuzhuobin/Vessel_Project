@@ -27,19 +27,24 @@ IADEInteractorStyleSwitch::IADEInteractorStyleSwitch()
 	// The first instance of QInteractorStyleNavigation should have control 
 	// of the ui
 	Navigation = QInteractorStyleNavigation::New();
+	allStyles.push_back(Navigation);
 	WindowLevel = QInteractorStyleWindowLevel::New();
+	allStyles.push_back(WindowLevel);
 	//PolygonDraw = QInteractorStyleVesselSegmentation::New();
 	LumenSeedsPlacer = QInteractorStyleLumenSeedsPlacer::New();
+	allStyles.push_back(LumenSeedsPlacer);
 	PaintBrush = QInteractorStylePaintBrush::New();
+	allStyles.push_back(PaintBrush);
 	VOI = QInteractorStyleVOI::New();
+	allStyles.push_back(VOI);
 	//Ruler = QInteractorStyleRuler::New();
 
-	allStyles.push_back(WindowLevel);
-	allStyles.push_back(Navigation);
+	// IADE specified
+	VBDSmoker = QInteractorStyleVBDSmokerSeeds::New();
+	allStyles.push_back(VBDSmoker);
+
+
 	//allStyles.push_back(PolygonDraw);
-	allStyles.push_back(LumenSeedsPlacer);
-	allStyles.push_back(PaintBrush);
-	allStyles.push_back(VOI);
 	//allStyles.push_back(Ruler);
 
 	this->CurrentStyle = 0;

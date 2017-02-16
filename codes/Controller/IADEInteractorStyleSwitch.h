@@ -21,6 +21,7 @@ Copyright (C) 2016
 #include "QInteractorStylePaintBrush.h"
 #include "QInteractorStyleVOI.h"
 #include "QInteractorStyleLumenSeedsPlacer.h"
+#include "QInteractorStyleVBDSmokerSeeds.h"
 
 class IADEInteractorStyleSwitch : public InteractorStyleSwitch
 {
@@ -48,6 +49,10 @@ public:
 	vtkGetMacro(VOI, QInteractorStyleVOI*);
 	SetInteractorStyleMacro(VOI);
 	CurrentStyleMacro(VOI);
+
+	vtkGetMacro(VBDSmoker, QInteractorStyleVBDSmokerSeeds*);
+	SetInteractorStyleMacro(VBDSmoker);
+	CurrentStyleMacro(VBDSmoker);
 	//vtkGetMacro(Ruler, QInteractorStyleRuler*);
 
 
@@ -73,6 +78,11 @@ protected:
 	QInteractorStyleLumenSeedsPlacer* LumenSeedsPlacer;
 	QInteractorStylePaintBrush*	PaintBrush;
 	QInteractorStyleVOI* VOI;
+
+
+	// IADE specified 
+	QInteractorStyleVBDSmokerSeeds* VBDSmoker;
+
 	//QInteractorStyleRuler* Ruler;
 };
 

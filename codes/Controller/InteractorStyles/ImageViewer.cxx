@@ -39,9 +39,13 @@ PURPOSE.  See the above copyright notice for more information.
 #include <vtkExtractVOI.h>
 #include <vtkObjectFactory.h>
 
+#include <algorithm>
+
 
 //#include <QList>
 using std::string;
+using std::min;
+using std::max;
 vtkStandardNewMacro(ImageViewer);
 
 //----------------------------------------------------------------------------
@@ -167,18 +171,25 @@ void ImageViewer::UpdateDisplayExtent()
 
 	input->UpdateInformation();
 	vtkInformation* outInfo = input->GetOutputInformation(0);
-	int *w_ext = outInfo->Get(
-		vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
-	if (FirstRender) {
-		memcpy(DisplayExtent, w_ext, sizeof(DisplayExtent));
-	}
-	else {
-		memcpy(w_ext, DisplayExtent, sizeof(DisplayExtent));
-	}
+	//int *DisplayExtent = outInfo->Get(
+	//	vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
+	//DisplayExtent[0] = max(DisplayExtent[0], DisplayExtent[0]);
+	//DisplayExtent[2] = max(DisplayExtent[2], DisplayExtent[2]);
+	//DisplayExtent[4] = max(DisplayExtent[4], DisplayExtent[4]);
+	//DisplayExtent[1] = min(DisplayExtent[1], DisplayExtent[1]);
+	//DisplayExtent[3] = min(DisplayExtent[3], DisplayExtent[3]);
+	//DisplayExtent[5] = min(DisplayExtent[5], DisplayExtent[5]);
+	//if (FirstRender) {
+	//	memcpy(DisplayExtent, DisplayExtent, sizeof(DisplayExtent));
+	//}
+	//else {
+	//	memcpy(DisplayExtent, DisplayExtent, sizeof(DisplayExtent));
+	//}
+
 	// Is the slice in range ? If not, fix it
 
-	int slice_min = w_ext[this->SliceOrientation * 2];
-	int slice_max = w_ext[this->SliceOrientation * 2 + 1];
+	int slice_min = DisplayExtent[this->SliceOrientation * 2];
+	int slice_max = DisplayExtent[this->SliceOrientation * 2 + 1];
 	if (this->Slice < slice_min || this->Slice > slice_max)
 	{
 		this->Slice = static_cast<int>((slice_min + slice_max) * 0.5);
@@ -190,23 +201,23 @@ void ImageViewer::UpdateDisplayExtent()
 	{
 	case vtkImageViewer2::SLICE_ORIENTATION_XY:
 		this->ImageActor->SetDisplayExtent(
-			w_ext[0], w_ext[1], w_ext[2], w_ext[3], this->Slice, this->Slice);
+			DisplayExtent[0], DisplayExtent[1], DisplayExtent[2], DisplayExtent[3], this->Slice, this->Slice);
 		this->OverlayActor->SetDisplayExtent(
-			w_ext[0], w_ext[1], w_ext[2], w_ext[3], this->Slice, this->Slice);
+			DisplayExtent[0], DisplayExtent[1], DisplayExtent[2], DisplayExtent[3], this->Slice, this->Slice);
 		break;
 
 	case vtkImageViewer2::SLICE_ORIENTATION_XZ:
 		this->ImageActor->SetDisplayExtent(
-			w_ext[0], w_ext[1], this->Slice, this->Slice, w_ext[4], w_ext[5]);
+			DisplayExtent[0], DisplayExtent[1], this->Slice, this->Slice, DisplayExtent[4], DisplayExtent[5]);
 		this->OverlayActor->SetDisplayExtent(
-			w_ext[0], w_ext[1], this->Slice, this->Slice, w_ext[4], w_ext[5]);
+			DisplayExtent[0], DisplayExtent[1], this->Slice, this->Slice, DisplayExtent[4], DisplayExtent[5]);
 		break;
 
 	case vtkImageViewer2::SLICE_ORIENTATION_YZ:
 		this->ImageActor->SetDisplayExtent(
-			this->Slice, this->Slice, w_ext[2], w_ext[3], w_ext[4], w_ext[5]);
+			this->Slice, this->Slice, DisplayExtent[2], DisplayExtent[3], DisplayExtent[4], DisplayExtent[5]);
 		this->OverlayActor->SetDisplayExtent(
-			this->Slice, this->Slice, w_ext[2], w_ext[3], w_ext[4], w_ext[5]);
+			this->Slice, this->Slice, DisplayExtent[2], DisplayExtent[3], DisplayExtent[4], DisplayExtent[5]);
 		break;
 	}
 	InitializeCursorBoundary();
@@ -237,6 +248,21 @@ void ImageViewer::UpdateDisplayExtent()
 			}
 		}
 	}
+}
+void ImageViewer::ResetDisplayExtent()
+{
+	vtkAlgorithm *input = this->GetInputAlgorithm();
+	if (!input || !this->ImageActor || !this->OverlayActor)
+	{
+		return;
+	}
+
+	input->UpdateInformation();
+	vtkInformation* outInfo = input->GetOutputInformation(0);
+	int *ResetExtent = outInfo->Get(
+		vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
+	memcpy(DisplayExtent, ResetExtent, sizeof(DisplayExtent));
+	UpdateDisplayExtent();
 }
 
 void ImageViewer::SetColorLevel(double level)
@@ -368,11 +394,14 @@ void ImageViewer::Render()
 //----------------------------------------------------------------------------
 void ImageViewer::SetInputData(vtkImageData *in)
 {
+	// when there is a new input, Update the member DisplayExtent 
 	vtkImageViewer2::SetInputData(in);
+	ResetDisplayExtent();
 	//Color Map
 	double* range = in->GetScalarRange();
 	this->SetColorWindow(range[1] - range[0]);
 	this->SetColorLevel((range[1] + range[0])*0.5);
+
 
 	//DefaultWindowLevel[0] = this->GetColorWindow();
 	//DefaultWindowLevel[1] = this->GetColorLevel();
