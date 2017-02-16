@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	QActionGroup* actionGroupSurface = new QActionGroup(this);
 	actionGroupSurface->addAction(ui->actionTraceball_camera);
+	actionGroupSurface->addAction(ui->actionCenter_line);
 	actionGroupSurface->setExclusive(true);
 
 

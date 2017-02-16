@@ -46,6 +46,7 @@ private slots:
 
 	// Surface interactorStyle
 	void slotTrackballCamera();
+	void slotCenterLine();
 
 	// IADE specified
 	void slotVBDSmoker();

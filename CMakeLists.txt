@@ -19,17 +19,16 @@ if (NOT VTK_FOUND)
 endif()
 include(${VTK_USE_FILE})
 
+#VMTK
+find_package(VMTK REQUIRED)
+if (NOT VMTK_FOUND)
+	message(FATAL_ERROR "error: VMTK is not found")
+endif()
+include(${VMTK_USE_FILE})
+
 #QT5
 find_package(Qt5Core)
 find_package(Qt5Widgets)
-
-
-# #VMTK
-# find_package(VMTK REQUIRED)
-# if (NOT VMTK_FOUND)
-# 	message(FATAL_ERROR "error: VMTK is not found")
-# endif()
-# include(${VMTK_USE_FILE})
 
 #QT
 # if(${VTK_VERSION} VERSION_GREATER "6" AND VTK_QT_VERSION VERSION_GREATER "4")

@@ -98,6 +98,8 @@ Core::Core(QObject * parent)
 	// surface action
 	connect(mainWindow.getUi()->actionTraceball_camera, SIGNAL(triggered()),
 		this, SLOT(slotTrackballCamera()));
+	connect(mainWindow.getUi()->actionCenter_line, SIGNAL(triggered()),
+		this, SLOT(slotCenterLine()));
 
 	//connect(&mainWindow, SIGNAL(signalImageImportInitialize()),
 	//	&ioManager, SLOT(slotCleanListsOfFileNames()));
@@ -256,6 +258,12 @@ void Core::slotVOI()
 void Core::slotTrackballCamera()
 {
 	surfaceInteractorStyle->SetInteractorStyleTo3DTrackballCamera();
+}
+
+void Core::slotCenterLine()
+{
+	surfaceInteractorStyle->SetInteractorStyleTo3DCenterLine();
+
 }
 
 void Core::slotVBDSmoker()

@@ -21,8 +21,7 @@ Copyright (C) 2016
 
 #include "AbstractInteractorStyle.h"
 
-#include <vtkInteractorStyle.h>
-
+#include <vtkInteractorStyleTrackballCamera.h>
 
 
 #ifndef VIEWER_CONSTITERATOR(METHOD)
@@ -35,11 +34,11 @@ for(std::list<SurfaceViewer*>::const_iterator cit = \
 
 class SurfaceViewer;
 
-class AbstractInteractorStyleSurface : public vtkInteractorStyle,
+class AbstractInteractorStyleSurface : public vtkInteractorStyleTrackballCamera,
 	public AbstractInteractorStyle
 {
 public:
-	vtkTypeMacro(AbstractInteractorStyleSurface, vtkInteractorStyle);
+	vtkTypeMacro(AbstractInteractorStyleSurface, vtkInteractorStyleTrackballCamera);
 	static AbstractInteractorStyleSurface *New();
 	
 	virtual void SetSurfaceViewer(SurfaceViewer* imageViewer);
@@ -72,12 +71,12 @@ protected:
 	//virtual int GetMinSlice();
 	//virtual int GetMaxSlice();
 	//virtual int GetSliceOrientation();
-	//virtual double* GetOrigin();
-	//virtual double* GetSpacing();
-	//virtual int* GetExtent();
+	virtual double* GetOrigin();
+	virtual double* GetSpacing();
+	virtual int* GetExtent();
 
 	static std::list<SurfaceViewer*> m_synchronalViewers;
-	SurfaceViewer* m_imageViewer;
+	SurfaceViewer* m_surfaceViewer;
 
 private:
 	const static int RESET_PIXEL_DISTANCE = 5;

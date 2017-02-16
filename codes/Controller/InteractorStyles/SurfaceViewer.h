@@ -50,7 +50,9 @@ public:
 	vtkGetObjectMacro(RenderWindow, vtkRenderWindow);
 	vtkGetObjectMacro(Renderer, vtkRenderer);
 	vtkGetObjectMacro(SurfaceActor, vtkActor);
+	vtkGetObjectMacro(ImageResample, vtkImageResample);
 	vtkGetObjectMacro(MarchingCubes, vtkDiscreteMarchingCubes);
+	vtkGetObjectMacro(WindowedSincPolyDataFilter, vtkWindowedSincPolyDataFilter)
 	vtkGetObjectMacro(InteractorStyle, vtkInteractorStyle);
 
 	// Description:

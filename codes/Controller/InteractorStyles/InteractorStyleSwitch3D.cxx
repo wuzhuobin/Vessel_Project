@@ -19,6 +19,7 @@ Copyright (C) 2016
 #include "InteractorStyleSwitch3D.h"
 #include "AbstractInteractorStyle.h"
 #include "vtkRenderWindowInteractor.h"
+#include "AbstractInteractorStyleSurface.h"
 //#include "MainWindow.h"
 
 //class MyViewer;
@@ -116,6 +117,14 @@ void InteractorStyleSwitch3D::SetAutoAdjustCameraClippingRange(int value)
 
 void InteractorStyleSwitch3D::SetSurfaceViewer(SurfaceViewer * surfaceViewer)
 {
+	for (std::list<vtkInteractorStyle*>::const_iterator cit = allStyles.cbegin();
+		cit != allStyles.cend(); ++cit) {
+		AbstractInteractorStyleSurface* _style =
+			AbstractInteractorStyleSurface::SafeDownCast(*cit);
+		if (_style != NULL) {
+			_style->SetSurfaceViewer(surfaceViewer);
+		}
+	}
 }
 
 void InteractorStyleSwitch3D::SetDefaultRenderer(vtkRenderer* renderer)

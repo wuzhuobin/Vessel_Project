@@ -30,7 +30,7 @@ Copyright (C) 2016
 vtkStandardNewMacro(AbstractInteractorStyleSurface);
 std::list<SurfaceViewer*> AbstractInteractorStyleSurface::m_synchronalViewers;
 
-AbstractInteractorStyleSurface::AbstractInteractorStyleSurface() : vtkInteractorStyle()
+AbstractInteractorStyleSurface::AbstractInteractorStyleSurface() : vtkInteractorStyleTrackballCamera()
 {
 }
 
@@ -40,7 +40,7 @@ AbstractInteractorStyleSurface::~AbstractInteractorStyleSurface()
 
 void AbstractInteractorStyleSurface::SetSurfaceViewer(SurfaceViewer * imageViewer)
 {
-	this->m_imageViewer = imageViewer;
+	this->m_surfaceViewer = imageViewer;
 	AddSynchronalViewer(imageViewer);
 }
 
@@ -67,7 +67,7 @@ void AbstractInteractorStyleSurface::SynchronalZooming()
 {
 	if (!m_synchronalZoomingFlag)
 		return;
-	double scale = m_imageViewer->GetRenderer()->GetActiveCamera()->GetParallelScale();
+	double scale = m_surfaceViewer->GetRenderer()->GetActiveCamera()->GetParallelScale();
 	VIEWER_CONSTITERATOR(GetRenderer()->GetActiveCamera()->SetParallelScale(scale));
 	VIEWER_CONSTITERATOR(Render());
 
@@ -80,47 +80,47 @@ void AbstractInteractorStyleSurface::SynchronalZooming()
 //
 //int AbstractInteractorStyleSurface::GetSlice()
 //{
-//	return m_imageViewer->GetSlice();
+//	return m_surfaceViewer->GetSlice();
 //}
 //
 //int AbstractInteractorStyleSurface::GetMinSlice()
 //{
-//	return m_imageViewer->GetSliceMin();
+//	return m_surfaceViewer->GetSliceMin();
 //}
 //
 //int AbstractInteractorStyleSurface::GetMaxSlice()
 //{
-//	return m_imageViewer->GetSliceMax();
+//	return m_surfaceViewer->GetSliceMax();
 //}
 //
 //int AbstractInteractorStyleSurface::GetSliceOrientation()
 //{
-//	return m_imageViewer->GetSliceOrientation();
+//	return m_surfaceViewer->GetSliceOrientation();
 //}
 //
-//double * AbstractInteractorStyleSurface::GetOrigin()
-//{
-//	return m_imageViewer->GetInput()->GetOrigin();
-//}
-//
-//double * AbstractInteractorStyleSurface::GetSpacing()
-//{
-//	return m_imageViewer->GetInput()->GetSpacing();
-//}
-//
-//int * AbstractInteractorStyleSurface::GetExtent()
-//{
-//	return m_imageViewer->GetInput()->GetExtent();
-//}
+double * AbstractInteractorStyleSurface::GetOrigin()
+{
+	return m_surfaceViewer->GetInput()->GetOrigin();
+}
+
+double * AbstractInteractorStyleSurface::GetSpacing()
+{
+	return m_surfaceViewer->GetInput()->GetSpacing();
+}
+
+int * AbstractInteractorStyleSurface::GetExtent()
+{
+	return m_surfaceViewer->GetInput()->GetExtent();
+}
 
 void AbstractInteractorStyleSurface::OnMouseWheelForward()
 {
-	vtkInteractorStyle::OnMouseWheelForward();
+	vtkInteractorStyleTrackballCamera::OnMouseWheelForward();
 }
 
 void AbstractInteractorStyleSurface::OnMouseWheelBackward()
 {
-	vtkInteractorStyle::OnMouseWheelBackward();
+	vtkInteractorStyleTrackballCamera::OnMouseWheelBackward();
 }
 
 void AbstractInteractorStyleSurface::OnLeftButtonDown()
@@ -138,13 +138,13 @@ void AbstractInteractorStyleSurface::OnLeftButtonDown()
 		this->m_numberOfLeftClicks = 0;
 	}
 	AbstractInteractorStyle::OnLeftButtonDown();
-	//vtkInteractorStyleImage::OnLeftButtonDown();
+	vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
 }
 
 void AbstractInteractorStyleSurface::OnLeftButtonUp()
 {
 	AbstractInteractorStyle::OnLeftButtonUp();
-	//vtkInteractorStyleImage::OnLeftButtonUp();
+	vtkInteractorStyleTrackballCamera::OnLeftButtonUp();
 }
 
 void AbstractInteractorStyleSurface::OnLeftDoubleClick()
@@ -169,13 +169,13 @@ void AbstractInteractorStyleSurface::OnRightButtonDown()
 	}
 
 	AbstractInteractorStyle::OnRightButtonDown();
-	vtkInteractorStyle::OnRightButtonDown();
+	vtkInteractorStyleTrackballCamera::OnRightButtonDown();
 }
 
 void AbstractInteractorStyleSurface::OnRightButtonUp()
 {
 	AbstractInteractorStyle::OnRightButtonUp();
-	vtkInteractorStyle::OnRightButtonUp();
+	vtkInteractorStyleTrackballCamera::OnRightButtonUp();
 }
 
 void AbstractInteractorStyleSurface::OnRightDoubleClick()
@@ -199,13 +199,13 @@ void AbstractInteractorStyleSurface::OnMiddleButtonDown()
 		this->m_numberOfMiddleClicks = 0;
 	}
 	AbstractInteractorStyle::OnMiddleButtonDown();
-	vtkInteractorStyle::OnMiddleButtonDown();
+	vtkInteractorStyleTrackballCamera::OnMiddleButtonDown();
 }
 
 void AbstractInteractorStyleSurface::OnMiddleButtonUp()
 {
 	AbstractInteractorStyle::OnMiddleButtonUp();
-	vtkInteractorStyle::OnMiddleButtonUp();
+	vtkInteractorStyleTrackballCamera::OnMiddleButtonUp();
 }
 
 void AbstractInteractorStyleSurface::OnMiddleDoubleClick()
@@ -214,17 +214,17 @@ void AbstractInteractorStyleSurface::OnMiddleDoubleClick()
 
 void AbstractInteractorStyleSurface::OnMouseMove()
 {
-	vtkInteractorStyle::OnMouseMove();
+	vtkInteractorStyleTrackballCamera::OnMouseMove();
 }
 
 void AbstractInteractorStyleSurface::OnChar()
 {
-	vtkInteractorStyle::OnChar();
+	vtkInteractorStyleTrackballCamera::OnChar();
 }
 
 void AbstractInteractorStyleSurface::OnKeyPress()
 {
-	vtkInteractorStyle::OnKeyPress();
+	vtkInteractorStyleTrackballCamera::OnKeyPress();
 }
 
 bool AbstractInteractorStyleSurface::CheckMoveDistance()

@@ -33,7 +33,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -74,7 +74,7 @@
          <item>
           <widget class="QVTKWidget" name="image3View" native="true">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -218,7 +218,7 @@
          <item>
           <widget class="QVTKWidget" name="image4View" native="true">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -319,6 +319,9 @@
         </property>
         <item>
          <widget class="QWidget" name="xyzwidget" native="true">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <layout class="QHBoxLayout" name="horizontalLayout_7">
            <property name="spacing">
             <number>7</number>
@@ -391,6 +394,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="updateBtn">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>150</width>
@@ -404,6 +410,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="generateCLBtn">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>150</width>
@@ -447,7 +456,7 @@
          <item>
           <widget class="QVTKWidget" name="image1View" native="true">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -629,7 +638,7 @@
          <item>
           <widget class="QVTKWidget" name="image2View" native="true">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -873,6 +882,7 @@
      <string>Surface</string>
     </property>
     <addaction name="actionTraceball_camera"/>
+    <addaction name="actionCenter_line"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuImage"/>
@@ -1434,6 +1444,17 @@
    </property>
    <property name="toolTip">
     <string>Traceball camera</string>
+   </property>
+  </action>
+  <action name="actionCenter_line">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Center line</string>
+   </property>
+   <property name="toolTip">
+    <string>Center line</string>
    </property>
   </action>
  </widget>

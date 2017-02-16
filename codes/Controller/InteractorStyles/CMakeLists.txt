@@ -99,6 +99,7 @@ target_link_libraries(
 	InteractorStyles
 	${ITK_LIBRARIES}
 	${VTK_LIBRARIES}
+	${VMTK_LIBRARIES}
 	Qt5::Core
 	Qt5::Widgets
 	Widgets
