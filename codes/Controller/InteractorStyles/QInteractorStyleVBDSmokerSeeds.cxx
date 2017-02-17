@@ -137,21 +137,6 @@ void QInteractorStyleVBDSmokerSeeds::SlotVBDSmokerUpdate()
 QInteractorStyleVBDSmokerSeeds::QInteractorStyleVBDSmokerSeeds(int uiType, QWidget * parent)
 {
 	QNEW_UI();
-	if (numOfMyself == 1) {
-		connect(ui->pushButtonDeleteSeed, SIGNAL(clicked()),
-			this, SLOT(DeleteFocalSeed()));
-
-		connect(ui->listWidgetSeedList, SIGNAL(currentRowChanged(int)),
-			this, SLOT(SetFocalSeed(int)));
-
-		connect(ui->pushButtonDropSeed, SIGNAL(clicked()),
-			this, SLOT(DropSeed()));
-
-		connect(ui->pushButtonUpdate, SIGNAL(clicked()),
-			this, SLOT(SlotVBDSmokerUpdate()));
-	}
-	connect(ui->pushButtonDeleteAllSeeds, SIGNAL(clicked()),
-		this, SLOT(SlotClearAllSeeds()));
 }
 
 QInteractorStyleVBDSmokerSeeds::~QInteractorStyleVBDSmokerSeeds()
@@ -176,4 +161,25 @@ void QInteractorStyleVBDSmokerSeeds::UpdateWidgetToSeeds(int * oldImagePos, int 
 		ui->listWidgetSeedList->addItem(listItem);
 		//++i;
 	}
+}
+
+void QInteractorStyleVBDSmokerSeeds::uniqueInitialization()
+{
+	connect(ui->pushButtonDeleteSeed, SIGNAL(clicked()),
+		this, SLOT(DeleteFocalSeed()));
+
+	connect(ui->listWidgetSeedList, SIGNAL(currentRowChanged(int)),
+		this, SLOT(SetFocalSeed(int)));
+
+	connect(ui->pushButtonDropSeed, SIGNAL(clicked()),
+		this, SLOT(DropSeed()));
+
+	connect(ui->pushButtonUpdate, SIGNAL(clicked()),
+		this, SLOT(SlotVBDSmokerUpdate()));
+}
+
+void QInteractorStyleVBDSmokerSeeds::initialization()
+{
+	connect(ui->pushButtonDeleteAllSeeds, SIGNAL(clicked()),
+		this, SLOT(SlotClearAllSeeds()));
 }

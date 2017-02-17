@@ -8,10 +8,6 @@ QAbstractNavigation::QAbstractNavigation(int uiType, QWidget * parent)
 {
 	// The first instance of QAbstractNavigation will have control of the UI widget
 	QNEW_UI();
-	if (numOfMyself == 1) {
-		uniqueInitialization();
-	}
-	initialization();
 }
 
 QAbstractNavigation::~QAbstractNavigation()

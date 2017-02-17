@@ -21,80 +21,94 @@ namespace Ui { class QAbstractInteractorStyle; }
 
 #ifndef QSETUP_UI_HEAD(STYLE_NAME)
 #define QSETUP_UI_HEAD(STYLE_NAME) \
-public:\
-Ui::##STYLE_NAME* getUi();\
-protected:\
-static QList<Ui::##STYLE_NAME*> m_uis; \
-void setupUi();\
-int uiType = NO_UI;\
-static int numOfMyself;\
-static bool initializationFlag;
+	public:\
+	protected:\
+		Ui::##STYLE_NAME* getUi();\
+	private:\
+		virtual bool getInitializationFlag();\
+		virtual void setInitializationFlag(bool flag); \
+		static QList<Ui::##STYLE_NAME*> m_uis; \
+		void setupUi();\
+		int uiType = NO_UI;\
+		static int numOfMyself;\
+		static bool initializationFlag;
 #endif // !QSETUP_UI_HEAD(STYLE_NAME)
 
 #ifndef QSETUP_UI_SRC(STYLE_NAME)
 #define QSETUP_UI_SRC(STYLE_NAME) \
-int STYLE_NAME::numOfMyself = 0;\
-bool STYLE_NAME::initializationFlag = false;\
-QList<Ui::##STYLE_NAME*> STYLE_NAME::m_uis;\
-void STYLE_NAME::setupUi()\
-{\
-	switch (uiType)\
+	int STYLE_NAME::numOfMyself = 0;\
+	bool STYLE_NAME::initializationFlag = false;\
+	QList<Ui::##STYLE_NAME*> STYLE_NAME::m_uis;\
+	bool STYLE_NAME::getInitializationFlag(){ \
+		return initializationFlag; \
+	} \
+	void STYLE_NAME::setInitializationFlag(bool flag){ \
+		initializationFlag = flag; \
+	}\
+	void STYLE_NAME::setupUi()\
 	{\
-		case UNIQUE_UI:\
-			if (m_uis.size() < 1) {\
-				ui = new Ui::##STYLE_NAME; \
+		switch (uiType)\
+		{\
+			case UNIQUE_UI:\
+				if (m_uis.size() < 1) {\
+					ui = new Ui::##STYLE_NAME; \
+					ui->setupUi(this);\
+					m_uis.push_back(ui);\
+				}\
+				else {\
+					ui = m_uis.first();\
+				}\
+				break;\
+			case MULTIPLE_UI:\
+				ui = new Ui::##STYLE_NAME;\
 				ui->setupUi(this);\
 				m_uis.push_back(ui);\
+				break;\
+			case NO_UI:\
+				ui = nullptr;\
+				break;\
 			}\
-			else {\
-				ui = m_uis.first();\
-			}\
-			break;\
-		case MULTIPLE_UI:\
-			ui = new Ui::##STYLE_NAME;\
-			ui->setupUi(this);\
-			m_uis.push_back(ui);\
-			break;\
-		case NO_UI:\
-			ui = nullptr;\
-			break;\
-		}\
-		++numOfMyself;\
-}\
-Ui::##STYLE_NAME* STYLE_NAME::getUi(){\
-	return ui;\
-}
+	}\
+	Ui::##STYLE_NAME* STYLE_NAME::getUi(){\
+		return ui;\
+	}
 #endif // !QSETUP_UI_SRC(STYLE_NAME)
 
 #ifndef QNEW_UI()
 #define QNEW_UI()\
-this->uiType = uiType;this->setupUi();
+	this->uiType = uiType;\
+	this->setupUi();\
+	++numOfMyself; \
+	if (numOfMyself == 1) { \
+		uniqueInitialization(); \
+	} \
+	initialization();
 #endif // !QNEW_UI()
 
 #ifndef QDELETE_UI()
 #define QDELETE_UI() \
---numOfMyself;\
-switch (this->uiType)\
-{\
-	case UNIQUE_UI:\
-		if(numOfMyself == 0){\
+	--numOfMyself;\
+	switch (this->uiType)\
+	{\
+		case UNIQUE_UI:\
+			if(numOfMyself == 0){\
+				if (m_uis.removeOne(ui)) {\
+					if (ui != nullptr) {\
+						delete ui; \
+						ui = nullptr;\
+					}\
+				}\
+			}\
+			break;\
+		case MULTIPLE_UI:\
 			if (m_uis.removeOne(ui)) {\
 				if (ui != nullptr) {\
 					delete ui; \
 					ui = nullptr;\
 				}\
 			}\
-		}\
-		break;\
-	case MULTIPLE_UI:\
-		if (m_uis.removeOne(ui)) {\
-			if (ui != nullptr) {\
-				delete ui; \
-				ui = nullptr;\
-			}\
-		}\
-		break;\
-}
+			break;\
+	}
 #endif // !QDELETE_UI()
 
 /**
@@ -136,11 +150,11 @@ protected:
 	* @brief	function be invoked once in constructor.
 	* This function only be invoked in the first instance.
 	*/
-	virtual void uniqueInitialization() {};
+	void uniqueInitialization() {};
 	/**
 	* @brief	function be invokded in constructor.
 	*/
-	virtual void initialization() {};
+	void initialization() {};
 	/**
 	 * @brief	function be invoked once requirement. 
 	 * @see	#uniqueEnable()

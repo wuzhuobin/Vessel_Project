@@ -53,6 +53,9 @@ protected:
 
 private:
 
+	void uniqueInitialization();
+	void initialization();
+
 	Ui::QInteractorStyleLumenSeedsPlacer* ui = nullptr;
 
 	int m_numberOfIteractions = 3;

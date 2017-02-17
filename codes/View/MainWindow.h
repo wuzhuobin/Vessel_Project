@@ -50,6 +50,8 @@ public:
 
 	
 	Ui::MainWindow* getUi() { return ui; }
+	QMenu* getSelectImgMenu(unsigned int i);
+	QList<QMenu*>* getSelectImgMenus();
 
 	//void setRenderWindow(unsigned short i, vtkRenderWindow* renderWindow);
 	//vtkRenderWindow* getRenderWindow(unsigned short i);

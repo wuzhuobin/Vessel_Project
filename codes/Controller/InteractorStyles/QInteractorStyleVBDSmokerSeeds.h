@@ -34,6 +34,10 @@ protected:
 
 
 private:
+	
+	void uniqueInitialization();
+	void initialization();
+	
 	Ui::QInteractorStyleVBDSmokerSeeds* ui = nullptr;
 
 

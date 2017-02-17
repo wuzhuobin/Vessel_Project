@@ -258,30 +258,6 @@ void QInteractorStyleLumenSeedsPlacer::SetInitialNeighborhoodRadius(int value)
 QInteractorStyleLumenSeedsPlacer::QInteractorStyleLumenSeedsPlacer(int uiType, QWidget* parent)
 {
 	QNEW_UI();
-	if (numOfMyself == 1) {
-		connect(ui->pushBtnDeleteSeed, SIGNAL(clicked()),
-			this, SLOT(DeleteFocalSeed()));
-
-		connect(ui->listWidgetSeedList, SIGNAL(currentRowChanged(int)),
-			this, SLOT(SetFocalSeed(int)));
-		
-		connect(ui->dropSeedPushButton, SIGNAL(clicked()),
-			this, SLOT(DropSeed()));
-		// only create lumenExtraction and connect its parameter in the first 
-		// InteractorStyleLumenSeedsPalcer, others' are nullptr and won't be 
-		// connected
-		connect(ui->pushBtnExtractLumen, SIGNAL(clicked()),
-			this, SLOT(ExtractLumen()));
-		connect(ui->doubleSpinBoxMultiplier, SIGNAL(valueChanged(double)),
-			this, SLOT(SetMultipier(double)));
-		connect(ui->numberOfIterationsSpinBox, SIGNAL(valueChanged(int)),
-			this, SLOT(SetNumberOfIteractions(int)));
-		connect(ui->initialNeighbodhoodSpinBox, SIGNAL(valueChanged(int)),
-			this, SLOT(SetInitialNeighborhoodRadius(int)));
-
-	}
-	connect(ui->deleteAllSeedsPushButton, SIGNAL(clicked()),
-		this, SLOT(SlotClearAllSeeds()));
 }
 
 QInteractorStyleLumenSeedsPlacer::~QInteractorStyleLumenSeedsPlacer()
@@ -333,4 +309,33 @@ void QInteractorStyleLumenSeedsPlacer::OnKeyPress()
 	else {
 		InteractorStyleSeedsPlacer::OnKeyPress();
 	}
+}
+
+void QInteractorStyleLumenSeedsPlacer::uniqueInitialization()
+{
+	connect(ui->pushBtnDeleteSeed, SIGNAL(clicked()),
+		this, SLOT(DeleteFocalSeed()));
+
+	connect(ui->listWidgetSeedList, SIGNAL(currentRowChanged(int)),
+		this, SLOT(SetFocalSeed(int)));
+
+	connect(ui->dropSeedPushButton, SIGNAL(clicked()),
+		this, SLOT(DropSeed()));
+	// only create lumenExtraction and connect its parameter in the first 
+	// InteractorStyleLumenSeedsPalcer, others' are nullptr and won't be 
+	// connected
+	connect(ui->pushBtnExtractLumen, SIGNAL(clicked()),
+		this, SLOT(ExtractLumen()));
+	connect(ui->doubleSpinBoxMultiplier, SIGNAL(valueChanged(double)),
+		this, SLOT(SetMultipier(double)));
+	connect(ui->numberOfIterationsSpinBox, SIGNAL(valueChanged(int)),
+		this, SLOT(SetNumberOfIteractions(int)));
+	connect(ui->initialNeighbodhoodSpinBox, SIGNAL(valueChanged(int)),
+		this, SLOT(SetInitialNeighborhoodRadius(int)));
+}
+
+void QInteractorStyleLumenSeedsPlacer::initialization()
+{
+	connect(ui->deleteAllSeedsPushButton, SIGNAL(clicked()),
+		this, SLOT(SlotClearAllSeeds()));
 }

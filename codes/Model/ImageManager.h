@@ -36,14 +36,16 @@ public:
 	bool setDicomIO(unsigned int i, itk::GDCMImageIO::Pointer dicomIO);
 
 	IVtkImageData* getImage(unsigned int i) const;
+	IVtkImageData* getImage(QString modalityName) const;
 	Overlay* getOverlay() const;
 	const QString getModalityName(unsigned int i) const;
+	int getIndexOfModalityName(QString modalityName);
 	const itk::GDCMImageIO::Pointer getDicomIO(unsigned int i) const;
 
 protected:
 
 	QList<vtkSmartPointer<IVtkImageData>> m_images;
-	QList<QString> m_modalityNames;
+	QStringList m_modalityNames;
 	QList<itk::GDCMImageIO::Pointer> m_dicomIOs;
 
 	QSharedPointer<Overlay> m_overlay;

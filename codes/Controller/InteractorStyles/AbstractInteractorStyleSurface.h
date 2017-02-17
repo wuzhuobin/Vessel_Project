@@ -24,13 +24,13 @@ Copyright (C) 2016
 #include <vtkInteractorStyleTrackballCamera.h>
 
 
-#ifndef VIEWER_CONSTITERATOR(METHOD)
-#define VIEWER_CONSTITERATOR(METHOD) \
+#ifndef SURFACE_VIEWER_CONSTITERATOR(METHOD)
+#define SURFACE_VIEWER_CONSTITERATOR(METHOD) \
 for(std::list<SurfaceViewer*>::const_iterator cit = \
 	m_synchronalViewers.cbegin(); cit != m_synchronalViewers.cend(); ++cit){\
 	(*cit)->##METHOD; \
 }
-#endif // !VIEWER_CONSTITERATOR(METHOD)
+#endif // !SURFACE_VIEWER_CONSTITERATOR(METHOD)
 
 class SurfaceViewer;
 
@@ -43,14 +43,14 @@ public:
 	
 	virtual void SetSurfaceViewer(SurfaceViewer* imageViewer);
 	//virtual void SetCurrentSlice(int slice);
-	virtual void EnableSynchronalZooming(bool flag);
+	//virtual void EnableSynchronalZooming(bool flag);
 
 protected:
 	AbstractInteractorStyleSurface();
 	~AbstractInteractorStyleSurface();
 
 	virtual void AddSynchronalViewer(SurfaceViewer* imageViewer);
-	virtual void SynchronalZooming();
+	//virtual void SynchronalZooming();
 	
 	void OnMouseWheelForward();
 	void OnMouseWheelBackward();
@@ -81,7 +81,7 @@ protected:
 private:
 	const static int RESET_PIXEL_DISTANCE = 5;
 	bool CheckMoveDistance();
-	bool m_synchronalZoomingFlag = true;
+	//bool m_synchronalZoomingFlag = true;
 	int PreviousPosition[2] = { 0,0 };
 
 };

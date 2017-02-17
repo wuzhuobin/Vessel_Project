@@ -15,8 +15,8 @@ Wong Matthew Lun
 Copyright (C) 2016
 */
 
-#ifndef ABSTRACT_INTERACTOR_STYLE_IMAGE_H
-#define ABSTRACT_INTERACTOR_STYLE_IMAGE_H
+#ifndef __ABSTRACT_INTERACTOR_STYLE_IMAGE_H__
+#define __ABSTRACT_INTERACTOR_STYLE_IMAGE_H__
 
 
 #include "AbstractInteractorStyle.h"
@@ -83,8 +83,8 @@ private:
 	const static int RESET_PIXEL_DISTANCE = 5;
 	bool CheckMoveDistance();
 	bool m_synchronalZoomingFlag = true;
-	int PreviousPosition[2] = { 0,0 };
+	int PreviousPosition[2] = { 0 };
 
 };
 
-#endif //ABSTRACT_INTERACTOR_STYLE_IMAGE_H
+#endif //__ABSTRACT_INTERACTOR_STYLE_IMAGE_H__

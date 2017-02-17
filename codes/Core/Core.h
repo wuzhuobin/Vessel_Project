@@ -12,6 +12,7 @@
 #include "IADEInteractorStyleSwitch.h"
 #include "IADEInteractorStyleSwitch3D.h"
 #include "SurfaceViewer.h"
+#include "ImageViewer.h"
 //#include <vtkInteractorStyleSwitch.h>
 
 
@@ -52,6 +53,9 @@ private slots:
 	// IADE specified
 	void slotVBDSmoker();
 
+
+	void slotChangeImage(QAction* action);
+	void slotChangeImage(int viewer, int image);
 	void slotMultiPlanarView();
 	void slotAllAxialView();
 	void slotChangeView(unsigned int viewMode);
@@ -70,6 +74,9 @@ private:
 	IADEIOManager ioManager;
 	IADEImageManager imageManager;
 
+
+	int currentImage[MainWindow::NUM_OF_2D_VIEWERS] = {DEFAULT_IMAGE};
+	int currentSliceOrientation[MainWindow::NUM_OF_2D_VIEWERS] = {ImageViewer::SLICE_ORIENTATION_XY};
 	ImageViewer* imageViewers[MainWindow::NUM_OF_2D_VIEWERS];
 	//vtkRenderWindowInteractor* imageInteractor[MainWindow::NUM_OF_2D_VIEWERS];
 	IADEInteractorStyleSwitch* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];

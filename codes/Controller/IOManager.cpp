@@ -176,12 +176,11 @@ bool IOManager::loadImageData(QStringList fileNames)
 
 IOManager::ImageType::Pointer IOManager::imageAlignment(ImageType::Pointer alignedTo, ImageType::Pointer toBeAligned)
 {
-	//this->registration.SetFixedImage(alignedTo);
-	//this->registration.SetMovingImage(toBeAligned);
-	//this->registration.Update();
+	this->registration.SetFixedImage(alignedTo);
+	this->registration.SetMovingImage(toBeAligned);
+	this->registration.Update();
 
-	//return registration.GetOutput();
-	return nullptr;
+	return registration.GetOutput();
 }
 
 void IOManager::slotOpenMultiImages()

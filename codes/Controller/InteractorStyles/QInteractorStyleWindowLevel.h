@@ -84,6 +84,7 @@ protected:
 
 
 private:
+	void initialization();
 	///< the pointer of the navigation ui.
 	Ui::QInteractorStyleWindowLevel *ui = nullptr;
 	QSpinBox* m_spinBoxWindowLevel;

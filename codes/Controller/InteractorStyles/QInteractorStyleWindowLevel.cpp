@@ -10,22 +10,6 @@ QSETUP_UI_SRC(QInteractorStyleWindowLevel);
 QInteractorStyleWindowLevel::QInteractorStyleWindowLevel(int uiType, QWidget * parent)
 {
 	QNEW_UI();
-	QSpinBox* spinBoxWindowLevel[] = {
-		ui->spinBoxWindowLevel0,
-		ui->spinBoxWindowLevel1,
-		ui->spinBoxWindowLevel2
-	};
-	QSpinBox* spinBoxWindowWidth[] = {
-		ui->spinBoxWindowWidth0,
-		ui->spinBoxWindowWidth1,
-		ui->spinBoxWindowWidth2
-	};
-	m_spinBoxWindowLevel = spinBoxWindowLevel[numOfMyself - 1];
-	m_spinBoxWindowWidth = spinBoxWindowWidth[numOfMyself - 1];
-	connect(m_spinBoxWindowLevel, SIGNAL(valueChanged(int)),
-		this, SLOT(SetLevel(int)), Qt::UniqueConnection);
-	connect(m_spinBoxWindowWidth, SIGNAL(valueChanged(int)),
-		this, SLOT(SetWindow(int)), Qt::UniqueConnection);
 }
 
 QInteractorStyleWindowLevel::~QInteractorStyleWindowLevel()
@@ -52,6 +36,26 @@ void QInteractorStyleWindowLevel::SetLevelByViewer(double level)
 	//if (int(m_level + 0.5) != level) {
 		m_spinBoxWindowLevel->setValue(level);
 	//}
+}
+
+void QInteractorStyleWindowLevel::initialization()
+{
+	QSpinBox* spinBoxWindowLevel[] = {
+		ui->spinBoxWindowLevel0,
+		ui->spinBoxWindowLevel1,
+		ui->spinBoxWindowLevel2
+	};
+	QSpinBox* spinBoxWindowWidth[] = {
+		ui->spinBoxWindowWidth0,
+		ui->spinBoxWindowWidth1,
+		ui->spinBoxWindowWidth2
+	};
+	m_spinBoxWindowLevel = spinBoxWindowLevel[numOfMyself - 1];
+	m_spinBoxWindowWidth = spinBoxWindowWidth[numOfMyself - 1];
+	connect(m_spinBoxWindowLevel, SIGNAL(valueChanged(int)),
+		this, SLOT(SetLevel(int)), Qt::UniqueConnection);
+	connect(m_spinBoxWindowWidth, SIGNAL(valueChanged(int)),
+		this, SLOT(SetWindow(int)), Qt::UniqueConnection);
 }
 
 void QInteractorStyleWindowLevel::SetCustomEnabled(bool flag)

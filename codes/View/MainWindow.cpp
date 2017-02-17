@@ -283,6 +283,16 @@ void MainWindow::clearModalityNames()
 	}
 }
 
+QMenu * MainWindow::getSelectImgMenu(unsigned int i)
+{
+	return selectImgMenus[i];
+}
+
+QList<QMenu*>* MainWindow::getSelectImgMenus()
+{
+	return &selectImgMenus;
+}
+
 
 void MainWindow::setEnabled(bool flag)
 {

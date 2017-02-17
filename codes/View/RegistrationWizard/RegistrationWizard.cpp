@@ -190,7 +190,7 @@ ImagePage::ImagePage(int numOfImages, QWidget *parent)
 
 	treeWidget = new QTreeWidget(this);
 	treeWidget->setHeaderLabels(headerList);
-	//treeWidget->setMinimumSize(1000, 400);
+	treeWidget->setMinimumSize(1000, 200);
 
 	progressBar = new QProgressBar(this);
 	progressBar->setRange(0, 100);

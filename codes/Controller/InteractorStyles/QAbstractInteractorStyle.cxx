@@ -6,29 +6,23 @@ QSETUP_UI_SRC(QAbstractInteractorStyle);
 void QAbstractInteractorStyle::uniqueInvoke(bool flag)
 {
 	// turn on for once
-	if (flag && flag != initializationFlag) {
+	if (flag && flag != getInitializationFlag()) {
 		uniqueEnable();
 	}
 	// turn off for once
-	if (!flag && flag != initializationFlag) {
+	if (!flag && flag != getInitializationFlag()) {
 		uniqueDisable();
 	}
 	// run any way for once
-	if (flag != initializationFlag) {
+	if (flag != getInitializationFlag()) {
 		uniqueCall();
 	}
-	initializationFlag = flag;
+	setInitializationFlag(flag);
 }
 
 QAbstractInteractorStyle::QAbstractInteractorStyle(int uiType, QWidget * parent)
 	:QWidget(parent) {
 	QNEW_UI();
-	if (numOfMyself == 1) {
-		// this will only run in the first class's construction
-		uniqueInitialization();
-	}
-	initialization();
-
 }
 
 QAbstractInteractorStyle::~QAbstractInteractorStyle() {

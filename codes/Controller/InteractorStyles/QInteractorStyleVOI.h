@@ -33,6 +33,8 @@ protected:
 
 
 private:
+	void uniqueInitialization();
+	void initialization();
 	// initialization value is nullptr, if there is an instance of QInteractorStyleROI
 	// m_roi will be created
 	static vtkSmartPointer<vtkROIWidget> m_roi;

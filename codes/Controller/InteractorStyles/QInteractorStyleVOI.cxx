@@ -21,7 +21,7 @@ void QInteractorStyleVOI::SetCustomEnabled(bool flag)
 {
 	QInteractorStyleNavigation::SetCustomEnabled(flag);
 	if (flag) {
-		m_roi->SetBorderWidgetsInteractor(m_uniqueROIId  - 1, this->Interactor);
+		m_roi->SetBorderWidgetsInteractor(m_uniqueROIId, this->Interactor);
 		m_roi->GetRepresentation()->PlaceWidget(
 			m_imageViewer->GetInput()->GetBounds());
 		m_roi->SetPositionPointer(
@@ -104,29 +104,6 @@ void QInteractorStyleVOI::ResetVOI()
 QInteractorStyleVOI::QInteractorStyleVOI(int uiType, QWidget * parent)
 {
 	QNEW_UI();
-	if (m_roi == nullptr) {
-		m_roi = vtkSmartPointer<vtkROIWidget>::New();
-		m_renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
-		m_renderWindow->OffScreenRenderingOn();
-		m_renderWindow->AddRenderer(vtkSmartPointer<vtkRenderer>::New());
-		vtkSmartPointer<vtkRenderWindowInteractor> interactor = 
-			vtkSmartPointer<vtkRenderWindowInteractor>::New();
-		m_renderWindow->SetInteractor(interactor);
-		//interactor->Start();
-		m_roi->SetInteractor(interactor);
-		m_roi->GetRepresentation()->SetPlaceFactor(1);
-	}
-	m_uniqueROIId = numOfMyself;
-	if (numOfMyself == 1) {
-		/// ROI
-		connect(m_roi, SIGNAL(signalROIBounds(double*)),
-			this, SLOT(slotUpdateVOISpinBoxes(double*)));
-	}
-	connect(ui->resetROIPushButton, SIGNAL(clicked()),
-		this, SLOT(ResetVOI()));
-	connect(ui->segmentationPushButton, SIGNAL(clicked()), 
-		this, SLOT(ExtractVOI()));
-
 }
 
 QInteractorStyleVOI::~QInteractorStyleVOI()
@@ -134,4 +111,33 @@ QInteractorStyleVOI::~QInteractorStyleVOI()
 	QDELETE_UI();
 	m_renderWindow = nullptr;
 	m_roi = nullptr;
+}
+
+void QInteractorStyleVOI::uniqueInitialization()
+{
+	if (m_roi == nullptr) {
+		m_roi = vtkSmartPointer<vtkROIWidget>::New();
+		m_renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+		m_renderWindow->OffScreenRenderingOn();
+		m_renderWindow->AddRenderer(vtkSmartPointer<vtkRenderer>::New());
+		vtkSmartPointer<vtkRenderWindowInteractor> interactor =
+			vtkSmartPointer<vtkRenderWindowInteractor>::New();
+		m_renderWindow->SetInteractor(interactor);
+		//interactor->Start();
+		m_roi->SetInteractor(interactor);
+		m_roi->GetRepresentation()->SetPlaceFactor(1);
+	}
+	/// ROI
+	connect(m_roi, SIGNAL(signalROIBounds(double*)),
+		this, SLOT(slotUpdateVOISpinBoxes(double*)));
+}
+
+void QInteractorStyleVOI::initialization()
+{
+	m_uniqueROIId = numOfMyself - 1;
+
+	connect(ui->resetROIPushButton, SIGNAL(clicked()),
+		this, SLOT(ResetVOI()));
+	connect(ui->segmentationPushButton, SIGNAL(clicked()),
+		this, SLOT(ExtractVOI()));
 }

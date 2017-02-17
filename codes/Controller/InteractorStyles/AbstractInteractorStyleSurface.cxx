@@ -54,29 +54,29 @@ void AbstractInteractorStyleSurface::AddSynchronalViewer(SurfaceViewer * imageVi
 
 //void AbstractInteractorStyleSurface::SetCurrentSlice(int slice)
 //{
-//	VIEWER_CONSTITERATOR(SetSlice(slice));
+//	SURFACE_VIEWER_CONSTITERATOR(SetSlice(slice));
+//}
+//
+//void AbstractInteractorStyleSurface::EnableSynchronalZooming(bool flag)
+//{
+//	this->m_synchronalZoomingFlag = flag;
+//	SynchronalZooming();
 //}
 
-void AbstractInteractorStyleSurface::EnableSynchronalZooming(bool flag)
-{
-	this->m_synchronalZoomingFlag = flag;
-	SynchronalZooming();
-}
-
-void AbstractInteractorStyleSurface::SynchronalZooming()
-{
-	if (!m_synchronalZoomingFlag)
-		return;
-	double scale = m_surfaceViewer->GetRenderer()->GetActiveCamera()->GetParallelScale();
-	VIEWER_CONSTITERATOR(GetRenderer()->GetActiveCamera()->SetParallelScale(scale));
-	VIEWER_CONSTITERATOR(Render());
-
-	//for (std::list<vtkImageViewer2*>::iterator it = m_synchronalViewers.begin();
-	//	it != m_synchronalViewers.end(); ++it) {
-	//	(*it)->GetRenderer()->GetActiveCamera()->SetParallelScale(scale);
-	//	(*it)->Render();
-	//}
-}
+//void AbstractInteractorStyleSurface::SynchronalZooming()
+//{
+//	if (!m_synchronalZoomingFlag)
+//		return;
+//	//double scale = m_surfaceViewer->GetRenderer()->GetActiveCamera()->GetParallelScale();
+//	//SURFACE_VIEWER_CONSTITERATOR(GetRenderer()->GetActiveCamera()->SetParallelScale(scale));
+//	//SURFACE_VIEWER_CONSTITERATOR(Render());
+//
+//	//for (std::list<vtkImageViewer2*>::iterator it = m_synchronalViewers.begin();
+//	//	it != m_synchronalViewers.end(); ++it) {
+//	//	(*it)->GetRenderer()->GetActiveCamera()->SetParallelScale(scale);
+//	//	(*it)->Render();
+//	//}
+//}
 //
 //int AbstractInteractorStyleSurface::GetSlice()
 //{

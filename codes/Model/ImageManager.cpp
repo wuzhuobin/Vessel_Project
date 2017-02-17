@@ -130,6 +130,15 @@ IVtkImageData * ImageManager::getImage(unsigned int i) const
 	return m_images[i];
 }
 
+IVtkImageData * ImageManager::getImage(QString modalityName) const
+{
+	unsigned int index = modalityName.indexOf(modalityName);
+	if (index < 0) {
+		return nullptr;
+	}
+	return getImage(index);
+}
+
 Overlay * ImageManager::getOverlay() const
 {
 	return m_overlay.data();
@@ -142,6 +151,11 @@ const QString ImageManager::getModalityName(unsigned int i) const
 	}
 
 	return m_modalityNames[i];
+}
+
+int ImageManager::getIndexOfModalityName(QString modalityName)
+{
+	return m_modalityNames.indexOf(modalityName);
 }
 
 const itk::GDCMImageIO::Pointer ImageManager::getDicomIO(unsigned int i) const

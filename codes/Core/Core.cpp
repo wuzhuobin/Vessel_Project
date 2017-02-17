@@ -1,8 +1,7 @@
 #include "Core.h"
 
-#include "ImageViewer.h"
-#include "QInteractorStyleNavigation.h"
-#include "QInteractorStyleWindowLevel.h"
+//#include "QInteractorStyleNavigation.h"
+//#include "QInteractorStyleWindowLevel.h"
 #include "Overlay.h"
 #include "ui_MainWindow.h"
 #include "ui_ModuleWidget.h"
@@ -24,6 +23,8 @@ Core::Core(QObject * parent)
 	ioManager(parent),
 	QObject(parent)
 {
+	ioManager.enableRegistration(true);
+
 
 	imageManager.setModalityName(0, "T2 Image");
 	imageManager.setModalityName(1, "MRA Image");
@@ -97,11 +98,7 @@ Core::Core(QObject * parent)
 	connect(mainWindow.getUi()->actionVBD_Smoker, SIGNAL(triggered()),
 		this, SLOT(slotVBDSmoker()));
 
-	// surface action
-	connect(mainWindow.getUi()->actionTraceball_camera, SIGNAL(triggered()),
-		this, SLOT(slotTrackballCamera()));
-	connect(mainWindow.getUi()->actionCenter_line, SIGNAL(triggered()),
-		this, SLOT(slotCenterLine()));
+
 
 	//connect(&mainWindow, SIGNAL(signalImageImportInitialize()),
 	//	&ioManager, SLOT(slotCleanListsOfFileNames()));
@@ -127,7 +124,20 @@ Core::Core(QObject * parent)
 		this, SLOT(slotOverlayToImageManager()));
 	connect(&mainWindow, SIGNAL(signalOverlayExportSave(QString)),
 		&ioManager, SLOT(slotSaveSegmentation(QString)));
+	
+	// change image
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		connect(mainWindow.getSelectImgMenu(i), SIGNAL(triggered(QAction*)),
+			this, SLOT(slotChangeImage(QAction*)));
+	}
 
+
+
+	// surface action
+	connect(mainWindow.getUi()->actionTraceball_camera, SIGNAL(triggered()),
+		this, SLOT(slotTrackballCamera()));
+	connect(mainWindow.getUi()->actionCenter_line, SIGNAL(triggered()),
+		this, SLOT(slotCenterLine()));
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
 		this, SLOT(slotUpdateSurfaceView()));
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
@@ -138,8 +148,6 @@ Core::Core(QObject * parent)
 		this, SLOT(slotChangeOpacity(int)));
 	connect(moduleWiget.getUi()->labelComboBox, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(slotUpdateOpacity(int)));
-
-
 
 
 	mainWindow.show();
@@ -285,6 +293,23 @@ void Core::slotVBDSmoker()
 	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
 }
 
+void Core::slotChangeImage(QAction * action)
+{
+	QMenu* selectImgMenu = static_cast<QMenu*>(sender());
+	int viewer = mainWindow.getSelectImgMenus()->indexOf(selectImgMenu);
+	int image = imageManager.getIndexOfModalityName(action->text());
+	slotChangeImage(viewer, image);
+}
+
+void Core::slotChangeImage(int viewer, int image)
+{
+	currentImage[viewer] = image;
+	imageViewers[viewer]->SetInputData(imageManager.getImage(currentImage[viewer]));
+	imageViewers[viewer]->Render();
+	imageViewers[viewer]->InitializeHeader(imageManager.getModalityName(currentImage[viewer]).toStdString());
+	imageViewers[viewer]->Render();
+}
+
 void Core::slotMultiPlanarView()
 {
 	slotChangeView(MULTIPLANAR_VIEW);
@@ -306,14 +331,14 @@ void Core::slotChangeView(unsigned int viewMode)
 		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 			// Change input to same image, default 0
 			// SetupInteractor should be ahead of InitializeHeader
-			imageViewers[i]->SetInputData(imageManager.getImage(DEFAULT_IMAGE));
+			imageViewers[i]->SetInputData(imageManager.getImage(currentImage[i]));
 			// Overlay settings
 			//imageViewers[i]->SetInputDataLayer(imageManager.getOverlay()->getData());
 			//imageViewers[i]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
 			
 			imageViewers[i]->SetSliceOrientation(i);
 			imageViewers[i]->Render();
-			imageViewers[i]->InitializeHeader(imageManager.getModalityName(DEFAULT_IMAGE).toStdString());
+			imageViewers[i]->InitializeHeader(imageManager.getModalityName(currentImage[i]).toStdString());
 			imageViewers[i]->Render();
 			// else only change input and viewer m_orientation
 			//imageViewers[i]->GetRenderWindow()->GetInteractor()->Enable();
@@ -356,12 +381,12 @@ void Core::slotChangeView(unsigned int viewMode)
 	}
 }
 
-
 void Core::slotUpdateSurfaceView()
 {
 	// temporary fix for real time updated.
 	vtkSmartPointer<vtkImageData> image = vtkSmartPointer<vtkImageData>::New();
 	image->ShallowCopy(imageManager.getOverlay()->getData());
+	//surfaceViewer->SetInputData(imageManager.getOverlay()->getData());
 	surfaceViewer->SetInputData(image);
 	surfaceViewer->SetLookupTable(imageManager.getOverlay()->getLookupTable());
 	surfaceViewer->GetRenderer()->ResetCameraClippingRange();
