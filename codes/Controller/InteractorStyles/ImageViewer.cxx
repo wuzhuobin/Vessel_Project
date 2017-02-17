@@ -52,12 +52,8 @@ vtkStandardNewMacro(ImageViewer);
 ImageViewer::ImageViewer(/*QObject* parent*/)
 	//:QObject(parent)
 {
-	this->CursorActor = NULL;
 	this->OverlayActor = vtkImageActor::New();
 	this->OverlayWindowLevel = vtkImageMapToWindowLevelColors::New();
-
-	//Setup the pipeline again because of Annotation
-	this->UnInstallPipeline();
 
 	// OrientationTextActor 
 	this->IntTextActor = vtkTextActor::New();
@@ -76,13 +72,13 @@ ImageViewer::ImageViewer(/*QObject* parent*/)
 	Cursor3D->Update();
 
 	CursorMapper = vtkPolyDataMapper::New();
-	CursorMapper->SetInputData(Cursor3D->GetOutput());
 
 	CursorActor = vtkActor::New();
-	CursorActor->SetMapper(CursorMapper);
 	CursorActor->GetProperty()->SetColor(0, 0, 1);
 	CursorActor->GetProperty()->SetLineStipplePattern(0xf0f0);
-
+	if (this->CursorActor && this->CursorMapper) {
+		this->CursorActor->SetMapper(this->CursorMapper);
+	}
 	//AnnotationRenderer
 	//AnnotationRenderer->SetLayer(1);
 
@@ -299,6 +295,10 @@ void ImageViewer::InstallPipeline()
 			this->OverlayWindowLevel->GetOutputPort());
 	}
 	// add cursor 
+	if (this->CursorMapper && this->Cursor3D) {
+		this->CursorMapper->SetInputConnection(this->Cursor3D->GetOutputPort());
+	}
+
 	if (this->Renderer && this->CursorActor)
 	{
 		this->Renderer->AddActor(this->CursorActor);
@@ -320,13 +320,15 @@ void ImageViewer::InstallPipeline()
 //----------------------------------------------------------------------------
 void ImageViewer::UnInstallPipeline()
 {
-	Superclass::UnInstallPipeline();
 	if (this->OverlayActor)
 	{
 		this->OverlayActor->GetMapper()->SetInputConnection(NULL);
 	}
 	if (this->Renderer && this->OverlayActor) {
 		this->Renderer->RemoveActor(OverlayActor);
+	}
+	if (this->CursorMapper) {
+		this->CursorMapper->SetInputConnection(nullptr);
 	}
 	if (this->Renderer && this->CursorActor)
 	{
@@ -345,6 +347,7 @@ void ImageViewer::UnInstallPipeline()
 			this->Renderer->RemoveActor(this->OrientationTextActor[i]);
 		}
 	}
+	vtkImageViewer2::UnInstallPipeline();
 }
 
 //----------------------------------------------------------------------------

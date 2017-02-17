@@ -24,12 +24,14 @@ endif()
 set(
 	VIEWER_SRC
 	${PROJECT_SOURCE_DIR}/ImageViewer.cxx
+	${PROJECT_SOURCE_DIR}/ResliceImageViewer.cxx
 	${PROJECT_SOURCE_DIR}/SurfaceViewer.cxx
 )
 
 set(
 	VIEWER_H
 	${PROJECT_SOURCE_DIR}/ImageViewer.h
+	${PROJECT_SOURCE_DIR}/ResliceImageViewer.h
 	${PROJECT_SOURCE_DIR}/SurfaceViewer.h	
 )
 

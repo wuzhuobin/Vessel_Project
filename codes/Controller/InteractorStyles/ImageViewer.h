@@ -116,13 +116,10 @@ public:
 
 	/**
 	 * Get/Set method of LookupTable
+	 * @param	LookupTable
 	 * @return	lookupTable
 	 */
 	virtual vtkLookupTable* GetLookupTable();
-	/**
-	 * Get/Set method of LookupTable
-	 * @param	LookupTable
-	 */
 	virtual void SetLookupTable(vtkLookupTable* LookupTable);
 
 	/**
@@ -263,14 +260,11 @@ protected:
 private:
 	ImageViewer(const ImageViewer&);  // Not implemented.
 	void operator=(const ImageViewer&);  // Not implemented.
-	inline vtkAlgorithm* GetInputAlgorithm() {
-		return vtkImageViewer2::GetInputAlgorithm(); }
-	inline vtkInformation* GetInputInformation() { 
-		return vtkImageViewer2::GetInputInformation(); }
-	inline void SetInputConnection(vtkAlgorithmOutput* input) {
+	void SetInputConnection(vtkAlgorithmOutput* input) {}
+	/*{
 		return vtkImageViewer2::SetInputConnection(input);
 	}
-
+*/
 
 };
 #endif // !__IMAGE_VIEWER_H__
