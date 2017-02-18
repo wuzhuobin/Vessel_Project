@@ -209,8 +209,8 @@ SurfaceViewer::SurfaceViewer()
 {
 	this->RenderWindow = nullptr;
 	this->Renderer = nullptr;
-	this->SurfaceActor = vtkActor::New();
-	this->SurfaceMapper = vtkPolyDataMapper::New();
+	this->SurfaceActors = vtkActorCollection::New();
+	//this->SurfaceMapper = vtkPolyDataMapper::New();
 	this->ImageResample = vtkImageResample::New();
 	this->ImageResample->SetInterpolationModeToCubic();
 	this->ImageResample->SetDimensionality(3);
@@ -235,8 +235,10 @@ SurfaceViewer::SurfaceViewer()
 	this->InteractorStyle = nullptr;
 	this->LookupTable = nullptr;
 
-	if (this->SurfaceActor && this->SurfaceMapper) {
-		this->SurfaceActor->SetMapper(this->SurfaceMapper);
+	for (int i = 0; i < INITIAL_ACTORS; ++i) {
+		vtkActor* actor = vtkActor::New();
+		actor->SetMapper(vtkPolyDataMapper::New());
+		this->SurfaceActors->AddItem(actor);
 	}
 
 	//this->Slice = 0;
@@ -333,6 +335,13 @@ void SurfaceViewer::InstallPipeline()
 		this->Interactor->SetInteractorStyle(this->InteractorStyle);
 		this->Interactor->SetRenderWindow(this->RenderWindow);
 	}
+
+	this->SurfaceActors->InitTraversal();
+	for (int i = 0; i < this->SurfaceActors->GetNumberOfItems(); ++i) {
+		if(this->Render)
+		this->Renderer->AddViewProp(this->SurfaceActors->GetNextActor());
+	}
+	
 	if (this->Renderer && this->SurfaceActor)
 	{
 		this->Renderer->AddViewProp(this->SurfaceActor);
