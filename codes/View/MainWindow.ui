@@ -884,6 +884,7 @@
     </property>
     <addaction name="actionTraceball_camera"/>
     <addaction name="actionCenter_line"/>
+    <addaction name="actionFind_maximum_radius"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuImage"/>
@@ -1440,6 +1441,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Traceball camera</string>
    </property>
@@ -1467,6 +1471,17 @@
    </property>
    <property name="toolTip">
     <string>Testing</string>
+   </property>
+  </action>
+  <action name="actionFind_maximum_radius">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Find maximum radius</string>
+   </property>
+   <property name="toolTip">
+    <string>Find maximum radius</string>
    </property>
   </action>
  </widget>

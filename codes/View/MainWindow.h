@@ -42,6 +42,7 @@ public:
 	~MainWindow();
 
 	void initialization();
+	void enableInteractor(bool flag);
 	//void setModuleWidget(QWidget* moduleWidget);
 
 	void addModalityNames(QString name);

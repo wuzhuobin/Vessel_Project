@@ -20,7 +20,7 @@ namespace Ui { class QInteractorStyleNavigation;}
  * @brief	Navigation.
  * using cursor to navigate. 
  */
-class QInteractorStyleNavigation : public QAbstractNavigation, 
+class QInteractorStyleNavigation: public QAbstractNavigation, 
 	public InteractorStyleNavigation
 {
 	Q_OBJECT;
@@ -33,14 +33,14 @@ public:
 	* @brief	Enabled/Disable this InteractorStyle.
 	* @param	flag	true, enable. false, disable. 
 	*/
-	virtual void SetCustomEnabled(bool flag);
+	virtual void SetCustomEnabled(bool flag) override;
 	/**
 	* @override
 	* @brief	function to set the focal point.
 	* @param	ijk	int[3] array to set the focal point
 	* @param	i, j, k	to set the focal point
 	*/
-	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
+	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k) override;
 
 protected:
 	/**
@@ -52,7 +52,7 @@ protected:
 	/**
 	 * @brief	Destructor.
 	 */
-	virtual ~QInteractorStyleNavigation();
+	virtual ~QInteractorStyleNavigation() override;
 	/**
 	* @override
 	* @brief	abstract funtion to call once.
@@ -61,7 +61,7 @@ protected:
 	* The #uniqueCall() function used to guarantee only call once.
 	* For updating the spinbox's boundaries.
 	*/
-	virtual void uniqueCall();
+	virtual void uniqueCall() override;
 
 private:
 	///< ui pointer.

@@ -49,6 +49,7 @@ private slots:
 	// Surface interactorStyle
 	void slotTrackballCamera();
 	void slotCenterLine();
+	void slotFindMaximumRadius();
 
 	// IADE specified
 	void slotVBDSmoker();
@@ -78,11 +79,9 @@ private:
 	int currentImage[MainWindow::NUM_OF_2D_VIEWERS] = {DEFAULT_IMAGE};
 	int currentSliceOrientation[MainWindow::NUM_OF_2D_VIEWERS] = {ImageViewer::SLICE_ORIENTATION_XY};
 	ImageViewer* imageViewers[MainWindow::NUM_OF_2D_VIEWERS];
-	//vtkRenderWindowInteractor* imageInteractor[MainWindow::NUM_OF_2D_VIEWERS];
 	IADEInteractorStyleSwitch* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
 
 	SurfaceViewer* surfaceViewer;
-	//vtkRenderWindowInteractor* surfaceInteractor;
 	IADEInteractorStyleSwitch3D* surfaceInteractorStyle;
 
 	void RenderALlViewers();

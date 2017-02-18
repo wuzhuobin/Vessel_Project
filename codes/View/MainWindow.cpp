@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 	ui = new Ui::MainWindow;
 	ui->setupUi(this);
 
+
 	settings = new QSettings("Setting.ini", QSettings::IniFormat, this);
 
 	for (int i = 0; i < NUM_OF_2D_VIEWERS; ++i) {
@@ -45,13 +46,13 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroupImage->addAction(ui->actionSeeds_placer);
 	actionGroupImage->addAction(ui->actionVBD_Smoker);
 	actionGroupImage->addAction(ui->actionTesting);
-
 	actionGroupImage->setExclusive(true);
 
 
 	QActionGroup* actionGroupSurface = new QActionGroup(this);
 	actionGroupSurface->addAction(ui->actionTraceball_camera);
 	actionGroupSurface->addAction(ui->actionCenter_line);
+	actionGroupSurface->addAction(ui->actionFind_maximum_radius);
 	actionGroupSurface->setExclusive(true);
 
 
@@ -244,7 +245,6 @@ void MainWindow::initialization()
 	ui->image3frame->setEnabled(true);
 	ui->image4frame->setEnabled(true);
 	ui->image1View->setEnabled(true);
-	ui->image1View->setEnabled(true);
 	ui->image2View->setEnabled(true);
 	ui->image3View->setEnabled(true);
 	ui->image4View->setEnabled(true);
@@ -252,6 +252,20 @@ void MainWindow::initialization()
 
 	ui->actionNavigation->trigger();
 
+}
+
+void MainWindow::enableInteractor(bool flag)
+{
+	if (!flag) {
+		ui->image1View->GetInteractor()->Disable();
+		ui->image2View->GetInteractor()->Disable();
+		ui->image3View->GetInteractor()->Disable();
+		ui->image4View->GetInteractor()->Disable();
+	}
+	ui->image1View->setEnabled(flag);
+	ui->image2View->setEnabled(flag);
+	ui->image3View->setEnabled(flag);
+	ui->image4View->setEnabled(flag);
 }
 
 //void MainWindow::setModuleWidget(QWidget * moduleWidget)

@@ -47,7 +47,7 @@ public:
 
 protected:
 	AbstractInteractorStyleSurface();
-	~AbstractInteractorStyleSurface();
+	virtual ~AbstractInteractorStyleSurface();
 
 	virtual void AddSynchronalViewer(SurfaceViewer* imageViewer);
 	//virtual void SynchronalZooming();

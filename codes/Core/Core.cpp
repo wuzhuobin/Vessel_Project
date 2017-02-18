@@ -138,6 +138,10 @@ Core::Core(QObject * parent)
 		this, SLOT(slotTrackballCamera()));
 	connect(mainWindow.getUi()->actionCenter_line, SIGNAL(triggered()),
 		this, SLOT(slotCenterLine()));
+	connect(mainWindow.getUi()->actionFind_maximum_radius, SIGNAL(triggered()),
+		this, SLOT(slotFindMaximumRadius()));
+
+	// update btn
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
 		this, SLOT(slotUpdateSurfaceView()));
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
@@ -283,6 +287,11 @@ void Core::slotCenterLine()
 {
 	surfaceInteractorStyle->SetInteractorStyleTo3DCenterLine();
 
+}
+
+void Core::slotFindMaximumRadius()
+{
+	surfaceInteractorStyle->SetInteractorStyleTo3DFindMaximumRadius();
 }
 
 void Core::slotVBDSmoker()
