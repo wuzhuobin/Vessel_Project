@@ -75,12 +75,12 @@ void SurfaceViewer::SetInputData(vtkImageData * in)
 	//this->MarchingCubes->SetInputData(in);
 	UpdateDisplayExtent();
 
-	if (!IsDepthPeelingSupported()) {
-		//if (!DepthPeelingSupportedFlag && this->Renderer) {
-		//	this->DepthSortPolyData->SetInputConnection(
-		//		this->WindowedSincPolyDataFilter->GetOutputPort());
-		//	this->SurfaceActor->GetMapper()->SetInputConnection(this->DepthSortPolyData->GetOutputPort());
-		//}
+	if (this->UseDepthPeeling && !IsDepthPeelingSupported()) {
+		if (!DepthPeelingSupportedFlag && this->UseDepthSorting && this->Renderer) {
+			this->DepthSortPolyData->SetInputConnection(
+				this->WindowedSincPolyDataFilter->GetOutputPort());
+			this->SurfaceActor->GetMapper()->SetInputConnection(this->DepthSortPolyData->GetOutputPort());
+		}
 	}
 }
 
@@ -261,7 +261,9 @@ SurfaceViewer::SurfaceViewer()
 
 	if (this->SurfaceActor && this->SurfaceMapper) {
 		// for make sure the Actor is not opaque
-		//this->SurfaceActor->GetProperty()->SetOpacity(0.9);
+		if (this->UseDepthPeeling) {
+			this->SurfaceActor->GetProperty()->SetOpacity(0.999999);
+		}
 		this->SurfaceActor->SetMapper(this->SurfaceMapper);
 	}
 
@@ -374,7 +376,7 @@ void SurfaceViewer::InstallPipeline()
 		this->SurfaceActor->GetMapper()->SetInputConnection(
 			this->WindowedSincPolyDataFilter->GetOutputPort());
 
-		if (!DepthPeelingSupportedFlag && this->Renderer) {
+		if (this->UseDepthSorting && !DepthPeelingSupportedFlag && this->Renderer) {
 			this->DepthSortPolyData->SetInputConnection(
 				this->WindowedSincPolyDataFilter->GetOutputPort());
 			this->SurfaceActor->GetMapper()->SetInputConnection(this->DepthSortPolyData->GetOutputPort());

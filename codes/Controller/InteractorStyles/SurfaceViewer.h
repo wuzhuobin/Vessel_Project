@@ -105,7 +105,7 @@ protected:
 	* >0.0 means a non-perfect image which in general results in faster rendering)
 	* @return TRUE if depth peeling could be set up
 	*/
-	bool SetupEnvironmentForDepthPeeling(int maxNoOfPeels = 100, double occlusionRatio = 0.1);
+	bool SetupEnvironmentForDepthPeeling(int maxNoOfPeels = 0, double occlusionRatio = 0.0);
 
 
 	//vtkImageMapToWindowLevelColors  *WindowLevel;
@@ -125,6 +125,8 @@ protected:
 
 	bool FirstRender = true;
 	bool DepthPeelingSupportedFlag = true;
+	bool UseDepthPeeling = true;
+	bool UseDepthSorting = false;
 	//int MaxNoOfPeels = 100;
 	//double OcclusionRatio = 0.1;
 

@@ -5,6 +5,14 @@ IF(COMMAND CMAKE_POLICY)
 ENDIF(COMMAND CMAKE_POLICY)
 
 project(IADE_Analyzer)
+
+# MSUT find vtk first
+#VTK
+find_package(VTK REQUIRED)
+if (NOT VTK_FOUND)
+	message(FATAL_ERROR "error: VTK is not found")
+endif()
+include(${VTK_USE_FILE})
 #ITK
 find_package(ITK REQUIRED)
 if (NOT ITK_FOUND)
@@ -12,12 +20,6 @@ if (NOT ITK_FOUND)
 endif()
 include(${ITK_USE_FILE})
 
-#VTK
-find_package(VTK REQUIRED)
-if (NOT VTK_FOUND)
-	message(FATAL_ERROR "error: VTK is not found")
-endif()
-include(${VTK_USE_FILE})
 
 #VMTK
 find_package(VMTK REQUIRED)

@@ -9,6 +9,9 @@
 #include <vtkActor.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkRenderWindowInteractor.h>
+#include <vtkThreshold.h>
+#include <vtkDataSetAttributes.h>
+#include <vtkGeometryFilter.h>
 
 
 #include <vtkvmtkCapPolyData.h>
@@ -109,12 +112,28 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::ClipAndCap()
 		vtkSmartPointer<vtkBox>::New();
 	clipBox->SetBounds(bounds);
 
+	vtkSmartPointer<vtkThreshold> Threshold =
+		vtkSmartPointer<vtkThreshold>::New();
+	Threshold->SetInputData(m_surfaceViewer->GetSurfaceActor()->GetMapper()->GetInput());
+	Threshold->ThresholdBetween(1,1);
+	Threshold->SetInputArrayToProcess(0, 0, 0, vtkDataObject::FIELD_ASSOCIATION_CELLS, vtkDataSetAttributes::SCALARS);
+	Threshold->Update();
+
+	vtkSmartPointer<vtkGeometryFilter> GeometryFilter =
+		vtkSmartPointer<vtkGeometryFilter>::New();
+	GeometryFilter->SetInputConnection(Threshold->GetOutputPort());
+	GeometryFilter->Update();
+
+
+
 	vtkSmartPointer<vtkClipPolyData> clipPolyData =
 		vtkSmartPointer<vtkClipPolyData>::New();
-	clipPolyData->SetInputData(m_surfaceViewer->GetSurfaceActor()->GetMapper()->GetInput());
+	clipPolyData->SetInputConnection(GeometryFilter->GetOutputPort());
+	//clipPolyData->SetInputData(m_surfaceViewer->GetSurfaceActor()->GetMapper()->GetInput());
 	clipPolyData->SetClipFunction(clipBox);
 	clipPolyData->InsideOutOn();
 	clipPolyData->Update();
+	//clipPolyData->GetOutput()->Print(cout);
 
 	vtkSmartPointer<vtkvmtkCapPolyData> capPolyData =
 		vtkSmartPointer<vtkvmtkCapPolyData>::New();
