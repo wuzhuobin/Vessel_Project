@@ -17,6 +17,7 @@ class vtkDiscreteMarchingCubes;
 class vtkLookupTable;
 class vtkImageResample;
 class vtkWindowedSincPolyDataFilter;
+class vtkDepthSortPolyData;
 
 class SurfaceViewer: public vtkObject
 {
@@ -64,6 +65,16 @@ public:
 	// Attach an interactor for the internal render window.
 	virtual void SetupInteractor(vtkRenderWindowInteractor* arg);
 
+
+	// Description:
+	// Create a window in memory instead of on the screen. This may not
+	// be supported for every type of window and on some windows you may
+	// need to invoke this prior to the first render.
+	virtual void SetOffScreenRendering(int flag);
+	virtual int GetOffScreenRendering();
+	vtkBooleanMacro(OffScreenRendering, int);
+
+
 protected:
 
 	SurfaceViewer();
@@ -72,22 +83,50 @@ protected:
 	virtual void InstallPipeline();
 	virtual void UnInstallPipeline();
 
+	
+	/**
+	* Find out whether this box supports depth peeling. Depth peeling requires
+	* a variety of openGL extensions and appropriate drivers.
+	* rendered to screen (this requires the box to support off screen rendering)
+	* @return	TRUE if depth peeling is supported, FALSE otherwise (which means
+	*			that another strategy must be used for correct rendering of translucent
+	*			geometry, e.g. CPU-based depth sorting)
+	*/
+	bool IsDepthPeelingSupported();
+
+	/**
+	* Setup the rendering environment for depth peeling (general depth peeling
+	* support is requested).
+	* @see IsDepthPeelingSupported()
+	* @param renderWindow a valid openGL-supporting render window
+	* @param renderer a valid renderer instance
+	* @param maxNoOfPeels maximum number of depth peels (multi-pass rendering)
+	* @param occulusionRation the occlusion ration (0.0 means a perfect image,
+	* >0.0 means a non-perfect image which in general results in faster rendering)
+	* @return TRUE if depth peeling could be set up
+	*/
+	bool SetupEnvironmentForDepthPeeling(int maxNoOfPeels = 100, double occlusionRatio = 0.1);
+
 
 	//vtkImageMapToWindowLevelColors  *WindowLevel;
 
-	vtkImageResample* ImageResample;
-	vtkDiscreteMarchingCubes* MarchingCubes;
-	vtkWindowedSincPolyDataFilter* WindowedSincPolyDataFilter;
-	vtkRenderWindow                 *RenderWindow;
-	vtkRenderer                     *Renderer;
-	vtkActor* SurfaceActor;
-	vtkPolyDataMapper* SurfaceMapper;
-	vtkRenderWindowInteractor       *Interactor;
-	vtkInteractorStyle         *InteractorStyle;
+	vtkImageResample* ImageResample = nullptr;
+	vtkDiscreteMarchingCubes* MarchingCubes = nullptr;
+	vtkWindowedSincPolyDataFilter* WindowedSincPolyDataFilter = nullptr;
+	vtkDepthSortPolyData* DepthSortPolyData = nullptr;
+	vtkRenderWindow* RenderWindow = nullptr;
+	vtkRenderer* Renderer = nullptr;
+	vtkActor* SurfaceActor = nullptr;
+	vtkPolyDataMapper* SurfaceMapper = nullptr;
+	vtkRenderWindowInteractor* Interactor = nullptr;
+	vtkInteractorStyle* InteractorStyle = nullptr;
 
 	vtkLookupTable* LookupTable = nullptr;
 
-	bool FirstRender;
+	bool FirstRender = true;
+	bool DepthPeelingSupportedFlag = true;
+	//int MaxNoOfPeels = 100;
+	//double OcclusionRatio = 0.1;
 
 
 	vtkAlgorithm* GetInputAlgorithm();

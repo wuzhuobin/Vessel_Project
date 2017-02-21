@@ -11,9 +11,11 @@
 #include <vtkImageData.h>
 #include <vtkObjectFactory.h>
 #include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
 #include <vtkLookupTable.h>
 #include <vtkWindowedSincPolyDataFilter.h>
 #include <vtkImageResample.h>
+#include <vtkDepthSortPolyData.h>
 
 #include <algorithm>
 
@@ -72,6 +74,14 @@ void SurfaceViewer::SetInputData(vtkImageData * in)
 	this->ImageResample->SetInputData(in);
 	//this->MarchingCubes->SetInputData(in);
 	UpdateDisplayExtent();
+
+	if (!IsDepthPeelingSupported()) {
+		//if (!DepthPeelingSupportedFlag && this->Renderer) {
+		//	this->DepthSortPolyData->SetInputConnection(
+		//		this->WindowedSincPolyDataFilter->GetOutputPort());
+		//	this->SurfaceActor->GetMapper()->SetInputConnection(this->DepthSortPolyData->GetOutputPort());
+		//}
+	}
 }
 
 vtkImageData * SurfaceViewer::GetInput()
@@ -116,7 +126,7 @@ void SurfaceViewer::SetLookupTable(vtkLookupTable* lookupTable)
 {
 	this->LookupTable = lookupTable;
 	MarchingCubes->GenerateValues(this->LookupTable->GetNumberOfTableValues(),
-		1, this->LookupTable->GetNumberOfTableValues());
+		0, this->LookupTable->GetNumberOfTableValues() - 1);
 	SurfaceMapper->SetScalarRange(0, this->LookupTable->GetNumberOfTableValues());
 	SurfaceMapper->SetLookupTable(lookupTable);
 	//SurfaceMapper->UseLookupTableScalarRangeOn();
@@ -205,6 +215,16 @@ void SurfaceViewer::SetupInteractor(vtkRenderWindowInteractor * arg)
 	}
 }
 
+void SurfaceViewer::SetOffScreenRendering(int flag)
+{
+	this->RenderWindow->SetOffScreenRendering(flag);
+}
+
+int SurfaceViewer::GetOffScreenRendering()
+{
+	return this->RenderWindow->GetOffScreenRendering();
+}
+
 SurfaceViewer::SurfaceViewer()
 {
 	this->RenderWindow = nullptr;
@@ -212,7 +232,7 @@ SurfaceViewer::SurfaceViewer()
 	this->SurfaceActor = vtkActor::New();
 	this->SurfaceMapper = vtkPolyDataMapper::New();
 	this->ImageResample = vtkImageResample::New();
-	this->ImageResample->SetInterpolationModeToCubic();
+	this->ImageResample->SetInterpolationModeToLinear();
 	this->ImageResample->SetDimensionality(3);
 	this->ImageResample->SetOutputSpacing(0.3,0.3,0.3);
 	this->MarchingCubes = vtkDiscreteMarchingCubes::New();
@@ -230,12 +250,18 @@ SurfaceViewer::SurfaceViewer()
 	this->WindowedSincPolyDataFilter->SetFeatureAngle(120.0);
 	this->WindowedSincPolyDataFilter->SetPassBand(0.001);
 
+	this->DepthSortPolyData = vtkDepthSortPolyData::New();
+	this->DepthSortPolyData->SetDirectionToBackToFront();
+	//this->DepthSortPolyData->SetVector(1, 1, 1);
+	this->DepthSortPolyData->SortScalarsOff();
 
 	this->Interactor = nullptr;
 	this->InteractorStyle = nullptr;
 	this->LookupTable = nullptr;
 
 	if (this->SurfaceActor && this->SurfaceMapper) {
+		// for make sure the Actor is not opaque
+		//this->SurfaceActor->GetProperty()->SetOpacity(0.9);
 		this->SurfaceActor->SetMapper(this->SurfaceMapper);
 	}
 
@@ -270,6 +296,10 @@ SurfaceViewer::~SurfaceViewer()
 	if (this->WindowedSincPolyDataFilter) {
 		this->WindowedSincPolyDataFilter->Delete();
 		this->WindowedSincPolyDataFilter = nullptr;
+	}
+	if(this->DepthSortPolyData) {
+		this->DepthSortPolyData->Delete();
+		this->DepthSortPolyData = nullptr;
 	}
 	if (this->SurfaceMapper) 
 	{
@@ -336,13 +366,23 @@ void SurfaceViewer::InstallPipeline()
 	if (this->Renderer && this->SurfaceActor)
 	{
 		this->Renderer->AddViewProp(this->SurfaceActor);
+		this->DepthSortPolyData->SetCamera(this->Renderer->GetActiveCamera());
 	}
 
 	if (this->SurfaceActor && this->WindowedSincPolyDataFilter)
 	{
 		this->SurfaceActor->GetMapper()->SetInputConnection(
 			this->WindowedSincPolyDataFilter->GetOutputPort());
+
+		if (!DepthPeelingSupportedFlag && this->Renderer) {
+			this->DepthSortPolyData->SetInputConnection(
+				this->WindowedSincPolyDataFilter->GetOutputPort());
+			this->SurfaceActor->GetMapper()->SetInputConnection(this->DepthSortPolyData->GetOutputPort());
+
+		}
 	}
+
+
 }
 
 void SurfaceViewer::UnInstallPipeline()
@@ -367,6 +407,51 @@ void SurfaceViewer::UnInstallPipeline()
 		this->Interactor->SetInteractorStyle(nullptr);
 		this->Interactor->SetRenderWindow(nullptr);
 	}
+}
+
+bool SurfaceViewer::IsDepthPeelingSupported()
+{
+	{
+		if (!this->RenderWindow || !this->Renderer)
+		{
+			return false;
+		}
+
+		DepthPeelingSupportedFlag = true;
+
+		// Setup environment for depth peeling (with some default parametrization)
+		this->DepthPeelingSupportedFlag = SetupEnvironmentForDepthPeeling();
+		// Do a test render
+		this->RenderWindow->Render();
+		// Check whether depth peeling was used
+		this->DepthPeelingSupportedFlag = this->Renderer->GetLastRenderingUsedDepthPeeling();
+
+		return this->DepthPeelingSupportedFlag;
+	}
+}
+
+bool SurfaceViewer::SetupEnvironmentForDepthPeeling(int maxNoOfPeels, double occlusionRatio)
+{
+	if (!RenderWindow || !Renderer)
+		return false;
+
+	// 1. Use a render window with alpha bits (as initial value is 0 (false)):
+	RenderWindow->SetAlphaBitPlanes(true);
+
+	// 2. Force to not pick a framebuffer with a multisample buffer
+	// (as initial value is 8):
+	RenderWindow->SetMultiSamples(0);
+
+	// 3. Choose to use depth peeling (if supported) (initial value is 0 (false)):
+	Renderer->SetUseDepthPeeling(true);
+
+	// 4. Set depth peeling parameters
+	// - Set the maximum number of rendering passes (initial value is 4):
+	Renderer->SetMaximumNumberOfPeels(maxNoOfPeels);
+	// - Set the occlusion ratio (initial value is 0.0, exact image):
+	Renderer->SetOcclusionRatio(occlusionRatio);
+
+	return true;
 }
 
 vtkAlgorithm * SurfaceViewer::GetInputAlgorithm()
