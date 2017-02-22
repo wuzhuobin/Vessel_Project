@@ -8,6 +8,7 @@ project(View)
 
 find_package(Qt5Core)
 find_package(Qt5Widgets)
+find_package(Qt5OpenGL)
 
 
 add_subdirectory(RegistrationWizard)
@@ -58,6 +59,7 @@ target_link_libraries(
 	View
 	Qt5::Core
 	Qt5::Widgets
+	Qt5::OpenGL
 	RegistrationWizard
 	)
 

@@ -72,7 +72,7 @@
           <number>1</number>
          </property>
          <item>
-          <widget class="QVTKWidget" name="image3View" native="true">
+          <widget class="QVTKWidget2" name="image3View" native="true">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -87,6 +87,9 @@
              <width>350</width>
              <height>350</height>
             </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::WheelFocus</enum>
            </property>
           </widget>
          </item>
@@ -216,7 +219,7 @@
           <number>1</number>
          </property>
          <item>
-          <widget class="QVTKWidget" name="image4View" native="true">
+          <widget class="QVTKWidget2" name="image4View" native="true">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -231,6 +234,9 @@
              <width>350</width>
              <height>350</height>
             </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::WheelFocus</enum>
            </property>
           </widget>
          </item>
@@ -454,7 +460,7 @@
           <number>1</number>
          </property>
          <item>
-          <widget class="QVTKWidget" name="image1View" native="true">
+          <widget class="QVTKWidget2" name="image1View" native="true">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -469,6 +475,9 @@
              <width>350</width>
              <height>350</height>
             </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::WheelFocus</enum>
            </property>
           </widget>
          </item>
@@ -636,7 +645,7 @@
           <number>1</number>
          </property>
          <item>
-          <widget class="QVTKWidget" name="image2View" native="true">
+          <widget class="QVTKWidget2" name="image2View" native="true">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -651,6 +660,9 @@
              <width>350</width>
              <height>350</height>
             </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::WheelFocus</enum>
            </property>
           </widget>
          </item>
@@ -1487,9 +1499,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QVTKWidget</class>
+   <class>QVTKWidget2</class>
    <extends>QWidget</extends>
-   <header>QVTKWidget.h</header>
+   <header>qvtkwidget2.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

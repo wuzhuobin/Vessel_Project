@@ -3,6 +3,7 @@
 #include <qdebug.h>
 #include <qsettings.h>
 #include <qfiledialog.h>
+#include <QVTKInteractor.h>
 
 #include <vtkRenderWindow.h>
 

@@ -13,8 +13,10 @@
 
 
 #include <qdebug.h>
+#include <QVTKInteractor.h>
 
 #include <vtkRenderWindowInteractor.h>
+#include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkLookupTable.h>
 
 Core::Core(QObject * parent)
@@ -36,7 +38,7 @@ Core::Core(QObject * parent)
 	mainWindow.addModalityNames("Image 3");
 
 
-	QVTKWidget* uiViewers[] = {
+	QVTKWidget2* uiViewers[] = {
 		mainWindow.getUi()->image1View,
 		mainWindow.getUi()->image2View,
 		mainWindow.getUi()->image3View,
@@ -47,28 +49,31 @@ Core::Core(QObject * parent)
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		
 		imageViewers[i] = ImageViewer::New();
+		imageViewers[i]->SetRenderWindow(uiViewers[i]->GetRenderWindow());
 		imageViewers[i]->SetupInteractor(uiViewers[i]->GetInteractor());
-		imageInteractorStyle[i] = IADEInteractorStyleSwitch::New();
-		imageInteractorStyle[i]->SetImageViewer(imageViewers[i]);
-		
+
 		// Never use below method to set the interactorsyle
 		//imageInteractorStyle[i]->SetInteractor(imageInteractor[i]);
+		imageInteractorStyle[i] = IADEInteractorStyleSwitch::New();
+		imageInteractorStyle[i]->SetImageViewer(imageViewers[i]);
 		uiViewers[i]->GetInteractor()->SetInteractorStyle(imageInteractorStyle[i]);
-		uiViewers[i]->SetRenderWindow(imageViewers[i]->GetRenderWindow());
+		
 	}
 
 	//surfaceInteractor = vtkRenderWindowInteractor::New();
 
 	surfaceViewer = SurfaceViewer::New();
-	surfaceViewer->EnableDepthPeelingOn();
+	surfaceViewer->SetRenderWindow(uiViewers[3]->GetRenderWindow());
 	surfaceViewer->SetupInteractor(uiViewers[3]->GetInteractor());
+	surfaceViewer->EnableDepthPeelingOn();
+	//surfaceViewer->EnableDepthSortingOn();
 
+
+	// Never use below method to set the interactorsyle
+	//surfaceInteractorStyle[i]->SetInteractor(imageInteractor[i]);
 	surfaceInteractorStyle = IADEInteractorStyleSwitch3D::New();
 	surfaceInteractorStyle->SetSurfaceViewer(surfaceViewer);
-	//surfaceInteractorStyle->SetCurrentStyleToTrackballCamera();
-	
 	uiViewers[3]->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle);
-	uiViewers[3]->SetRenderWindow(surfaceViewer->GetRenderWindow());
 
 
 	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
@@ -160,7 +165,7 @@ Core::Core(QObject * parent)
 
 Core::~Core()
 {
-	QVTKWidget* uiViewers[] = {
+	QVTKWidget2* uiViewers[] = {
 		mainWindow.getUi()->image1View,
 		mainWindow.getUi()->image2View,
 		mainWindow.getUi()->image3View,
