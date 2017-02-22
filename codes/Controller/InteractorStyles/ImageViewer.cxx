@@ -156,6 +156,12 @@ ImageViewer::~ImageViewer()
 
 }
 
+void ImageViewer::UpdateDisplayExtent(int * displayExtent)
+{
+	SetDisplayExtent(displayExtent);
+	UpdateDisplayExtent();
+}
+
 //----------------------------------------------------------------------------
 void ImageViewer::UpdateDisplayExtent()
 {

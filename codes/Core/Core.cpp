@@ -60,6 +60,7 @@ Core::Core(QObject * parent)
 	//surfaceInteractor = vtkRenderWindowInteractor::New();
 
 	surfaceViewer = SurfaceViewer::New();
+	surfaceViewer->EnableDepthPeelingOn();
 	surfaceViewer->SetupInteractor(uiViewers[3]->GetInteractor());
 
 	surfaceInteractorStyle = IADEInteractorStyleSwitch3D::New();

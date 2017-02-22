@@ -38,7 +38,6 @@ public:
 	// Set/Get the input image to the viewer.
 	virtual void SetInputData(vtkImageData *in);
 	virtual vtkImageData *GetInput();
-	virtual void SetInputConnection(vtkAlgorithmOutput* input);
 
 	virtual void UpdateDisplayExtent();
 
@@ -65,6 +64,13 @@ public:
 	// Attach an interactor for the internal render window.
 	virtual void SetupInteractor(vtkRenderWindowInteractor* arg);
 
+	vtkBooleanMacro(EnableDepthSorting, bool);
+	virtual void SetEnableDepthSorting(bool flag);
+
+
+	vtkBooleanMacro(EnableDepthPeeling, bool);
+	virtual void SetEnableDepthPeeling(bool flag);
+
 
 	// Description:
 	// Create a window in memory instead of on the screen. This may not
@@ -83,33 +89,6 @@ protected:
 	virtual void InstallPipeline();
 	virtual void UnInstallPipeline();
 
-	
-	/**
-	* Find out whether this box supports depth peeling. Depth peeling requires
-	* a variety of openGL extensions and appropriate drivers.
-	* rendered to screen (this requires the box to support off screen rendering)
-	* @return	TRUE if depth peeling is supported, FALSE otherwise (which means
-	*			that another strategy must be used for correct rendering of translucent
-	*			geometry, e.g. CPU-based depth sorting)
-	*/
-	bool IsDepthPeelingSupported();
-
-	/**
-	* Setup the rendering environment for depth peeling (general depth peeling
-	* support is requested).
-	* @see IsDepthPeelingSupported()
-	* @param renderWindow a valid openGL-supporting render window
-	* @param renderer a valid renderer instance
-	* @param maxNoOfPeels maximum number of depth peels (multi-pass rendering)
-	* @param occulusionRation the occlusion ration (0.0 means a perfect image,
-	* >0.0 means a non-perfect image which in general results in faster rendering)
-	* @return TRUE if depth peeling could be set up
-	*/
-	bool SetupEnvironmentForDepthPeeling(int maxNoOfPeels = 0, double occlusionRatio = 0.0);
-
-
-	//vtkImageMapToWindowLevelColors  *WindowLevel;
-
 	vtkImageResample* ImageResample = nullptr;
 	vtkDiscreteMarchingCubes* MarchingCubes = nullptr;
 	vtkWindowedSincPolyDataFilter* WindowedSincPolyDataFilter = nullptr;
@@ -124,17 +103,18 @@ protected:
 	vtkLookupTable* LookupTable = nullptr;
 
 	bool FirstRender = true;
-	bool DepthPeelingSupportedFlag = true;
-	bool UseDepthPeeling = true;
-	bool UseDepthSorting = false;
-	//int MaxNoOfPeels = 100;
-	//double OcclusionRatio = 0.1;
+	// MaxNoOfPeels maximum number of depth peels(multi - pass rendering)
+	int MaxNoOfPeels = 0;
+	// OcclusionRatio the occlusion ration(0.0 means a perfect image,
+	// >0.0 means a non - perfect image which in general results in faster rendering)
+	double OcclusionRatio = 0.0;
 
 
 	vtkAlgorithm* GetInputAlgorithm();
 	vtkInformation* GetInputInformation();
 
 private:
+	void SetInputConnection(vtkAlgorithmOutput* input); // not implemented
 
 };
 

@@ -83,8 +83,7 @@ void QInteractorStyleVOI::ExtractVOI()
 		//extent[i*2] = extent[i*2] > GetExtent()[i*2] ? extent[i*2] : GetExtent()[i*2];
 		//extent[i*2 + 1] = extent[i*2 + 1] < GetExtent()[i*2 + 1] ? extent[i*2 + 1] : GetExtent()[i*2 +1];
 	}
-	m_imageViewer->SetDisplayExtent(extent);
-	m_imageViewer->UpdateDisplayExtent();
+	m_imageViewer->UpdateDisplayExtent(extent);
 	m_imageViewer->Render();
 	//m_imageViewer->SetImageVOI(extent);
 	//m_imageViewer->SetOverlayVOI(extent);

@@ -139,6 +139,7 @@ public:
 	// be displayed since the current display extent is probably outside
 	// the new whole extent. Calling this method will ensure that the display
 	// extent is reset properly.
+	virtual void UpdateDisplayExtent(int* displayExtent);
 	virtual void UpdateDisplayExtent();
 	virtual void ResetDisplayExtent();
 

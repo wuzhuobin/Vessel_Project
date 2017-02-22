@@ -75,13 +75,7 @@ void SurfaceViewer::SetInputData(vtkImageData * in)
 	//this->MarchingCubes->SetInputData(in);
 	UpdateDisplayExtent();
 
-	if (this->UseDepthPeeling && !IsDepthPeelingSupported()) {
-		if (!DepthPeelingSupportedFlag && this->UseDepthSorting && this->Renderer) {
-			this->DepthSortPolyData->SetInputConnection(
-				this->WindowedSincPolyDataFilter->GetOutputPort());
-			this->SurfaceActor->GetMapper()->SetInputConnection(this->DepthSortPolyData->GetOutputPort());
-		}
-	}
+
 }
 
 vtkImageData * SurfaceViewer::GetInput()
@@ -215,6 +209,46 @@ void SurfaceViewer::SetupInteractor(vtkRenderWindowInteractor * arg)
 	}
 }
 
+void SurfaceViewer::SetEnableDepthSorting(bool flag)
+{
+	if (flag && this->WindowedSincPolyDataFilter && this->DepthSortPolyData) {
+		this->DepthSortPolyData->SetInputConnection(
+			this->WindowedSincPolyDataFilter->GetOutputPort());
+		this->SurfaceActor->GetMapper()->SetInputConnection(
+			this->DepthSortPolyData->GetOutputPort());
+
+	}
+	else if(this->WindowedSincPolyDataFilter){
+		this->SurfaceActor->GetMapper()->SetInputConnection(
+			this->WindowedSincPolyDataFilter->GetOutputPort());
+	}
+}
+
+void SurfaceViewer::SetEnableDepthPeeling(bool flag)
+{
+	if (this->RenderWindow || !this->Renderer) {
+		// 1. Use a render window with alpha bits (as initial value is 0 (false)):
+		this->RenderWindow->SetAlphaBitPlanes(flag);
+
+		if (flag) {
+			// 2. Force to not pick a framebuffer with a multisample buffer
+			// (as initial value is 8):
+			this->RenderWindow->SetMultiSamples(0);
+		}
+		else {
+			this->RenderWindow->SetMultiSamples(8);
+		}
+
+		// 3. Choose to use depth peeling (if supported) (initial value is 0 (false)):
+		this->Renderer->SetUseDepthPeeling(flag);
+		// 4. Set depth peeling parameters
+		// - Set the maximum number of this->Rendering passes (initial value is 4):
+		this->Renderer->SetMaximumNumberOfPeels(this->MaxNoOfPeels);
+		// - Set the occlusion ratio (initial value is 0.0, exact image):
+		this->Renderer->SetOcclusionRatio(this->OcclusionRatio);
+	}
+}
+
 void SurfaceViewer::SetOffScreenRendering(int flag)
 {
 	this->RenderWindow->SetOffScreenRendering(flag);
@@ -261,9 +295,6 @@ SurfaceViewer::SurfaceViewer()
 
 	if (this->SurfaceActor && this->SurfaceMapper) {
 		// for make sure the Actor is not opaque
-		if (this->UseDepthPeeling) {
-			this->SurfaceActor->GetProperty()->SetOpacity(0.999999);
-		}
 		this->SurfaceActor->SetMapper(this->SurfaceMapper);
 	}
 
@@ -375,15 +406,7 @@ void SurfaceViewer::InstallPipeline()
 	{
 		this->SurfaceActor->GetMapper()->SetInputConnection(
 			this->WindowedSincPolyDataFilter->GetOutputPort());
-
-		if (this->UseDepthSorting && !DepthPeelingSupportedFlag && this->Renderer) {
-			this->DepthSortPolyData->SetInputConnection(
-				this->WindowedSincPolyDataFilter->GetOutputPort());
-			this->SurfaceActor->GetMapper()->SetInputConnection(this->DepthSortPolyData->GetOutputPort());
-
-		}
 	}
-
 
 }
 
@@ -409,51 +432,6 @@ void SurfaceViewer::UnInstallPipeline()
 		this->Interactor->SetInteractorStyle(nullptr);
 		this->Interactor->SetRenderWindow(nullptr);
 	}
-}
-
-bool SurfaceViewer::IsDepthPeelingSupported()
-{
-	{
-		if (!this->RenderWindow || !this->Renderer)
-		{
-			return false;
-		}
-
-		DepthPeelingSupportedFlag = true;
-
-		// Setup environment for depth peeling (with some default parametrization)
-		this->DepthPeelingSupportedFlag = SetupEnvironmentForDepthPeeling();
-		// Do a test render
-		this->RenderWindow->Render();
-		// Check whether depth peeling was used
-		this->DepthPeelingSupportedFlag = this->Renderer->GetLastRenderingUsedDepthPeeling();
-
-		return this->DepthPeelingSupportedFlag;
-	}
-}
-
-bool SurfaceViewer::SetupEnvironmentForDepthPeeling(int maxNoOfPeels, double occlusionRatio)
-{
-	if (!RenderWindow || !Renderer)
-		return false;
-
-	// 1. Use a render window with alpha bits (as initial value is 0 (false)):
-	RenderWindow->SetAlphaBitPlanes(true);
-
-	// 2. Force to not pick a framebuffer with a multisample buffer
-	// (as initial value is 8):
-	RenderWindow->SetMultiSamples(0);
-
-	// 3. Choose to use depth peeling (if supported) (initial value is 0 (false)):
-	Renderer->SetUseDepthPeeling(true);
-
-	// 4. Set depth peeling parameters
-	// - Set the maximum number of rendering passes (initial value is 4):
-	Renderer->SetMaximumNumberOfPeels(maxNoOfPeels);
-	// - Set the occlusion ratio (initial value is 0.0, exact image):
-	Renderer->SetOcclusionRatio(occlusionRatio);
-
-	return true;
 }
 
 vtkAlgorithm * SurfaceViewer::GetInputAlgorithm()
