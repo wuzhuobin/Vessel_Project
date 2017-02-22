@@ -6,14 +6,12 @@
 
 #include "MainWindow.h"
 #include "ModuleWidget.h"
-#include "ImageManager.h"
 #include "IADEIOManager.h"
 #include "IADEImageManager.h"
 #include "IADEInteractorStyleSwitch.h"
 #include "IADEInteractorStyleSwitch3D.h"
 #include "SurfaceViewer.h"
 #include "ImageViewer.h"
-//#include <vtkInteractorStyleSwitch.h>
 
 
 class Core: public QObject

@@ -3,7 +3,7 @@
 
 #include "InteractorStyleSwitch3D.h"
 #include "InteractorStyleSurfaceCenterLineSimpleClipping.h"
-#include "InteractorStyleSurfaceCenterLineFindMaximumRadius.h"
+#include "InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius.h"
 
 
 class IADEInteractorStyleSwitch3D: public InteractorStyleSwitch3D
@@ -15,7 +15,7 @@ public:
 	SetInteractorStyle3DMacro(CenterLine);
 	CurrentStyle3DMacro(CenterLine);
 
-	vtkGetMacro(FindMaximumRadius, InteractorStyleSurfaceCenterLineFindMaximumRadius*);
+	vtkGetMacro(FindMaximumRadius, InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius*);
 	SetInteractorStyle3DMacro(FindMaximumRadius);
 	CurrentStyle3DMacro(FindMaximumRadius);
 
@@ -23,7 +23,7 @@ protected:
 	IADEInteractorStyleSwitch3D();
 
 	InteractorStyleSurfaceCenterLineSimpleClipping* CenterLine;
-	InteractorStyleSurfaceCenterLineFindMaximumRadius* FindMaximumRadius;
+	InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius* FindMaximumRadius;
 
 
 private:

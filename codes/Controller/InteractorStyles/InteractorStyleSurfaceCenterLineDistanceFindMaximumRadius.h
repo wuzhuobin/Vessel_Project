@@ -9,24 +9,24 @@ class vtkPolyData;
 class vtkTextActor;
 
 
-class InteractorStyleSurfaceCenterLineFindMaximumRadius :
+class InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius :
 	public InteractorStyleSurfaceCenterLineSimpleClipping
 {
 public:
 
 	const static unsigned int NUM_OF_SEEDS = 2;
 
-	vtkTypeMacro(InteractorStyleSurfaceCenterLineFindMaximumRadius,
+	vtkTypeMacro(InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius,
 		InteractorStyleSurfaceCenterLineSimpleClipping);
-	static InteractorStyleSurfaceCenterLineFindMaximumRadius* New();
+	static InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius* New();
 
 	virtual void SetCustomEnabled(bool flag) override;
 
 
 protected:
 
-	InteractorStyleSurfaceCenterLineFindMaximumRadius();
-	virtual ~InteractorStyleSurfaceCenterLineFindMaximumRadius() override;
+	InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius();
+	virtual ~InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius() override;
 
 	virtual void CreateCenterLine() override;
 	virtual void InitializationSeeds();

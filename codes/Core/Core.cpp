@@ -1,20 +1,15 @@
 #include "Core.h"
 
-//#include "QInteractorStyleNavigation.h"
-//#include "QInteractorStyleWindowLevel.h"
-#include "Overlay.h"
+#include "IADEOverlay.h"
 #include "ui_MainWindow.h"
 #include "ui_ModuleWidget.h"
-#include "SurfaceViewer.h"
 
-#include <vtkRenderer.h>
-
-//#include <vtkInteractorStyleSwitch.h>
 
 
 #include <qdebug.h>
 #include <QVTKInteractor.h>
 
+#include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkLookupTable.h>

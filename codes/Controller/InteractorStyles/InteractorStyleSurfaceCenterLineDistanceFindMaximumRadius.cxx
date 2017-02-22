@@ -1,4 +1,4 @@
-#include "InteractorStyleSurfaceCenterLineFindMaximumRadius.h"
+#include "InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius.h"
 
 #include "SurfaceViewer.h"
 
@@ -21,11 +21,33 @@
 #include <vtkTextProperty.h>
 #include <vtkRenderer.h>
 
+#include <vtkDijkstraGraphInternals.h>
+class vtkDijkstraGraphGeodesicPathDistance : public vtkDijkstraGraphGeodesicPath {
 
-vtkStandardNewMacro(InteractorStyleSurfaceCenterLineFindMaximumRadius);
+public:
+	static vtkDijkstraGraphGeodesicPathDistance* New() { return new vtkDijkstraGraphGeodesicPathDistance(); }
+	double GetGeodesicPathDistance(int vertexId) {
+		try
+		{
+			return this->Internals->CumulativeWeights.at(vertexId);
+		}
+		catch (const std::out_of_range& e)
+		{
+			cerr << e.what();
+			vtkErrorMacro(<< e.what());
+			return VTK_DOUBLE_MAX;
+		}
 
+	}
+	//vtkGetMacro(GeodesicPathDistance, double);
+protected:
+	double GeodesicPathDistance = 0;
 
-void InteractorStyleSurfaceCenterLineFindMaximumRadius::SetCustomEnabled(bool flag)
+};
+
+vtkStandardNewMacro(InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius);
+
+void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled(bool flag)
 {
 	InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(flag);
 	if (m_customFlag) {
@@ -42,7 +64,7 @@ void InteractorStyleSurfaceCenterLineFindMaximumRadius::SetCustomEnabled(bool fl
 
 }
 
-InteractorStyleSurfaceCenterLineFindMaximumRadius::InteractorStyleSurfaceCenterLineFindMaximumRadius()
+InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius()
 {
 	m_radiusText =
 		vtkSmartPointer<vtkTextActor>::New();
@@ -51,16 +73,16 @@ InteractorStyleSurfaceCenterLineFindMaximumRadius::InteractorStyleSurfaceCenterL
 	m_radiusText->GetTextProperty()->SetColor(1.0, 0.0, 0.0);
 }
 
-InteractorStyleSurfaceCenterLineFindMaximumRadius::~InteractorStyleSurfaceCenterLineFindMaximumRadius()
+InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::~InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius()
 {
 }
 
-void InteractorStyleSurfaceCenterLineFindMaximumRadius::CreateCenterLine()
+void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::CreateCenterLine()
 {
 	InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine();
 }
 
-void InteractorStyleSurfaceCenterLineFindMaximumRadius::InitializationSeeds()
+void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializationSeeds()
 {
 	vtkSmartPointer<vtkCleanPolyData> cleanPolyData =
 		vtkSmartPointer<vtkCleanPolyData>::New();
@@ -112,27 +134,31 @@ void InteractorStyleSurfaceCenterLineFindMaximumRadius::InitializationSeeds()
 	//writer->Write();
 }
 
-void InteractorStyleSurfaceCenterLineFindMaximumRadius::FindMaximumRadius()
+void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::FindMaximumRadius()
 {
 	double worldPos[3];
 	m_seedWidget->GetSeedRepresentation()->GetSeedWorldPosition(0, worldPos);
 	vtkIdType seed1 = m_pointLocator->FindClosestPoint(worldPos);
 	m_seedWidget->GetSeedRepresentation()->GetSeedWorldPosition(1, worldPos);
 	vtkIdType seed2 = m_pointLocator->FindClosestPoint(worldPos);
-	vtkSmartPointer<vtkDijkstraGraphGeodesicPath> dijkstra =
-		vtkSmartPointer<vtkDijkstraGraphGeodesicPath>::New();
+	vtkSmartPointer<vtkDijkstraGraphGeodesicPathDistance> dijkstra =
+		vtkSmartPointer<vtkDijkstraGraphGeodesicPathDistance>::New();
 	dijkstra->SetInputData(m_triangulatedCenterLine);
 	dijkstra->SetStartVertex(seed1);
 	//dijkstra->SetRepelVertices(repelVertices);
 	//dijkstra->RepelPathFromVerticesOn();
 	dijkstra->SetEndVertex(seed2);
+	dijkstra->StopWhenEndReachedOn();
 	dijkstra->Update();
 	vtkIdList* pathPointId = dijkstra->GetIdList();
 	//vtkSmartPointer<vtkDoubleArray> radius =
 	//	vtkSmartPointer<vtkDoubleArray>::New();
 	//radius->SetNumberOfValues(pathPointId->GetNumberOfIds());
-	double maxRadius = 0;
+	double maxRadius = VTK_DOUBLE_MIN;
+	double minRadius = VTK_DOUBLE_MAX;
+	double GeodesicPathDistance = 0;
 	vtkIdType maxRadiusId = 0;
+	vtkIdType minRadiusId = 0;
 	for (vtkIdType id = 0; id < pathPointId->GetNumberOfIds(); ++id) {
 		vtkIdType _pointId = pathPointId->GetId(id);
 		double* value = static_cast<double*>(
@@ -141,17 +167,24 @@ void InteractorStyleSurfaceCenterLineFindMaximumRadius::FindMaximumRadius()
 			maxRadius = *value;
 			maxRadiusId = _pointId;
 		}
+		if (*value < minRadius) {
+			minRadius = *value;
+			minRadiusId = _pointId;
+		}
 		//cout << "point id = " << id << endl;
 		//double* point = m_centerLine->GetPoint(pathPointId->GetId(id));
 		//cout << point[0] << ' ' << point[1] << ' ' << point[2] << endl;
 	}
-	cout << "maximun radius " << maxRadiusId << " is " << maxRadius << endl;
-	char buff[10];
-	sprintf(buff, "%.2f", maxRadius);
+	cout << "maximum radius " << maxRadiusId << " is " << maxRadius << endl;
+	cout << "minimum radius " << minRadiusId << " is " << minRadius << endl;
+	GeodesicPathDistance = dijkstra->GetGeodesicPathDistance(seed2);
+	cout << GeodesicPathDistance << endl;
+	char buff[100];
+	sprintf(buff, "Maximum radius: %.2f mm\n Minimum radius: %.2f mm\n Center line length: %.2f mm", maxRadius, minRadius, GeodesicPathDistance);
 	m_radiusText->SetInput(buff);
 }
 
-void InteractorStyleSurfaceCenterLineFindMaximumRadius::OnKeyPress()
+void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::OnKeyPress()
 {
 	std::string key = this->Interactor->GetKeySym();
 	cout << key << endl;
@@ -170,3 +203,5 @@ void InteractorStyleSurfaceCenterLineFindMaximumRadius::OnKeyPress()
 		InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress();
 	}
 }
+
+

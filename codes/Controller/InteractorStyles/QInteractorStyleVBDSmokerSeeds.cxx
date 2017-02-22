@@ -1,138 +1,71 @@
 #include <vtkObjectFactory.h>
 #include "QInteractorStyleVBDSmokerSeeds.h"
+#include "ui_QInteractorStyleVBDSmokerSeeds.h"
 #include "ImageViewer.h"
 
+#include <vtkHandleWidget.h>
 
-#include "ui_QInteractorStyleVBDSmokerSeeds.h"
-
-#include <qmessagebox.h>
-#include <qlist.h>
-
-using namespace std;
 
 vtkStandardNewMacro(QInteractorStyleVBDSmokerSeeds);
 QSETUP_UI_SRC(QInteractorStyleVBDSmokerSeeds);
 
 void QInteractorStyleVBDSmokerSeeds::SetCustomEnabled(bool flag)
 {
-	InteractorStyleSeedsPlacer::SetCustomEnabled(flag);
+	InteractorStyleNavigation::SetCustomEnabled(flag);
 	uniqueInvoke(flag);
 }
 
 void QInteractorStyleVBDSmokerSeeds::SetCurrentFocalPointWithImageCoordinate(int i, int j, int k)
 {
-	InteractorStyleSeedsPlacer::SetCurrentFocalPointWithImageCoordinate(i, j, k);
+	InteractorStyleNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
 	QAbstractNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
 }
 
-
-void QInteractorStyleVBDSmokerSeeds::SlotClearAllSeeds()
+void QInteractorStyleVBDSmokerSeeds::uniqueEnable()
 {
-	ClearAllSeeds();
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleVBDSmokerSeeds, ClearAllSeedWidget());
-	ui->listWidgetSeedList->clear();
-	m_imageViewer->Render();
-}
+	QAbstractNavigation::uniqueEnable();
+	int* extent = GetExtent();
+	ui->spinBoxBasilarArteryBifurcationLocation->setRange(extent[4], extent[5]);
+	ui->spinBoxPonsCentralSectionLocation->setRange(extent[4], extent[5]);
 
-void QInteractorStyleVBDSmokerSeeds::SetFocalSeed(int i)
-{
-	if (i < 0)
-		return;
-	QList<int*> _seeds = QList<int*>::fromStdList(m_seeds);
-	int imageCoordinate[3];
-	double worldCoordinate[3];
-
-	memcpy(imageCoordinate, _seeds[i], sizeof(imageCoordinate));
-	SetCurrentFocalPointWithImageCoordinate(imageCoordinate[0], imageCoordinate[1],
-		imageCoordinate[2]);
-
-	for (int pos = 0; pos < 3; ++pos) {
-		worldCoordinate[pos] = imageCoordinate[pos] * GetSpacing()[pos] - GetOrigin()[i];
+	for (int i = 0; i < NUM_OF_SPHERE_WIDGET; i++)
+	{
+		m_handleWidgets[i] = vtkSmartPointer<vtkHandleWidget>::New();
+		(m_handleWidgets[i])->SetInteractor(this->Interactor);
+		(m_handleWidgets[i])->CreateDefaultRepresentation();
+		
 	}
 
-	//char label[60];
-	//sprintf_s(label, "(%.3f, %.3f, %.3f)", worldCoordinate[0], worldCoordinate[1], worldCoordinate[2]);
-	QString label = "(" + QString::number(worldCoordinate[0], 'f', 3) + "," +
-		QString::number(worldCoordinate[1], 'f', 3) + "," +
-		QString::number(worldCoordinate[2], 'f', 3) + ")";
-	/// change label text
-	this->ui->labelSeedCoordinate->setText(label);
+	connect(ui->pushButtonBasilarArteryBifurcationLocation0, SIGNAL(toggled(bool)),
+		this, SLOT(slotEnableTest(bool)));
 }
 
-void QInteractorStyleVBDSmokerSeeds::DeleteFocalSeed()
+void QInteractorStyleVBDSmokerSeeds::uniqueDisable()
 {
-	QList<int*> _seeds = QList<int*>::fromStdList(m_seeds);
-	int i = ui->listWidgetSeedList->currentRow();
-	if (i >= 0 && i < _seeds.size()) {
-		ui->listWidgetSeedList->removeItemWidget(
-			ui->listWidgetSeedList->takeItem(i));
-		m_seeds.remove(_seeds[i]);
-		delete _seeds[i];
-	}
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleVBDSmokerSeeds, ClearAllSeedWidget());
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleVBDSmokerSeeds, GenerateWidgetFromSeeds());
-	MY_VIEWER_CONSTITERATOR(Render());
-}
-
-void QInteractorStyleVBDSmokerSeeds::SaveWidgetToSeeds()
-{
-	InteractorStyleSeedsPlacer::SaveWidgetToSeeds();
-	ui->listWidgetSeedList->clear();
-	for (list<int*>::const_iterator cit = m_seeds.cbegin(); cit != m_seeds.cend(); ++cit) {
-		QString listItem = "Seed Index: [" +
-			QString::number((*cit)[0]) + "," +
-			QString::number((*cit)[1]) + "," +
-			QString::number((*cit)[2]) + "]";
-		ui->listWidgetSeedList->addItem(listItem);
-		//++i;
+	for (int i = 0; i < NUM_OF_SPHERE_WIDGET; i++)
+	{
+		m_handleWidgets[i] = nullptr;
 	}
 }
 
-void QInteractorStyleVBDSmokerSeeds::DropSeed()
+void QInteractorStyleVBDSmokerSeeds::slotBasilarArteryBifurcationLocationCurrentSlice() 
 {
-	InteractorStyleSeedsPlacer::DropSeed();
-}
-#include <vtkExtractVOI.h>
-#include <vtkSmartPointer.h>
-#include <vtkImageAccumulate.h>
-#include <vtkImageData.h>
-void QInteractorStyleVBDSmokerSeeds::SlotVBDSmokerUpdate()
-{
-	if (m_seeds.size() < 11) {
-		QMessageBox::critical(this, "Not enough points", "At least 11 points");
-		return;
-	}
-	QList<int*> _seeds = QList<int*>::fromStdList(m_seeds);
-
-	for (int i = 0; i < 4; ++i) {
-		vtkSmartPointer<vtkExtractVOI> extractVOI =
-			vtkSmartPointer<vtkExtractVOI>::New();
-		extractVOI->SetInputData(m_imageViewer->GetInputLayer());
-		extractVOI->SetVOI(m_imageViewer->GetDisplayExtent()[0], m_imageViewer->GetDisplayExtent()[1], m_imageViewer->GetDisplayExtent()[2], m_imageViewer->GetDisplayExtent()[3],
-			_seeds[i][2], _seeds[i + 1][2]);
-		if (i == 3) {
-			extractVOI->SetVOI(m_imageViewer->GetDisplayExtent()[0], m_imageViewer->GetDisplayExtent()[1], m_imageViewer->GetDisplayExtent()[2], m_imageViewer->GetDisplayExtent()[3],
-				_seeds[i][2], m_imageViewer->GetDisplayExtent()[5]);
-		}
-		extractVOI->Update();
-
-		vtkSmartPointer<vtkImageAccumulate> imageAccumulate =
-			vtkSmartPointer<vtkImageAccumulate>::New();
-		imageAccumulate->SetInputConnection(extractVOI->GetOutputPort());
-		imageAccumulate->SetComponentExtent(0, 0, 0, 0, 0, 0);
-		imageAccumulate->SetComponentOrigin(1, 0, 0);
-		imageAccumulate->SetComponentSpacing(1, 0, 0);
-		imageAccumulate->IgnoreZeroOn();
-		imageAccumulate->Update();
-		int* output = static_cast<int*>(imageAccumulate->GetOutput()->GetScalarPointer());
-		cout <<i << " " << output[0] << endl;
-		if (output[0] > 1) {
-			ui->spinBoxProlongation->setValue(i);
-		}
-	}
-
+	int ijk[3];
+	m_imageViewer->GetFocalPointWithImageCoordinate(ijk);
+	ui->spinBoxBasilarArteryBifurcationLocation->setValue(ijk[2]);
 }
 
+void QInteractorStyleVBDSmokerSeeds::slotPonsCentralSectionLocationCurrentSlice()
+{
+	int ijk[3];
+	m_imageViewer->GetFocalPointWithImageCoordinate(ijk);
+	ui->spinBoxPonsCentralSectionLocation->setValue(ijk[2]);
+}
+
+void QInteractorStyleVBDSmokerSeeds::slotEnableTest(bool flag)
+{
+	(m_handleWidgets[0])->SetEnabled(flag);
+}
 
 QInteractorStyleVBDSmokerSeeds::QInteractorStyleVBDSmokerSeeds(int uiType, QWidget * parent)
 {
@@ -144,42 +77,19 @@ QInteractorStyleVBDSmokerSeeds::~QInteractorStyleVBDSmokerSeeds()
 	QDELETE_UI();
 }
 
-void QInteractorStyleVBDSmokerSeeds::UpdateWidgetToSeeds(int * oldImagePos, int * newImagePos)
-{
-	InteractorStyleSeedsPlacer::UpdateWidgetToSeeds(oldImagePos, newImagePos);
-	ui->listWidgetSeedList->clear();
-	//QList<int*> _seeds = QList<int*>::fromStdList(m_seeds);
-	//for (QList<int*>::ConstIterator cit = _seeds.cbegin(); cit != _seeds.cend(); ++cit) {
-	//	ui->listWidgetSeedList->insertItem()
-	//}
-	//int i = 0;
-	for (list<int*>::const_iterator cit = m_seeds.cbegin(); cit != m_seeds.cend(); ++cit) {
-		QString listItem = "Seed Index: [" +
-			QString::number((*cit)[0]) + "," +
-			QString::number((*cit)[1]) + "," +
-			QString::number((*cit)[2]) + "]";
-		ui->listWidgetSeedList->addItem(listItem);
-		//++i;
-	}
-}
 
 void QInteractorStyleVBDSmokerSeeds::uniqueInitialization()
 {
-	connect(ui->pushButtonDeleteSeed, SIGNAL(clicked()),
-		this, SLOT(DeleteFocalSeed()));
+	QAbstractNavigation::uniqueInitialization();
 
-	connect(ui->listWidgetSeedList, SIGNAL(currentRowChanged(int)),
-		this, SLOT(SetFocalSeed(int)));
+	connect(ui->pushButtonBasilarArteryBifurcationLocation, SIGNAL(clicked()),
+		this, SLOT(slotBasilarArteryBifurcationLocationCurrentSlice()));
 
-	connect(ui->pushButtonDropSeed, SIGNAL(clicked()),
-		this, SLOT(DropSeed()));
-
-	connect(ui->pushButtonUpdate, SIGNAL(clicked()),
-		this, SLOT(SlotVBDSmokerUpdate()));
+	connect(ui->pushButtonPonsCentralSectionLocation, SIGNAL(clicked()),
+		this, SLOT(slotPonsCentralSectionLocationCurrentSlice()));
 }
 
 void QInteractorStyleVBDSmokerSeeds::initialization()
 {
-	connect(ui->pushButtonDeleteAllSeeds, SIGNAL(clicked()),
-		this, SLOT(SlotClearAllSeeds()));
+	QAbstractNavigation::initialization();
 }

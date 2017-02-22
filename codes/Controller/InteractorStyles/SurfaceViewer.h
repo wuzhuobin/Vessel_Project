@@ -52,7 +52,8 @@ public:
 	vtkGetObjectMacro(SurfaceActor, vtkActor);
 	vtkGetObjectMacro(ImageResample, vtkImageResample);
 	vtkGetObjectMacro(MarchingCubes, vtkDiscreteMarchingCubes);
-	vtkGetObjectMacro(WindowedSincPolyDataFilter, vtkWindowedSincPolyDataFilter)
+	vtkGetObjectMacro(WindowedSincPolyDataFilter, vtkWindowedSincPolyDataFilter);
+	vtkGetObjectMacro(DepthSortPolyData, vtkDepthSortPolyData);
 	vtkGetObjectMacro(InteractorStyle, vtkInteractorStyle);
 
 	// Description:
