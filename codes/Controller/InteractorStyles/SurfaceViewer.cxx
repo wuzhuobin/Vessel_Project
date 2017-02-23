@@ -266,6 +266,7 @@ SurfaceViewer::SurfaceViewer()
 	this->SurfaceActor = vtkActor::New();
 	this->SurfaceMapper = vtkPolyDataMapper::New();
 	this->ImageResample = vtkImageResample::New();
+	this->ImageResample->SetNumberOfThreads(4);
 	this->ImageResample->SetInterpolationModeToLinear();
 	this->ImageResample->SetDimensionality(3);
 	this->ImageResample->SetOutputSpacing(0.3,0.3,0.3);

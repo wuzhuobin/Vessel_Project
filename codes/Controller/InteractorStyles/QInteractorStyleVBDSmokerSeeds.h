@@ -1,7 +1,7 @@
 #ifndef __QINTERACTOR_STYLE_VBD_SMOKER_SEEDS_H__
 #define __QINTERACTOR_STYLE_VBD_SMOKER_SEEDS_H__
 
-#include "InteractorStyleNavigation.h"
+#include "InteractorStyleSeedsPlacer.h"
 #include "QAbstractNavigation.h"
 
 #include <vtkSmartPointer.h>
@@ -12,7 +12,7 @@ namespace Ui { class QInteractorStyleVBDSmokerSeeds; }
 class vtkHandleWidget;
 
 class QInteractorStyleVBDSmokerSeeds : public QAbstractNavigation, 
-	public InteractorStyleNavigation
+	public InteractorStyleSeedsPlacer
 {
 	Q_OBJECT;
 	QSETUP_UI_HEAD(QInteractorStyleVBDSmokerSeeds);
@@ -20,11 +20,22 @@ class QInteractorStyleVBDSmokerSeeds : public QAbstractNavigation,
 public:
 	const static int NUM_OF_SPHERE_WIDGET = 11;
 
-	vtkTypeMacro(QInteractorStyleVBDSmokerSeeds, InteractorStyleNavigation);
+	vtkTypeMacro(QInteractorStyleVBDSmokerSeeds, InteractorStyleSeedsPlacer);
 	static QInteractorStyleVBDSmokerSeeds* New();
 	void SetCustomEnabled(bool flag);
 	void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 
+	virtual void GenerateWidgetFromSeeds() override;
+	virtual void SaveWidgetToSeeds() override;
+	virtual void DropSeed() override;
+	virtual void UpdateWidgetToSeeds(
+		int* newImagePos,
+		int* oldImagePos = nullptr) override;
+	virtual void UpdateWidgetToSeeds(
+		std::list<int*>& seeds,
+		int* newImagePos,
+		int* oldImagePos = nullptr) override;
+	virtual void ClearAllSeeds() override;
 
 	virtual void uniqueEnable() override;
 	virtual void uniqueDisable() override;
@@ -40,7 +51,7 @@ protected:
 	QInteractorStyleVBDSmokerSeeds(int uiType = UNIQUE_UI, QWidget* parent = Q_NULLPTR);
 	~QInteractorStyleVBDSmokerSeeds();
 
-	vtkSmartPointer<vtkHandleWidget> m_handleWidgets[NUM_OF_SPHERE_WIDGET] = {nullptr};
+	static std::list<int*> m_VBDSmokerSeeds;
 
 private:
 	

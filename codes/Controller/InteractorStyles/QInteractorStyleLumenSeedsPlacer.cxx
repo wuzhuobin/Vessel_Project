@@ -45,9 +45,9 @@ void QInteractorStyleLumenSeedsPlacer::SetTargetImages(
 	}
 }
 
-void QInteractorStyleLumenSeedsPlacer::UpdateWidgetToSeeds(int * oldImagePos, int* newImagePos)
+void QInteractorStyleLumenSeedsPlacer::UpdateWidgetToSeeds(int * newImagePos, int* oldImagePos)
 {
-	InteractorStyleSeedsPlacer::UpdateWidgetToSeeds(oldImagePos, newImagePos);
+	InteractorStyleSeedsPlacer::UpdateWidgetToSeeds(newImagePos, oldImagePos);
 	ui->listWidgetSeedList->clear();
 	for (list<int*>::const_iterator cit = m_seeds.cbegin(); cit != m_seeds.cend(); ++cit) {
 		QString listItem = "Seed Index: [" +
@@ -68,19 +68,8 @@ void QInteractorStyleLumenSeedsPlacer::SlotClearAllSeeds()
 
 void QInteractorStyleLumenSeedsPlacer::SetFocalSeed(int i)
 {
-	if (i < 0)
-		return;
-	QList<int*> _seeds = QList<int*>::fromStdList(m_seeds);
-	int imageCoordinate[3];
-	double worldCoordinate[3];
-
-	memcpy(imageCoordinate, _seeds[i], sizeof(imageCoordinate));
-	SetCurrentFocalPointWithImageCoordinate(imageCoordinate[0], imageCoordinate[1], 
-		imageCoordinate[2]);
-
-	for (int pos = 0; pos < 3; ++pos) {
-		worldCoordinate[pos] = imageCoordinate[pos] * GetSpacing()[pos] - GetOrigin()[i];
-	}
+	InteractorStyleSeedsPlacer::SetFocalSeed(i);
+	const double* worldCoordinate = m_imageViewer->GetFocalPointWithWorldCoordinate();
 
 	//char label[60];
 	//sprintf_s(label, "(%.3f, %.3f, %.3f)", worldCoordinate[0], worldCoordinate[1], worldCoordinate[2]);
@@ -106,9 +95,9 @@ void QInteractorStyleLumenSeedsPlacer::DeleteFocalSeed()
 	MY_VIEWER_CONSTITERATOR(Render());
 }
 
-void QInteractorStyleLumenSeedsPlacer::SaveWidgetToSeeds()
+void QInteractorStyleLumenSeedsPlacer::SaveWidgetToSeeds(std::list<int*>& seed)
 {
-	InteractorStyleSeedsPlacer::SaveWidgetToSeeds();
+	InteractorStyleSeedsPlacer::SaveWidgetToSeeds(seed);
 	ui->listWidgetSeedList->clear();
 	for (list<int*>::const_iterator cit = m_seeds.cbegin(); cit != m_seeds.cend(); ++cit) {
 		QString listItem = "Seed Index: [" +

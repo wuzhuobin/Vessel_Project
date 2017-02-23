@@ -22,10 +22,12 @@ Copyright (C) 2016
 #include <vtkObjectFactory.h>
 #include <vtkImageActorPointPlacer.h>
 #include <vtkPointHandleRepresentation3D.h>
-//#include <vtkImageActor.h>
 #include <ImageViewer.h>
-
+#include <vtkWidgetEvent.h>
+#include <vtkWidgetCallbackMapper.h>
 #include <vtkHandleWidget.h>
+#include <vtkSeedWidget.h>
+#include <vtkSeedRepresentation.h>
 
 #include <algorithm>
 
@@ -56,7 +58,6 @@ protected:
 	//	w->InvokeEvent(vtkCommand::LeftButtonPressEvent);
 	//}
 	//static void DeleteAction(vtkAbstractWidget *w) {}
-	//static void CompletedAction(vtkAbstractWidget *w) {}
 
 private:
 	friend class InteractorStyleSeedsPlacer;
@@ -70,13 +71,13 @@ vtkStandardNewMacro(SeedsPlacerRepresentation);
 vtkStandardNewMacro(SeedsPlacerWidget);
 vtkStandardNewMacro(InteractorStyleSeedsPlacer);
 
-int InteractorStyleSeedsPlacer::m_oldSeedsSize = 0;
-std::list<int*> InteractorStyleSeedsPlacer::m_seeds;
+//int InteractorStyleSeedsPlacer::m_oldSeedsSize = 0;
+list<int*> InteractorStyleSeedsPlacer::m_seeds;
 
 void InteractorStyleSeedsPlacer::SetCustomEnabled(bool flag)
 {
 	if (flag) {
-		m_seedRep->GetImagePointPlacer()->SetImageActor(m_imageViewer->GetImageActor());
+		SeedsPlacerRepresentation::SafeDownCast(m_seedRep)->GetImagePointPlacer()->SetImageActor(m_imageViewer->GetImageActor());
 		// SetInteractor CANNOT place in the constructor
 		m_seedWidget->SetInteractor(this->Interactor);
 		m_seedWidget->EnabledOn();
@@ -91,27 +92,58 @@ void InteractorStyleSeedsPlacer::SetCustomEnabled(bool flag)
 	m_customFlag = flag;
 }
 
-void InteractorStyleSeedsPlacer::SetFocalSeed(int i)
+void InteractorStyleSeedsPlacer::SetFocalSeed(int i, list<int*>& seeds)
 {
 	//if (i >= m_seedRep->GetNumberOfSeeds() || i == m_focalSeed) {
 	//	return;
 	//}
 	//m_focalSeed = i;
+	if (i < 0 || i > seeds.size()) {
+		return;
+	}
+	int index = 0;
+	for (list<int*>::const_iterator cit = seeds.cbegin(); cit != seeds.cend(); ++cit, ++index) {
+		if (index == i) {
+			int imageCoordinate[3];
+			memcpy(imageCoordinate, *cit, sizeof(imageCoordinate));
+			SetCurrentFocalPointWithImageCoordinate(imageCoordinate[0], imageCoordinate[1],
+				imageCoordinate[2]);
+			break;
+		}
+	}
+}
 
+void InteractorStyleSeedsPlacer::SetFocalSeed(int i)
+{
+	SetFocalSeed(i, m_seeds);
 }
 
 void InteractorStyleSeedsPlacer::SetCurrentFocalPointWithImageCoordinate(int i, int j, int k)
 {
+	// Only Generate seedWidgets when it is needed
+	// if its slice has not changed, it needs not to re-generate
+	int oldIJK[3];
+	m_imageViewer->GetFocalPointWithImageCoordinate(oldIJK);
 	AbstractNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
-	STYLE_DOWN_CAST_CONSTITERATOR(InteractorStyleSeedsPlacer, GenerateWidgetFromSeeds());
-	MY_VIEWER_CONSTITERATOR(Render());
+	for (list<AbstractInteractorStyle*>::const_iterator cit =
+		m_abstractInteractorStyles.cbegin(); cit != m_abstractInteractorStyles.cend(); ++cit) {
+		InteractorStyleSeedsPlacer* _style = dynamic_cast<InteractorStyleSeedsPlacer*>(*cit);
+		if (_style != nullptr &&
+			_style->m_customFlag &&
+			_style->GetSlice() != oldIJK[_style->GetSliceOrientation()]) {
+			_style->GenerateWidgetFromSeeds();
+			_style->m_imageViewer->Render();
+		}
+	}
+	//STYLE_DOWN_CAST_CONSTITERATOR(InteractorStyleSeedsPlacer, GenerateWidgetFromSeeds());
+	//MY_VIEWER_CONSTITERATOR(Render());
 }
 
 InteractorStyleSeedsPlacer::InteractorStyleSeedsPlacer()
 	:AbstractNavigation()
 {
 	m_seedWidget = vtkSmartPointer<SeedsPlacerWidget>::New();
-	m_seedWidget->seedsPlacer = this;
+	SeedsPlacerWidget::SafeDownCast(m_seedWidget)->seedsPlacer = this;
 	m_seedRep = vtkSmartPointer<SeedsPlacerRepresentation>::New();
 	m_seedWidget->SetRepresentation(m_seedRep);
 }
@@ -199,30 +231,18 @@ void InteractorStyleSeedsPlacer::OnLeave()
 	AbstractNavigation::OnLeave();
 }
 
-void InteractorStyleSeedsPlacer::CalculateIndex()
-{
-	//Pick
-	this->GetInteractor()->GetPicker()->Pick(
-		this->GetInteractor()->GetEventPosition()[0],
-		this->GetInteractor()->GetEventPosition()[1],
-		0,  // always zero.
-		m_imageViewer->GetRenderer());
+//void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds()
+//{
+//	GenerateWidgetFromSeeds(m_seeds);
+//}
 
-	this->GetInteractor()->GetPicker()->GetPickPosition(m_world);
-
-	if (m_imageViewer->GetInput() != NULL) {
-		m_world[GetSliceOrientation()] = GetOrigin()[GetSliceOrientation()] +
-			GetSlice() * GetSpacing()[GetSliceOrientation()];
-	}
-
-}
-
-void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds()
+void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds(const list<int*>& seeds)
 {
 	ClearAllSeedWidget();
 
-	for (list<int*>::const_iterator cit = m_seeds.cbegin();
-	cit != m_seeds.cend(); ++cit) {
+
+	for (list<int*>::const_iterator cit = seeds.cbegin();
+		cit != seeds.cend(); ++cit) {
 		int* imagePos = (*cit);
 		double worldPos[3];
 		for (int pos = 0; pos < 3; ++pos) {
@@ -237,57 +257,69 @@ void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds()
 	m_imageViewer->Render();
 }
 
-void InteractorStyleSeedsPlacer::UpdateWidgetToSeeds(int* oldImagePos, int* newImagePos)
+void InteractorStyleSeedsPlacer::SaveWidgetToSeeds()
 {
-	// only used in modify seed widget, replace the old position with the 
-	// ImagePos
+	SaveWidgetToSeeds(m_seeds);
+}
 
-	list<int*>::iterator it = find_if(InteractorStyleSeedsPlacer::m_seeds.begin(),
-		InteractorStyleSeedsPlacer::m_seeds.end(), [oldImagePos](int* index)->bool {
+void InteractorStyleSeedsPlacer::UpdateWidgetToSeeds(int* newImagePos, int* oldImagePos)
+{
+	UpdateWidgetToSeeds(m_seeds, newImagePos, oldImagePos);
+}
+
+void InteractorStyleSeedsPlacer::UpdateWidgetToSeeds(list<int*>& seeds, int * newImagePos, int * oldImagePos)
+{
+
+	// if oldImagePos is nullptr or oldImagePos is not a valid number, 
+	// replace the existed newImagePos or push the new newImagePos
+	if (oldImagePos == nullptr || 
+		oldImagePos[0] < 0 || 
+		oldImagePos[1] < 0 || 
+		oldImagePos[2] < 0) {
+		oldImagePos = newImagePos;
+	}
+	list<int*>::iterator it = find_if(seeds.begin(),
+		seeds.end(), [oldImagePos](int* index)->bool {
 		return
 			oldImagePos[0] == index[0] &&
 			oldImagePos[1] == index[1] &&
 			oldImagePos[2] == index[2];
 	});
-	if (it != InteractorStyleSeedsPlacer::m_seeds.end()) {
-		delete *it;
-		it = InteractorStyleSeedsPlacer::m_seeds.erase(it);
-		if (it == m_seeds.end()) {
-			InteractorStyleSeedsPlacer::m_seeds.push_back(new int[3]);
-			memcpy(InteractorStyleSeedsPlacer::m_seeds.back(), newImagePos, sizeof(int) * 3);
-		}
-		else {
-			InteractorStyleSeedsPlacer::m_seeds.insert(it, new int[3]);
-			memcpy(*it, newImagePos, sizeof(int) * 3);
-
-		}
+	if (it != seeds.end()) {
+		memcpy(*it, newImagePos, sizeof(int[3]));
+	}
+	else {
+		seeds.push_back(new int[3]);
+		memcpy(seeds.back(), newImagePos, sizeof(int[3]));
 	}
 }
 
-void InteractorStyleSeedsPlacer::SaveWidgetToSeeds()
+void InteractorStyleSeedsPlacer::ClearAllSeeds()
+{
+	ClearAllSeeds(m_seeds);
+}
+
+void InteractorStyleSeedsPlacer::SaveWidgetToSeeds(list<int*>& seeds)
 {
 	for (int i = m_seedRep->GetNumberOfSeeds() - 1; i >= 0; --i) {
 		//double* worldPos = new double[3]; // #MemLeakHere
 		double worldPos[3];
 		m_seedWidget->GetSeedRepresentation()->GetSeedWorldPosition(i, worldPos);
-		int* imagePos = new int[3]; // #MemLeakHere
+		
+		int imagePos[3];
 		for (int pos = 0; pos < 3; ++pos) {
 			imagePos[pos] = (worldPos[pos] - GetOrigin()[pos]) / GetSpacing()[pos] + 0.5;
 		}
-
-		// Check if seeds already exist
-		if (find_if(m_seeds.cbegin(), m_seeds.cend(), [&imagePos](int* index) -> bool {
-			return (index[0] == imagePos[0] && index[1] == imagePos[1] && index[2] == imagePos[2]);
-		}) == m_seeds.cend()) {
-			m_seeds.push_back(imagePos);
-			//ModuleWidget::SeedCoordinatesList.push_back(worldPos);
-		}
+		UpdateWidgetToSeeds(seeds, imagePos);
 	}
-
-	//MainWindow::GetMainWindow()->GetModuleWidget()->UpdateSeedListView();
 }
 
 void InteractorStyleSeedsPlacer::DropSeed()
+{
+	DropSeed(m_seeds);
+}
+
+void InteractorStyleSeedsPlacer::DropSeed(list<int*>& seeds)
 {
 	double* worldPos = m_imageViewer->GetFocalPointWithWorldCoordinate();
 	vtkHandleWidget* newSeed = m_seedWidget->CreateNewHandle();
@@ -295,7 +327,7 @@ void InteractorStyleSeedsPlacer::DropSeed()
 	newSeed->EnabledOn();
 	m_imageViewer->Render();
 
-	SaveWidgetToSeeds();
+	SaveWidgetToSeeds(seeds);
 	OnLeftButtonUp();
 }
 
@@ -306,13 +338,18 @@ void InteractorStyleSeedsPlacer::ClearAllSeedWidget()
 	}
 }
 
-void InteractorStyleSeedsPlacer::ClearAllSeeds()
+void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds()
 {
-	if (m_seeds.size() != 0) {
-		while (!m_seeds.empty())
+	GenerateWidgetFromSeeds(m_seeds);
+}
+
+void InteractorStyleSeedsPlacer::ClearAllSeeds(list<int*>& seed)
+{
+	if (seed.size() != 0) {
+		while (!seed.empty())
 		{
-			delete m_seeds.back();
-			m_seeds.pop_back();
+			delete[] seed.back();
+			seed.pop_back();
 		}
 	}
 }
@@ -349,9 +386,11 @@ SeedsPlacerWidget::SeedsPlacerWidget()
 	//	vtkEvent::NoModifier, 127, 1, "Delete",
 	//	vtkWidgetEvent::Delete,
 	//	this, SeedsPlacerWidget::DeleteAction);
-	//this->CallbackMapper->SetCallbackMethod(vtkCommand::RightButtonPressEvent,
-	//	vtkWidgetEvent::Completed,
-	//	this, SeedsPlacerWidget::CompletedAction);
+
+	// using a NULL function to replace CompletedAction(vtkAbstractWidget *w) {};
+	this->CallbackMapper->SetCallbackMethod(vtkCommand::RightButtonPressEvent,
+		vtkWidgetEvent::Completed,
+		this, [](vtkAbstractWidget* widget) {});
 	vtkSmartPointer<vtkCallbackCommand> callback =
 		vtkSmartPointer<vtkCallbackCommand>::New();
 	callback->SetCallback(SeedsPlacerWidget::CallbackSave);
@@ -376,7 +415,7 @@ void SeedsPlacerWidget::CallbackSave(vtkObject * caller, unsigned long eid, void
 			newImagePos[pos] = (worldPos[pos] - _widget->seedsPlacer->GetOrigin()[pos]) /
 				_widget->seedsPlacer->GetSpacing()[pos] + 0.5;
 		}
-		_widget->seedsPlacer->UpdateWidgetToSeeds(oldImagePos, newImagePos);
+		_widget->seedsPlacer->UpdateWidgetToSeeds(newImagePos, oldImagePos);
 		_widget->seedsPlacer->OnLeftButtonUp();
 	}
 	else if (eid == vtkCommand::PlacePointEvent) {

@@ -24,12 +24,20 @@ public:
 	void SetTargetImages(
 		QList<vtkSmartPointer<vtkImageData>> listOfVtkImages, 
 		QList<QString> listOfModalityNames);
+	virtual void SaveWidgetToSeeds(std::list<int*>& seed = m_seeds)override;
+	virtual void UpdateWidgetToSeeds(
+		int* newImagePos,
+		int* oldImagePos = nullptr);
+	//virtual void UpdateWidgetToSeeds(
+	//	std::list<int*>& seeds,
+	//	int* newImagePos,
+	//	int* oldImagePos = nullptr);
+	//virtual void UpdateWidgetToSeeds(int* oldImagePos, int* newImagePos);
 
 public slots:
 	void SlotClearAllSeeds();
-	void SetFocalSeed(int i);
+	virtual void SetFocalSeed(int i);
 	void DeleteFocalSeed();
-	void SaveWidgetToSeeds();
 	void DropSeed();
 
 	void ExtractLumen();
@@ -47,7 +55,6 @@ protected:
 	~QInteractorStyleLumenSeedsPlacer();
 
 	//void uniqueInvoke(bool flag);
-	void UpdateWidgetToSeeds(int* oldImagePos, int* newImagePos);
 
 	void OnKeyPress();
 

@@ -21,12 +21,9 @@ Copyright (C) 2016
 #include "AbstractNavigation.h"
 
 #include <vtkSmartPointer.h>
-#include <vtkSeedWidget.h>
-#include <vtkSeedRepresentation.h>
 
-class SeedsPlacerWidget;
-class SeedsPlacerRepresentation;
-
+class vtkSeedWidget;
+class vtkSeedRepresentation;
 
 class InteractorStyleSeedsPlacer : public AbstractNavigation
 {
@@ -35,13 +32,30 @@ public:
 	static InteractorStyleSeedsPlacer* New();
 
 	void SetCustomEnabled(bool flag);
-	void SetFocalSeed(int i);
+	virtual void SetFocalSeed(int i);
+	virtual void SetFocalSeed(int i, std::list<int*>& seeds);
 	void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
+
+
+
 
 	virtual void ClearAllSeedWidget();
 	virtual void GenerateWidgetFromSeeds();
+	virtual void GenerateWidgetFromSeeds(const std::list<int*>& seeds);
 	virtual void SaveWidgetToSeeds();
+	virtual void SaveWidgetToSeeds(std::list<int*>& seeds);
 	virtual void DropSeed();
+	virtual void DropSeed(std::list<int*>& seeds);
+	virtual void UpdateWidgetToSeeds(
+		int* newImagePos,
+		int* oldImagePos = nullptr);
+	virtual void UpdateWidgetToSeeds(
+		std::list<int*>& seeds,
+		int* newImagePos,
+		int* oldImagePos = nullptr);
+	virtual void ClearAllSeeds();
+	virtual void ClearAllSeeds(std::list<int*>& seed);
+	//virtual void DropSeed();
 
 protected:
 	InteractorStyleSeedsPlacer();
@@ -49,7 +63,8 @@ protected:
 	/**
 	 * Supposed to only used in callback
 	 */
-	virtual void UpdateWidgetToSeeds(int* oldImagePos, int* newImagePos);
+
+
 
 	virtual void OnMouseMove();
 	virtual void OnLeftButtonDown();
@@ -66,21 +81,11 @@ protected:
 	* InteractorStyleSeedsPlacer instances
 	*/
 	static std::list<int*> m_seeds;
-	static int m_oldSeedsSize;
-	static void ClearAllSeeds();
 
-private:
 	friend class SeedsPlacerWidget;
-	vtkSmartPointer<SeedsPlacerRepresentation> m_seedRep;
-	vtkSmartPointer<SeedsPlacerWidget> m_seedWidget;
-	/**
-	 * Invalide pick or any other error? CalculateIndex() will set m_world[3] = 
-	 * { 0 };
-	 */
-	double m_world[3] = { 0 };
-
-	void CalculateIndex();
-
+	vtkSmartPointer<vtkSeedRepresentation> m_seedRep = nullptr;
+	vtkSmartPointer<vtkSeedWidget> m_seedWidget = nullptr;
+	vtkSmartPointer<vtkCallbackCommand> m_callbackCommandSave = nullptr;
 
 };
 

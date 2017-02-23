@@ -3,8 +3,6 @@
 #include "SurfaceViewer.h"
 
 #include <vtkObjectFactory.h>
-#include <vtkSeedWidget.h>
-#include <vtkSeedRepresentation.h>
 #include <vtkPointHandleRepresentation3D.h>
 #include <vtkCleanPolyData.h>
 #include <vtkPolygonalSurfacePointPlacer.h>
@@ -51,12 +49,14 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled
 {
 	InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(flag);
 	if (m_customFlag) {
-		InitializationSeeds();
+		InitializeHandleWidgets();
 		m_surfaceViewer->GetRenderer()->AddActor(m_radiusText);
 	}
 	else {
-		m_seedWidget->EnabledOff();
-		m_seedWidget = nullptr;
+		for (int i = 0; i < NUM_OF_HANDLES; ++i) {
+			m_handleWidgets[i]->EnabledOff();
+			m_handleWidgets[i] = nullptr;
+		}
 		m_pointLocator = nullptr;
 		m_surfaceViewer->GetRenderer()->RemoveActor(m_radiusText);
 	}
@@ -82,7 +82,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::CreateCenterLine
 	InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine();
 }
 
-void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializationSeeds()
+void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializeHandleWidgets()
 {
 	vtkSmartPointer<vtkCleanPolyData> cleanPolyData =
 		vtkSmartPointer<vtkCleanPolyData>::New();
@@ -101,28 +101,25 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializationSe
 		vtkSmartPointer<vtkPolygonalSurfacePointPlacer>::New();
 	pointPlacer->AddProp(m_centerLineActor);
 
-	vtkSmartPointer<vtkPointHandleRepresentation3D> handleRep =
-		vtkSmartPointer<vtkPointHandleRepresentation3D>::New();
-	handleRep->SetPointPlacer(pointPlacer);
+	double* worldPos =
+		m_triangulatedCenterLine->GetPoint(0);
 
-	//if (!m_seedWidget) {
-	m_seedWidget = vtkSmartPointer<vtkSeedWidget>::New();
-	//}
-	m_seedWidget->CreateDefaultRepresentation();
-	m_seedWidget->GetSeedRepresentation()->SetHandleRepresentation(handleRep);
-	m_seedWidget->SetInteractor(this->Interactor);
-	m_seedWidget->EnabledOn();
-	m_seedWidget->CompleteInteraction();
-	// testing handlewidget
-	
-	for (int i = 0; i < NUM_OF_SEEDS; ++i) {
-		vtkHandleWidget* handle = m_seedWidget->CreateNewHandle();
-		double* worldPos =
-			m_triangulatedCenterLine->GetPoint(0);
+	for (int i = 0; i < NUM_OF_HANDLES; ++i) {
 
-		handle->GetHandleRepresentation()->SetWorldPosition(worldPos);
-		handle->EnabledOn();
+		// the vtkSphereHandleRepresentation does not use the vtkPolygonalSurfacePointPlacer 
+		// in its widgetInteraction function, but vtkPointHandleRepresentation3D does
+		vtkSmartPointer<vtkPointHandleRepresentation3D> handleRep =
+			vtkSmartPointer<vtkPointHandleRepresentation3D>::New();
+		handleRep->SetPointPlacer(pointPlacer);
+		handleRep->SetWorldPosition(m_triangulatedCenterLine->GetPoint(0));
+
+		m_handleWidgets[i] = vtkSmartPointer<vtkHandleWidget>::New();
+		m_handleWidgets[i]->SetRepresentation(handleRep);
+		m_handleWidgets[i]->SetInteractor(this->Interactor);
+		m_handleWidgets[i]->EnabledOn();
+
 	}
+
 
 	m_pointLocator = vtkSmartPointer<vtkKdTreePointLocator>::New();
 	m_pointLocator->SetDataSet(m_triangulatedCenterLine);
@@ -136,11 +133,10 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializationSe
 
 void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::FindMaximumRadius()
 {
-	double worldPos[3];
-	m_seedWidget->GetSeedRepresentation()->GetSeedWorldPosition(0, worldPos);
-	vtkIdType seed1 = m_pointLocator->FindClosestPoint(worldPos);
-	m_seedWidget->GetSeedRepresentation()->GetSeedWorldPosition(1, worldPos);
-	vtkIdType seed2 = m_pointLocator->FindClosestPoint(worldPos);
+	vtkIdType seed1 = m_pointLocator->FindClosestPoint(
+		m_handleWidgets[0]->GetHandleRepresentation()->GetWorldPosition());
+	vtkIdType seed2 = m_pointLocator->FindClosestPoint(
+		m_handleWidgets[1]->GetHandleRepresentation()->GetWorldPosition());
 	vtkSmartPointer<vtkDijkstraGraphGeodesicPathDistance> dijkstra =
 		vtkSmartPointer<vtkDijkstraGraphGeodesicPathDistance>::New();
 	dijkstra->SetInputData(m_triangulatedCenterLine);
@@ -182,6 +178,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::FindMaximumRadiu
 	char buff[100];
 	sprintf(buff, "Maximum radius: %.2f mm\n Minimum radius: %.2f mm\n Center line length: %.2f mm", maxRadius, minRadius, GeodesicPathDistance);
 	m_radiusText->SetInput(buff);
+	this->m_surfaceViewer->Render();
 }
 
 void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::OnKeyPress()
@@ -193,11 +190,11 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::OnKeyPress()
 	}
 	else if (key == "Tab") {
 		InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress();
-		InitializationSeeds();
+		InitializeHandleWidgets();
 	}
 	else if (key == "space") {
 		InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress();
-		InitializationSeeds();
+		InitializeHandleWidgets();
 	}
 	else {
 		InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress();
