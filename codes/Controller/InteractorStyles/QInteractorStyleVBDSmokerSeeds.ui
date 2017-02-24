@@ -140,9 +140,6 @@ location</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
          </widget>
         </item>
         <item row="0" column="1">
@@ -153,9 +150,6 @@ location</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
          </widget>
         </item>
         <item row="1" column="0">
@@ -166,9 +160,6 @@ location</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
          </widget>
         </item>
         <item row="1" column="1">
@@ -179,9 +170,6 @@ location</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
          </widget>
         </item>
        </layout>
@@ -223,9 +211,6 @@ location</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
          </widget>
         </item>
         <item row="1" column="1">
@@ -236,9 +221,6 @@ location</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
          </widget>
         </item>
         <item row="1" column="2">
@@ -249,9 +231,6 @@ location</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
          </widget>
         </item>
         <item row="2" column="2">
@@ -262,9 +241,6 @@ location</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
          </widget>
         </item>
         <item row="3" column="1">
@@ -275,9 +251,6 @@ location</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
          </widget>
         </item>
         <item row="3" column="2">
@@ -288,9 +261,6 @@ location</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
          </widget>
         </item>
         <item row="0" column="1" colspan="2">
@@ -301,9 +271,6 @@ location</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
          </widget>
         </item>
        </layout>
@@ -393,7 +360,4 @@ location</string>
  </widget>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup"/>
- </buttongroups>
 </ui>

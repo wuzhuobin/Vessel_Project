@@ -568,7 +568,7 @@ void ImageViewer::SetFocalPointWithImageCoordinate(int i, int j, int k)
 	int ijk[3] = { i, j, k };
 	SetSlice(ijk[this->SliceOrientation]);
 	InitializeIntensityText(std::to_string(
-		(GetInput()->GetScalarComponentAsDouble(i, j, k, 0))));
+		(GetInput()->GetScalarComponentAsFloat(i, j, k, 0))));
 	this->Render();
 
 	//emit FocalPointWithImageCoordinateChanged(i, j, k);

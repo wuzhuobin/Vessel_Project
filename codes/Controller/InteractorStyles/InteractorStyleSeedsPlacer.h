@@ -66,15 +66,8 @@ protected:
 
 
 
-	virtual void OnMouseMove();
-	virtual void OnLeftButtonDown();
 	virtual void OnLeftButtonUp();
-	virtual void OnRightButtonDown();
-	virtual void OnChar();
 	virtual void OnKeyPress();
-	virtual void OnLeave();
-
-
 
 	/**
 	* Using a static list to save all seeds and it will be shared by all other

@@ -18,7 +18,8 @@ class QInteractorStyleVBDSmokerSeeds : public QAbstractNavigation,
 	QSETUP_UI_HEAD(QInteractorStyleVBDSmokerSeeds);
 
 public:
-	const static int NUM_OF_SPHERE_WIDGET = 11;
+	const static int NUM_OF_ELONGATION = 4;
+	const static int NUM_OF_DETOUR = 7;
 
 	vtkTypeMacro(QInteractorStyleVBDSmokerSeeds, InteractorStyleSeedsPlacer);
 	static QInteractorStyleVBDSmokerSeeds* New();
@@ -26,32 +27,53 @@ public:
 	void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 
 	virtual void GenerateWidgetFromSeeds() override;
+	//virtual void GenerateWidgetFromSeeds(const std::list<int*>& seeds) override;
+	/**
+	 * save all widgets into the 2 list
+	 * since all seeds has already created beforehand, no need to check and push
+	 * juse replacing
+	 */
 	virtual void SaveWidgetToSeeds() override;
-	virtual void DropSeed() override;
+	/**
+	 * @deprecated
+	 * @oveerride
+	 * do nothing
+	 */
 	virtual void UpdateWidgetToSeeds(
 		int* newImagePos,
 		int* oldImagePos = nullptr) override;
+	/**
+	* @deprecated
+	* @oveerride
+	* do nothing
+	*/
 	virtual void UpdateWidgetToSeeds(
 		std::list<int*>& seeds,
 		int* newImagePos,
 		int* oldImagePos = nullptr) override;
 	virtual void ClearAllSeeds() override;
 
-	virtual void uniqueEnable() override;
-	virtual void uniqueDisable() override;
+
+
+
 
 protected slots:
 	void slotBasilarArteryBifurcationLocationCurrentSlice();
 	void slotPonsCentralSectionLocationCurrentSlice();
 
 	void slotEnableTest(bool flag);
+	virtual void DropSeed() override;
 
 
 protected:
 	QInteractorStyleVBDSmokerSeeds(int uiType = UNIQUE_UI, QWidget* parent = Q_NULLPTR);
 	~QInteractorStyleVBDSmokerSeeds();
 
-	static std::list<int*> m_VBDSmokerSeeds;
+	virtual void uniqueEnable() override;
+	virtual void uniqueDisable() override;
+
+	static std::list<int*> m_VBDSmokerElongation;
+	static std::list<int*> m_VBDSmokerDetour;
 
 private:
 	

@@ -155,42 +155,6 @@ InteractorStyleSeedsPlacer::~InteractorStyleSeedsPlacer()
 	ClearAllSeeds();
 }
 
-void InteractorStyleSeedsPlacer::OnMouseMove()
-{
-	//if (m_oldSeedsSize != m_seedRep->GetNumberOfSeeds() ||
-	//	m_oldSeedsSize != m_seeds.size()) {
-	//	m_oldSeedsSize = m_seeds.size();
-	//	SaveWidgetToSeeds();
-	//}
-
-	//if (!m_renderingFlag) {
-	//	m_renderingFlag = true;
-	//	GenerateWidgetFromSeeds();
-	//}
-
-	AbstractNavigation::OnMouseMove();
-}
-
-void InteractorStyleSeedsPlacer::OnLeftButtonDown()
-{
-	//CalculateIndex();
-	//cout << m_world[0] << ' ' << m_world[1] << ' ' << m_world[2] << endl;
-	//double pos[3];
-	//m_seedWidget->GetSeedRepresentation()->GetSeedWorldPosition(0, pos);
-	//cout << pos[0] << ' ' << pos[1] << ' ' << pos[2] << endl;
-	//m_imageViewer->Render();
-
-	////Check if valid pick
-	//if (m_world[0] == 0 &&
-	//	m_world[1] == 0 &&
-	//	m_world[2] == 0) {
-	//	return;
-	//}
-	AbstractNavigation::OnLeftButtonDown();
-
-	
-}
-
 void InteractorStyleSeedsPlacer::OnLeftButtonUp()
 {
 	AbstractNavigation::OnLeftButtonUp();
@@ -204,14 +168,7 @@ void InteractorStyleSeedsPlacer::OnLeftButtonUp()
 			_style->GenerateWidgetFromSeeds();
 		}
 	}
-
 }
-
-void InteractorStyleSeedsPlacer::OnRightButtonDown()
-{
-	AbstractNavigation::OnRightButtonDown();
-}
-
 
 void InteractorStyleSeedsPlacer::OnKeyPress()
 {
@@ -226,10 +183,6 @@ void InteractorStyleSeedsPlacer::OnKeyPress()
 }
 
 
-void InteractorStyleSeedsPlacer::OnLeave()
-{
-	AbstractNavigation::OnLeave();
-}
 
 //void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds()
 //{
@@ -351,29 +304,6 @@ void InteractorStyleSeedsPlacer::ClearAllSeeds(list<int*>& seed)
 			delete[] seed.back();
 			seed.pop_back();
 		}
-	}
-}
-
-void InteractorStyleSeedsPlacer::OnChar()
-{
-	char key = this->Interactor->GetKeyCode();
-	cout << __func__ << ' ' << key << endl;
-	AbstractNavigation::OnChar();
-	switch (key)
-	{
-	case 'P':
-		for (int i = 0; i < m_seedRep->GetNumberOfSeeds(); ++i) {
-			double pos[3];
-			m_seedRep->GetSeedWorldPosition(i, pos);
-			cout << pos[0] << ' ' << pos[1] << ' ' << pos[2] << endl;
-		}
-		break;
-	case'D':
-		ClearAllSeedWidget();
-		break;
-	default:
-		AbstractNavigation::OnChar();
-		break;
 	}
 }
 	
