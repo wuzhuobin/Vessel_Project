@@ -7,7 +7,11 @@
 #include <vtkSeedWidget.h>
 #include <vtkSeedRepresentation.h>
 #include <vtkPointHandleRepresentation3D.h>
-
+#include <vtkRenderWindowInteractor.h>
+#include <vtkAbstractPicker.h>
+#include <vtkMarchingSquares.h>
+#include <vtkCenterOfMass.h>
+#include <vtkImageData.h>
 //#include <qpushbutton.h>
 
 using namespace std;
@@ -16,8 +20,9 @@ QSETUP_UI_SRC(QInteractorStyleVBDSmokerSeeds);
 
 
 // using a initial value
-list<int*> QInteractorStyleVBDSmokerSeeds::m_VBDSmokerElongation(QInteractorStyleVBDSmokerSeeds::NUM_OF_ELONGATION, new int[3]{ -1,-1,-1 });
-list<int*> QInteractorStyleVBDSmokerSeeds::m_VBDSmokerDetour(QInteractorStyleVBDSmokerSeeds::NUM_OF_DETOUR, new int[3]{ -1,-1,-1 });
+list<int*> QInteractorStyleVBDSmokerSeeds::m_VBDSmokerSeeds;
+
+QPushButton* QInteractorStyleVBDSmokerSeeds::pushButtons[];
 
 void QInteractorStyleVBDSmokerSeeds::SetCustomEnabled(bool flag)
 {
@@ -38,34 +43,73 @@ void QInteractorStyleVBDSmokerSeeds::SetCurrentFocalPointWithImageCoordinate(int
 void QInteractorStyleVBDSmokerSeeds::GenerateWidgetFromSeeds()
 {
 	ClearAllSeedWidget();
-	for (list<int*>::const_iterator cit = m_VBDSmokerElongation.cbegin();
-		cit != m_VBDSmokerElongation.cend(); ++cit) {
-		int* imagePos = (*cit);
-		double worldPos[3];
-		m_imageViewer->GetFocalPointWithWorldCoordinate(worldPos);
-		worldPos[2] = (imagePos[2] * GetSpacing()[2]) + GetOrigin()[2];
+	int i = 0;
+	for (list<int*>::const_iterator cit = m_VBDSmokerSeeds.cbegin();
+		cit != m_VBDSmokerSeeds.cend(); ++cit, ++i) {
+		int imagePos[3];
 		vtkHandleWidget* newSeed = m_seedWidget->CreateNewHandle();
-		newSeed->GetHandleRepresentation()->SetWorldPosition(worldPos);
+		if ((*cit)[0] >= 0 && pushButtons[i]->isChecked()) {
+			// for not twinkle, make it always on top
+			//const int* displayExtent = m_imageViewer->GetDisplayExtent();
+			double worldPos[3]; 
+			//worldPos[0] = displayExtent[1] * GetSpacing()[0] + GetOrigin()[0];
+			//worldPos[1] = displayExtent[3] * GetSpacing()[1] + GetOrigin()[1];
+			//worldPos[0] = displayExtent[1] * GetSpacing()[2] + GetOrigin()[2];
+			m_imageViewer->GetFocalPointWithWorldCoordinate(worldPos);
+			m_imageViewer->GetFocalPointWithImageCoordinate(imagePos);
 
-		if (imagePos[0] >= 0) {
-			newSeed->EnabledOn();
+			if (i < NUM_OF_ELONGATION) {
+				if (GetSliceOrientation() == ImageViewer::SLICE_ORIENTATION_XY && 
+					imagePos[ImageViewer::SLICE_ORIENTATION_XY] != 
+					(*cit)[ImageViewer::SLICE_ORIENTATION_XY]) {
+					continue;
+				}
+				worldPos[ImageViewer::SLICE_ORIENTATION_XY] =
+					((*cit)[ImageViewer::SLICE_ORIENTATION_XY] *
+						GetSpacing()[ImageViewer::SLICE_ORIENTATION_XY]) +
+					GetOrigin()[ImageViewer::SLICE_ORIENTATION_XY];
+
+				//vtkPointHandleRepresentation3D::SafeDownCast(newSeed->GetHandleRepresentation())->
+				//	GetProperty()->SetColor(1,0,0); // red
+			}
+			else {
+				if (GetSliceOrientation() != ImageViewer::SLICE_ORIENTATION_XY &&
+					(imagePos[ImageViewer::SLICE_ORIENTATION_YZ] != 
+					(*cit)[ImageViewer::SLICE_ORIENTATION_YZ] || 
+						imagePos[ImageViewer::SLICE_ORIENTATION_XZ] != 
+						(*cit)[ImageViewer::SLICE_ORIENTATION_XZ])) {
+					continue;
+				}
+				worldPos[ImageViewer::SLICE_ORIENTATION_YZ] =
+					((*cit)[ImageViewer::SLICE_ORIENTATION_YZ] *
+						GetSpacing()[ImageViewer::SLICE_ORIENTATION_YZ]) +
+					GetOrigin()[ImageViewer::SLICE_ORIENTATION_YZ];
+				worldPos[ImageViewer::SLICE_ORIENTATION_XZ] = ((*cit)[ImageViewer::SLICE_ORIENTATION_XZ]
+					* GetSpacing()[ImageViewer::SLICE_ORIENTATION_XZ])
+					+ GetOrigin()[ImageViewer::SLICE_ORIENTATION_XZ];
+				//vtkPointHandleRepresentation3D::SafeDownCast(newSeed->GetHandleRepresentation())->
+				//	GetProperty()->SetColor(0, 1, 0); // blue
+			}
+			newSeed->GetHandleRepresentation()->SetWorldPosition(worldPos);
+			m_seedWidget->GetSeed(i)->SetEnabled(pushButtons[i]->isChecked());
+		}
+		else {
+			m_seedWidget->GetSeed(i)->EnabledOff();
 		}
 	}
+	m_imageViewer->Render();
+	//for (list<int*>::const_iterator cit = m_VBDSmokerDetour.cbegin();
+	//	cit != m_VBDSmokerDetour.cend(); ++cit) {
+	//	int* imagePos = (*cit);
+	//	vtkHandleWidget* newSeed = m_seedWidget->CreateNewHandle();
+	//	if (imagePos[0] >= 0 ) {
+	//		double worldPos[3];
+	//		m_imageViewer->GetFocalPointWithWorldCoordinate(worldPos);
 
-	for (list<int*>::const_iterator cit = m_VBDSmokerDetour.cbegin();
-		cit != m_VBDSmokerDetour.cend(); ++cit) {
-		int* imagePos = (*cit);
-		double worldPos[3];
-		m_imageViewer->GetFocalPointWithWorldCoordinate(worldPos);
-		worldPos[0] = (imagePos[0] * GetSpacing()[0]) + GetOrigin()[0];
-		worldPos[1] = (imagePos[1] * GetSpacing()[1]) + GetOrigin()[1];
-		vtkHandleWidget* newSeed = m_seedWidget->CreateNewHandle();
-		newSeed->GetHandleRepresentation()->SetWorldPosition(worldPos);
-		
-		if (imagePos[0] >= 0 ) {
-			newSeed->EnabledOn();
-		}
-	}
+	//		newSeed->GetHandleRepresentation()->SetWorldPosition(worldPos);
+	//		newSeed->EnabledOn();
+	//	}
+	//}
 }
 
 //void QInteractorStyleVBDSmokerSeeds::GenerateWidgetFromSeeds(const std::list<int*>& seeds)
@@ -75,81 +119,37 @@ void QInteractorStyleVBDSmokerSeeds::GenerateWidgetFromSeeds()
 
 void QInteractorStyleVBDSmokerSeeds::SaveWidgetToSeeds()
 {
-	list<int*>::const_iterator cit1 = m_VBDSmokerElongation.cbegin();
-	list<int*>::const_iterator cit2 = m_VBDSmokerDetour.cbegin();
+	list<int*>::const_iterator cit1 = m_VBDSmokerSeeds.cbegin();
+	//list<int*>::const_iterator cit2 = m_VBDSmokerDetour.cbegin();
 
-	for (int i = 0; i < m_seedRep->GetNumberOfSeeds(); ++i) {
-		double worldPos[3];
-		m_seedWidget->GetSeedRepresentation()->GetSeedWorldPosition(i, worldPos);
-
-		int imagePos[3];
-		for (int pos = 0; pos < 3; ++pos) {
-			imagePos[pos] = (worldPos[pos] - GetOrigin()[pos]) / GetSpacing()[pos] + 0.5;
-		}
-		if (i < NUM_OF_ELONGATION) {
-			memcpy(*cit1, imagePos, sizeof(imagePos));
-			++cit1;
-		}
-		else {
-			memcpy(*cit2, imagePos, sizeof(imagePos));
-			++cit2;
-		}
-	}
-}
-
-void QInteractorStyleVBDSmokerSeeds::DropSeed()
-{
-	double* worldPos = m_imageViewer->GetFocalPointWithWorldCoordinate();
-	list<int*>::const_iterator cit1 = m_VBDSmokerElongation.cbegin();
-	list<int*>::const_iterator cit2 = m_VBDSmokerDetour.cbegin();
-	QPushButton* _pushButtons[] = {
-		ui->pushButtonBasilarArteryBifurcationLocation0,
-		ui->pushButtonBasilarArteryBifurcationLocation1,
-		ui->pushButtonBasilarArteryBifurcationLocation2,
-		ui->pushButtonBasilarArteryBifurcationLocation3,
-		ui->pushButtonPonsCentralSectionLocation0,
-		ui->pushButtonPonsCentralSectionLocation1Left,
-		ui->pushButtonPonsCentralSectionLocation1Right,
-		ui->pushButtonPonsCentralSectionLocation2Left,
-		ui->pushButtonPonsCentralSectionLocation2Right,
-		ui->pushButtonPonsCentralSectionLocation3Left,
-		ui->pushButtonPonsCentralSectionLocation3Right
-	};
-	for (int i = 0; i < NUM_OF_DETOUR + NUM_OF_ELONGATION; ++i) {
-		int* imagePos;
-		if (i < NUM_OF_ELONGATION) {
-			imagePos = (*cit1);
-			cit1++;
-		}
-		else {
-			imagePos = (*cit2);
-			cit2++;
-		}
-
-		if (sender() == _pushButtons[i]) {
+	for (int i = 0; i < m_seedRep->GetNumberOfSeeds(); ++i, ++cit1) {
+		if (m_seedWidget->GetSeed(i)->GetEnabled() && pushButtons[i]->isChecked()) {
 			double worldPos[3];
-			int* imagePos = (*cit1);
-			if (imagePos[0] >= 0) {
-				for (int pos = 0; pos < 3; ++pos) {
-					worldPos[pos] = (imagePos[pos] * GetSpacing()[pos]) + GetOrigin()[pos];
-				}
+			m_seedWidget->GetSeedRepresentation()->GetSeedWorldPosition(i, worldPos);
+			int imagePos[3];
+			for (int pos = 0; pos < 3; ++pos) {
+				imagePos[pos] = (worldPos[pos] - GetOrigin()[pos]) / GetSpacing()[pos] + 0.5;
 			}
-			else {
-				m_imageViewer->GetFocalPointWithWorldCoordinate(worldPos);
-			}
-			m_seedWidget->GetSeed(i)->GetHandleRepresentation()->SetWorldPosition(worldPos);
-			m_seedWidget->GetSeed(i)->SetEnabled(_pushButtons[i]->isChecked());
-			break;
+			memcpy(*cit1, imagePos, sizeof(imagePos));
+			//if (i < NUM_OF_ELONGATION) {
+
+			//}
+			//else {
+			//	memcpy(*cit2, imagePos, sizeof(imagePos));
+			//	++cit2;
+			//}
 		}
 	}
-
-	InteractorStyleSeedsPlacer::DropSeed(m_VBDSmokerElongation);
-
+	cout << __func__ << endl;
+	cout << __FUNCTION__ << endl;
+	cout << __LINE__ << endl;
+	print();
 }
 
 void QInteractorStyleVBDSmokerSeeds::UpdateWidgetToSeeds(int * newImagePos, int * oldImagePos)
 {
-	// do nothing
+	SaveWidgetToSeeds();
+	GenerateWidgetFromSeeds();
 }
 
 void QInteractorStyleVBDSmokerSeeds::UpdateWidgetToSeeds(std::list<int*>& seeds, int * newImagePos, int * oldImagePos)
@@ -159,8 +159,90 @@ void QInteractorStyleVBDSmokerSeeds::UpdateWidgetToSeeds(std::list<int*>& seeds,
 
 void QInteractorStyleVBDSmokerSeeds::ClearAllSeeds()
 {
-	InteractorStyleSeedsPlacer::ClearAllSeeds(m_VBDSmokerElongation);
-	InteractorStyleSeedsPlacer::ClearAllSeeds(m_VBDSmokerDetour);
+	InteractorStyleSeedsPlacer::ClearAllSeeds(m_VBDSmokerSeeds);
+}
+
+void QInteractorStyleVBDSmokerSeeds::slotUpdateBasilarArteryBifurcationLocation()
+{
+	int i = 0;
+	list<int*>::const_iterator cit = m_VBDSmokerSeeds.cbegin();
+	int class0 = (*cit++)[2];
+	int class1 = (*cit++)[2];
+	int class2 = (*cit++)[2];
+	int value = ui->spinBoxBasilarArteryBifurcationLocation->value();
+	if (value <= class0) {
+		ui->lineEditElongation->setText("class0");
+	}
+	else if (class0 < value && value <= class1) {
+		ui->lineEditElongation->setText("class1");
+
+	}
+	else if (class1 < value && value <= class2) {
+		ui->lineEditElongation->setText("class2");
+	}
+	else {
+		ui->lineEditElongation->setText("class3");
+
+	}
+
+}
+
+void QInteractorStyleVBDSmokerSeeds::slotUpdatePonsCentralSectionLocation()
+{
+	int range[6];
+	memcpy(range, m_imageViewer->GetDisplayExtent(), sizeof(range));
+	range[4] = ui->spinBoxPonsCentralSectionLocation->value();
+	range[5] = ui->spinBoxPonsCentralSectionLocation->value();
+	vtkSmartPointer<vtkMarchingSquares> marchingSquare =
+		vtkSmartPointer<vtkMarchingSquares>::New();
+	marchingSquare->SetInputData(m_imageViewer->GetInputLayer());
+	marchingSquare->GenerateValues(1, 1, 1);
+	marchingSquare->SetImageRange(range);
+	marchingSquare->Update();
+
+	vtkSmartPointer<vtkCenterOfMass> centerOfMass =
+		vtkSmartPointer<vtkCenterOfMass>::New();
+	centerOfMass->SetInputConnection(marchingSquare->GetOutputPort());
+	centerOfMass->SetUseScalarsAsWeights(false);
+	centerOfMass->Update();
+
+	const double* center = centerOfMass->GetCenter();
+	int centerX = (center[0] - GetOrigin()[0]) / GetSpacing()[0] + 0.5;
+	int centerY = (center[1] - GetOrigin()[1]) / GetSpacing()[1] + 0.5;
+	int centerZ = (center[2] - GetOrigin()[2]) / GetSpacing()[2] + 0.5;
+
+	list<int*>::const_iterator cit = m_VBDSmokerSeeds.cbegin();
+	int class0 = (*cit++)[2];
+	int class1 = (*cit++)[2];
+	int class2 = (*cit++)[2];
+	int class0M = (*cit++)[0];
+	int class1R = (*cit++)[0];
+	int class1L = (*cit++)[0];
+	int class2R = (*cit++)[0];
+	int class2L = (*cit++)[0];
+	int class3R = (*cit++)[0];
+	int class3L = (*cit++)[0];
+
+	if ((class1R < centerX && centerX <= class0M) ||
+		(class0M < centerX && centerX <= class1L)) {
+		ui->lineEditDetour->setText("class0");
+
+	}
+	else if((class2R < centerX && centerX <= class1R) ||
+		(class1L < centerX && centerX <= class2L)) {
+		ui->lineEditDetour->setText("class1");
+
+	}
+	else if ((class3R < centerX && centerX <= class2R) ||
+		(class2L < centerX && centerX <= class3L)) {
+		ui->lineEditDetour->setText("class2");
+
+	}
+	else {
+		ui->lineEditDetour->setText("class3");
+
+	}
+
 }
 
 void QInteractorStyleVBDSmokerSeeds::uniqueEnable()
@@ -172,8 +254,8 @@ void QInteractorStyleVBDSmokerSeeds::uniqueEnable()
 
 
 
-	connect(ui->pushButtonBasilarArteryBifurcationLocation0, SIGNAL(toggled(bool)),
-		this, SLOT(slotEnableTest(bool)));
+	//connect(ui->pushButtonBasilarArteryBifurcationLocation0, SIGNAL(toggled(bool)),
+	//	this, SLOT(slotEnableTest(bool)));
 }
 
 void QInteractorStyleVBDSmokerSeeds::uniqueDisable()
@@ -206,6 +288,65 @@ QInteractorStyleVBDSmokerSeeds::QInteractorStyleVBDSmokerSeeds(int uiType, QWidg
 QInteractorStyleVBDSmokerSeeds::~QInteractorStyleVBDSmokerSeeds()
 {
 	QDELETE_UI();
+	ClearAllSeeds();
+}
+
+void QInteractorStyleVBDSmokerSeeds::OnLeftButtonDown()
+{
+	InteractorStyleSeedsPlacer::OnLeftButtonDown();
+
+	list<int*>::const_iterator cit1 = m_VBDSmokerSeeds.cbegin();
+	for (int i = 0; i < NUM_OF_DETOUR + NUM_OF_ELONGATION; ++i, ++cit1) {
+		if (!m_seedWidget->GetSeed(i)->GetEnabled() &&
+			pushButtons[i]->isChecked() && 
+			(*cit1)[0] == -1) {
+
+			this->GetInteractor()->GetPicker()->Pick(
+				this->GetInteractor()->GetEventPosition()[0],
+				this->GetInteractor()->GetEventPosition()[1],
+				0,  // always zero.
+				m_imageViewer->GetRenderer());
+
+			double* picked = this->GetInteractor()->GetPicker()->GetPickPosition();
+
+			//Check if valid pick
+			if (picked[0] == 0.0&&picked[1] == 0.0)
+				break;
+			int imagePos[3];
+			m_imageViewer->GetFocalPointWithImageCoordinate(imagePos);
+			picked[GetSliceOrientation()] = imagePos[GetSliceOrientation()] * 
+				GetSpacing()[GetSliceOrientation()] + GetOrigin()[GetSliceOrientation()];
+			m_seedWidget->GetSeed(i)->SetEnabled(pushButtons[i]->isChecked());
+			m_seedWidget->GetSeed(i)->GetHandleRepresentation()->SetWorldPosition(picked);
+			
+			SaveWidgetToSeeds();
+			GenerateWidgetFromSeeds();
+
+			break;
+
+		}
+	}
+
+	cout << __func__ << endl;
+	cout << __FUNCTION__ << endl;
+	cout << __LINE__ << endl;
+	print();
+
+}
+
+void QInteractorStyleVBDSmokerSeeds::OnKeyPress()
+{
+	string key = this->Interactor->GetKeySym();
+	cout << __func__ << ' ' << key << endl;
+	if (key == "D") {
+		cout << __func__ << endl;
+		cout << __FUNCTION__ << endl;
+		cout << __LINE__ << endl;
+		print();
+	}
+	else {
+		InteractorStyleSeedsPlacer::OnKeyPress();
+	}
 }
 
 
@@ -217,17 +358,17 @@ void QInteractorStyleVBDSmokerSeeds::uniqueInitialization()
 		ui->pushButtonBasilarArteryBifurcationLocation0,
 		ui->pushButtonBasilarArteryBifurcationLocation1,
 		ui->pushButtonBasilarArteryBifurcationLocation2,
-		ui->pushButtonBasilarArteryBifurcationLocation3,
 		ui->pushButtonPonsCentralSectionLocation0,
-		ui->pushButtonPonsCentralSectionLocation1Left,
 		ui->pushButtonPonsCentralSectionLocation1Right,
-		ui->pushButtonPonsCentralSectionLocation2Left,
+		ui->pushButtonPonsCentralSectionLocation1Left,
 		ui->pushButtonPonsCentralSectionLocation2Right,
-		ui->pushButtonPonsCentralSectionLocation3Left,
-		ui->pushButtonPonsCentralSectionLocation3Right
-	};
-	for (int i = 0; i < NUM_OF_DETOUR + NUM_OF_ELONGATION; ++i) {
-		connect(_pushButtons[i], SIGNAL(toggled(bool)), this, SLOT(DropSeed()));
+		ui->pushButtonPonsCentralSectionLocation2Left,
+		ui->pushButtonPonsCentralSectionLocation3Right,
+		ui->pushButtonPonsCentralSectionLocation3Left };
+	memcpy(pushButtons, _pushButtons, sizeof(pushButtons));
+
+	for (int i = 0; i < NUM_OF_ELONGATION + NUM_OF_DETOUR; ++i) {
+		m_VBDSmokerSeeds.push_back(new int[3]{ -1,-1,-1 });
 	}
 
 	connect(ui->pushButtonBasilarArteryBifurcationLocation, SIGNAL(clicked()),
@@ -235,9 +376,37 @@ void QInteractorStyleVBDSmokerSeeds::uniqueInitialization()
 
 	connect(ui->pushButtonPonsCentralSectionLocation, SIGNAL(clicked()),
 		this, SLOT(slotPonsCentralSectionLocationCurrentSlice()));
+
+	connect(ui->spinBoxBasilarArteryBifurcationLocation, SIGNAL(valueChanged(int)),
+		this, SLOT(slotUpdateBasilarArteryBifurcationLocation()));
+	connect(ui->spinBoxPonsCentralSectionLocation, SIGNAL(valueChanged(int)),
+		this, SLOT(slotUpdatePonsCentralSectionLocation()));
 }
 
 void QInteractorStyleVBDSmokerSeeds::initialization()
 {
 	QAbstractNavigation::initialization();
+	for (int i = 0; i < NUM_OF_DETOUR + NUM_OF_ELONGATION; ++i) {
+		connect(pushButtons[i], SIGNAL(toggled(bool)), this, SLOT(GenerateWidgetFromSeeds()));
+	}
+}
+
+void QInteractorStyleVBDSmokerSeeds::print()
+{
+	for (list<int*>::const_iterator cit = m_VBDSmokerSeeds.cbegin();
+		cit != m_VBDSmokerSeeds.cend(); ++cit) {
+		int* imagePos = (*cit);
+		cout << "Elongation" << endl;
+		cout << imagePos[0] << ' ' << imagePos[1] << ' '
+			<< imagePos[2] << endl;
+	}
+
+	//for (list<int*>::const_iterator cit = m_VBDSmokerDetour.cbegin();
+	//	cit != m_VBDSmokerDetour.cend(); ++cit) {
+	//	int* imagePos = (*cit);
+	//	cout << "Detour" << endl;
+	//	cout << imagePos[0] << ' ' << imagePos[1] << ' '
+	//		<< imagePos[2] << endl;
+	//}
+
 }

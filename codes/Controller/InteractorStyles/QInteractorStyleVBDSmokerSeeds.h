@@ -10,6 +10,7 @@
 namespace Ui { class QInteractorStyleVBDSmokerSeeds; }
 
 class vtkHandleWidget;
+class QPushButton;
 
 class QInteractorStyleVBDSmokerSeeds : public QAbstractNavigation, 
 	public InteractorStyleSeedsPlacer
@@ -18,7 +19,7 @@ class QInteractorStyleVBDSmokerSeeds : public QAbstractNavigation,
 	QSETUP_UI_HEAD(QInteractorStyleVBDSmokerSeeds);
 
 public:
-	const static int NUM_OF_ELONGATION = 4;
+	const static int NUM_OF_ELONGATION = 3;
 	const static int NUM_OF_DETOUR = 7;
 
 	vtkTypeMacro(QInteractorStyleVBDSmokerSeeds, InteractorStyleSeedsPlacer);
@@ -26,7 +27,6 @@ public:
 	void SetCustomEnabled(bool flag);
 	void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 
-	virtual void GenerateWidgetFromSeeds() override;
 	//virtual void GenerateWidgetFromSeeds(const std::list<int*>& seeds) override;
 	/**
 	 * save all widgets into the 2 list
@@ -37,6 +37,7 @@ public:
 	/**
 	 * @deprecated
 	 * @oveerride
+	 * just directly invoke #SaveWidgetToSeeds() and #GenerateWidgetFromSeeds()
 	 * do nothing
 	 */
 	virtual void UpdateWidgetToSeeds(
@@ -54,31 +55,41 @@ public:
 	virtual void ClearAllSeeds() override;
 
 
-
+public slots:
+	virtual void GenerateWidgetFromSeeds() override;
+	virtual void slotUpdateBasilarArteryBifurcationLocation();
+	virtual void slotUpdatePonsCentralSectionLocation();
 
 
 protected slots:
 	void slotBasilarArteryBifurcationLocationCurrentSlice();
 	void slotPonsCentralSectionLocationCurrentSlice();
 
+
+
 	void slotEnableTest(bool flag);
-	virtual void DropSeed() override;
 
 
 protected:
 	QInteractorStyleVBDSmokerSeeds(int uiType = UNIQUE_UI, QWidget* parent = Q_NULLPTR);
 	~QInteractorStyleVBDSmokerSeeds();
 
+	virtual void OnLeftButtonDown() override;
+	virtual void OnKeyPress() override;
+
 	virtual void uniqueEnable() override;
 	virtual void uniqueDisable() override;
 
-	static std::list<int*> m_VBDSmokerElongation;
-	static std::list<int*> m_VBDSmokerDetour;
+	static std::list<int*> m_VBDSmokerSeeds;
 
 private:
 	
 	void uniqueInitialization();
 	void initialization();
+
+	void print();
+
+	static QPushButton* pushButtons[NUM_OF_ELONGATION + NUM_OF_DETOUR];
 	
 	Ui::QInteractorStyleVBDSmokerSeeds* ui = nullptr;
 

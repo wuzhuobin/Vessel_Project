@@ -132,27 +132,7 @@ location</string>
       </item>
       <item>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
-         <widget class="QPushButton" name="pushButtonBasilarArteryBifurcationLocation0">
-          <property name="text">
-           <string>0</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QPushButton" name="pushButtonBasilarArteryBifurcationLocation1">
-          <property name="text">
-           <string>1</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
+        <item row="1" column="1">
          <widget class="QPushButton" name="pushButtonBasilarArteryBifurcationLocation2">
           <property name="text">
            <string>2</string>
@@ -162,10 +142,20 @@ location</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QPushButton" name="pushButtonBasilarArteryBifurcationLocation3">
+        <item row="1" column="0">
+         <widget class="QPushButton" name="pushButtonBasilarArteryBifurcationLocation1">
           <property name="text">
-           <string>3</string>
+           <string>1</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QPushButton" name="pushButtonBasilarArteryBifurcationLocation0">
+          <property name="text">
+           <string>0</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -203,50 +193,20 @@ location</string>
       </item>
       <item>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="2" column="1">
-         <widget class="QPushButton" name="pushButtonPonsCentralSectionLocation2Right">
-          <property name="text">
-           <string>2 right</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QPushButton" name="pushButtonPonsCentralSectionLocation1Right">
-          <property name="text">
-           <string>1 right</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QPushButton" name="pushButtonPonsCentralSectionLocation1Left">
-          <property name="text">
-           <string>1 left</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QPushButton" name="pushButtonPonsCentralSectionLocation2Left">
-          <property name="text">
-           <string>2 left</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
         <item row="3" column="1">
          <widget class="QPushButton" name="pushButtonPonsCentralSectionLocation3Right">
           <property name="text">
            <string>3 right</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="QPushButton" name="pushButtonPonsCentralSectionLocation0">
+          <property name="text">
+           <string>0</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -263,10 +223,40 @@ location</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" colspan="2">
-         <widget class="QPushButton" name="pushButtonPonsCentralSectionLocation0">
+        <item row="1" column="1">
+         <widget class="QPushButton" name="pushButtonPonsCentralSectionLocation1Right">
           <property name="text">
-           <string>0</string>
+           <string>1 right</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="pushButtonPonsCentralSectionLocation2Right">
+          <property name="text">
+           <string>2 right</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QPushButton" name="pushButtonPonsCentralSectionLocation2Left">
+          <property name="text">
+           <string>2 left</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QPushButton" name="pushButtonPonsCentralSectionLocation1Left">
+          <property name="text">
+           <string>1 left</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -300,14 +290,14 @@ location</string>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_2">
+         <widget class="QLineEdit" name="lineEditDetour">
           <property name="readOnly">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit">
+         <widget class="QLineEdit" name="lineEditElongation">
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -328,7 +318,7 @@ location</string>
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="lineEdit_3">
+         <widget class="QLineEdit" name="lineEditExpansion">
           <property name="readOnly">
            <bool>true</bool>
           </property>
