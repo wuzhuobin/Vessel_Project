@@ -54,6 +54,8 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled
 	}
 	else {
 		for (int i = 0; i < NUM_OF_HANDLES; ++i) {
+			// removing widgets
+			m_handleWidgets[i]->SetInteractor(nullptr);
 			m_handleWidgets[i]->EnabledOff();
 			m_handleWidgets[i] = nullptr;
 		}
@@ -77,10 +79,10 @@ InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::~InteractorStyleSurfa
 {
 }
 
-void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::CreateCenterLine()
-{
-	InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine();
-}
+//void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::CreateCenterLine()
+//{
+//	InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine();
+//}
 
 void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializeHandleWidgets()
 {

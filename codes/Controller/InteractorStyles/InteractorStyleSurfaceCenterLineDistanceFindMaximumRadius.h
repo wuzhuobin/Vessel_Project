@@ -29,7 +29,7 @@ protected:
 	InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius();
 	virtual ~InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius() override;
 
-	virtual void CreateCenterLine() override;
+	//virtual void CreateCenterLine() override;
 	virtual void InitializeHandleWidgets();
 	virtual void FindMaximumRadius();
 
