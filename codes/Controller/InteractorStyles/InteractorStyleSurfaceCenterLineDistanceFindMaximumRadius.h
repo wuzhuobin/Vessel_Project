@@ -40,7 +40,7 @@ protected:
 	//vtkSmartPointer<vtkSeedWidget> m_seedWidget = nullptr;
 	vtkSmartPointer<vtkHandleWidget> m_handleWidgets[NUM_OF_HANDLES] = {nullptr};
 	vtkSmartPointer<vtkPolyData> m_triangulatedCenterLine = nullptr;
-	vtkSmartPointer<vtkTextActor> m_radiusText = nullptr;
+	vtkSmartPointer<vtkTextActor> m_measurementText = nullptr;
 	//vtkSmartPointer<vtkPolyData> m_centerLine = nullptr;
 
 

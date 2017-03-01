@@ -48,6 +48,7 @@ private slots:
 	void slotTrackballCamera();
 	void slotCenterLine();
 	void slotFindMaximumRadius();
+	void slotPerpendicularMeasurement();
 
 	// IADE specified
 	void slotVBDSmoker();

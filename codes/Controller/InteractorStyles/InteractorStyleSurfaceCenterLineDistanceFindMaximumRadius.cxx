@@ -50,7 +50,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled
 	InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(flag);
 	if (m_customFlag) {
 		InitializeHandleWidgets();
-		m_surfaceViewer->GetRenderer()->AddActor(m_radiusText);
+		m_surfaceViewer->GetRenderer()->AddActor(m_measurementText);
 	}
 	else {
 		for (int i = 0; i < NUM_OF_HANDLES; ++i) {
@@ -60,7 +60,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled
 			m_handleWidgets[i] = nullptr;
 		}
 		m_pointLocator = nullptr;
-		m_surfaceViewer->GetRenderer()->RemoveActor(m_radiusText);
+		m_surfaceViewer->GetRenderer()->RemoveActor(m_measurementText);
 	}
 	
 
@@ -68,11 +68,11 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled
 
 InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius()
 {
-	m_radiusText =
+	m_measurementText =
 		vtkSmartPointer<vtkTextActor>::New();
-	m_radiusText->SetPosition2(10, 40);
-	m_radiusText->GetTextProperty()->SetFontSize(24);
-	m_radiusText->GetTextProperty()->SetColor(1.0, 0.0, 0.0);
+	m_measurementText->SetPosition2(10, 40);
+	m_measurementText->GetTextProperty()->SetFontSize(24);
+	m_measurementText->GetTextProperty()->SetColor(1.0, 0.0, 0.0);
 }
 
 InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::~InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius()
@@ -99,6 +99,10 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializeHandle
 	triangleFilter->Update();
 	m_triangulatedCenterLine = triangleFilter->GetOutput();
 
+	m_pointLocator = vtkSmartPointer<vtkKdTreePointLocator>::New();
+	m_pointLocator->SetDataSet(m_triangulatedCenterLine);
+	m_pointLocator->BuildLocator();
+
 	vtkSmartPointer<vtkPolygonalSurfacePointPlacer> pointPlacer =
 		vtkSmartPointer<vtkPolygonalSurfacePointPlacer>::New();
 	pointPlacer->AddProp(m_centerLineActor);
@@ -113,7 +117,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializeHandle
 		vtkSmartPointer<vtkPointHandleRepresentation3D> handleRep =
 			vtkSmartPointer<vtkPointHandleRepresentation3D>::New();
 		handleRep->SetPointPlacer(pointPlacer);
-		handleRep->SetWorldPosition(m_triangulatedCenterLine->GetPoint(0));
+		handleRep->SetWorldPosition(m_triangulatedCenterLine->GetPoint(i));
 
 		m_handleWidgets[i] = vtkSmartPointer<vtkHandleWidget>::New();
 		m_handleWidgets[i]->SetRepresentation(handleRep);
@@ -123,9 +127,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializeHandle
 	}
 
 
-	m_pointLocator = vtkSmartPointer<vtkKdTreePointLocator>::New();
-	m_pointLocator->SetDataSet(m_triangulatedCenterLine);
-	m_pointLocator->BuildLocator();
+
 	//vtkSmartPointer<vtkPolyDataWriter> writer =
 	//	vtkSmartPointer<vtkPolyDataWriter>::New();
 	//writer->SetInputData(centerlinesFilter->GetOutput());
@@ -179,7 +181,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::FindMaximumRadiu
 	cout << GeodesicPathDistance << endl;
 	char buff[100];
 	sprintf(buff, "Maximum radius: %.2f mm\n Minimum radius: %.2f mm\n Center line length: %.2f mm", maxRadius, minRadius, GeodesicPathDistance);
-	m_radiusText->SetInput(buff);
+	m_measurementText->SetInput(buff);
 	this->m_surfaceViewer->Render();
 }
 

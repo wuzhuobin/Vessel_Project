@@ -14,6 +14,9 @@ IADEInteractorStyleSwitch3D::IADEInteractorStyleSwitch3D()
 	this->FindMaximumRadius = InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::New();
 	allStyles.push_back(this->FindMaximumRadius);
 
+	this->PerpendicularMeasurement = InteractorStyleSurfaceCenterLinePerpendicularMeasurement::New();
+	allStyles.push_back(this->PerpendicularMeasurement);
+
 	this->CurrentStyle = 0;
 
 }

@@ -141,6 +141,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotCenterLine()));
 	connect(mainWindow.getUi()->actionFind_maximum_radius, SIGNAL(triggered()),
 		this, SLOT(slotFindMaximumRadius()));
+	connect(mainWindow.getUi()->actionPerpendicular_measurement, SIGNAL(triggered()),
+		this, SLOT(slotPerpendicularMeasurement()));
 
 	// update btn
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
@@ -293,6 +295,11 @@ void Core::slotCenterLine()
 void Core::slotFindMaximumRadius()
 {
 	surfaceInteractorStyle->SetInteractorStyleTo3DFindMaximumRadius();
+}
+
+void Core::slotPerpendicularMeasurement()
+{
+	surfaceInteractorStyle->SetInteractorStyleTo3DPerpendicularMeasurement();
 }
 
 void Core::slotVBDSmoker()

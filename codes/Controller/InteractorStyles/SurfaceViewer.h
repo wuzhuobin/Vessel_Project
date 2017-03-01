@@ -18,6 +18,7 @@ class vtkLookupTable;
 class vtkImageResample;
 class vtkWindowedSincPolyDataFilter;
 class vtkDepthSortPolyData;
+class vtkAxesActor;
 
 class SurfaceViewer: public vtkObject
 {
@@ -100,6 +101,7 @@ protected:
 	vtkPolyDataMapper* SurfaceMapper = nullptr;
 	vtkRenderWindowInteractor* Interactor = nullptr;
 	vtkInteractorStyle* InteractorStyle = nullptr;
+	vtkAxesActor* AxesActor = nullptr;
 
 	vtkLookupTable* LookupTable = nullptr;
 

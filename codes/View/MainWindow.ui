@@ -897,6 +897,7 @@
     <addaction name="actionTraceball_camera"/>
     <addaction name="actionCenter_line"/>
     <addaction name="actionFind_maximum_radius"/>
+    <addaction name="actionPerpendicular_measurement"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuImage"/>
@@ -1494,6 +1495,14 @@
    </property>
    <property name="toolTip">
     <string>Find maximum radius</string>
+   </property>
+  </action>
+  <action name="actionPerpendicular_measurement">
+   <property name="text">
+    <string>Perpendicular measurement</string>
+   </property>
+   <property name="toolTip">
+    <string>Perpendicular measurement</string>
    </property>
   </action>
  </widget>

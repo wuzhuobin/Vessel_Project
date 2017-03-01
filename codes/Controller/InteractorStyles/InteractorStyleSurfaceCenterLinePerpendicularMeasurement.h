@@ -5,6 +5,8 @@
 
 class vtkLineWidget2;
 class vtkTextActor;
+class PerpendicularMeasurementLineWidget;
+//class vtkDistanceWidget;
 
 class InteractorStyleSurfaceCenterLinePerpendicularMeasurement :
 	public InteractorStyleSurfaceCenterLineSimpleClipping
@@ -19,18 +21,22 @@ public:
 
 	virtual void SetCustomEnabled(bool flag) override;
 
+	virtual void FindMaxiMumPerpendicularDistance();
+
 
 protected:
 
 	InteractorStyleSurfaceCenterLinePerpendicularMeasurement();
 	virtual ~InteractorStyleSurfaceCenterLinePerpendicularMeasurement() override;
 
-	virtual void InitializeLineWidget2();
+	virtual void InitializeLinePerpendicularMeasurementWidget();
+	virtual void InitializeDistanceWidget();
 
 	virtual void OnKeyPress() override;
 
-	vtkSmartPointer<vtkLineWidget2> m_lineWidget2 = nullptr;
-	vtkSmartPointer<vtkTextActor> m_radiusText = nullptr;
+	vtkSmartPointer<PerpendicularMeasurementLineWidget> m_lineWidget2 = nullptr;
+	vtkSmartPointer<vtkTextActor> m_measurementText = nullptr;
+	//vtkSmartPointer<vtkDistanceWidget> m_distanceWidget = nullptr;
 
 
 private:

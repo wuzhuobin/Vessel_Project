@@ -16,6 +16,7 @@
 #include <vtkWindowedSincPolyDataFilter.h>
 #include <vtkImageResample.h>
 #include <vtkDepthSortPolyData.h>
+#include <vtkAxesActor.h>
 
 #include <algorithm>
 
@@ -60,6 +61,9 @@ void SurfaceViewer::Render(void)
 				this->Renderer->GetActiveCamera()->SetParallelScale(
 					xs < 150 ? 75 : (xs - 1) / 2.0);
 			}
+			this->AxesActor->SetOrigin(GetInput()->GetOrigin());
+			this->AxesActor->VisibilityOn();
+			this->AxesActor->VisibilityOff();
 			this->FirstRender = 0;
 		}
 	}
@@ -263,6 +267,9 @@ SurfaceViewer::SurfaceViewer()
 {
 	this->RenderWindow = nullptr;
 	this->Renderer = nullptr;
+	this->AxesActor = vtkAxesActor::New();
+	this->AxesActor->DragableOff();
+	this->AxesActor->VisibilityOff();
 	this->SurfaceActor = vtkActor::New();
 	this->SurfaceMapper = vtkPolyDataMapper::New();
 	this->ImageResample = vtkImageResample::New();
@@ -340,6 +347,10 @@ SurfaceViewer::~SurfaceViewer()
 		this->SurfaceMapper->Delete();
 		this->SurfaceMapper = nullptr;
 	}
+	if (this->AxesActor) {
+		this->AxesActor->Delete();
+		this->AxesActor = nullptr;
+	}
 	if (this->SurfaceActor)
 	{
 		this->SurfaceActor->Delete();
@@ -397,6 +408,10 @@ void SurfaceViewer::InstallPipeline()
 		this->Interactor->SetInteractorStyle(this->InteractorStyle);
 		this->Interactor->SetRenderWindow(this->RenderWindow);
 	}
+	if (this->Renderer && this->AxesActor)
+	{
+		this->Renderer->AddViewProp(this->AxesActor);
+	}
 	if (this->Renderer && this->SurfaceActor)
 	{
 		this->Renderer->AddViewProp(this->SurfaceActor);
@@ -417,7 +432,10 @@ void SurfaceViewer::UnInstallPipeline()
 	{
 		this->SurfaceActor->GetMapper()->SetInputConnection(nullptr);
 	}
-
+	if (this->Renderer && this->AxesActor)
+	{
+		this->Renderer->RemoveActor(this->AxesActor);
+	}
 	if (this->Renderer && this->SurfaceActor)
 	{
 		this->Renderer->RemoveViewProp(this->SurfaceActor);
