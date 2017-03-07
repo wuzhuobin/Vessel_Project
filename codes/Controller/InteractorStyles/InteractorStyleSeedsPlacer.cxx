@@ -132,7 +132,7 @@ void InteractorStyleSeedsPlacer::SetCurrentFocalPointWithImageCoordinate(int i, 
 			_style->m_customFlag &&
 			_style->GetSlice() != oldIJK[_style->GetSliceOrientation()]) {
 			_style->GenerateWidgetFromSeeds();
-			_style->m_imageViewer->Render();
+			_style->m_seedWidget->Render();
 		}
 	}
 	//STYLE_DOWN_CAST_CONSTITERATOR(InteractorStyleSeedsPlacer, GenerateWidgetFromSeeds());
@@ -207,7 +207,7 @@ void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds(const list<int*>& seeds
 			newSeed->EnabledOn();
 		}
 	}
-	m_imageViewer->Render();
+	m_seedWidget->Render();
 }
 
 void InteractorStyleSeedsPlacer::SaveWidgetToSeeds()
@@ -278,7 +278,7 @@ void InteractorStyleSeedsPlacer::DropSeed(list<int*>& seeds)
 	vtkHandleWidget* newSeed = m_seedWidget->CreateNewHandle();
 	newSeed->GetHandleRepresentation()->SetWorldPosition(worldPos);
 	newSeed->EnabledOn();
-	m_imageViewer->Render();
+	m_seedWidget->Render();
 
 	SaveWidgetToSeeds(seeds);
 	OnLeftButtonUp();

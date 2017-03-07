@@ -18,6 +18,7 @@
 #include <vtkTextActor.h>
 #include <vtkTextProperty.h>
 #include <vtkRenderer.h>
+#include <vtkCommand.h>
 
 #include <vtkDijkstraGraphInternals.h>
 class vtkDijkstraGraphGeodesicPathDistance : public vtkDijkstraGraphGeodesicPath {
@@ -43,6 +44,18 @@ protected:
 
 };
 
+class InteractorStyleSurfaceCenterLineDistanceFindMaximumRadiusCallback : public vtkCommand {
+public:
+	static InteractorStyleSurfaceCenterLineDistanceFindMaximumRadiusCallback* New() { return new InteractorStyleSurfaceCenterLineDistanceFindMaximumRadiusCallback; }
+	InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius* style;
+	virtual void Execute(vtkObject*, unsigned long event, void *calldata) override {
+		if (event == vtkCommand::EndInteractionEvent)
+		{
+			style->FindMaximumRadius();
+		}
+	}
+};
+
 vtkStandardNewMacro(InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius);
 
 void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled(bool flag)
@@ -57,6 +70,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled
 			// removing widgets
 			m_handleWidgets[i]->SetInteractor(nullptr);
 			m_handleWidgets[i]->EnabledOff();
+			m_handleWidgets[i]->RemoveAllObservers();
 			m_handleWidgets[i] = nullptr;
 		}
 		m_pointLocator = nullptr;
@@ -119,10 +133,15 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializeHandle
 		handleRep->SetPointPlacer(pointPlacer);
 		handleRep->SetWorldPosition(m_triangulatedCenterLine->GetPoint(i));
 
+		vtkSmartPointer<InteractorStyleSurfaceCenterLineDistanceFindMaximumRadiusCallback> callback =
+			vtkSmartPointer<InteractorStyleSurfaceCenterLineDistanceFindMaximumRadiusCallback>::New();
+		callback->style = this;
+
 		m_handleWidgets[i] = vtkSmartPointer<vtkHandleWidget>::New();
 		m_handleWidgets[i]->SetRepresentation(handleRep);
 		m_handleWidgets[i]->SetInteractor(this->Interactor);
 		m_handleWidgets[i]->EnabledOn();
+		m_handleWidgets[i]->AddObserver(vtkCommand::EndInteractionEvent, callback);
 
 	}
 
@@ -189,10 +208,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::OnKeyPress()
 {
 	std::string key = this->Interactor->GetKeySym();
 	cout << key << endl;
-	if (key == "Return") {
-		FindMaximumRadius();
-	}
-	else if (key == "Tab") {
+	if (key == "Tab") {
 		InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress();
 		InitializeHandleWidgets();
 	}

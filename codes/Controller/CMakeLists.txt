@@ -11,6 +11,7 @@ if (NOT ITK_FOUND)
 	message(FATAL_ERROR "error: ITK is not found")
 endif()
 include(${ITK_USE_FILE})
+#QT
 find_package(Qt5Core)
 find_package(Qt5Widgets REQUIRED)
 if(NOT Qt5Widgets_FOUND)
@@ -19,6 +20,9 @@ endif()
 
 add_subdirectory(
 	InteractorStyles
+)
+add_subdirectory(
+	SurfaceViewer_test
 )
 
 SET(

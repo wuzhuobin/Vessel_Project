@@ -41,6 +41,16 @@ void AbstractSurfaceCenterLine::SetCustomEnabled(bool flag)
 
 }
 
+void AbstractSurfaceCenterLine::SetCenterLine(vtkPolyData* centerLine)
+{
+	m_centerLine = centerLine;
+}
+
+vtkPolyData* AbstractSurfaceCenterLine::GetCenterLine()
+{
+	return m_centerLine;
+}
+
 AbstractSurfaceCenterLine::AbstractSurfaceCenterLine()
 {
 }

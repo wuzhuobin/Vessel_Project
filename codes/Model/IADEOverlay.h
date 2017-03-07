@@ -16,8 +16,8 @@ public:
 	static const int NUMBER_OF_COLOR = 7;
 	const int* m_overlayColor[NUMBER_OF_COLOR];
 	const int zeros[4] = { 0,0,0,0 };
-	const int lumen[4] = { 255, 0, 0, 255 };
 	const int vesselWall[4] = { 0, 0, 255, 255 };
+	const int lumen[4] = { 255, 0, 0, 255 };
 	const int calcification[4] = { 0,255,0,255 };
 	const int hemorrhage[4] = { 255, 255, 0,255 };
 	const int lrnc[4] = { 0, 255, 255 ,255 };

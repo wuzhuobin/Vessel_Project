@@ -943,6 +943,7 @@
    <addaction name="separator"/>
    <addaction name="actionMultiPlanarView"/>
    <addaction name="actionAllAxialView"/>
+   <addaction name="actionCurved_multiplanar_view"/>
   </widget>
   <widget class="QDockWidget" name="moduleWidgetDockWidget">
    <property name="sizePolicy">
@@ -1503,6 +1504,14 @@
    </property>
    <property name="toolTip">
     <string>Perpendicular measurement</string>
+   </property>
+  </action>
+  <action name="actionCurved_multiplanar_view">
+   <property name="text">
+    <string>Curved multiplanar view</string>
+   </property>
+   <property name="toolTip">
+    <string>Curved multiplanar view</string>
    </property>
   </action>
  </widget>

@@ -94,6 +94,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reCli
 	centerlinesFilter->SetTargetSeedIds(targetIds);
 	centerlinesFilter->AppendEndPointsToCenterlinesOn();
 	centerlinesFilter->SetRadiusArrayName("Radius");
+	//centerlinesFilter->
 	//centerlinesFilter->SetEdgeArrayName("Edge");
 	//centerlinesFilter->SetEdgePCoordArrayName("PCoord");
 	centerlinesFilter->Update();
@@ -115,7 +116,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::ClipAndCap()
 	vtkSmartPointer<vtkThreshold> Threshold =
 		vtkSmartPointer<vtkThreshold>::New();
 	Threshold->SetInputData(m_surfaceViewer->GetSurfaceActor()->GetMapper()->GetInput());
-	Threshold->ThresholdBetween(1,1);
+	Threshold->ThresholdBetween(2,2);
 	Threshold->SetInputArrayToProcess(0, 0, 0, vtkDataObject::FIELD_ASSOCIATION_CELLS, vtkDataSetAttributes::SCALARS);
 	Threshold->Update();
 

@@ -7,6 +7,7 @@
 #include <vtkObjectFactory.h>
 #include <vtkImageData.h>
 #include <vtkExtractVOI.h>
+#include <vtkSeedWidget.h>
 
 #include "LumenExtractionFilter.h"
 #include "ImageViewer.h"
@@ -63,7 +64,7 @@ void QInteractorStyleLumenSeedsPlacer::SlotClearAllSeeds()
 	ClearAllSeeds();
 	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, ClearAllSeedWidget());
 	ui->listWidgetSeedList->clear();
-	m_imageViewer->Render();
+	m_seedWidget->Render();
 }
 
 void QInteractorStyleLumenSeedsPlacer::SetFocalSeed(int i)
@@ -92,7 +93,7 @@ void QInteractorStyleLumenSeedsPlacer::DeleteFocalSeed()
 	}
 	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, ClearAllSeedWidget());
 	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GenerateWidgetFromSeeds());
-	MY_VIEWER_CONSTITERATOR(Render());
+	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, m_seedWidget->Render());
 }
 
 void QInteractorStyleLumenSeedsPlacer::SaveWidgetToSeeds(std::list<int*>& seed)

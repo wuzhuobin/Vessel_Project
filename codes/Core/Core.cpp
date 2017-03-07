@@ -23,12 +23,12 @@ Core::Core(QObject * parent)
 	ioManager.enableRegistration(true);
 
 
-	imageManager.setModalityName(0, "T2 Image");
-	imageManager.setModalityName(1, "MRA Image");
+	imageManager.setModalityName(0, "Image 0");
+	imageManager.setModalityName(1, "Image 1");
 	imageManager.setModalityName(2, "Image 2");
 	imageManager.setModalityName(3, "Image 3");
-	mainWindow.addModalityNames("T2 Image");
-	mainWindow.addModalityNames("MRA Image");
+	mainWindow.addModalityNames("Image 0");
+	mainWindow.addModalityNames("Image 1");
 	mainWindow.addModalityNames("Image 2");
 	mainWindow.addModalityNames("Image 3");
 
@@ -228,6 +228,10 @@ void Core::slotOverlayToImageManager()
 	//ioManager.clearOverlay();
 }
 
+void Core::slotCurvedToImageManager()
+{
+}
+
 void Core::slotNavigation()
 {
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
@@ -337,6 +341,11 @@ void Core::slotAllAxialView()
 	slotChangeView(ALL_AXIAL_VIEW);
 }
 
+void Core::slotCurvedMultiPlanarView()
+{
+	slotChangeView(CURVED_MULTIPLANAR_VIEW);
+}
+
 void Core::slotChangeView(unsigned int viewMode)
 {
 	if (m_viewMode == viewMode)
@@ -391,7 +400,30 @@ void Core::slotChangeView(unsigned int viewMode)
 				}
 
 			}
+			break;
+	case CURVED_MULTIPLANAR_VIEW:
+		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+			if (!imageManager.getCurvedImage(currentImage[i])) {
+				mainWindow.getUi()->actionMultiPlanarView->trigger();
+				break;
+			}
+			// Change input to same image, default 0
+			// SetupInteractor should be ahead of InitializeHeader
+			imageViewers[i]->SetInputData(imageManager.getCurvedImage(currentImage[i]));
+			// Overlay settings
+			//imageViewers[i]->SetInputDataLayer(imageManager.getOverlay()->getData());
+			//imageViewers[i]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
 
+			imageViewers[i]->SetSliceOrientation(i);
+			imageViewers[i]->Render();
+			imageViewers[i]->InitializeHeader(imageManager.getModalityName(currentImage[i]).toStdString());
+			imageViewers[i]->Render();
+			// else only change input and viewer m_orientation
+			//imageViewers[i]->GetRenderWindow()->GetInteractor()->Enable();
+			// Show view props for overlay
+			//m_2DimageViewer[i]->SetAllBlack(false);
+
+		}
 		break;
 	default:
 		break;
@@ -455,19 +487,19 @@ void Core::slotUpdateOpacity(int opacity)
 //}
 
 
-void Core::slotIOManagerToImageManager(QList<IOManager::ImageType::Pointer>* images,
-	QList<itk::GDCMImageIO::Pointer>* dicoms) {
-
-	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
-		qDebug() << __LINE__;
-		qDebug() << __FUNCTION__;
-		if (images->at(i)) {
-			imageManager.setImage(i, images->at(i));
-		}
-		if (dicoms->at(i)) {
-			imageManager.setDicomIO(i, dicoms->at(i));
-		}
-	}
-
-
-}
+//void Core::slotIOManagerToImageManager(QList<IOManager::ImageType::Pointer>* images,
+//	QList<itk::GDCMImageIO::Pointer>* dicoms) {
+//
+//	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
+//		qDebug() << __LINE__;
+//		qDebug() << __FUNCTION__;
+//		if (images->at(i)) {
+//			imageManager.setImage(i, images->at(i));
+//		}
+//		if (dicoms->at(i)) {
+//			imageManager.setDicomIO(i, dicoms->at(i));
+//		}
+//	}
+//
+//
+//}

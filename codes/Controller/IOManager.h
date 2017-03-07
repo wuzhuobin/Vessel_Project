@@ -86,7 +86,7 @@ public slots:
 signals:
 	void signalFinishOpenMultiImages();
 
-	void signalFinishOpenMultiImages(QList<ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>*);
+	//void signalFinishOpenMultiImages(QList<ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>*);
 
 	void signalFinishOpenOneImage();
 

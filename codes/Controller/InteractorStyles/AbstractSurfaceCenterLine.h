@@ -16,6 +16,9 @@ public:
 
 	virtual void SetCustomEnabled(bool flag);
 
+	virtual void SetCenterLine(vtkPolyData* centerLine);
+	virtual vtkPolyData* GetCenterLine();
+
 protected:
 	AbstractSurfaceCenterLine();
 	
@@ -27,7 +30,7 @@ protected:
 
 
 	static vtkSmartPointer<vtkPolyData> m_centerLine;
-	vtkSmartPointer<vtkActor> m_centerLineActor;
+	vtkSmartPointer<vtkActor> m_centerLineActor = nullptr;
 
 
 private:

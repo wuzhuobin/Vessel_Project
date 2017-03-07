@@ -221,20 +221,20 @@
            </property>
            <item>
             <property name="text">
-             <string>Lumen</string>
+             <string>Vessel Wall</string>
             </property>
             <property name="icon">
-             <iconset resource="../../resources/Project.qrc">
-              <normaloff>:/icons/redbox.png</normaloff>:/icons/redbox.png</iconset>
+             <iconset resource="../../Main/resources/IADE_Analyzer.qrc">
+              <normaloff>:/icons/bluebox.png</normaloff>:/icons/bluebox.png</iconset>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Vessel Wall</string>
+             <string>Lumen</string>
             </property>
             <property name="icon">
-             <iconset resource="../../resources/Project.qrc">
-              <normaloff>:/icons/bluebox.png</normaloff>:/icons/bluebox.png</iconset>
+             <iconset resource="../../Main/resources/IADE_Analyzer.qrc">
+              <normaloff>:/icons/redbox.png</normaloff>:/icons/redbox.png</iconset>
             </property>
            </item>
            <item>
@@ -242,7 +242,7 @@
              <string>Calcification</string>
             </property>
             <property name="icon">
-             <iconset resource="../../resources/Project.qrc">
+             <iconset resource="../../Main/resources/IADE_Analyzer.qrc">
               <normaloff>:/icons/greenbox.png</normaloff>:/icons/greenbox.png</iconset>
             </property>
            </item>
@@ -251,7 +251,7 @@
              <string>Hemorrhage</string>
             </property>
             <property name="icon">
-             <iconset resource="../../resources/Project.qrc">
+             <iconset resource="../../Main/resources/IADE_Analyzer.qrc">
               <normaloff>:/icons/yellowbox.png</normaloff>:/icons/yellowbox.png</iconset>
             </property>
            </item>
@@ -260,7 +260,7 @@
              <string>LRNC</string>
             </property>
             <property name="icon">
-             <iconset resource="../../resources/Project.qrc">
+             <iconset resource="../../Main/resources/IADE_Analyzer.qrc">
               <normaloff>:/icons/lightbluebox.png</normaloff>:/icons/lightbluebox.png</iconset>
             </property>
            </item>
@@ -269,7 +269,7 @@
              <string>LM</string>
             </property>
             <property name="icon">
-             <iconset resource="../../resources/Project.qrc">
+             <iconset resource="../../Main/resources/IADE_Analyzer.qrc">
               <normaloff>:/icons/purplebox.png</normaloff>:/icons/purplebox.png</iconset>
             </property>
            </item>
@@ -345,7 +345,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../resources/Project.qrc"/>
+  <include location="../../Main/resources/IADE_Analyzer.qrc"/>
  </resources>
  <connections>
   <connection>

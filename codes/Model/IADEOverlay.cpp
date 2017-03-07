@@ -7,8 +7,8 @@ IADEOverlay::IADEOverlay(QObject * parent)
 {
 	// using m_overlayColor to build the lookupTable
 	m_overlayColor[0] = zeros;
-	m_overlayColor[1] = lumen;
-	m_overlayColor[2] = vesselWall;
+	m_overlayColor[1] = vesselWall;
+	m_overlayColor[2] = lumen;
 	m_overlayColor[3] = calcification;
 	m_overlayColor[4] = hemorrhage;
 	m_overlayColor[5] = lrnc;

@@ -128,20 +128,20 @@
           </property>
           <item>
            <property name="text">
-            <string>Lumen</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../Main/resources/IADE_Analyzer.qrc">
-             <normaloff>:/icons/redbox.png</normaloff>:/icons/redbox.png</iconset>
-           </property>
-          </item>
-          <item>
-           <property name="text">
             <string>Vessel Wall</string>
            </property>
            <property name="icon">
             <iconset resource="../Main/resources/IADE_Analyzer.qrc">
              <normaloff>:/icons/bluebox.png</normaloff>:/icons/bluebox.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Lumen</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+             <normaloff>:/icons/redbox.png</normaloff>:/icons/redbox.png</iconset>
            </property>
           </item>
           <item>

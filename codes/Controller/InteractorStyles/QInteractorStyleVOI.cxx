@@ -31,7 +31,7 @@ void QInteractorStyleVOI::SetCustomEnabled(bool flag)
 	else {
 		m_roi->EnabledOff();
 	}
-	m_imageViewer->Render();
+	m_roi->Render();
 	uniqueInvoke(flag);
 }
 void QInteractorStyleVOI::slotUpdateVOISpinBoxes(double * values)

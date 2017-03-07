@@ -25,6 +25,7 @@ public:
 
 	virtual void SetLine(vtkPolyData* line);
 
+
 	vtkDistanceWidget* GetDistanceWidget();
 
 	// Description:
@@ -35,7 +36,17 @@ protected:
 	PerpendicularMeasurementLineWidget();
 	~PerpendicularMeasurementLineWidget();
 
+	/**
+	 * @static 
+	 * when finish EndSelectAction, update the #DistanceWidget 
+	 */
 	static void EndSelectAction(vtkAbstractWidget *w);
+	/**
+	 * @static
+	 * remove the vtkLineRepresentation#OnLine situation, others are the same as 
+	 * vtkLineWidget2#MoveAction
+	 */
+	static void MoveAction(vtkAbstractWidget* w);
 
 	vtkDistanceWidget* DistanceWidget = nullptr;
 	vtkSmartPointer<vtkPolyData> TriangulatedLine = nullptr;

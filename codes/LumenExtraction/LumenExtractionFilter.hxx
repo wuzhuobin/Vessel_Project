@@ -65,14 +65,14 @@ namespace itk
 		typename TImage::ConstPointer input = this->GetInput();
 		typename TImage::Pointer output = this->GetOutput();
 		m_confidenceConnectedFilter->SetInput(input);
-		m_confidenceConnectedFilter->SetNumberOfThreads(4);
+		m_confidenceConnectedFilter->SetNumberOfThreads(16);
 		m_confidenceConnectedFilter->Update();
 
 		FillHoleFilterType::Pointer fillHoleFilter = FillHoleFilterType::New();
 		fillHoleFilter->SetInput(m_confidenceConnectedFilter->GetOutput());
-		fillHoleFilter->SetForegroundValue(1);
+		fillHoleFilter->SetForegroundValue(2);
 		fillHoleFilter->SetMaximumNumberOfIterations(MaximumNumberOfIterationsOfHoleFilling);
-		fillHoleFilter->SetNumberOfThreads(4);
+		fillHoleFilter->SetNumberOfThreads(16);
 		fillHoleFilter->Update();
 
 		output->Graft(fillHoleFilter->GetOutput());

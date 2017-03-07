@@ -97,7 +97,7 @@ void QInteractorStyleVBDSmokerSeeds::GenerateWidgetFromSeeds()
 			m_seedWidget->GetSeed(i)->EnabledOff();
 		}
 	}
-	m_imageViewer->Render();
+	m_seedWidget->Render();
 	//for (list<int*>::const_iterator cit = m_VBDSmokerDetour.cbegin();
 	//	cit != m_VBDSmokerDetour.cend(); ++cit) {
 	//	int* imagePos = (*cit);

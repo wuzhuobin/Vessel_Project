@@ -24,7 +24,7 @@ public:
 	ImageManager(unsigned int numOfImages = 0, QObject* parent = nullptr);
 	~ImageManager();
 
-	void setNumOfImages(unsigned int num);
+	virtual void setNumOfImages(unsigned int num);
 
 	virtual bool setOverlay();
 	virtual bool setOverlay(IVtkImageData* image);
@@ -48,6 +48,7 @@ protected:
 	QStringList m_modalityNames;
 	QList<itk::GDCMImageIO::Pointer> m_dicomIOs;
 
+	QList<vtkSmartPointer<IVtkImageData>> m_images;
 	QSharedPointer<Overlay> m_overlay;
 
 

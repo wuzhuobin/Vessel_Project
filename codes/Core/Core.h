@@ -24,7 +24,8 @@ public:
 	const static enum VIEW_MODE
 	{
 		MULTIPLANAR_VIEW = 0,
-		ALL_AXIAL_VIEW = 1
+		ALL_AXIAL_VIEW = 1, 
+		CURVED_MULTIPLANAR_VIEW = 2
 	};
 
 	Core(QObject* parent = nullptr);
@@ -32,10 +33,11 @@ public:
 
 private slots:
 	
-	void slotIOManagerToImageManager(QList<IOManager::ImageType::Pointer>* images,
-		QList<itk::GDCMImageIO::Pointer>* dicoms);
+	//void slotIOManagerToImageManager(QList<IOManager::ImageType::Pointer>* images,
+	//	QList<itk::GDCMImageIO::Pointer>* dicoms);
 	void slotIOManagerToImageManager();
 	void slotOverlayToImageManager();
+	void slotCurvedToImageManager();
 	// Image interactorstyle
 	void slotNavigation();
 	void slotWindowLevel();
@@ -58,6 +60,7 @@ private slots:
 	void slotChangeImage(int viewer, int image);
 	void slotMultiPlanarView();
 	void slotAllAxialView();
+	void slotCurvedMultiPlanarView();
 	void slotChangeView(unsigned int viewMode);
 
 	void slotUpdateSurfaceView();

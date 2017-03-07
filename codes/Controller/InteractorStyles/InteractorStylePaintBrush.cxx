@@ -52,9 +52,9 @@ InteractorStylePaintBrush::InteractorStylePaintBrush()
 	m_brushActor = nullptr;
 	m_brushRenderer = nullptr;
 	//Default color: Red
-	m_colorRed = 255;
+	m_colorRed = 0;
 	m_colorGreen = 0;
-	m_colorBule = 0;
+	m_colorBule = 255;
 	m_opacity = 255;
 	m_brushShape = SQUARE;
 	m_brushSize = 1;

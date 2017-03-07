@@ -8,7 +8,7 @@ class vtkHandleWidget;
 class vtkKdTreePointLocator;
 class vtkPolyData;
 class vtkTextActor;
-
+class InteractorStyleSurfaceCenterLineDistanceFindMaximumRadiusCallback;
 
 class InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius :
 	public InteractorStyleSurfaceCenterLineSimpleClipping
@@ -43,6 +43,7 @@ protected:
 	vtkSmartPointer<vtkTextActor> m_measurementText = nullptr;
 	//vtkSmartPointer<vtkPolyData> m_centerLine = nullptr;
 
+	friend class InteractorStyleSurfaceCenterLineDistanceFindMaximumRadiusCallback;
 
 private:
 

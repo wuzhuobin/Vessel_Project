@@ -39,6 +39,13 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(ui->actionImage4, SIGNAL(triggered()), this, SLOT(slotImage()));
 	connect(ui->actionFourViews, SIGNAL(triggered()), this, SLOT(slotImage()));
 
+	QActionGroup* actionGroupView = new QActionGroup(this);
+	actionGroupView->addAction(ui->actionAllAxialView);
+	actionGroupView->addAction(ui->actionMultiPlanarView);
+	actionGroupView->addAction(ui->actionCurved_multiplanar_view);
+	actionGroupView->setExclusive(true);
+
+
 	QActionGroup* actionGroupImage = new QActionGroup(this);
 	actionGroupImage->addAction(ui->actionNavigation);
 	actionGroupImage->addAction(ui->actionWindow_level);

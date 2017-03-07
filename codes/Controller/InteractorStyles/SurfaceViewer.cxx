@@ -76,6 +76,8 @@ void SurfaceViewer::Render(void)
 void SurfaceViewer::SetInputData(vtkImageData * in)
 {
 	this->ImageResample->SetInputData(in);
+	double spacing = std::fmin(std::fmin(in->GetSpacing()[0], in->GetSpacing()[1]), in->GetSpacing()[2]);
+	this->ImageResample->SetOutputSpacing(spacing, spacing, spacing);
 	//this->MarchingCubes->SetInputData(in);
 	UpdateDisplayExtent();
 
@@ -273,10 +275,10 @@ SurfaceViewer::SurfaceViewer()
 	this->SurfaceActor = vtkActor::New();
 	this->SurfaceMapper = vtkPolyDataMapper::New();
 	this->ImageResample = vtkImageResample::New();
-	this->ImageResample->SetNumberOfThreads(4);
+	this->ImageResample->SetNumberOfThreads(16);
 	this->ImageResample->SetInterpolationModeToLinear();
 	this->ImageResample->SetDimensionality(3);
-	this->ImageResample->SetOutputSpacing(0.3,0.3,0.3);
+	//this->ImageResample->SetOutputSpacing(0.3,0.3,0.3);
 	this->MarchingCubes = vtkDiscreteMarchingCubes::New();
 	this->MarchingCubes->SetInputConnection(ImageResample->GetOutputPort());
 	this->MarchingCubes->ComputeGradientsOff();
