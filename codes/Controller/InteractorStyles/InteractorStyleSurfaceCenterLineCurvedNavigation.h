@@ -1,5 +1,5 @@
-#ifndef __INTERACTOR_STYLE_SURFACE_CENTER_LINE_RESLICER_H__
-#define __INTERACTOR_STYLE_SURFACE_CENTER_LINE_RESLICER_H__
+#ifndef __INTERACTOR_STYLE_SURFACE_CENTER_LINE_CURVED_NAVIGATION_H__
+#define __INTERACTOR_STYLE_SURFACE_CENTER_LINE_CURVED_NAVIGATION_H__
 
 #include "InteractorStyleSurfaceCenterLineSimpleClipping.h"
 
@@ -8,31 +8,31 @@ class vtkHandleWidget;
 class vtkKdTreePointLocator;
 class vtkPolyData;
 class vtkImageActor;
-class InteractorStyleSurfaceCenterLineReslicerCallback;
+class InteractorStyleSurfaceCenterLineCurvedNavigationCallback;
 
-class InteractorStyleSurfaceCenterLineReslicer :
+class InteractorStyleSurfaceCenterLineCurvedNavigation :
 	public InteractorStyleSurfaceCenterLineSimpleClipping
 {
 public:
 
 	const static unsigned int NUM_OF_HANDLES = 1;
 
-	vtkTypeMacro(InteractorStyleSurfaceCenterLineReslicer,
+	vtkTypeMacro(InteractorStyleSurfaceCenterLineCurvedNavigation,
 		InteractorStyleSurfaceCenterLineSimpleClipping);
-	static InteractorStyleSurfaceCenterLineReslicer* New();
+	static InteractorStyleSurfaceCenterLineCurvedNavigation* New();
 
 	virtual void SetCustomEnabled(bool flag) override;
 
 
 protected:
 
-	InteractorStyleSurfaceCenterLineReslicer();
-	virtual ~InteractorStyleSurfaceCenterLineReslicer() override;
+	InteractorStyleSurfaceCenterLineCurvedNavigation();
+	virtual ~InteractorStyleSurfaceCenterLineCurvedNavigation() override;
 
 	//virtual void CreateCenterLine() override;
 	virtual void InitializeHandleWidgets();
-	virtual void InitializeReslicer();
-	virtual void UpdateReslicer();
+	//virtual void InitializeReslicer();
+	virtual void Update2DViewers();
 	//virtual void FindMaximumRadius();
 
 	virtual void OnKeyPress() override;
@@ -41,13 +41,13 @@ protected:
 	vtkSmartPointer<vtkKdTreePointLocator> m_pointLocator = nullptr;
 	//vtkSmartPointer<vtkSeedWidget> m_seedWidget = nullptr;
 	vtkSmartPointer<vtkHandleWidget> m_handleWidgets[NUM_OF_HANDLES] = {nullptr};
-	vtkSmartPointer<vtkPolyData> m_triangulatedCenterLine = nullptr;
-	vtkSmartPointer<vtkImageActor> m_imageActor = nullptr;
+	//vtkSmartPointer<vtkPolyData> m_triangulatedCenterLine = nullptr;
+	//vtkSmartPointer<vtkImageActor> m_imageActor = nullptr;
 
 	//vtkSmartPointer<vtkTextActor> m_measurementText = nullptr;
 	//vtkSmartPointer<vtkPolyData> m_centerLine = nullptr;
 
-	friend class InteractorStyleSurfaceCenterLineReslicerCallback;
+	friend class InteractorStyleSurfaceCenterLineCurvedNavigationCallback;
 
 private:
 
@@ -55,4 +55,4 @@ private:
 
 
 
-#endif // !__INTERACTOR_STYLE_SURFACE_CENTER_LINE_RESLICER_H__
+#endif // !__INTERACTOR_STYLE_SURFACE_CENTER_LINE_CURVED_NAVIGATION_H__

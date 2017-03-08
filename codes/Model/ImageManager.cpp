@@ -23,72 +23,102 @@ void ImageManager::setNumOfImages(unsigned int num)
 	}
 }
 
-bool ImageManager::setOverlay()
-{
-	if (m_images[0] != nullptr) {
-		setOverlay(m_images[0]);
+unsigned int ImageManager::getNumOfImages() {
+	return m_images.size();
+}
+
+//bool ImageManager::setOverlay()
+//{
+//	if (m_images[0] != nullptr) {
+//		setOverlay(m_images[0]);
+//		return true;
+//	}
+//	else
+//		return false;
+//}
+
+//bool ImageManager::setOverlay(IVtkImageData * image)
+//{
+//	if (image != nullptr) {
+//		setOverlay(image->GetItkImage());
+//		return true;
+//	}
+//	else
+//		return false;
+//}
+
+//bool ImageManager::setOverlay(IVtkImageData::itkImageType::Pointer image)
+//{
+//	typedef itk::CastImageFilter<IVtkImageData::itkImageType, OverlayImageData::itkImageType> CastImageFilter;
+//	
+//	if (image.IsNotNull()) {
+//		CastImageFilter::Pointer castImageFilter = CastImageFilter::New();
+//		castImageFilter->SetInput(image);
+//		castImageFilter->Update();
+//
+//		m_overlay = QSharedPointer<Overlay>(new Overlay(castImageFilter->GetOutput()));
+//
+//		return true;
+//	}
+//	else
+//		return false;
+//}
+
+//bool ImageManager::setOverlay(OverlayImageData::itkImageType::Pointer image)
+//{
+//
+//	if (image.IsNotNull()) {
+//		m_overlay = QSharedPointer<Overlay>(new Overlay(image));
+//
+//		return true;
+//	}
+//	else
+//		return false;
+//}
+
+bool ImageManager::setOverlay(QSharedPointer<Overlay> overlay){
+	if (overlay) {
+		m_overlay = overlay;
 		return true;
 	}
-	else
-		return false;
-}
-
-bool ImageManager::setOverlay(IVtkImageData * image)
-{
-	if (image != nullptr) {
-		setOverlay(image->GetItkImage());
-		return true;
-	}
-	else
-		return false;
-}
-
-bool ImageManager::setOverlay(IVtkImageData::itkImageType::Pointer image)
-{
-	typedef itk::CastImageFilter<IVtkImageData::itkImageType, OverlayImageData::itkImageType> CastImageFilter;
-	
-	if (image.IsNotNull()) {
-		CastImageFilter::Pointer castImageFilter = CastImageFilter::New();
-		castImageFilter->SetInput(image);
-		castImageFilter->Update();
-
-		m_overlay = QSharedPointer<Overlay>(new Overlay(castImageFilter->GetOutput()));
-
-		return true;
-	}
-	else
-		return false;
-}
-
-bool ImageManager::setOverlay(OverlayImageData::itkImageType::Pointer image)
-{
-
-	if (image.IsNotNull()) {
-		m_overlay = QSharedPointer<Overlay>(new Overlay(image));
-
-		return true;
-	}
-	else
-		return false;
-}
-
-bool ImageManager::setImage(unsigned int i, IVtkImageData::itkImageType::Pointer image)
-{
-	if (i >= m_images.size()) {
+	else {
 		return false;
 	}
-	if (!image) {
-		m_images[i] = nullptr;
-		return false;
-	}
-	vtkSmartPointer<IVtkImageData> _image =
-		vtkSmartPointer<IVtkImageData>::New();
-	_image->Graft(image);
-	m_images[i] = _image;
-	return true;
 }
 
-bool ImageManager::setImage(unsigned int i, vtkImageData * image)
+//bool ImageManager::setImage(unsigned int i, IVtkImageData::itkImageType::Pointer image)
+//{
+//	if (i >= m_images.size()) {
+//		return false;
+//	}
+//	if (!image) {
+//		m_images[i] = nullptr;
+//		return false;
+//	}
+//	vtkSmartPointer<IVtkImageData> _image =
+//		vtkSmartPointer<IVtkImageData>::New();
+//	_image->Graft(image);
+//	m_images[i] = _image;
+//	return true;
+//}
+
+//bool ImageManager::setImage(unsigned int i, vtkImageData * image)
+//{
+//	if (i >= m_images.size()) {
+//		return false;
+//	}
+//	if (!image) {
+//		m_images[i] = nullptr;
+//		return false;
+//	}
+//	vtkSmartPointer<IVtkImageData> _image =
+//		vtkSmartPointer<IVtkImageData>::New();
+//	_image->ShallowCopy(image);
+//	m_images[i] = _image;
+//	return true;
+//}
+
+bool ImageManager::setImage(unsigned int i, IVtkImageData * image)
 {
 	if (i >= m_images.size()) {
 		return false;

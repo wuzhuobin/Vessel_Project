@@ -12,7 +12,7 @@ class AbstractSurfaceCenterLine: public AbstractInteractorStyleSurface
 {
 public:
 	vtkTypeMacro(AbstractSurfaceCenterLine, AbstractInteractorStyleSurface);
-	static AbstractSurfaceCenterLine* New();
+	//static AbstractSurfaceCenterLine* New();
 
 	virtual void SetCustomEnabled(bool flag);
 
@@ -26,7 +26,7 @@ protected:
 
 	virtual void VisualizeCenterLine(vtkPolyData* centerLine);
 
-	virtual void CreateCenterLine();
+	virtual void CreateCenterLine() = 0;
 
 
 	static vtkSmartPointer<vtkPolyData> m_centerLine;

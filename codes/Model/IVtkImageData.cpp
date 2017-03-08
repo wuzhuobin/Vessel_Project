@@ -23,6 +23,7 @@ void IVtkImageData::ShallowCopy(vtkDataObject * dataObject)
 	IVtkImageData* ivtkImageData = IVtkImageData::SafeDownCast(dataObject);
 	if (ivtkImageData) {
 		m_itkImage->Graft(ivtkImageData->GetItkImage());
+		vtkImageData::ShallowCopy(ivtkImageData);
 		return;
 	}
 
@@ -41,6 +42,7 @@ void IVtkImageData::DeepCopy(vtkDataObject * dataObject)
 	IVtkImageData* ivtkImageData = IVtkImageData::SafeDownCast(dataObject);
 	if (ivtkImageData) {
 		m_itkImage->Graft(ivtkImageData->GetItkImage());
+		vtkImageData::DeepCopy(ivtkImageData);
 		return;
 	}
 

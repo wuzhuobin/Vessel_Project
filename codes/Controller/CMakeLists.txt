@@ -33,6 +33,7 @@ SET(
 	${PROJECT_SOURCE_DIR}/ImageRegistration.cxx
 	${PROJECT_SOURCE_DIR}/IADEInteractorStyleSwitch.cxx
 	${PROJECT_SOURCE_DIR}/IADEInteractorStyleSwitch3D.cxx
+	${PROJECT_SOURCE_DIR}/DataProcessor.cpp
 	# ${PROJECT_SOURCE_DIR}/Overlay.cxx
 	# ${PROJECT_SOURCE_DIR}/RegistrationWizard.cxx
 	)
@@ -44,6 +45,7 @@ SET(
 	${PROJECT_SOURCE_DIR}/ImageRegistration.h
 	${PROJECT_SOURCE_DIR}/IADEInteractorStyleSwitch.h
 	${PROJECT_SOURCE_DIR}/IADEInteractorStyleSwitch3D.h
+	${PROJECT_SOURCE_DIR}/DataProcessor.h
 	# ${PROJECT_SOURCE_DIR}/Overlay.h
 	# ${PROJECT_SOURCE_DIR}/RegistrationWizard.h
 	)
@@ -67,6 +69,7 @@ target_link_libraries(
 	${VTK_LIBRARIES}
 	Qt5::Core
 	Qt5::Widgets
+	Model
 	InteractorStyles
 )
 

@@ -9,19 +9,21 @@
 #include <vtkRenderer.h>
 
 
-vtkStandardNewMacro(AbstractSurfaceCenterLine);
-vtkSmartPointer<vtkPolyData> AbstractSurfaceCenterLine::m_centerLine = nullptr;
+//vtkStandardNewMacro(AbstractSurfaceCenterLine);
 
+vtkSmartPointer<vtkPolyData> AbstractSurfaceCenterLine::m_centerLine = nullptr;
 
 void AbstractSurfaceCenterLine::SetCustomEnabled(bool flag)
 {
 	AbstractInteractorStyleSurface::SetCustomEnabled(flag);
 	if (m_customFlag) {
 		if (!m_centerLine) {
-			m_centerLine = vtkSmartPointer<vtkPolyData>::New();
-			
+			//vtkErrorMacro(<< "please set a centerline before using this interactorStyle");
+			m_centerLine = vtkSmartPointer<vtkPolyData>::New();	
+			//return;
+		}
+		if (m_centerLine->GetNumberOfPoints() < 1) {
 			CreateCenterLine();
-		
 		}
 		if (!m_centerLineActor) {
 			m_centerLineActor = vtkSmartPointer<vtkActor>::New();
@@ -67,6 +69,6 @@ void AbstractSurfaceCenterLine::VisualizeCenterLine(vtkPolyData * centerLine)
 	m_surfaceViewer->Render();
 }
 
-void AbstractSurfaceCenterLine::CreateCenterLine()
-{
-}
+//void AbstractSurfaceCenterLine::CreateCenterLine()
+//{
+//}

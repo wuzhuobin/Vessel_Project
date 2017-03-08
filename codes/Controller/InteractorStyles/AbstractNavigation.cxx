@@ -53,6 +53,11 @@ void AbstractNavigation::SetImageViewer(ImageViewer * imageViewer)
 	AbstractInteractorStyleImage::SetImageViewer(imageViewer);
 }
 
+//ImageViewer* AbstractNavigation::GetImageViewer()
+//{
+//
+//}
+
 void AbstractNavigation::AddSynchronalViewer(ImageViewer * imageViewer)
 {
 	if (std::find(m_synchronalViewers.cbegin(), m_synchronalViewers.cend(), imageViewer)

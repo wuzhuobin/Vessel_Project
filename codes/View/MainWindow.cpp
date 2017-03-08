@@ -15,6 +15,13 @@ MainWindow::MainWindow(QWidget *parent)
 	ui = new Ui::MainWindow;
 	ui->setupUi(this);
 
+	centralWidget = new QMainWindow(this);
+	ui->verticalLayoutCentralWidget->insertWidget(0, centralWidget);
+
+	ui->image1frame->setHidden(true);
+	ui->image2frame->setHidden(true);
+	ui->image3frame->setHidden(true);
+	ui->image4frame->setHidden(true);
 
 	settings = new QSettings("Setting.ini", QSettings::IniFormat, this);
 
@@ -40,9 +47,9 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(ui->actionFourViews, SIGNAL(triggered()), this, SLOT(slotImage()));
 
 	QActionGroup* actionGroupView = new QActionGroup(this);
-	actionGroupView->addAction(ui->actionAllAxialView);
-	actionGroupView->addAction(ui->actionMultiPlanarView);
-	actionGroupView->addAction(ui->actionCurved_multiplanar_view);
+	actionGroupView->addAction(ui->actionAll_axial_view);
+	actionGroupView->addAction(ui->actionMulti_planar_view);
+	actionGroupView->addAction(ui->actionCurved_view);
 	actionGroupView->setExclusive(true);
 
 
@@ -61,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroupSurface->addAction(ui->actionTraceball_camera);
 	actionGroupSurface->addAction(ui->actionCenter_line);
 	actionGroupSurface->addAction(ui->actionFind_maximum_radius);
+	actionGroupSurface->addAction(ui->actionCurved_navigation);
 	actionGroupSurface->setExclusive(true);
 
 
@@ -258,6 +266,7 @@ void MainWindow::initialization()
 	ui->image4View->setEnabled(true);
 
 
+	ui->actionMulti_planar_view->trigger();
 	ui->actionNavigation->trigger();
 
 }
@@ -303,6 +312,11 @@ void MainWindow::clearModalityNames()
 	for (int i = 0; i < NUM_OF_2D_VIEWERS; ++i) {
 		selectImgMenus[i]->clear();
 	}
+}
+
+QMainWindow * MainWindow::getCentralWidget()
+{
+	return this->centralWidget;
 }
 
 QMenu * MainWindow::getSelectImgMenu(unsigned int i)

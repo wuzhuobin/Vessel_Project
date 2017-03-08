@@ -23,6 +23,11 @@ void AbstractInteractorStyle::SetCustomEnabled(bool flag)
 	m_customFlag = flag;
 }
 
+bool AbstractInteractorStyle::GetCustomEnabled()
+{
+	return m_customFlag;
+}
+
 void AbstractInteractorStyle::CustomEnabledOn()
 {
 	SetCustomEnabled(true);

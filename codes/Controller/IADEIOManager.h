@@ -10,6 +10,12 @@ class IADEIOManager :public IOManager
 public:
 	IADEIOManager(QObject* parent = nullptr);
 
+	public slots:
+	virtual void slotOpenSegmentation(QString fileName) override;
+	
+	virtual void slotInitializeOverlay() override;
+	
+	virtual	void slotInitializeOverlay(IVtkImageData::itkImageType::Pointer image) override;
 
 
 };

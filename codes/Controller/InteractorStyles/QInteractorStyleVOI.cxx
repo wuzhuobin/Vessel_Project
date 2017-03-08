@@ -31,7 +31,9 @@ void QInteractorStyleVOI::SetCustomEnabled(bool flag)
 	else {
 		m_roi->EnabledOff();
 	}
-	m_roi->Render();
+	m_imageViewer->Render();
+	// suppose it should able to disappear by the following
+	//m_roi->Render();
 	uniqueInvoke(flag);
 }
 void QInteractorStyleVOI::slotUpdateVOISpinBoxes(double * values)

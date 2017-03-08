@@ -6,12 +6,14 @@
 
 #include "MainWindow.h"
 #include "ModuleWidget.h"
+#include "ViewerWidget.h"
 #include "IADEIOManager.h"
 #include "IADEImageManager.h"
 #include "IADEInteractorStyleSwitch.h"
 #include "IADEInteractorStyleSwitch3D.h"
 #include "SurfaceViewer.h"
 #include "ImageViewer.h"
+#include "DataProcessor.h"
 
 
 class Core: public QObject
@@ -21,11 +23,11 @@ public:
 
 	const static unsigned short NUM_OF_IMAGES = 4;
 	const static unsigned short DEFAULT_IMAGE = 0;
-	const static enum VIEW_MODE
+	const enum VIEW_MODE
 	{
 		MULTIPLANAR_VIEW = 0,
 		ALL_AXIAL_VIEW = 1, 
-		CURVED_MULTIPLANAR_VIEW = 2
+		CURVED_VIEW = 2
 	};
 
 	Core(QObject* parent = nullptr);
@@ -51,13 +53,19 @@ private slots:
 	void slotCenterLine();
 	void slotFindMaximumRadius();
 	void slotPerpendicularMeasurement();
+	void slotCurvedNavigation();
 
 	// IADE specified
 	void slotVBDSmoker();
 
+	// Curved image update
+	void slotInitializeCurvedImage();
 
 	void slotChangeImage(QAction* action);
 	void slotChangeImage(int viewer, int image);
+	void slotChangeCurved(int viewer, bool curvedFlag);
+	void slotChangeSliceOrientation(int viewer, int sliceOrientation);
+	void slotUpdateImageViewersToCurrent(int viewer);
 	void slotMultiPlanarView();
 	void slotAllAxialView();
 	void slotCurvedMultiPlanarView();
@@ -74,12 +82,19 @@ private slots:
 private:
 	MainWindow mainWindow;
 	ModuleWidget moduleWiget;
+	ViewerWidget viewerWidgets[MainWindow::NUM_OF_2D_VIEWERS + MainWindow::NUM_OF_3D_VIEWERS];
 	IADEIOManager ioManager;
 	IADEImageManager imageManager;
+	DataProcessor dataProcessor;
 
 
 	int currentImage[MainWindow::NUM_OF_2D_VIEWERS] = {DEFAULT_IMAGE};
-	int currentSliceOrientation[MainWindow::NUM_OF_2D_VIEWERS] = {ImageViewer::SLICE_ORIENTATION_XY};
+	bool currentCurved[MainWindow::NUM_OF_2D_VIEWERS] = { false };
+	int currentSliceOrientation[MainWindow::NUM_OF_2D_VIEWERS] = {
+		ImageViewer::SLICE_ORIENTATION_YZ,
+		ImageViewer::SLICE_ORIENTATION_XZ,
+		ImageViewer::SLICE_ORIENTATION_XY};
+	int currentMode[MainWindow::NUM_OF_2D_VIEWERS] = { MULTIPLANAR_VIEW };
 	ImageViewer* imageViewers[MainWindow::NUM_OF_2D_VIEWERS];
 	IADEInteractorStyleSwitch* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
 

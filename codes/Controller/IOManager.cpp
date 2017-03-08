@@ -21,8 +21,9 @@
 using itk::GDCMImageIO;
 using itk::ImageFileReader;
 using itk::ImageSeriesReader;
-typedef itk::Image<float, 3> ImageType;
-typedef itk::Image<float, 3> ImageType;
+using itk::OrientImageFilter;
+//typedef itk::Image<float, 3> ImageType;
+//typedef itk::Image<float, 3> ImageType;
 
 
 IOManager::IOManager(QObject* parent)
@@ -65,20 +66,25 @@ void IOManager::clearListsOfFileNames()
 	this->listOfFileNames.clear();
 }
 
+const QList<vtkSmartPointer<IVtkImageData>> IOManager::getListOfImage() const
+{
+	return this->listOfImages;
+}
+
 const QList<QStringList> IOManager::getListOfFileNames() const
 {
 	return this->listOfFileNames;
 }
 
-const QList<ImageType::Pointer> IOManager::getListOfItkImages() const
-{
-	return this->listOfItkImages;
-}
+//const QList<ImageType::Pointer> IOManager::getListOfItkImages() const
+//{
+//	return this->listOfItkImages;
+//}
 
-void IOManager::clearListOfItkImages()
-{
-	this->listOfItkImages.clear();
-}
+//void IOManager::clearListOfItkImages()
+//{
+//	this->listOfItkImages.clear();
+//}
 
 const QList<GDCMImageIO::Pointer> IOManager::getListOfDicomIOs() const
 {
@@ -90,20 +96,20 @@ void IOManager::clearListOfDicoms()
 	this->listOfDicomIOs.clear();
 }
 
-const IOManager::OverlayType::Pointer IOManager::getOverlay() const
+const QSharedPointer<Overlay> IOManager::getOverlay() const
 {
 	return overlay;
 }
 
-void IOManager::clearOverlay()
-{
-	overlay = nullptr;
-}
+//void IOManager::clearOverlay()
+//{
+//	overlay = nullptr;
+//}
 
 bool IOManager::loadImageData(QStringList fileNames)
 {
 
-	ImageType::Pointer _itkImage = nullptr;
+	IVtkImageData::itkImageType::Pointer _itkImage = nullptr;
 	GDCMImageIO::Pointer _dicomIO = nullptr;
 
 	if (fileNames.isEmpty() || fileNames.value(0) == QString()) {
@@ -112,10 +118,10 @@ bool IOManager::loadImageData(QStringList fileNames)
 	}
 	// load Nifti Data
 	else if (fileNames.size() == 1) {
-		ImageFileReader<ImageType>::Pointer reader;
+		ImageFileReader<IVtkImageData::itkImageType>::Pointer reader;
 
 		try {
-			reader = ImageFileReader<ImageType>::New();
+			reader = ImageFileReader<IVtkImageData::itkImageType>::New();
 			reader->SetFileName(fileNames[0].toStdString());
 			reader->SetImageIO(_dicomIO);
 			reader->Update();
@@ -126,7 +132,7 @@ bool IOManager::loadImageData(QStringList fileNames)
 			qDebug() << "Fail to read Dicom header";
 			qDebug() << e.what();
 			qDebug() << "Description: " << e.GetDescription();
-			reader = ImageFileReader<ImageType>::New();
+			reader = ImageFileReader<IVtkImageData::itkImageType>::New();
 			reader->SetFileName(fileNames[0].toStdString());
 			reader->Update();
 			_itkImage = reader->GetOutput();
@@ -141,8 +147,8 @@ bool IOManager::loadImageData(QStringList fileNames)
 		}
 		_dicomIO = GDCMImageIO::New();
 
-		ImageSeriesReader<ImageType>::Pointer reader =
-			ImageSeriesReader<ImageType>::New();
+		ImageSeriesReader<IVtkImageData::itkImageType>::Pointer reader =
+			ImageSeriesReader<IVtkImageData::itkImageType>::New();
 		reader->SetFileNames(_fileNames);
 		reader->SetImageIO(_dicomIO);
 		reader->Update();
@@ -150,7 +156,7 @@ bool IOManager::loadImageData(QStringList fileNames)
 
 	}
 	if (_itkImage.IsNotNull()) {
-		typedef itk::OrientImageFilter<ImageType, ImageType> OrientImageFilter;
+		typedef itk::OrientImageFilter<IVtkImageData::itkImageType, IVtkImageData::itkImageType> OrientImageFilter;
 
 		// using the same m_orientation ITK_COORDINATE_ORIENTATION_RAI
 		OrientImageFilter::Pointer orienter =
@@ -163,18 +169,30 @@ bool IOManager::loadImageData(QStringList fileNames)
 		_itkImage = orienter->GetOutput();
 		// Image Registration
 		if (this->registrationFlag && 
-			this->listOfItkImages.size() > 0 && 
-			this->listOfItkImages[0].IsNotNull()) {
-			_itkImage = imageAlignment(this->listOfItkImages[0], _itkImage);
+			this->listOfImages.size() > 0 && 
+			this->listOfImages[0]) {
+			_itkImage = imageAlignment(this->listOfImages[0]->GetItkImage(), _itkImage);
 		}
-
+		vtkSmartPointer<IVtkImageData> _image =
+			vtkSmartPointer<IVtkImageData>::New();
+		_image->Graft(_itkImage);
+		listOfImages << _image;
 	}
-	listOfItkImages << _itkImage;
-	listOfDicomIOs << _dicomIO;
+	else {
+		listOfImages << nullptr;
+	}
+	if (_dicomIO) {
+		listOfDicomIOs << _dicomIO;
+	}
+	else {
+		listOfDicomIOs << nullptr;
+	}
 	return true;
 }
 
-IOManager::ImageType::Pointer IOManager::imageAlignment(ImageType::Pointer alignedTo, ImageType::Pointer toBeAligned)
+IVtkImageData::itkImageType::Pointer IOManager::imageAlignment(
+	IVtkImageData::itkImageType::Pointer alignedTo, 
+	IVtkImageData::itkImageType::Pointer toBeAligned)
 {
 	this->registration.SetFixedImage(alignedTo);
 	this->registration.SetMovingImage(toBeAligned);
@@ -212,7 +230,7 @@ void IOManager::slotOpenMultiImages()
 	//	this->myImageManager->listOfVtkImages[0]);
 
 	emit signalFinishOpenMultiImages();
-	emit signalFinishOpenMultiImages(&this->listOfItkImages, &this->listOfDicomIOs);
+	//emit signalFinishOpenMultiImages(&this->listOfItkImages, &this->listOfDicomIOs);
 }
 
 void IOManager::slotOpenOneImage(QStringList fileNames)
@@ -227,25 +245,29 @@ void IOManager::slotOpenOneImage(QStringList fileNames)
 void IOManager::slotCleanImagesAndDicomIOs()
 {
 	this->listOfDicomIOs.clear();
-	this->listOfItkImages.clear();
+	this->listOfImages.clear();
 }
 
 void IOManager::slotInitializeOverlay()
 {
-	if (listOfItkImages.size() > 1 && listOfItkImages[0].IsNotNull()){
-		slotInitializeOverlay(listOfItkImages[0]);
+	if (listOfImages.size() > 1 && listOfImages[0]){
+		slotInitializeOverlay(listOfImages[0]->GetItkImage());
 	}
 }
 
-void IOManager::slotInitializeOverlay(ImageType::Pointer image)
+void IOManager::slotInitializeOverlay(IVtkImageData::itkImageType::Pointer image)
 {
-	overlay = OverlayType::New();
-	overlay->SetRegions(image->GetLargestPossibleRegion());
-	overlay->SetDirection(image->GetDirection());
-	overlay->SetOrigin(image->GetOrigin());
-	overlay->SetSpacing(image->GetSpacing());
-	overlay->Allocate();
-	overlay->FillBuffer(0);
+
+	OverlayImageData::itkImageType::Pointer _overlay
+		= OverlayImageData::itkImageType::New();
+	_overlay->SetRegions(image->GetLargestPossibleRegion());
+	_overlay->SetDirection(image->GetDirection());
+	_overlay->SetOrigin(image->GetOrigin());
+	_overlay->SetSpacing(image->GetSpacing());
+	_overlay->Allocate();
+	_overlay->FillBuffer(0);
+
+	overlay = QSharedPointer<Overlay>(new Overlay(_overlay));
 
 	emit signalFinishOpenOverlay();
 }
@@ -261,35 +283,36 @@ void IOManager::slotInitializeOverlay(ImageType::Pointer image)
 //
 void IOManager::slotOpenSegmentation(QString fileName)
 {
-	typedef itk::OrientImageFilter<OverlayType, OverlayType> OrientImageFilter;
+	//typedef itk::OrientImageFilter<OverlayImageData::itkImageType, OverlayImageData::itkImageType> OrientImageFilter;
 
-	overlay = OverlayType::New();
-	ImageFileReader<OverlayType>::Pointer reader =
-		ImageFileReader<OverlayType>::New();
+	ImageFileReader<OverlayImageData::itkImageType>::Pointer reader =
+		ImageFileReader<OverlayImageData::itkImageType>::New();
 	reader->SetFileName(fileName.toStdString());
 	reader->Update();
-	overlay = reader->GetOutput();
+	OverlayImageData::itkImageType::Pointer _overlay = reader->GetOutput();
 
 	// using the same m_orientation ITK_COORDINATE_ORIENTATION_RAI
-	OrientImageFilter::Pointer orienter =
-		OrientImageFilter::New();
+	OrientImageFilter<OverlayImageData::itkImageType, OverlayImageData::itkImageType>::Pointer orienter =
+		OrientImageFilter<OverlayImageData::itkImageType, OverlayImageData::itkImageType>::New();
 	orienter->UseImageDirectionOn();
 	orienter->SetDesiredCoordinateOrientation(
 		itk::SpatialOrientation::ITK_COORDINATE_ORIENTATION_RAI);
-	orienter->SetInput(overlay);
+	orienter->SetInput(_overlay);
 	orienter->Update();
-	overlay = orienter->GetOutput();
+	_overlay = orienter->GetOutput();
+
+	overlay = QSharedPointer<Overlay>(new Overlay(_overlay));
 
 	emit signalFinishOpenOverlay();
 
 }
 void IOManager::slotSaveSegmentation(QString path)
 {
-	slotSaveSegmentation(overlay, path);
+	slotSaveSegmentation(overlay->getData()->GetItkImage(), path);
 }
-void IOManager::slotSaveSegmentation(OverlayType::Pointer input, QString path)
+void IOManager::slotSaveSegmentation(OverlayImageData::itkImageType::Pointer input, QString path)
 {
-	typedef itk::ImageFileWriter<OverlayType> ImageFileWriter;
+	typedef itk::ImageFileWriter<OverlayImageData::itkImageType> ImageFileWriter;
 		ImageFileWriter::Pointer writer =
 			ImageFileWriter::New();
 		writer->SetInput(input);

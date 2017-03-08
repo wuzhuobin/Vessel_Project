@@ -18,6 +18,7 @@ set(
 	MainWindow.h
 	LabelWidget.h
 	ModuleWidget.h
+	ViewerWidget.h
 )
 
 set(
@@ -25,6 +26,7 @@ set(
 	MainWindow.cpp
 	LabelWidget.cpp
 	ModuleWidget.cpp
+	ViewerWidget.cpp
 )
 
 set(
@@ -32,6 +34,7 @@ set(
 	MainWindow.ui
 	LabelWidget.ui
 	ModuleWidget.ui
+	ViewerWidget.ui
 )
 #Generate moc and ui file
 qt5_wrap_cpp(

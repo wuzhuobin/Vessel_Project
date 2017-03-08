@@ -5,6 +5,7 @@
 #include "InteractorStyleSurfaceCenterLineSimpleClipping.h"
 #include "InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius.h"
 #include "InteractorStyleSurfaceCenterLinePerpendicularMeasurement.h"
+#include "InteractorStyleSurfaceCenterLineCurvedNavigation.h"
 
 
 class IADEInteractorStyleSwitch3D: public InteractorStyleSwitch3D
@@ -24,12 +25,19 @@ public:
 	SetInteractorStyle3DMacro(PerpendicularMeasurement);
 	CurrentStyle3DMacro(PerpendicularMeasurement);
 
+	vtkGetMacro(CurvedNavigation, InteractorStyleSurfaceCenterLineCurvedNavigation*);
+	SetInteractorStyle3DMacro(CurvedNavigation);
+	CurrentStyle3DMacro(CurvedNavigation);
+
+	virtual void SetCenterLine(vtkPolyData* centerline);
+
 protected:
 	IADEInteractorStyleSwitch3D();
 
 	InteractorStyleSurfaceCenterLineSimpleClipping* CenterLine;
 	InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius* FindMaximumRadius;
 	InteractorStyleSurfaceCenterLinePerpendicularMeasurement* PerpendicularMeasurement;
+	InteractorStyleSurfaceCenterLineCurvedNavigation* CurvedNavigation;
 
 private:
 

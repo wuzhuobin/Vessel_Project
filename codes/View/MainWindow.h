@@ -51,6 +51,7 @@ public:
 
 	
 	Ui::MainWindow* getUi() { return ui; }
+	QMainWindow* getCentralWidget();
 	QMenu* getSelectImgMenu(unsigned int i);
 	QList<QMenu*>* getSelectImgMenus();
 
@@ -96,6 +97,8 @@ private:
 
 
 	Ui::MainWindow* ui;
+
+	QMainWindow* centralWidget = nullptr;
 
 	QList<QMenu*> selectImgMenus;
 

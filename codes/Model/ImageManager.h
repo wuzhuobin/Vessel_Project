@@ -25,13 +25,16 @@ public:
 	~ImageManager();
 
 	virtual void setNumOfImages(unsigned int num);
+	virtual unsigned int getNumOfImages();
 
-	virtual bool setOverlay();
-	virtual bool setOverlay(IVtkImageData* image);
-	virtual bool setOverlay(IVtkImageData::itkImageType::Pointer image);
-	virtual bool setOverlay(OverlayImageData::itkImageType::Pointer image);
-	bool setImage(unsigned int i, IVtkImageData::itkImageType::Pointer image);
-	bool setImage(unsigned int i, vtkImageData* image);
+	//virtual bool setOverlay();
+	//virtual bool setOverlay(IVtkImageData* image);
+	//virtual bool setOverlay(IVtkImageData::itkImageType::Pointer image);
+	//virtual bool setOverlay(OverlayImageData::itkImageType::Pointer image);
+	virtual bool setOverlay(QSharedPointer<Overlay> overlay);
+	//bool setImage(unsigned int i, IVtkImageData::itkImageType::Pointer image);
+	//bool setImage(unsigned int i, vtkImageData* image);
+	bool setImage(unsigned int i, IVtkImageData* image);
 	bool setModalityName(unsigned int i, QString name);
 	bool setDicomIO(unsigned int i, itk::GDCMImageIO::Pointer dicomIO);
 
@@ -48,7 +51,6 @@ protected:
 	QStringList m_modalityNames;
 	QList<itk::GDCMImageIO::Pointer> m_dicomIOs;
 
-	QList<vtkSmartPointer<IVtkImageData>> m_images;
 	QSharedPointer<Overlay> m_overlay;
 
 

@@ -82,7 +82,9 @@ void InteractorStyleNavigation::CalculateIndex()
 		m_imageViewer->GetRenderer());
 
 	double* picked = this->GetInteractor()->GetPicker()->GetPickPosition();
-
+	//cout << "picked" << endl;
+	//cout << picked[0] << " " << picked[1] << " " << picked[2] << endl;
+	//cout << "picker" << endl;
 	//Check if valid pick
 	if (picked[0] == 0.0&&picked[1] == 0.0)
 		return;
@@ -93,6 +95,9 @@ void InteractorStyleNavigation::CalculateIndex()
 		{
 			m_index[i] = (picked[i] - GetOrigin()[i]) / GetSpacing()[i];
 		}
+		//cout << "m_index" << endl;
+		//cout << m_index[0] << " " << m_index[1] << " " << m_index[2];
+
 	}
 
 }

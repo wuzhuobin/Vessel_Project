@@ -92,7 +92,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reCli
 	centerlinesFilter->SetInputData(m_ClipAndCapSurface);
 	centerlinesFilter->SetSourceSeedIds(sourceIds);
 	centerlinesFilter->SetTargetSeedIds(targetIds);
-	centerlinesFilter->AppendEndPointsToCenterlinesOn();
+	//centerlinesFilter->AppendEndPointsToCenterlinesOn();
 	centerlinesFilter->SetRadiusArrayName("Radius");
 	//centerlinesFilter->
 	//centerlinesFilter->SetEdgeArrayName("Edge");

@@ -5,19 +5,22 @@
 #include <QString>
 #include <QList>
 #include <QStringList>
+#include <qsharedpointer.h>
 
 #include <itkImage.h>
 #include <itkGDCMImageIO.h>
 
 #include "ImageRegistration.h"
+#include "Overlay.h"
+#include "IVtkImageData.h"
 
 
 class IOManager:public QObject
 {
 	Q_OBJECT;
 public:
-	typedef itk::Image<float, 3> ImageType;
-	typedef itk::Image<unsigned char, 3> OverlayType;
+	//typedef itk::Image<float, 3> ImageType;
+	//typedef itk::Image<unsigned char, 3> OverlayType;
 
 	IOManager(QObject* parent = nullptr);
 	~IOManager();
@@ -31,20 +34,22 @@ public:
 	*/
 	void clearListsOfFileNames();
 
-	const QList<ImageType::Pointer> getListOfItkImages() const;
-
+	//const QList<ImageType::Pointer> getListOfItkImages() const;
+	const QList<vtkSmartPointer<IVtkImageData>> getListOfImage() const;
 	/**
 	 * 
 	 */
-	void clearListOfItkImages();
+	//void clearListOfItkImages();
 
 	const QList<itk::GDCMImageIO::Pointer> getListOfDicomIOs() const;
 
 	void clearListOfDicoms();
 
-	const OverlayType::Pointer getOverlay() const;
+	//const OverlayType::Pointer getOverlay() const;
 
-	void clearOverlay();
+	const QSharedPointer<Overlay> getOverlay() const;
+
+	//void clearOverlay();
 
 public slots:
 
@@ -64,19 +69,19 @@ public slots:
 
 	void slotCleanImagesAndDicomIOs();
 
-	void slotInitializeOverlay();
+	virtual void slotInitializeOverlay();
 
-	void slotInitializeOverlay(ImageType::Pointer image);
+	virtual void slotInitializeOverlay(IVtkImageData::itkImageType::Pointer image);
 
 	//void slotOpenSegmentationWithDiaglog();
 
-	void slotOpenSegmentation(QString fileName);
+	virtual void slotOpenSegmentation(QString fileName);
 
 	//void slotSaveSegmentaitonWithDiaglog();
 
 	void slotSaveSegmentation(QString path);
 
-	void slotSaveSegmentation(OverlayType::Pointer input, QString path);
+	void slotSaveSegmentation(OverlayImageData::itkImageType::Pointer input, QString path);
 
 
 	//void slotSaveContourWithDiaglog();
@@ -97,16 +102,18 @@ protected:
 	bool loadImageData(QStringList fileNames);
 
 
-	ImageType::Pointer imageAlignment(ImageType::Pointer alignedTo,
-		ImageType::Pointer toBeAligned);
+	IVtkImageData::itkImageType::Pointer imageAlignment(IVtkImageData::itkImageType::Pointer alignedTo,
+		IVtkImageData::itkImageType::Pointer toBeAligned);
 
-private:
+//private:
 	QList<QStringList> listOfFileNames;
-	QList<ImageType::Pointer> listOfItkImages;
+	//QList<ImageType::Pointer> listOfItkImages;
+	QList<vtkSmartPointer<IVtkImageData>> listOfImages;
 	QList<itk::GDCMImageIO::Pointer> listOfDicomIOs;
 
 	//ImageType::Pointer overlay;
-	OverlayType::Pointer overlay;
+	//OverlayType::Pointer overlay;
+	QSharedPointer<Overlay> overlay;
 
 	//QString filePath;
 	bool registrationFlag = false;

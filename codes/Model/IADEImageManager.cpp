@@ -18,49 +18,87 @@ void IADEImageManager::setNumOfImages(unsigned int num)
 	}
 }
 
-bool IADEImageManager::setOverlay(IVtkImageData::itkImageType::Pointer image)
+//bool IADEImageManager::setOverlay(IVtkImageData::itkImageType::Pointer image)
+//{
+//	typedef itk::CastImageFilter<IVtkImageData::itkImageType, OverlayImageData::itkImageType> CastImageFilter;
+//
+//	if (image.IsNotNull()) {
+//		CastImageFilter::Pointer castImageFilter = CastImageFilter::New();
+//		castImageFilter->SetInput(image);
+//		castImageFilter->Update();
+//
+//		m_overlay = QSharedPointer<Overlay>(new IADEOverlay(castImageFilter->GetOutput()));
+//
+//		return true;
+//	}
+//	else
+//		return false;
+//}
+
+//bool IADEImageManager::setOverlay(OverlayImageData::itkImageType::Pointer image)
+//{
+//
+//	if (image.IsNotNull()) {
+//		m_overlay = QSharedPointer<Overlay>(new IADEOverlay(image));
+//		return true;
+//	}
+//	else
+//		return false;
+//}
+
+bool IADEImageManager::setCurvedOverlay(vtkImageData * image)
 {
-	typedef itk::CastImageFilter<IVtkImageData::itkImageType, OverlayImageData::itkImageType> CastImageFilter;
-
-	if (image.IsNotNull()) {
-		CastImageFilter::Pointer castImageFilter = CastImageFilter::New();
-		castImageFilter->SetInput(image);
-		castImageFilter->Update();
-
-		m_overlay = QSharedPointer<Overlay>(new IADEOverlay(castImageFilter->GetOutput()));
-
+	if (image) {
+		m_curvedOverlay = QSharedPointer<Overlay>(new IADEOverlay());
+		m_curvedOverlay->getData()->ShallowCopy(image);
 		return true;
 	}
 	else
 		return false;
 }
 
-bool IADEImageManager::setOverlay(OverlayImageData::itkImageType::Pointer image)
-{
+//bool IADEImageManager::setCurvedOverlay(IVtkImageData::itkImageType::Pointer image)
+//{
+//	typedef itk::CastImageFilter<IVtkImageData::itkImageType, OverlayImageData::itkImageType> CastImageFilter;
+//
+//	if (image.IsNotNull()) {
+//		CastImageFilter::Pointer castImageFilter = CastImageFilter::New();
+//		castImageFilter->SetInput(image);
+//		castImageFilter->Update();
+//
+//		m_overlay = QSharedPointer<Overlay>(new IADEOverlay(castImageFilter->GetOutput()));
+//
+//		return true;
+//	}
+//	else
+//		return false;
+//}
 
-	if (image.IsNotNull()) {
-		m_overlay = QSharedPointer<Overlay>(new IADEOverlay(image));
-		return true;
-	}
-	else
-		return false;
-}
+//bool IADEImageManager::setCurvedOverlay(OverlayImageData::itkImageType::Pointer image)
+//{
+//	if (image.IsNotNull()) {
+//		m_overlay = QSharedPointer<Overlay>(new IADEOverlay(image));
+//		return true;
+//	}
+//	else
+//		return false;
+//}
 
-bool IADEImageManager::setCurvedImage(unsigned int i, IVtkImageData::itkImageType::Pointer image)
-{
-	if (i >= m_curvedImages.size()) {
-		return false;
-	}
-	if (!image) {
-		m_curvedImages[i] = nullptr;
-		return false;
-	}
-	vtkSmartPointer<IVtkImageData> _image =
-		vtkSmartPointer<IVtkImageData>::New();
-	_image->Graft(image);
-	m_curvedImages[i] = _image;
-	return true;
-}
+//bool IADEImageManager::setCurvedImage(unsigned int i, IVtkImageData::itkImageType::Pointer image)
+//{
+//	if (i >= m_curvedImages.size()) {
+//		return false;
+//	}
+//	if (!image) {
+//		m_curvedImages[i] = nullptr;
+//		return false;
+//	}
+//	vtkSmartPointer<IVtkImageData> _image =
+//		vtkSmartPointer<IVtkImageData>::New();
+//	_image->Graft(image);
+//	m_curvedImages[i] = _image;
+//	return true;
+//}
 
 bool IADEImageManager::setCurvedImage(unsigned int i, vtkImageData * image)
 {
@@ -98,4 +136,9 @@ IVtkImageData * IADEImageManager::getCurvedImage(QString modalityName) const
 IADEOverlay * IADEImageManager::getIADEOverlay() const
 {
 	return static_cast<IADEOverlay*>(m_overlay.data());
+}
+
+IADEOverlay * IADEImageManager::getCurvedIADEOverlay() const
+{
+	return static_cast<IADEOverlay*>(m_curvedOverlay.data());
 }

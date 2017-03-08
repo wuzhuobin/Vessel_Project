@@ -1,4 +1,4 @@
-#include "InteractorStyleSurfaceCenterLineReslicer.h"
+#include "InteractorStyleSurfaceCenterLineCurvedNavigation.h"
 
 #include "SurfaceViewer.h"
 
@@ -19,13 +19,7 @@
 //#include <vtkTextProperty.h>
 #include <vtkRenderer.h>
 #include <vtkCommand.h>
-#include <vtkImageActor.h>
-#include <vtkImageMapper3D.h>
-#include <vtkImageProperty.h>
-#include <vtkLookupTable.h>
-#include <vtkvmtkCurvedMPRImageFilter.h>
-#include <vtkvmtkCenterlineGeometry.h>
-#include <vtkvmtkCenterlineAttributesFilter.h>
+#include "AbstractNavigation.h"
 
 #include <vtkDijkstraGraphInternals.h>
 class vtkDijkstraGraphGeodesicPathDistance : public vtkDijkstraGraphGeodesicPath {
@@ -51,27 +45,27 @@ protected:
 
 };
 
-class InteractorStyleSurfaceCenterLineReslicerCallback : public vtkCommand {
+class InteractorStyleSurfaceCenterLineCurvedNavigationCallback : public vtkCommand {
 public:
-	static InteractorStyleSurfaceCenterLineReslicerCallback* New() { return new InteractorStyleSurfaceCenterLineReslicerCallback; }
-	InteractorStyleSurfaceCenterLineReslicer* style;
+	static InteractorStyleSurfaceCenterLineCurvedNavigationCallback* New() { return new InteractorStyleSurfaceCenterLineCurvedNavigationCallback; }
+	InteractorStyleSurfaceCenterLineCurvedNavigation* style;
 	virtual void Execute(vtkObject*, unsigned long event, void *calldata) override {
-		if (event == vtkCommand::EndInteractionEvent)
+		if (event == vtkCommand::InteractionEvent)
 		{
-			style->UpdateReslicer();
+			style->Update2DViewers();
 		}
 	}
 };
 
-vtkStandardNewMacro(InteractorStyleSurfaceCenterLineReslicer);
+vtkStandardNewMacro(InteractorStyleSurfaceCenterLineCurvedNavigation);
 
-void InteractorStyleSurfaceCenterLineReslicer::SetCustomEnabled(bool flag)
+void InteractorStyleSurfaceCenterLineCurvedNavigation::SetCustomEnabled(bool flag)
 {
 	InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(flag);
 	if (m_customFlag) {
 		InitializeHandleWidgets();
 		//m_surfaceViewer->GetRenderer()->AddActor(m_measurementText);
-		InitializeReslicer();
+		//InitializeReslicer();
 	}
 	else {
 		for (int i = 0; i < NUM_OF_HANDLES; ++i) {
@@ -83,13 +77,13 @@ void InteractorStyleSurfaceCenterLineReslicer::SetCustomEnabled(bool flag)
 		}
 		m_pointLocator = nullptr;
 		//m_surfaceViewer->GetRenderer()->RemoveActor(m_measurementText);
-		m_imageActor = nullptr;
+		//m_imageActor = nullptr;
 	}
 	
 
 }
 
-InteractorStyleSurfaceCenterLineReslicer::InteractorStyleSurfaceCenterLineReslicer()
+InteractorStyleSurfaceCenterLineCurvedNavigation::InteractorStyleSurfaceCenterLineCurvedNavigation()
 {
 	//m_measurementText =
 	//	vtkSmartPointer<vtkTextActor>::New();
@@ -98,16 +92,16 @@ InteractorStyleSurfaceCenterLineReslicer::InteractorStyleSurfaceCenterLineReslic
 	//m_measurementText->GetTextProperty()->SetColor(1.0, 0.0, 0.0);
 }
 
-InteractorStyleSurfaceCenterLineReslicer::~InteractorStyleSurfaceCenterLineReslicer()
+InteractorStyleSurfaceCenterLineCurvedNavigation::~InteractorStyleSurfaceCenterLineCurvedNavigation()
 {
 }
 
-//void InteractorStyleSurfaceCenterLineReslicer::CreateCenterLine()
+//void InteractorStyleSurfaceCenterLineCurvedNavigation::CreateCenterLine()
 //{
 //	InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine();
 //}
-#include <vtkPolyDataWriter.h>
-void InteractorStyleSurfaceCenterLineReslicer::InitializeHandleWidgets()
+//#include <vtkPolyDataWriter.h>
+void InteractorStyleSurfaceCenterLineCurvedNavigation::InitializeHandleWidgets()
 {
 	//vtkSmartPointer<vtkCleanPolyData> cleanPolyData =
 	//	vtkSmartPointer<vtkCleanPolyData>::New();
@@ -143,15 +137,15 @@ void InteractorStyleSurfaceCenterLineReslicer::InitializeHandleWidgets()
 		handleRep->SetPointPlacer(pointPlacer);
 		handleRep->SetWorldPosition(m_centerLine->GetPoint(i));
 
-		vtkSmartPointer<InteractorStyleSurfaceCenterLineReslicerCallback> callback =
-			vtkSmartPointer<InteractorStyleSurfaceCenterLineReslicerCallback>::New();
+		vtkSmartPointer<InteractorStyleSurfaceCenterLineCurvedNavigationCallback> callback =
+			vtkSmartPointer<InteractorStyleSurfaceCenterLineCurvedNavigationCallback>::New();
 		callback->style = this;
 
 		m_handleWidgets[i] = vtkSmartPointer<vtkHandleWidget>::New();
 		m_handleWidgets[i]->SetRepresentation(handleRep);
 		m_handleWidgets[i]->SetInteractor(this->Interactor);
 		m_handleWidgets[i]->EnabledOn();
-		m_handleWidgets[i]->AddObserver(vtkCommand::EndInteractionEvent, callback);
+		m_handleWidgets[i]->AddObserver(vtkCommand::InteractionEvent, callback);
 
 	}
 
@@ -163,88 +157,85 @@ void InteractorStyleSurfaceCenterLineReslicer::InitializeHandleWidgets()
 	//writer->SetFileName("C:/Users/user/Desktop/centerline.vtk");
 	//writer->Write();
 }
-#include <vtkNIFTIImageWriter.h>
-void InteractorStyleSurfaceCenterLineReslicer::InitializeReslicer()
-{
-	vtkSmartPointer<vtkvmtkCenterlineGeometry> centerlineGeometry =
-		vtkSmartPointer<vtkvmtkCenterlineGeometry>::New();
-	centerlineGeometry->SetInputData(m_centerLine);
-	centerlineGeometry->SetLengthArrayName("Length");
-	centerlineGeometry->SetCurvatureArrayName("Curvature");
-	centerlineGeometry->SetTorsionArrayName("Torsion");
-	centerlineGeometry->SetTortuosityArrayName("Tortuosity");
-	centerlineGeometry->SetFrenetTangentArrayName("FrenetTangent");
-	centerlineGeometry->SetFrenetNormalArrayName("FrenetNormal");
-	centerlineGeometry->SetFrenetBinormalArrayName("FrenetBinormal");
-	centerlineGeometry->LineSmoothingOff();
-	centerlineGeometry->Update();
+//#include <vtkNIFTIImageWriter.h>
+//void InteractorStyleSurfaceCenterLineCurvedNavigation::InitializeReslicer()
+//{
+//	vtkSmartPointer<vtkvmtkCenterlineGeometry> centerlineGeometry =
+//		vtkSmartPointer<vtkvmtkCenterlineGeometry>::New();
+//	centerlineGeometry->SetInputData(m_centerLine);
+//	centerlineGeometry->SetLengthArrayName("Length");
+//	centerlineGeometry->SetCurvatureArrayName("Curvature");
+//	centerlineGeometry->SetTorsionArrayName("Torsion");
+//	centerlineGeometry->SetTortuosityArrayName("Tortuosity");
+//	centerlineGeometry->SetFrenetTangentArrayName("FrenetTangent");
+//	centerlineGeometry->SetFrenetNormalArrayName("FrenetNormal");
+//	centerlineGeometry->SetFrenetBinormalArrayName("FrenetBinormal");
+//	centerlineGeometry->LineSmoothingOff();
+//	centerlineGeometry->Update();
+//
+//	vtkSmartPointer<vtkvmtkCenterlineAttributesFilter> centerlineAttributes =
+//		vtkSmartPointer<vtkvmtkCenterlineAttributesFilter>::New();
+//	centerlineAttributes->SetInputConnection(centerlineGeometry->GetOutputPort());
+//	centerlineAttributes->SetAbscissasArrayName("Abscissas");
+//	centerlineAttributes->SetParallelTransportNormalsArrayName("Normals");
+//	centerlineAttributes->Update();
+//
+//
+//
+//	vtkSmartPointer<vtkvmtkCurvedMPRImageFilter> curvedMPRImageFilter =
+//		vtkSmartPointer<vtkvmtkCurvedMPRImageFilter>::New();
+//	curvedMPRImageFilter->SetInputData(m_surfaceViewer->GetInput());
+//	curvedMPRImageFilter->SetCenterline(centerlineAttributes->GetOutput());
+//	//centerlineAttributesFilter->SetInputConnection(triangleFilter->GetOutputPort());
+//	curvedMPRImageFilter->SetParallelTransportNormalsArrayName("Normals");
+//	curvedMPRImageFilter->SetFrenetTangentArrayName("FrenetTangent");
+//	curvedMPRImageFilter->SetInplaneOutputSpacing(GetSpacing()[0], GetSpacing()[1]);
+//	curvedMPRImageFilter->SetInplaneOutputSize(GetExtent()[1] - GetExtent()[0], GetExtent()[3] - GetExtent()[2]);
+//	curvedMPRImageFilter->SetReslicingBackgroundLevel(0.0);
+//	curvedMPRImageFilter->Update();
+//	cout << GetOrigin()[0] << endl;
+//	cout << GetOrigin()[1] << endl;
+//	cout << GetOrigin()[2] << endl;
+//	cout << curvedMPRImageFilter->GetOutputOrigin()[0] << endl;
+//	cout << curvedMPRImageFilter->GetOutputOrigin()[1] << endl;
+//	cout << curvedMPRImageFilter->GetOutputOrigin()[2] << endl;
+//	//m_centerLine = curvedMPRImageFilter->GetCenterLine();
+//
+//	//vtkSmartPointer<vtkNIFTIImageWriter> nIFTIImageWriter =
+//	//	vtkSmartPointer<vtkNIFTIImageWriter>::New();
+//	//nIFTIImageWriter->SetInputData(curvedMPRImageFilter->GetOutput());
+//	//nIFTIImageWriter->SetFileName("C:/Users/jieji/Desktop/curved.nii");
+//	//nIFTIImageWriter->Update();
+//
+//	//vtkSmartPointer<vtkPolyDataWriter> w =
+//	//	vtkSmartPointer<vtkPolyDataWriter>::New();
+//	//w->SetInputData(centerlineAttributes->GetOutput());
+//	//w->SetFileName("C:/Users/jieji/Desktop/centerline.vtk");
+//	//w->Update();
+//
+//	m_imageActor = vtkSmartPointer<vtkImageActor>::New();
+//	m_imageActor->GetMapper()->SetInputConnection(curvedMPRImageFilter->GetOutputPort());
+//	m_imageActor->GetProperty()->SetLookupTable(m_surfaceViewer->GetLookupTable());
+//	m_imageActor->GetProperty()->UseLookupTableScalarRangeOn();
+//	m_surfaceViewer->GetRenderer()->AddActor(m_imageActor);
+//}
 
-	vtkSmartPointer<vtkvmtkCenterlineAttributesFilter> centerlineAttributes =
-		vtkSmartPointer<vtkvmtkCenterlineAttributesFilter>::New();
-	centerlineAttributes->SetInputConnection(centerlineGeometry->GetOutputPort());
-	centerlineAttributes->SetAbscissasArrayName("Abscissas");
-	centerlineAttributes->SetParallelTransportNormalsArrayName("Normals");
-	centerlineAttributes->Update();
-
-
-
-	vtkSmartPointer<vtkvmtkCurvedMPRImageFilter> curvedMPRImageFilter =
-		vtkSmartPointer<vtkvmtkCurvedMPRImageFilter>::New();
-	curvedMPRImageFilter->SetInputData(m_surfaceViewer->GetInput());
-	curvedMPRImageFilter->SetCenterline(centerlineAttributes->GetOutput());
-	//centerlineAttributesFilter->SetInputConnection(triangleFilter->GetOutputPort());
-	curvedMPRImageFilter->SetParallelTransportNormalsArrayName("Normals");
-	curvedMPRImageFilter->SetFrenetTangentArrayName("FrenetTangent");
-	curvedMPRImageFilter->SetInplaneOutputSpacing(GetSpacing()[0], GetSpacing()[1]);
-	curvedMPRImageFilter->SetInplaneOutputSize(GetExtent()[1] - GetExtent()[0], GetExtent()[3] - GetExtent()[2]);
-	curvedMPRImageFilter->SetReslicingBackgroundLevel(0.0);
-	curvedMPRImageFilter->Update();
-	cout << GetOrigin()[0] << endl;
-	cout << GetOrigin()[1] << endl;
-	cout << GetOrigin()[2] << endl;
-	cout << curvedMPRImageFilter->GetOutputOrigin()[0] << endl;
-	cout << curvedMPRImageFilter->GetOutputOrigin()[1] << endl;
-	cout << curvedMPRImageFilter->GetOutputOrigin()[2] << endl;
-	//m_centerLine = curvedMPRImageFilter->GetCenterline();
-
-	//vtkSmartPointer<vtkNIFTIImageWriter> nIFTIImageWriter =
-	//	vtkSmartPointer<vtkNIFTIImageWriter>::New();
-	//nIFTIImageWriter->SetInputData(curvedMPRImageFilter->GetOutput());
-	//nIFTIImageWriter->SetFileName("C:/Users/jieji/Desktop/curved.nii");
-	//nIFTIImageWriter->Update();
-
-	//vtkSmartPointer<vtkPolyDataWriter> w =
-	//	vtkSmartPointer<vtkPolyDataWriter>::New();
-	//w->SetInputData(centerlineAttributes->GetOutput());
-	//w->SetFileName("C:/Users/jieji/Desktop/centerline.vtk");
-	//w->Update();
-
-	m_imageActor = vtkSmartPointer<vtkImageActor>::New();
-	m_imageActor->GetMapper()->SetInputConnection(curvedMPRImageFilter->GetOutputPort());
-	m_imageActor->GetProperty()->SetLookupTable(m_surfaceViewer->GetLookupTable());
-	m_imageActor->GetProperty()->UseLookupTableScalarRangeOn();
-	m_surfaceViewer->GetRenderer()->AddActor(m_imageActor);
-}
-
-void InteractorStyleSurfaceCenterLineReslicer::UpdateReslicer()
+void InteractorStyleSurfaceCenterLineCurvedNavigation::Update2DViewers()
 {
 	const double* worldPos = m_handleWidgets[0]->GetHandleRepresentation()->GetWorldPosition();
+
+	int i = (GetExtent()[1] - GetExtent()[0])*0.5;
+	int j = (GetExtent()[3] - GetExtent()[2])*0.5;
 
 	
 	//int k = (worldPos[2] - GetOrigin()[2]) / GetSpacing()[2] + 0.5;
 	int k = m_pointLocator->FindClosestPoint(worldPos);
 
-	m_imageActor->SetDisplayExtent(
-		GetExtent()[0], 
-		GetExtent()[1], 
-		GetExtent()[2], 
-		GetExtent()[3], 
-		k,
-		k);
-	m_imageActor->Render(m_surfaceViewer->GetRenderer());
+	STYLE_DOWN_CAST_CONSTITERATOR(AbstractNavigation, SetCurrentFocalPointWithImageCoordinate(i, j, k));
+
 }
 
-//void InteractorStyleSurfaceCenterLineReslicer::FindMaximumRadius()
+//void InteractorStyleSurfaceCenterLineCurvedNavigation::FindMaximumRadius()
 //{
 //	vtkIdType seed1 = m_pointLocator->FindClosestPoint(
 //		m_handleWidgets[0]->GetHandleRepresentation()->GetWorldPosition());
@@ -294,7 +285,7 @@ void InteractorStyleSurfaceCenterLineReslicer::UpdateReslicer()
 //	this->m_surfaceViewer->Render();
 //}
 
-void InteractorStyleSurfaceCenterLineReslicer::OnKeyPress()
+void InteractorStyleSurfaceCenterLineCurvedNavigation::OnKeyPress()
 {
 	std::string key = this->Interactor->GetKeySym();
 	cout << key << endl;

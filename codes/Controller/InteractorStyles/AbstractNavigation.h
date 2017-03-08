@@ -42,6 +42,7 @@ public:
 	static AbstractNavigation *New();
 	
 	virtual void SetImageViewer(ImageViewer* imageViewer);
+	//virtual ImageViewer* GetImageViewer();
 	virtual void SetCurrentSlice(int slice);
 	virtual void SetCurrentFocalPointWithImageCoordinate(int* ijk);
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);

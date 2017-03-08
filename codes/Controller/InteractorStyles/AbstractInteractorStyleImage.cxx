@@ -25,13 +25,16 @@ Copyright (C) 2016
 #include <vtkObjectFactory.h>
 #include <vtkImageViewer2.h>
 
-
+#include <vtkWorldPointPicker.h>
 
 vtkStandardNewMacro(AbstractInteractorStyleImage);
 std::list<vtkImageViewer2*> AbstractInteractorStyleImage::m_synchronalViewers;
 
 AbstractInteractorStyleImage::AbstractInteractorStyleImage() : vtkInteractorStyleImage()
 {
+	//vtkWorldPointPicker* _picker = vtkWorldPointPicker::New();
+	//this->Interactor->SetPicker(_picker);
+	//_picker->Delete();
 }
 
 AbstractInteractorStyleImage::~AbstractInteractorStyleImage()
@@ -180,6 +183,7 @@ void AbstractInteractorStyleImage::OnRightButtonUp()
 
 void AbstractInteractorStyleImage::OnRightDoubleClick()
 {
+
 }
 
 void AbstractInteractorStyleImage::OnMiddleButtonDown()

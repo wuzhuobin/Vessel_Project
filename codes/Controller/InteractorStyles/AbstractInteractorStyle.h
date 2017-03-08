@@ -29,7 +29,7 @@ Copyright (C) 2016
 for(std::list<AbstractInteractorStyle*>::const_iterator cit = \
 	m_abstractInteractorStyles.cbegin(); cit != m_abstractInteractorStyles.cend(); ++cit){\
 	STYLE_NAME* _style = dynamic_cast<##STYLE_NAME*>(*cit); \
-	if (_style != nullptr && _style->m_customFlag) { \
+	if (_style != nullptr && _style->GetCustomEnabled()) { \
 		_style->##METHOD; \
 	} \
 }
@@ -40,6 +40,7 @@ class AbstractInteractorStyle
 public:
 
 	virtual void SetCustomEnabled(bool flag);
+	virtual bool GetCustomEnabled();
 	virtual void CustomEnabledOn();
 	virtual void CustomEnabledOff();
 

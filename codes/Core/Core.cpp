@@ -3,7 +3,7 @@
 #include "IADEOverlay.h"
 #include "ui_MainWindow.h"
 #include "ui_ModuleWidget.h"
-
+#include "ui_ViewerWidget.h"
 
 
 #include <qdebug.h>
@@ -18,10 +18,10 @@ Core::Core(QObject * parent)
 	:
 	imageManager(NUM_OF_IMAGES, parent),
 	ioManager(parent),
+	dataProcessor(parent),
 	QObject(parent)
 {
 	ioManager.enableRegistration(true);
-
 
 	imageManager.setModalityName(0, "Image 0");
 	imageManager.setModalityName(1, "Image 1");
@@ -32,34 +32,34 @@ Core::Core(QObject * parent)
 	mainWindow.addModalityNames("Image 2");
 	mainWindow.addModalityNames("Image 3");
 
-
-	QVTKWidget2* uiViewers[] = {
-		mainWindow.getUi()->image1View,
-		mainWindow.getUi()->image2View,
-		mainWindow.getUi()->image3View,
-		mainWindow.getUi()->image4View
-	};
-	
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS + MainWindow::NUM_OF_3D_VIEWERS; ++i) {
+		if (i % 2) {
+			mainWindow.getCentralWidget()->addDockWidget(Qt::TopDockWidgetArea, &viewerWidgets[i]);
+		}
+		else {
+			mainWindow.getCentralWidget()->addDockWidget(Qt::BottomDockWidgetArea, &viewerWidgets[i]);
+		}
+	}
 
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		
 		imageViewers[i] = ImageViewer::New();
-		imageViewers[i]->SetRenderWindow(uiViewers[i]->GetRenderWindow());
-		imageViewers[i]->SetupInteractor(uiViewers[i]->GetInteractor());
+		imageViewers[i]->SetRenderWindow(viewerWidgets[i].getUi()->qvtkWidget2->GetRenderWindow());
+		imageViewers[i]->SetupInteractor(viewerWidgets[i].getUi()->qvtkWidget2->GetInteractor());
 
 		// Never use below method to set the interactorsyle
 		//imageInteractorStyle[i]->SetInteractor(imageInteractor[i]);
 		imageInteractorStyle[i] = IADEInteractorStyleSwitch::New();
 		imageInteractorStyle[i]->SetImageViewer(imageViewers[i]);
-		uiViewers[i]->GetInteractor()->SetInteractorStyle(imageInteractorStyle[i]);
+		viewerWidgets[i].getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(imageInteractorStyle[i]);
 		
 	}
 
 	//surfaceInteractor = vtkRenderWindowInteractor::New();
 
 	surfaceViewer = SurfaceViewer::New();
-	surfaceViewer->SetRenderWindow(uiViewers[3]->GetRenderWindow());
-	surfaceViewer->SetupInteractor(uiViewers[3]->GetInteractor());
+	surfaceViewer->SetRenderWindow(viewerWidgets[3].getUi()->qvtkWidget2->GetRenderWindow());
+	surfaceViewer->SetupInteractor(viewerWidgets[3].getUi()->qvtkWidget2->GetInteractor());
 	surfaceViewer->EnableDepthPeelingOn();
 	//surfaceViewer->EnableDepthSortingOn();
 
@@ -68,8 +68,11 @@ Core::Core(QObject * parent)
 	//surfaceInteractorStyle[i]->SetInteractor(imageInteractor[i]);
 	surfaceInteractorStyle = IADEInteractorStyleSwitch3D::New();
 	surfaceInteractorStyle->SetSurfaceViewer(surfaceViewer);
-	uiViewers[3]->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle);
+	viewerWidgets[3].getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle);
 
+	dataProcessor.imageInteractorStyle = imageInteractorStyle;
+	dataProcessor.surfaceInteractorStyle = surfaceInteractorStyle;
+	dataProcessor.imageManager = &imageManager;
 
 	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
 	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
@@ -115,17 +118,31 @@ Core::Core(QObject * parent)
 
 	//connect(&ioManager, SIGNAL(signalFinishOpenMultiImages(QList<ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>*)),
 	//	this, SLOT(slotIOManagerToImageManager(QList<IOManager::ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>* dicoms)));
+	
+	// find loading images and overlay
 	connect(&ioManager, SIGNAL(signalFinishOpenMultiImages()),
 		this, SLOT(slotIOManagerToImageManager()));
-	connect(mainWindow.getUi()->actionNew_segmentation, SIGNAL(triggered()),
-		&ioManager, SLOT(slotInitializeOverlay()));
-	connect(&mainWindow, SIGNAL(signalOverlayImportLoad(QString)), 
-		&ioManager, SLOT(slotOpenSegmentation(QString)));
 	connect(&ioManager, SIGNAL(signalFinishOpenOverlay()),
 		this, SLOT(slotOverlayToImageManager()));
+
+
+	// import and export overlay
+	connect(&mainWindow, SIGNAL(signalOverlayImportLoad(QString)), 
+		&ioManager, SLOT(slotOpenSegmentation(QString)));
 	connect(&mainWindow, SIGNAL(signalOverlayExportSave(QString)),
 		&ioManager, SLOT(slotSaveSegmentation(QString)));
-	
+
+	// new overlay
+	connect(mainWindow.getUi()->actionNew_segmentation, SIGNAL(triggered()),
+		&ioManager, SLOT(slotInitializeOverlay()));
+
+	// change view mode
+	connect(mainWindow.getUi()->actionCurved_view, SIGNAL(triggered()),
+		this, SLOT(slotCurvedMultiPlanarView()));
+	connect(mainWindow.getUi()->actionAll_axial_view, SIGNAL(triggered()),
+		this, SLOT(slotAllAxialView()));
+	connect(mainWindow.getUi()->actionMulti_planar_view, SIGNAL(triggered()),
+		this, SLOT(slotMultiPlanarView()));
 	// change image
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		connect(mainWindow.getSelectImgMenu(i), SIGNAL(triggered(QAction*)),
@@ -143,12 +160,16 @@ Core::Core(QObject * parent)
 		this, SLOT(slotFindMaximumRadius()));
 	connect(mainWindow.getUi()->actionPerpendicular_measurement, SIGNAL(triggered()),
 		this, SLOT(slotPerpendicularMeasurement()));
+	connect(mainWindow.getUi()->actionCurved_navigation, SIGNAL(triggered()),
+		this, SLOT(slotCurvedNavigation()));
 
 	// update btn
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
 		this, SLOT(slotUpdateSurfaceView()));
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
 		mainWindow.getUi()->actionTraceball_camera, SLOT(trigger()));
+	connect(mainWindow.getUi()->actionUpdate_curved_images, SIGNAL(triggered()),
+		this, SLOT(slotInitializeCurvedImage()));
 
 	// Opacity
 	connect(moduleWiget.getUi()->opacitySpinBox, SIGNAL(valueChanged(int)),
@@ -175,7 +196,7 @@ Core::~Core()
 		imageInteractorStyle[i] = nullptr;
 
 		
-		uiViewers[i]->GetInteractor()->SetInteractorStyle(nullptr);
+		viewerWidgets[i].getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(nullptr);
 		//imageInteractor[i]->Delete();
 		//imageInteractor[i] = nullptr;
 		
@@ -189,14 +210,12 @@ Core::~Core()
 void Core::slotIOManagerToImageManager()
 {
 	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
-			imageManager.setImage(i, ioManager.getListOfItkImages()[i]);
+			imageManager.setImage(i, ioManager.getListOfImage()[i]);
 			imageManager.setDicomIO(i, ioManager.getListOfDicomIOs()[i]);
 	}
 
 	// set input to image viewer
 	ioManager.slotInitializeOverlay();
-
-	slotMultiPlanarView();
 
 	// update selectImgMenus 
 	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
@@ -217,11 +236,8 @@ void Core::slotIOManagerToImageManager()
 void Core::slotOverlayToImageManager()
 {
 	imageManager.setOverlay(ioManager.getOverlay());
-
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-		// Overlay settings
-		imageViewers[i]->SetInputDataLayer(imageManager.getOverlay()->getData());
-		imageViewers[i]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
+		slotUpdateImageViewersToCurrent(i);
 	}
 	// clear the memory later, sometimes it will clear too early
 	// make no different, if it has not been clear
@@ -306,12 +322,22 @@ void Core::slotPerpendicularMeasurement()
 	surfaceInteractorStyle->SetInteractorStyleTo3DPerpendicularMeasurement();
 }
 
+void Core::slotCurvedNavigation()
+{
+	surfaceInteractorStyle->SetInteractorStyleTo3DCurvedNavigation();
+}
+
 void Core::slotVBDSmoker()
 {
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToVBDSmoker();
 	}
 	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
+}
+
+void Core::slotInitializeCurvedImage()
+{
+	dataProcessor.initializeCurved();
 }
 
 void Core::slotChangeImage(QAction * action)
@@ -325,7 +351,34 @@ void Core::slotChangeImage(QAction * action)
 void Core::slotChangeImage(int viewer, int image)
 {
 	currentImage[viewer] = image;
-	imageViewers[viewer]->SetInputData(imageManager.getImage(currentImage[viewer]));
+	slotUpdateImageViewersToCurrent(viewer);
+}
+
+void Core::slotChangeCurved(int viewer, bool curvedFlag)
+{
+	currentCurved[viewer] = curvedFlag;
+	slotUpdateImageViewersToCurrent(viewer);
+}
+
+void Core::slotChangeSliceOrientation(int viewer, int sliceOrientation)
+{
+	currentSliceOrientation[viewer] = sliceOrientation;
+	slotUpdateImageViewersToCurrent(viewer);
+}
+
+void Core::slotUpdateImageViewersToCurrent(int viewer)
+{
+	if (currentCurved[viewer]) {
+		imageViewers[viewer]->SetInputDataLayer(imageManager.getCurvedIADEOverlay()->getData());
+		imageViewers[viewer]->SetInputData(imageManager.getCurvedImage(currentImage[viewer]));
+	}
+	else
+	{
+		imageViewers[viewer]->SetInputDataLayer(imageManager.getIADEOverlay()->getData());
+		imageViewers[viewer]->SetInputData(imageManager.getImage(currentImage[viewer]));
+	}
+	imageViewers[viewer]->SetLookupTable(imageManager.getIADEOverlay()->getLookupTable());
+	imageViewers[viewer]->SetSliceOrientation(currentSliceOrientation[viewer]);
 	imageViewers[viewer]->Render();
 	imageViewers[viewer]->InitializeHeader(imageManager.getModalityName(currentImage[viewer]).toStdString());
 	imageViewers[viewer]->Render();
@@ -343,7 +396,7 @@ void Core::slotAllAxialView()
 
 void Core::slotCurvedMultiPlanarView()
 {
-	slotChangeView(CURVED_MULTIPLANAR_VIEW);
+	slotChangeView(CURVED_VIEW);
 }
 
 void Core::slotChangeView(unsigned int viewMode)
@@ -355,73 +408,31 @@ void Core::slotChangeView(unsigned int viewMode)
 	case MULTIPLANAR_VIEW:
 		// MULTIPLANAR_VIEW
 		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-			// Change input to same image, default 0
-			// SetupInteractor should be ahead of InitializeHeader
-			imageViewers[i]->SetInputData(imageManager.getImage(currentImage[i]));
-			// Overlay settings
-			//imageViewers[i]->SetInputDataLayer(imageManager.getOverlay()->getData());
-			//imageViewers[i]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
-			
-			imageViewers[i]->SetSliceOrientation(i);
-			imageViewers[i]->Render();
-			imageViewers[i]->InitializeHeader(imageManager.getModalityName(currentImage[i]).toStdString());
-			imageViewers[i]->Render();
-			// else only change input and viewer m_orientation
-			//imageViewers[i]->GetRenderWindow()->GetInteractor()->Enable();
-			// Show view props for overlay
-			//m_2DimageViewer[i]->SetAllBlack(false);
+			currentCurved[i] = false;
+			currentSliceOrientation[i] = i % 3;
+			slotUpdateImageViewersToCurrent(i);
 
 		}
 		break;
 	case ALL_AXIAL_VIEW:
 		 // ALL_AXIAL_VIEW
-			// i1 for looping all 5 vtkImage, while i2 for looping all 3 m_2DimageViewer
-			for (int i1 = 0, i2 = 0; i2 < MainWindow::NUM_OF_2D_VIEWERS; ++i2)
-			{
-				for (; i1 < NUM_OF_IMAGES && i2 < MainWindow::NUM_OF_2D_VIEWERS;
-					++i1) {
-					// skip the NULL image
-					if (this->imageManager.getImage(i1) != nullptr) {
-						// SetupInteractor should be ahead of InitializeHeader
-						this->imageViewers[i2]->SetInputData(
-							this->imageManager.getImage(i1));
-						this->imageViewers[i2]->SetSliceOrientation(ImageViewer::SLICE_ORIENTATION_XY);
-						this->imageViewers[i2]->Render();
-						this->imageViewers[i2]->InitializeHeader(imageManager.getModalityName(i2).toStdString());
 
-						++i2;
-					}
-				}
-				if (i1 >= NUM_OF_IMAGES && i2 < MainWindow::NUM_OF_2D_VIEWERS) {
-					//this->imageViewers[i2]->GetRenderWindow()->GetInteractor()->Disable();
-					//// disable view props
-					//imageViewers[i2]->SetAllBlack(true);
-
-				}
-
-			}
-			break;
-	case CURVED_MULTIPLANAR_VIEW:
 		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-			if (!imageManager.getCurvedImage(currentImage[i])) {
-				mainWindow.getUi()->actionMultiPlanarView->trigger();
-				break;
-			}
-			// Change input to same image, default 0
-			// SetupInteractor should be ahead of InitializeHeader
-			imageViewers[i]->SetInputData(imageManager.getCurvedImage(currentImage[i]));
-			// Overlay settings
-			//imageViewers[i]->SetInputDataLayer(imageManager.getOverlay()->getData());
-			//imageViewers[i]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
+			currentCurved[i] = false;
+			currentSliceOrientation[i] = ImageViewer::SLICE_ORIENTATION_XY;
+			slotUpdateImageViewersToCurrent(i);
+		}
 
-			imageViewers[i]->SetSliceOrientation(i);
-			imageViewers[i]->Render();
-			imageViewers[i]->InitializeHeader(imageManager.getModalityName(currentImage[i]).toStdString());
-			imageViewers[i]->Render();
-			// else only change input and viewer m_orientation
-			//imageViewers[i]->GetRenderWindow()->GetInteractor()->Enable();
-			// Show view props for overlay
-			//m_2DimageViewer[i]->SetAllBlack(false);
+
+			break;
+	case CURVED_VIEW:
+		// CURVED_VIEW
+		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+			if (!imageManager.getCurvedIADEOverlay()) {
+				dataProcessor.initializeCurved();
+			}
+			currentCurved[i] = true;
+			slotUpdateImageViewersToCurrent(i);
 
 		}
 		break;
