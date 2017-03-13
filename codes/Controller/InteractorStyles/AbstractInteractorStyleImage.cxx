@@ -65,6 +65,16 @@ void AbstractInteractorStyleImage::SynchronalZooming()
 
 }
 
+int AbstractInteractorStyleImage::GetWindow()
+{
+	return GetVtkImageViewer2()->GetColorLevel();
+}
+
+int AbstractInteractorStyleImage::GetLevel()
+{
+	return GetVtkImageViewer2()->GetColorLevel();
+}
+
 int AbstractInteractorStyleImage::GetSlice()
 {
 	return GetVtkImageViewer2()->GetSlice();

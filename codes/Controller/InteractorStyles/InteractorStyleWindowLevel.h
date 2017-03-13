@@ -31,7 +31,6 @@ public:
 
 	virtual void SetWindow(double window);
 	virtual void SetLevel(double level);
-	virtual void WindowLevel();
 
 protected:
 	InteractorStyleWindowLevel();
@@ -43,6 +42,8 @@ protected:
 	 * by using #SetCurrentImageToNthImage() .
 	 */
 	virtual void StartWindowLevel();
+	virtual void WindowLevel();
+	virtual void ResetWindowLevel();
 
 	virtual void OnMouseMove();
 	virtual void OnLeftButtonDown();
@@ -57,9 +58,14 @@ protected:
 	virtual void SetLevelByViewer(double level);
 	virtual void SetWindowLevelByViewer(double window, double level);
 
-	double m_window;
-	double m_level;
+	//double m_window;
+	//double m_level;
 
+	double InitialWindow;
+	double InitialLevel;
+
+	int WindowLevelStartPosition[2] = { 0 };
+	int WindowLevelCurrentPosition[2] = { 0 };
 	
 
 };

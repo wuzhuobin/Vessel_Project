@@ -42,10 +42,10 @@ public slots:
 
 	void ExtractLumen();
 	/**
-	 * @deprecated
-	 * method has already been moved to InteractorStyleVesselSegmentation
 	 */
-	void ExtractLumenPolyData();
+	void ExtractSegmentation(std::list<int*>& seed);
+	void ExtractSegmentation();
+	void SetExtractRadius(int radius);
 	void SetMultipier(double value);
 	void SetNumberOfIteractions(int value);
 	void SetInitialNeighborhoodRadius(int value);
@@ -68,6 +68,7 @@ private:
 	int m_numberOfIteractions = 3;
 	double m_multiplier = 2.1;
 	int m_initialNeighborhoodRadius = 1;
+	int m_extractRadius = 10;
 
 
 	QList<vtkSmartPointer<vtkImageData>> m_listOfVtkImages;

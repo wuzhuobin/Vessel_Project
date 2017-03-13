@@ -67,6 +67,9 @@ protected:
 	void OnChar();
 	void OnKeyPress();
 
+
+	virtual int GetWindow();
+	virtual int GetLevel();
 	virtual int GetSlice();
 	virtual int GetMinSlice();
 	virtual int GetMaxSlice();

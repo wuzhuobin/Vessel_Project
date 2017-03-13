@@ -399,11 +399,21 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 		imageViewers[viewer]->SetInputDataLayer(imageManager.getIADEOverlay()->getData());
 		imageViewers[viewer]->SetInputData(imageManager.getImage(currentImage[viewer]));
 	}
+	imageViewers[viewer]->InitializeHeader(imageManager.getModalityName(currentImage[viewer]).toStdString());
+	imageViewers[viewer]->GetRenderWindow()->SetWindowName(imageManager.getModalityName(currentImage[viewer]).toStdString().c_str());
 	imageViewers[viewer]->SetLookupTable(imageManager.getIADEOverlay()->getLookupTable());
 	imageViewers[viewer]->SetSliceOrientation(currentSliceOrientation[viewer]);
 	imageViewers[viewer]->Render();
 	imageViewers[viewer]->InitializeHeader(imageManager.getModalityName(currentImage[viewer]).toStdString());
 	imageViewers[viewer]->Render();
+
+	mainWindow.getViewerWidget(viewer)->setWindowTitle(imageManager.getModalityName(currentImage[viewer]));
+
+	// tmp fix
+	imageInteractorStyle[viewer]->GetNavigation()->SetCustomEnabled(
+		!imageInteractorStyle[viewer]->GetNavigation()->GetCustomEnabled());
+	imageInteractorStyle[viewer]->GetNavigation()->SetCustomEnabled(
+		!imageInteractorStyle[viewer]->GetNavigation()->GetCustomEnabled());
 }
 
 void Core::slotMultiPlanarView()

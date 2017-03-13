@@ -69,55 +69,56 @@ set(
 	${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
 )
 
-set(
-	MAIN_INCLUDE_DIRECTORIES
-	### Directories for MOC Sources ###
-	${CMAKE_BINARY_DIR}
-	${CMAKE_BINARY_DIR}/codes/Main
-	${CMAKE_BINARY_DIR}/codes/Core
-	${CMAKE_BINARY_DIR}/codes/View
-	${CMAKE_BINARY_DIR}/codes/Controller
-	${CMAKE_BINARY_DIR}/codes/Model
+# set(
+	# MAIN_INCLUDE_DIRECTORIES
+	# ### Directories for MOC Sources ###
+	# ${CMAKE_BINARY_DIR}
+	# ${CMAKE_BINARY_DIR}/codes/Main
+	# ${CMAKE_BINARY_DIR}/codes/Core
+	# ${CMAKE_BINARY_DIR}/codes/View
+	# ${CMAKE_BINARY_DIR}/codes/Controller
+	# ${CMAKE_BINARY_DIR}/codes/Model
 
-	### Directories for headers ###
-	${CMAKE_SOURCE_DIR}
-	${CMAKE_SOURCE_DIR}/codes/Main
-	${CMAKE_SOURCE_DIR}/codes/Core
-	${CMAKE_SOURCE_DIR}/codes/View
-	${CMAKE_SOURCE_DIR}/codes/Controller
-	${CMAKE_SOURCE_DIR}/codes/Model
+	# ### Directories for headers ###
+	# ${CMAKE_SOURCE_DIR}
+	# ${CMAKE_SOURCE_DIR}/codes/Main
+	# ${CMAKE_SOURCE_DIR}/codes/Core
+	# ${CMAKE_SOURCE_DIR}/codes/View
+	# ${CMAKE_SOURCE_DIR}/codes/Controller
+	# ${CMAKE_SOURCE_DIR}/codes/Model
 	
+	# )
+
+# set(
+	# MAIN_LINK_LIBRARIES
+	# ${ITK_LIBRARIES}  
+	# ${VTK_LIBRARIES}
+	# # ${VMTK_LIBRARIES} 
+	# Qt5::Core
+	# Qt5::Widgets 
+	# # Qt5::PrintSupport
+	# View
+	# Core
+	# Controller
+	# Model
+# )
+
+# include_directories(
+	# ${MAIN_INCLUDE_DIRECTORIES}
+# )
+
+link_directories(
+	${MAIN_LINK_DIRECTORIES}
 	)
-
-set(
-	MAIN_LINK_LIBRARIES
-	${ITK_LIBRARIES}  
-	${VTK_LIBRARIES}
-	# ${VMTK_LIBRARIES} 
-	Qt5::Core
-	Qt5::Widgets 
-	# Qt5::PrintSupport
-	View
-	Core
-	Controller
-	Model
-)
-
-include_directories(
-	${MAIN_INCLUDE_DIRECTORIES}
-)
-
-# link_directories(
-# 	${MAIN_LINK_DIRECTORIES}
-# 	)
 
 add_subdirectory(codes/Main)
 add_subdirectory(codes/View)
 add_subdirectory(codes/Core)
 add_subdirectory(codes/Controller)
 add_subdirectory(codes/Model)
-add_subdirectory(codes/LumenExtraction)
+#add_subdirectory(codes/LumenExtraction)
 add_subdirectory(codes/Widgets)
+add_subdirectory(codes/Algorithm)
 
 
 

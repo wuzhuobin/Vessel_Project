@@ -113,6 +113,7 @@ target_link_libraries(
 	Qt5::Widgets
 	Widgets
 	LumenExtraction
+	PolylineToTubularVolume
 )
 
 target_include_directories(

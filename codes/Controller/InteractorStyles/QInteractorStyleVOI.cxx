@@ -87,6 +87,7 @@ void QInteractorStyleVOI::ExtractVOI()
 	}
 	GetImageViewer()->UpdateDisplayExtent(extent);
 	GetImageViewer()->Render();
+	uniqueEnable();
 	//m_imageViewer->SetImageVOI(extent);
 	//m_imageViewer->SetOverlayVOI(extent);
 }
@@ -98,6 +99,7 @@ void QInteractorStyleVOI::ResetVOI()
 	//m_imageViewer->UpdateDisplayExtent();
 	GetImageViewer()->ResetDisplayExtent();
 	GetImageViewer()->Render();
+	uniqueEnable();
 	//m_imageViewer->ResetImageVOI();
 	//m_imageViewer->ResetOverlayVOI();
 }

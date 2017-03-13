@@ -55,13 +55,13 @@ protected:
 	virtual ~QInteractorStyleNavigation() override;
 	/**
 	* @override
-	* @brief	abstract funtion to call once.
+	* @brief	abstract funtion to enable once.
 	* @see #uniqueInvoke()
 	*
-	* The #uniqueCall() function used to guarantee only call once.
+	* The #uniqueEnable() function used to guarantee only enable once.
 	* For updating the spinbox's boundaries.
 	*/
-	virtual void uniqueCall() override;
+	virtual void uniqueEnable() override;
 
 private:
 	///< ui pointer.

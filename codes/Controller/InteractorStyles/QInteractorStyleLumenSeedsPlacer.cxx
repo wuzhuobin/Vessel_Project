@@ -8,7 +8,13 @@
 #include <vtkImageData.h>
 #include <vtkExtractVOI.h>
 #include <vtkSeedWidget.h>
+#include <vtkParametricSpline.h>
+#include <vtkParametricFunctionSource.h>
+#include <vtkTransformPolyDataFilter.h>
+#include <vtkTransform.h>
+#include <vtkImageMask.h>
 
+#include "vtkPolylineToTubularVolume.h"
 #include "LumenExtractionFilter.h"
 #include "ImageViewer.h"
 #include "ui_QInteractorStyleLumenSeedsPlacer.h"
@@ -164,71 +170,67 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumen()
 	//ExtractLumenPolyData();
 }
 
-void QInteractorStyleLumenSeedsPlacer::ExtractLumenPolyData()
+void QInteractorStyleLumenSeedsPlacer::ExtractSegmentation(std::list<int*>& seed)
 {
+	vtkSmartPointer<vtkPolyData> splinePoints =
+		vtkSmartPointer<vtkPolyData>::New();
+	splinePoints->SetPoints(vtkSmartPointer<vtkPoints>::New());
+	for (list<int*>::const_iterator cit = seed.cbegin(); cit != seed.cend(); ++cit) {
+		splinePoints->GetPoints()->InsertNextPoint((*cit)[0], (*cit)[1], (*cit)[2]);
+		//double worldPos[3];
+		//for (int pos = 0; pos < 3; ++pos) {
+		//	worldPos[pos] = ((*cit)[pos] * GetSpacing()[pos]) + GetOrigin()[pos];
+		//}
+		//splinePoints->GetPoints()->InsertNextPoint(worldPos);
+	}
+	
+	vtkSmartPointer<vtkTransform> translation =
+		vtkSmartPointer<vtkTransform>::New();
+	translation->Scale(GetSpacing());
+	//translation->Translate(GetOrigin());
+	translation->Translate(-GetOrigin()[0], -GetOrigin()[1], -GetOrigin()[2]);
+	translation->Update();
 
+	vtkSmartPointer<vtkTransformPolyDataFilter> transformFilter =
+		vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+	transformFilter->SetInputData(splinePoints);
+	transformFilter->SetTransform(translation);
+	transformFilter->Update();
 
-	//const int* extent = /*m_imageViewer->GetOverlay()->GetOutput()->*/GetExtent(); 
-	//QMap<int, QList<vtkSmartPointer<vtkPolyData>>*>* lumenMap =
-	//	m_imageViewer->GetOverlay()->GetLumenPolyData();
+	vtkSmartPointer<vtkParametricSpline> spline =
+		vtkSmartPointer<vtkParametricSpline>::New();
+	//spline->SetPoints(splinePoints->GetPoints());
+	spline->SetPoints(transformFilter->GetOutput()->GetPoints());
 
+	vtkSmartPointer<vtkParametricFunctionSource> functionSource =
+		vtkSmartPointer<vtkParametricFunctionSource>::New();
+	functionSource->SetParametricFunction(spline);
+	functionSource->Update();
 
-	//for (int i = extent[4]; i <= extent[5]; ++i) {
+	vtkSmartPointer<vtkPolylineToTubularVolume> polylineToTubularVolume =
+		vtkSmartPointer<vtkPolylineToTubularVolume>::New();
+	polylineToTubularVolume->SetPolyline(functionSource->GetOutput());
+	polylineToTubularVolume->SetTubeRadius(m_extractRadius);
+	polylineToTubularVolume->SetInputData(GetImageViewer()->GetInputLayer());
+	polylineToTubularVolume->Update();
 
-	//	if (lumenMap->contains(i)) {
-	//		delete  lumenMap->value(i);
-	//	}
-	//	(*lumenMap)[i] = new QList<vtkSmartPointer<vtkPolyData>>;
+	vtkSmartPointer<vtkImageMask> maskFilter = vtkSmartPointer<vtkImageMask>::New();
+	maskFilter->SetInput1Data(GetImageViewer()->GetInputLayer());
+	maskFilter->SetMaskInputData(polylineToTubularVolume->GetOutput());
+	maskFilter->Update();
 
-	//	vtkSmartPointer<vtkMarchingSquares> marchingSquares =
-	//		vtkSmartPointer<vtkMarchingSquares>::New();
-	//	marchingSquares->SetInputData(m_imageViewer->GetOverlay()->GetOutput());
-	//	marchingSquares->CreateDefaultLocator();
-	//	marchingSquares->SetImageRange(extent[0], extent[1], extent[2], extent[3], i, i);
-	//	marchingSquares->GenerateValues(1, 1, 1);
-	//	marchingSquares->Update();
+	GetImageViewer()->GetInputLayer()->ShallowCopy(maskFilter->GetOutput());
 
-	//	vtkSmartPointer<vtkPolyDataConnectivityFilter> connectivityFilter =
-	//		vtkSmartPointer<vtkPolyDataConnectivityFilter>::New();
-	//	connectivityFilter->SetInputConnection(marchingSquares->GetOutputPort());
-	//	connectivityFilter->SetExtractionModeToAllRegions();
-	//	connectivityFilter->Update();
-	//	
-	//	for (int j = 0; j < connectivityFilter->GetNumberOfExtractedRegions(); ++j) {
-	//		vtkSmartPointer<vtkPolyDataConnectivityFilter> _connectivityFilter =
-	//			vtkSmartPointer<vtkPolyDataConnectivityFilter>::New();
-	//		_connectivityFilter->SetInputConnection(marchingSquares->GetOutputPort());
-	//		_connectivityFilter->AddSpecifiedRegion(j);
-	//		_connectivityFilter->SetExtractionModeToSpecifiedRegions();
-	//		_connectivityFilter->Update();
+}
 
-	//		//LumenSegmentationFilter2::ReorderPolyData(_connectivityFilter->GetOutput());
+void QInteractorStyleLumenSeedsPlacer::ExtractSegmentation()
+{
+	ExtractSegmentation(m_seeds);
+}
 
-	//		double toleranceInitial = 1;
-	//		int loopBreaker = 0;
-
-	//		vtkSmartPointer<vtkCleanPolyData> clearPolyData =
-	//			vtkSmartPointer<vtkCleanPolyData>::New();
-	//		clearPolyData->SetInputConnection(_connectivityFilter->GetOutputPort());
-	//		clearPolyData->ToleranceIsAbsoluteOn();
-	//		clearPolyData->SetAbsoluteTolerance(toleranceInitial);
-	//		clearPolyData->PointMergingOn();
-	//		clearPolyData->Update();
-	//		while (clearPolyData->GetOutput()->GetNumberOfPoints() < 3 && loopBreaker < 10) {
-	//			toleranceInitial *= 0.75;
-	//			clearPolyData->SetAbsoluteTolerance(toleranceInitial);
-	//			clearPolyData->Update();
-	//			loopBreaker += 1;
-	//		}
-
-	//		vtkSmartPointer<vtkPolyData> _lumenPolyData =
-	//			vtkSmartPointer<vtkPolyData>::New();
-	//		_lumenPolyData->ShallowCopy(clearPolyData->GetOutput());
-	//		(*(*lumenMap)[i]) += _lumenPolyData;
-	//	}
-	//	
-
-	//}
+void QInteractorStyleLumenSeedsPlacer::SetExtractRadius(int radius)
+{
+	this->m_extractRadius = radius;
 }
 
 void QInteractorStyleLumenSeedsPlacer::SetMultipier(double value)
@@ -323,6 +325,10 @@ void QInteractorStyleLumenSeedsPlacer::uniqueInitialization()
 		this, SLOT(SetNumberOfIteractions(int)));
 	connect(ui->initialNeighbodhoodSpinBox, SIGNAL(valueChanged(int)),
 		this, SLOT(SetInitialNeighborhoodRadius(int)));
+	connect(ui->spinBoxExtractRadius, SIGNAL(valueChanged(int)),
+		this, SLOT(SetExtractRadius(int)));
+	connect(ui->pushBtnExtractSegmentation, SIGNAL(clicked()),
+		this, SLOT(ExtractSegmentation()));
 }
 
 void QInteractorStyleLumenSeedsPlacer::initialization()

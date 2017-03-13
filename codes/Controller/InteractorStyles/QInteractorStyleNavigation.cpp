@@ -31,8 +31,9 @@ QInteractorStyleNavigation::~QInteractorStyleNavigation() {
 	QDELETE_UI();
 }
 
-void QInteractorStyleNavigation::uniqueCall()
+void QInteractorStyleNavigation::uniqueEnable()
 {
+	QAbstractNavigation::uniqueEnable();
 	// checking whether extent is equal to the old extent
 	// if different, update the maximum and minimum of the ui
 	const int* extent = GetImageViewer()->GetDisplayExtent();

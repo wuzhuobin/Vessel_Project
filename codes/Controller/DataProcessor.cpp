@@ -5,6 +5,7 @@
 #include "IADEOverlay.h"
 
 #include <vtkImageResample.h>
+#include <vtkSplineFilter.h>
 
 #include <vtkvmtkCurvedMPRImageFilter.h>
 #include <vtkvmtkCenterlineGeometry.h>
@@ -270,13 +271,33 @@ DataProcessor::~DataProcessor()
 
 void DataProcessor::initializeCurved() 
 {
-	vtkPolyData* centerline = surfaceInteractorStyle->GetCenterLine()->GetCenterLine();
+	vtkPolyData* centerline;
+	centerline = surfaceInteractorStyle->GetCenterLine()->GetCenterLine();
+	vtkImageData* inputImage;
+	inputImage = imageManager->getImage(0);
+	if (!inputImage) {
+		return;
+	}
+	double* spacing = inputImage->GetSpacing();
+	int* size = inputImage->GetDimensions();
+	int* extent = inputImage->GetExtent();
+	double outputSpacing = std::min(std::min(spacing[0], spacing[1]), spacing[2]);
+	int outputSize = std::max(std::max(extent[1] - extent[0], extent[3] - extent[2]),
+		extent[5] - extent[4]);
 	
+	
+	vtkSmartPointer<vtkSplineFilter> splineFilter =
+		vtkSmartPointer<vtkSplineFilter>::New();
+	splineFilter->SetInputData(centerline);
+	splineFilter->SetLength(outputSpacing);
+	splineFilter->Update();
+
 
 
 	vtkSmartPointer<vtkvmtkCenterlineGeometry> centerlineGeometry =
 		vtkSmartPointer<vtkvmtkCenterlineGeometry>::New();
-	centerlineGeometry->SetInputData(centerline);
+	centerlineGeometry->SetInputConnection(splineFilter->GetOutputPort());
+	//centerlineGeometry->SetInputData(centerline);
 	centerlineGeometry->SetLengthArrayName("Length");
 	centerlineGeometry->SetCurvatureArrayName("Curvature");
 	centerlineGeometry->SetTorsionArrayName("Torsion");
@@ -297,27 +318,18 @@ void DataProcessor::initializeCurved()
 	for (int i = 0; i < imageManager->getNumOfImages(); ++i) {
 
 
-		vtkImageData* inputImage = imageManager->getImage(i);
-		if (!inputImage) {
-			continue;
-		}
-		double* spacing = inputImage->GetSpacing();
-		int* size = inputImage->GetDimensions();
-		int* extent = inputImage->GetExtent();
-		double outputSpacing = std::max(std::max(spacing[0], spacing[1]), spacing[2]);
-		int outputSize = std::max(std::max(extent[1] - extent[0], extent[3] - extent[2]),
-			extent[5] - extent[4]);
 
-		vtkSmartPointer<vtkImageResample> imageResample =
-			vtkSmartPointer<vtkImageResample>::New();
-		imageResample->SetInputData(inputImage);
-		imageResample->SetOutputSpacing(outputSpacing, outputSpacing, outputSpacing);
-		imageResample->Update();
+
+		//vtkSmartPointer<vtkImageResample> imageResample =
+		//	vtkSmartPointer<vtkImageResample>::New();
+		//imageResample->SetInputData(inputImage);
+		//imageResample->SetOutputSpacing(outputSpacing, outputSpacing, outputSpacing);
+		//imageResample->Update();
 
 		vtkSmartPointer<vtkvmtkCurvedMPRImageFilter> curvedMPRImageFilter =
 			vtkSmartPointer<vtkvmtkCurvedMPRImageFilter>::New();
-		curvedMPRImageFilter->SetInputConnection(imageResample->GetOutputPort());
-		//curvedMPRImageFilter->SetInputData(inputImage);
+		//curvedMPRImageFilter->SetInputConnection(imageResample->GetOutputPort());
+		curvedMPRImageFilter->SetInputData(inputImage);
 		curvedMPRImageFilter->SetCenterline(centerlineAttributes->GetOutput());
 		curvedMPRImageFilter->SetParallelTransportNormalsArrayName("Normals");
 		curvedMPRImageFilter->SetFrenetTangentArrayName("FrenetTangent");
@@ -329,18 +341,7 @@ void DataProcessor::initializeCurved()
 		imageManager->setCurvedImage(i, curvedMPRImageFilter->GetOutput());
 	}
 
-	vtkImageData* inputImage = imageManager->getOverlay()->getData();
-	double* spacing = inputImage->GetSpacing();
-	int* extent = inputImage->GetExtent();
-	double outputSpacing = std::min(std::min(spacing[0], spacing[1]), spacing[2]);
-	int outputSize = std::max(std::max(extent[1] - extent[0], extent[3] - extent[2]),
-		extent[5] - extent[4]);
-
-	vtkSmartPointer<vtkImageResample> imageResample =
-		vtkSmartPointer<vtkImageResample>::New();
-	imageResample->SetInputData(inputImage);
-	imageResample->SetOutputSpacing(outputSpacing, outputSpacing, outputSpacing);
-	imageResample->Update();
+	inputImage = imageManager->getOverlay()->getData();
 
 	vtkSmartPointer<vtkvmtkCurvedMPRImageFilterNearestInterpolation> curvedMPRImageFilter =
 		vtkSmartPointer<vtkvmtkCurvedMPRImageFilterNearestInterpolation>::New();

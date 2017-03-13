@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>295</width>
-    <height>671</height>
+    <height>706</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -363,7 +363,7 @@
         <property name="maximum">
          <number>10</number>
         </property>
-        <property name="displayIntegerBase">
+        <property name="displayIntegerBase" stdset="0">
          <number>10</number>
         </property>
        </widget>
@@ -427,6 +427,104 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Postprocessing</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <spacer name="horizontalSpacer_7">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushBtnExtractSegmentation">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Extract Segmentation</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Extract Radius</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="hSliderExtractRadius">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>50</number>
+       </property>
+       <property name="singleStep">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>10</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBoxExtractRadius">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="suffix">
+        <string> mm</string>
+       </property>
+       <property name="prefix">
+        <string/>
+       </property>
+       <property name="maximum">
+        <number>50</number>
+       </property>
+       <property name="singleStep">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>10</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <spacer name="verticalSpacer_4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -451,11 +549,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>218</x>
-     <y>373</y>
+     <y>437</y>
     </hint>
     <hint type="destinationlabel">
      <x>274</x>
-     <y>372</y>
+     <y>436</y>
     </hint>
    </hints>
   </connection>
@@ -467,11 +565,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>274</x>
-     <y>372</y>
+     <y>436</y>
     </hint>
     <hint type="destinationlabel">
      <x>218</x>
-     <y>373</y>
+     <y>437</y>
     </hint>
    </hints>
   </connection>
@@ -482,12 +580,44 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>219</x>
-     <y>392</y>
+     <x>274</x>
+     <y>383</y>
     </hint>
     <hint type="destinationlabel">
      <x>237</x>
      <y>426</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hSliderExtractRadius</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxExtractRadius</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>570</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>571</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxExtractRadius</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>hSliderExtractRadius</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>563</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>177</x>
+     <y>564</y>
     </hint>
    </hints>
   </connection>

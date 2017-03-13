@@ -59,10 +59,10 @@ add_executable(
 target_link_libraries(
 	Main
 	Core
-	${ITK_LIBRARIES}
-	${VTK_LIBRARIES}
-	Qt5::Core
-	Qt5::Widgets
+	# ${ITK_LIBRARIES}
+	# ${VTK_LIBRARIES}
+	# Qt5::Core
+	# Qt5::Widgets
 )
 target_include_directories(
 	Main

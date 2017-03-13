@@ -52,10 +52,10 @@ void QInteractorStyleWindowLevel::initialization()
 	};
 	m_spinBoxWindowLevel = spinBoxWindowLevel[numOfMyself - 1];
 	m_spinBoxWindowWidth = spinBoxWindowWidth[numOfMyself - 1];
-	connect(m_spinBoxWindowLevel, SIGNAL(valueChanged(int)),
-		this, SLOT(SetLevel(int)), Qt::UniqueConnection);
-	connect(m_spinBoxWindowWidth, SIGNAL(valueChanged(int)),
-		this, SLOT(SetWindow(int)), Qt::UniqueConnection);
+	//connect(m_spinBoxWindowLevel, SIGNAL(valueChanged(int)),
+	//	this, SLOT(SetLevel(int)), Qt::UniqueConnection);
+	//connect(m_spinBoxWindowWidth, SIGNAL(valueChanged(int)),
+	//	this, SLOT(SetWindow(int)), Qt::UniqueConnection);
 }
 
 void QInteractorStyleWindowLevel::SetCustomEnabled(bool flag)
@@ -72,14 +72,14 @@ void QInteractorStyleWindowLevel::SetCurrentFocalPointWithImageCoordinate(int i,
 
 void QInteractorStyleWindowLevel::SetWindow(int window)
 {
-	if (int(m_window + 0.5) != window) {
+	if (int(GetWindow() + 0.5) != window) {
 		InteractorStyleWindowLevel::SetWindow(window);
 	}
 }
 
 void QInteractorStyleWindowLevel::SetLevel(int level)
 {
-	if (int(m_level + 0.5) != level) {
+	if (int(GetLevel() + 0.5) != level) {
 		InteractorStyleWindowLevel::SetLevel(level);
 	}
 }
