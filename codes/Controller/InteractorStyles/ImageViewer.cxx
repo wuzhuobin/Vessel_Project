@@ -73,7 +73,9 @@ public:
 ImageViewer::ImageViewer(/*QObject* parent*/)
 	//:QObject(parent)
 {
+	this->ImageActor->VisibilityOff();
 	this->OverlayActor = vtkImageActor::New();
+	this->OverlayActor->VisibilityOff();
 	this->OverlayWindowLevel = vtkImageMapToWindowLevelColors::New();
 
 	// OrientationTextActor 
@@ -431,6 +433,7 @@ void ImageViewer::Render()
 void ImageViewer::SetInputData(vtkImageData *in)
 {
 	// when there is a new input, Update the member DisplayExtent 
+	this->ImageActor->VisibilityOn();
 	vtkImageViewer2::SetInputData(in);
 	ResetDisplayExtent();
 	//Color Map
@@ -448,7 +451,7 @@ void ImageViewer::SetInputDataLayer(vtkImageData *in)
 	//OverlayExtractVOI->SetInputData(in);
 	//OverlayExtractVOI->SetVOI(in->GetExtent());
 	//OverlayExtractVOI->Update();
-
+	this->OverlayActor->VisibilityOn();
 	OverlayWindowLevel->SetInputData(in);
 	// in case when LookupTable has not been set
 	//if (this->LookupTable != NULL) {

@@ -75,6 +75,7 @@ void SurfaceViewer::Render(void)
 
 void SurfaceViewer::SetInputData(vtkImageData * in)
 {
+	this->SurfaceActor->VisibilityOn();
 	this->ImageResample->SetInputData(in);
 	double spacing = std::fmin(std::fmin(in->GetSpacing()[0], in->GetSpacing()[1]), in->GetSpacing()[2]);
 	this->ImageResample->SetOutputSpacing(spacing, spacing, spacing);
@@ -273,6 +274,7 @@ SurfaceViewer::SurfaceViewer()
 	this->AxesActor->DragableOff();
 	this->AxesActor->VisibilityOff();
 	this->SurfaceActor = vtkActor::New();
+	this->SurfaceActor->VisibilityOff();
 	this->SurfaceMapper = vtkPolyDataMapper::New();
 	this->ImageResample = vtkImageResample::New();
 	this->ImageResample->SetNumberOfThreads(16);
