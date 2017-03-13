@@ -25,7 +25,8 @@ PURPOSE.  See the above copyright notice for more information.
 #include <vtkProperty2D.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkInteractorStyleImage.h>
-#include <vtkCallbackCommand.h>
+#include <vtkCommand.h>
+//#include <vtkCallbackCommand.h>
 
 #include <vtkTextActor.h>
 #include <vtkImageMapToWindowLevelColors.h>
@@ -47,6 +48,26 @@ using std::string;
 using std::min;
 using std::max;
 vtkStandardNewMacro(ImageViewer);
+
+// update orientation and header text
+class vtkResizeHeaderAndOrientationTextCallback : public vtkCommand
+{
+public:
+	static vtkResizeHeaderAndOrientationTextCallback* New() { return new vtkResizeHeaderAndOrientationTextCallback; }
+	ImageViewer* IV;
+	void Execute(vtkObject *caller,
+		unsigned long event,
+		void *vtkNotUsed(callData)) override
+	{
+		if (this->IV->GetInput() == NULL)
+		{
+			return;
+		}
+		if (event == RenderEvent) {
+			IV->ResizeHeaderAndOrientationText();
+		}
+	}
+};
 
 //----------------------------------------------------------------------------
 ImageViewer::ImageViewer(/*QObject* parent*/)
@@ -288,7 +309,13 @@ void ImageViewer::SetColorWindow(double window)
 void ImageViewer::InstallPipeline()
 {
 	vtkImageViewer2::InstallPipeline();
-
+	if (this->RenderWindow) {
+		vtkResizeHeaderAndOrientationTextCallback* cbk =
+			vtkResizeHeaderAndOrientationTextCallback::New();
+		cbk->IV = this;
+		this->RenderWindow->AddObserver(vtkCommand::RenderEvent, cbk);
+		cbk->Delete();
+	}
 	// add label view prop to renderer
 	if (this->Renderer && this->OverlayActor) 
 	{
@@ -395,10 +422,10 @@ void ImageViewer::Render()
 		this->InitializeIntensityText("");
 		this->InitializeHeader(string());
 	}
+
 	vtkImageViewer2::Render();
 
-	// update orientation and header text
-	ResizeHeaderAndOrientationText();
+	//ResizeHeaderAndOrientationText();
 }
 //----------------------------------------------------------------------------
 void ImageViewer::SetInputData(vtkImageData *in)
@@ -760,3 +787,5 @@ void ImageViewer::SetupInteractor(vtkRenderWindowInteractor * arg)
 	//	this->AnnotationRenderer->SetActiveCamera(this->Renderer->GetActiveCamera());
 	//}
 }
+
+

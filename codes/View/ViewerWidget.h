@@ -13,6 +13,13 @@ public:
 	ViewerWidget(QWidget* parent = nullptr);
 	Ui::ViewerWidget* getUi();
 
+public slots:
+	void showMaximized(bool flag);
+
+protected:
+	//virtual void resizeEvent(QResizeEvent* event) override;
+	virtual void moveEvent(QMoveEvent* event)override;
+
 
 private:
 	Ui::ViewerWidget* ui = nullptr;

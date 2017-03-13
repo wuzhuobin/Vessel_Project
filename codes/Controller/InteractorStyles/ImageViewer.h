@@ -11,6 +11,7 @@ class vtkImageActor;
 class vtkCursor3D;
 class vtkPolyDataMapper;
 class vtkActor;
+class vtkResizeHeaderAndOrientationTextCallback;
 
 //#include "Overlay.h"
 
@@ -257,6 +258,8 @@ protected:
 	bool AllBlackFlag = false;
 
 	int DisplayExtent[6] = { -1 };
+
+	friend class vtkResizeHeaderAndOrientationTextCallback;
 
 private:
 	ImageViewer(const ImageViewer&);  // Not implemented.

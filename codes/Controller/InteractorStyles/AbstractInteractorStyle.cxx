@@ -38,6 +38,11 @@ void AbstractInteractorStyle::CustomEnabledOff()
 	SetCustomEnabled(false);
 }
 
+void AbstractInteractorStyle::SetViewer(vtkObject * viewer)
+{
+	m_viewer = viewer;
+}
+
 AbstractInteractorStyle::AbstractInteractorStyle() {
 	m_abstractInteractorStyles.push_back(this);
 }

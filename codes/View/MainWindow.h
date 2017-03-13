@@ -20,13 +20,17 @@
 
 #include <QtWidgets/QMainWindow>
 
+//#include "ModuleWidget.h"
+//#include "ViewerWidget.h"
+
 
 
 namespace Ui { class MainWindow; }
 class vtkRenderWindow;
 class QMenu;
 class QSettings;
-
+class ModuleWidget;
+class ViewerWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -37,31 +41,27 @@ public:
 
 	const static unsigned short NUM_OF_2D_VIEWERS = 3;
 	const static unsigned short NUM_OF_3D_VIEWERS = 1;
+	const static unsigned short NUM_OF_VIEWERS = NUM_OF_3D_VIEWERS + NUM_OF_2D_VIEWERS;
 
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
 	void initialization();
 	void enableInteractor(bool flag);
-	//void setModuleWidget(QWidget* moduleWidget);
 
 	void addModalityNames(QString name);
 	void setSelectImgMenuVisible(unsigned int num, bool flag);
 	void clearModalityNames();
 
-	
-	Ui::MainWindow* getUi() { return ui; }
-	QMainWindow* getCentralWidget();
+	// get ui things for connection 
+	Ui::MainWindow* getUi();
+	//QMainWindow* getCentralWidget();
+	ModuleWidget* getModuleWidget();
+	ViewerWidget* getViewerWidget(unsigned int num);
 	QMenu* getSelectImgMenu(unsigned int i);
-	QList<QMenu*>* getSelectImgMenus();
-
-	//void setRenderWindow(unsigned short i, vtkRenderWindow* renderWindow);
-	//vtkRenderWindow* getRenderWindow(unsigned short i);
 
 signals:
-	void signalImageImportInitialize();
-	void signalImageImportAdd(QStringList*);
-	void signalImageImportLoad();
+
 	void signalImageImportLoad(QList<QStringList>*);
 	void signalOverlayImportLoad(QString);
 	void signalOverlayExportSave(QString);
@@ -78,12 +78,13 @@ private slots:
 	/**
 	* four viewers and maximum
 	*/
-	void slotImage();
+	void slotImage(bool flag);
 
 
 private:
-	void imageImport(QString path);
+	Ui::MainWindow* ui;
 
+	void imageImport(QString path);
 
 	void setEnabled(bool flag);
 
@@ -93,20 +94,18 @@ private:
 	void createRecentImageActions();
 	void adjustForCurrentFile(const QString& filePath);
 	void updateRecentActionList();
+	
+	ViewerWidget* viewerWidgets[NUM_OF_VIEWERS] = { nullptr };
 
+	ModuleWidget* moduleWiget = nullptr;
 
+	//QMainWindow* centralWidget = nullptr;
 
-	Ui::MainWindow* ui;
-
-	QMainWindow* centralWidget = nullptr;
-
-	QList<QMenu*> selectImgMenus;
+	QMenu* selectImgMenus[NUM_OF_VIEWERS] = { nullptr };
 
 	QStringList modalityNames;
 
-
-	QSettings* settings;
-	//RegistrationWizard* m_rw;
+	QSettings* settings = nullptr;
 };
 
 #endif // !__MAIN_WINDOW_H__

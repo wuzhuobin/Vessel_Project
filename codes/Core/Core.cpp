@@ -4,10 +4,13 @@
 #include "ui_MainWindow.h"
 #include "ui_ModuleWidget.h"
 #include "ui_ViewerWidget.h"
+#include "ViewerWidget.h"
+#include "ModuleWidget.h"
 
 
 #include <qdebug.h>
 #include <QVTKInteractor.h>
+#include <qsignalmapper.h>
 
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
@@ -32,34 +35,25 @@ Core::Core(QObject * parent)
 	mainWindow.addModalityNames("Image 2");
 	mainWindow.addModalityNames("Image 3");
 
-	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS + MainWindow::NUM_OF_3D_VIEWERS; ++i) {
-		if (i % 2) {
-			mainWindow.getCentralWidget()->addDockWidget(Qt::TopDockWidgetArea, &viewerWidgets[i]);
-		}
-		else {
-			mainWindow.getCentralWidget()->addDockWidget(Qt::BottomDockWidgetArea, &viewerWidgets[i]);
-		}
-	}
-
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		
 		imageViewers[i] = ImageViewer::New();
-		imageViewers[i]->SetRenderWindow(viewerWidgets[i].getUi()->qvtkWidget2->GetRenderWindow());
-		imageViewers[i]->SetupInteractor(viewerWidgets[i].getUi()->qvtkWidget2->GetInteractor());
+		imageViewers[i]->SetRenderWindow(mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetRenderWindow());
+		imageViewers[i]->SetupInteractor(mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetInteractor());
 
 		// Never use below method to set the interactorsyle
 		//imageInteractorStyle[i]->SetInteractor(imageInteractor[i]);
 		imageInteractorStyle[i] = IADEInteractorStyleSwitch::New();
 		imageInteractorStyle[i]->SetImageViewer(imageViewers[i]);
-		viewerWidgets[i].getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(imageInteractorStyle[i]);
+		mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(imageInteractorStyle[i]);
 		
 	}
 
 	//surfaceInteractor = vtkRenderWindowInteractor::New();
 
 	surfaceViewer = SurfaceViewer::New();
-	surfaceViewer->SetRenderWindow(viewerWidgets[3].getUi()->qvtkWidget2->GetRenderWindow());
-	surfaceViewer->SetupInteractor(viewerWidgets[3].getUi()->qvtkWidget2->GetInteractor());
+	surfaceViewer->SetRenderWindow(mainWindow.getViewerWidget(3)->getUi()->qvtkWidget2->GetRenderWindow());
+	surfaceViewer->SetupInteractor(mainWindow.getViewerWidget(3)->getUi()->qvtkWidget2->GetInteractor());
 	surfaceViewer->EnableDepthPeelingOn();
 	//surfaceViewer->EnableDepthSortingOn();
 
@@ -68,23 +62,21 @@ Core::Core(QObject * parent)
 	//surfaceInteractorStyle[i]->SetInteractor(imageInteractor[i]);
 	surfaceInteractorStyle = IADEInteractorStyleSwitch3D::New();
 	surfaceInteractorStyle->SetSurfaceViewer(surfaceViewer);
-	viewerWidgets[3].getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle);
+	mainWindow.getViewerWidget(3)->getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle);
 
 	dataProcessor.imageInteractorStyle = imageInteractorStyle;
 	dataProcessor.surfaceInteractorStyle = surfaceInteractorStyle;
 	dataProcessor.imageManager = &imageManager;
 
 	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
-	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
-	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
-	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
-	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
-	moduleWiget.addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
+	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
+	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
+	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
+	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
+	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
 	//imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel()->show();
 	//moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	
-	mainWindow.getUi()->moduleWidgetDockWidget->setWidget(&moduleWiget);
-
 
 	// connect changing mode
 	connect(mainWindow.getUi()->actionTesting, SIGNAL(triggered()),
@@ -148,8 +140,27 @@ Core::Core(QObject * parent)
 		connect(mainWindow.getSelectImgMenu(i), SIGNAL(triggered(QAction*)),
 			this, SLOT(slotChangeImage(QAction*)));
 	}
-
-
+	// change slice orientation
+	QSignalMapper* sliceOrientationMapperA = new QSignalMapper(this);
+	QSignalMapper* sliceOrientationMapperS = new QSignalMapper(this);
+	QSignalMapper* sliceOrientationMapperC = new QSignalMapper(this);
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		sliceOrientationMapperA->setMapping(mainWindow.getViewerWidget(i)->getUi()->pushButtonAxialView, i);
+		sliceOrientationMapperS->setMapping(mainWindow.getViewerWidget(i)->getUi()->pushButtonSigitalView, i);
+		sliceOrientationMapperC->setMapping(mainWindow.getViewerWidget(i)->getUi()->pushButtonCoronalView, i);
+		connect(mainWindow.getViewerWidget(i)->getUi()->pushButtonAxialView, SIGNAL(clicked()),
+			sliceOrientationMapperA, SLOT(map()));
+		connect(mainWindow.getViewerWidget(i)->getUi()->pushButtonSigitalView, SIGNAL(clicked()),
+			sliceOrientationMapperS, SLOT(map()));
+		connect(mainWindow.getViewerWidget(i)->getUi()->pushButtonCoronalView, SIGNAL(clicked()),
+			sliceOrientationMapperC, SLOT(map()));
+	}
+	connect(sliceOrientationMapperA, SIGNAL(mapped(int)),
+		this, SLOT(slotChangeSliceOrientationToXY(int)));
+	connect(sliceOrientationMapperS, SIGNAL(mapped(int)),
+		this, SLOT(slotChangeSliceOrientationToYZ(int)));
+	connect(sliceOrientationMapperC, SIGNAL(mapped(int)),
+		this, SLOT(slotChangeSliceOrientationToXZ(int)));
 
 	// surface action
 	connect(mainWindow.getUi()->actionTraceball_camera, SIGNAL(triggered()),
@@ -172,9 +183,9 @@ Core::Core(QObject * parent)
 		this, SLOT(slotInitializeCurvedImage()));
 
 	// Opacity
-	connect(moduleWiget.getUi()->opacitySpinBox, SIGNAL(valueChanged(int)),
+	connect(mainWindow.getModuleWidget()->getUi()->opacitySpinBox, SIGNAL(valueChanged(int)),
 		this, SLOT(slotChangeOpacity(int)));
-	connect(moduleWiget.getUi()->labelComboBox, SIGNAL(currentIndexChanged(int)),
+	connect(mainWindow.getModuleWidget()->getUi()->labelComboBox, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(slotUpdateOpacity(int)));
 
 
@@ -183,12 +194,6 @@ Core::Core(QObject * parent)
 
 Core::~Core()
 {
-	QVTKWidget2* uiViewers[] = {
-		mainWindow.getUi()->image1View,
-		mainWindow.getUi()->image2View,
-		mainWindow.getUi()->image3View,
-		mainWindow.getUi()->image4View
-	};
 
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		
@@ -196,7 +201,7 @@ Core::~Core()
 		imageInteractorStyle[i] = nullptr;
 
 		
-		viewerWidgets[i].getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(nullptr);
+		mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(nullptr);
 		//imageInteractor[i]->Delete();
 		//imageInteractor[i] = nullptr;
 		
@@ -219,12 +224,7 @@ void Core::slotIOManagerToImageManager()
 
 	// update selectImgMenus 
 	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
-		if (imageManager.getImage(i) == nullptr) {
-			mainWindow.setSelectImgMenuVisible(i, false);
-		}
-		else {
-			mainWindow.setSelectImgMenuVisible(i, true);
-		}
+		mainWindow.setSelectImgMenuVisible(i, imageManager.getImage(i));
 	}
 	mainWindow.initialization();
 	// clear the memory later, sometimes it will clear too early
@@ -253,7 +253,7 @@ void Core::slotNavigation()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToNavigation();
 	}
-	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
+	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
 }
 
 void Core::slotWindowLevel()
@@ -261,7 +261,7 @@ void Core::slotWindowLevel()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToWindowLevel();
 	}
-	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
+	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 }
 
 void Core::slotPaintBrush()
@@ -270,7 +270,7 @@ void Core::slotPaintBrush()
 		imageInteractorStyle[i]->SetInteractorStyleToPaintBrush();
 		//imageInteractorStyle[i]->GetPaintBrush()->SetOverlay(imageManager.getOverlay()->getData());
 	}
-	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
+	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
 
 }
 
@@ -279,7 +279,7 @@ void Core::slotTesting()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToInteractorStyleTesting();
 	}
-	moduleWiget.setWidget(nullptr);
+	mainWindow.getModuleWidget()->setWidget(nullptr);
 
 }
 
@@ -288,7 +288,7 @@ void Core::slotSeedsPlacer()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToLumenSeedsPlacer();
 	}
-	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
+	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
 
 }
 
@@ -297,7 +297,7 @@ void Core::slotVOI()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToVOI();
 	}
-	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
+	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
 
 }
 
@@ -332,7 +332,7 @@ void Core::slotVBDSmoker()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToVBDSmoker();
 	}
-	moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
+	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
 }
 
 void Core::slotInitializeCurvedImage()
@@ -343,7 +343,13 @@ void Core::slotInitializeCurvedImage()
 void Core::slotChangeImage(QAction * action)
 {
 	QMenu* selectImgMenu = static_cast<QMenu*>(sender());
-	int viewer = mainWindow.getSelectImgMenus()->indexOf(selectImgMenu);
+	unsigned int viewer = 0;
+	for (int i = 0; i < MainWindow::NUM_OF_VIEWERS; ++i) {
+		if (selectImgMenu == mainWindow.getSelectImgMenu(i)) {
+			viewer = i;
+			break;
+		}
+	}
 	int image = imageManager.getIndexOfModalityName(action->text());
 	slotChangeImage(viewer, image);
 }
@@ -364,6 +370,22 @@ void Core::slotChangeSliceOrientation(int viewer, int sliceOrientation)
 {
 	currentSliceOrientation[viewer] = sliceOrientation;
 	slotUpdateImageViewersToCurrent(viewer);
+}
+
+void Core::slotChangeSliceOrientationToYZ(int viewer)
+{
+	slotChangeSliceOrientation(viewer, ImageViewer::SLICE_ORIENTATION_YZ);
+}
+
+void Core::slotChangeSliceOrientationToXZ(int viewer)
+{
+	slotChangeSliceOrientation(viewer, ImageViewer::SLICE_ORIENTATION_XZ);
+
+}
+
+void Core::slotChangeSliceOrientationToXY(int viewer)
+{
+	slotChangeSliceOrientation(viewer, ImageViewer::SLICE_ORIENTATION_XY);
 }
 
 void Core::slotUpdateImageViewersToCurrent(int viewer)
@@ -464,7 +486,7 @@ void Core::RenderALlViewers()
 
 void Core::slotChangeOpacity(int opacity)
 {
-	int color = moduleWiget.getUi()->labelComboBox->currentIndex() + 1;
+	int color = mainWindow.getModuleWidget()->getUi()->labelComboBox->currentIndex() + 1;
 	if (imageManager.getOverlay()->getOpacity(color) == opacity) {
 		return;
 	}
@@ -474,12 +496,12 @@ void Core::slotChangeOpacity(int opacity)
 
 void Core::slotUpdateOpacity(int opacity)
 {
-	int color = moduleWiget.getUi()->labelComboBox->currentIndex() + 1;
+	int color = mainWindow.getModuleWidget()->getUi()->labelComboBox->currentIndex() + 1;
 	if (imageManager.getOverlay()->getOpacity(color) == opacity) {
 		return;
 	}
 	;
-	moduleWiget.getUi()->opacitySpinBox->setValue(imageManager.getOverlay()->getOpacity(color));
+	mainWindow.getModuleWidget()->getUi()->opacitySpinBox->setValue(imageManager.getOverlay()->getOpacity(color));
 
 }
 

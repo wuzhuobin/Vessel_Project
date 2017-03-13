@@ -1,50 +1,68 @@
 #include "MainWindow.h"
+
 #include "ui_MainWindow.h"
+#include "ui_ViewerWidget.h"
+#include "ModuleWidget.h"
+#include "ViewerWidget.h"
+
 #include <qdebug.h>
 #include <qsettings.h>
 #include <qfiledialog.h>
 #include <QVTKInteractor.h>
+
 
 #include <vtkRenderWindow.h>
 
 #include "RegistrationWizard.h"
 
 MainWindow::MainWindow(QWidget *parent)
-	: QMainWindow(parent)
+	:QMainWindow(parent) 
 {
 	ui = new Ui::MainWindow;
 	ui->setupUi(this);
 
-	centralWidget = new QMainWindow(this);
+	this->moduleWiget = new ModuleWidget(this);
+	ui->moduleWidgetDockWidget->setWidget(this->moduleWiget);
+
+	QMainWindow* centralWidget = new QMainWindow(this);
+	centralWidget->setDockNestingEnabled(true);
 	ui->verticalLayoutCentralWidget->insertWidget(0, centralWidget);
 
-	ui->image1frame->setHidden(true);
-	ui->image2frame->setHidden(true);
-	ui->image3frame->setHidden(true);
-	ui->image4frame->setHidden(true);
-
+	for (int i = NUM_OF_VIEWERS - 1; i > -1; --i) {
+		this->viewerWidgets[i] = new ViewerWidget(this);
+		if (i % 2) {
+			centralWidget->addDockWidget(Qt::BottomDockWidgetArea, this->viewerWidgets[i]);
+		}
+		else {
+			centralWidget->addDockWidget(Qt::TopDockWidgetArea, this->viewerWidgets[i]);
+		}
+		this->selectImgMenus[i] = new QMenu(this);
+		this->viewerWidgets[i]->getUi()->pushButtonSelectImage->setMenu(this->selectImgMenus[i]);
+	}
 	settings = new QSettings("Setting.ini", QSettings::IniFormat, this);
 
-	for (int i = 0; i < NUM_OF_2D_VIEWERS; ++i) {
-		selectImgMenus << new QMenu(this);
-	}
-	ui->ULSelectImgBtn->setMenu(selectImgMenus[0]);
-	ui->URSelectImgBtn->setMenu(selectImgMenus[1]);
-	ui->LLSelectImgBtn->setMenu(selectImgMenus[2]);
+	connect(viewerWidgets[0]->getUi()->pushButtonRestore, SIGNAL(toggled(bool)),
+		ui->actionImage1, SLOT(setChecked(bool)));
+	connect(viewerWidgets[1]->getUi()->pushButtonRestore, SIGNAL(toggled(bool)),
+		ui->actionImage2, SLOT(setChecked(bool)));
+	connect(viewerWidgets[2]->getUi()->pushButtonRestore, SIGNAL(toggled(bool)),
+		ui->actionImage3, SLOT(setChecked(bool)));
+	connect(viewerWidgets[3]->getUi()->pushButtonRestore, SIGNAL(toggled(bool)),
+		ui->actionImage4, SLOT(setChecked(bool)));
 
-	connect(ui->ULBtn, SIGNAL(clicked()), ui->actionImage1, SLOT(trigger()));
-	connect(ui->URBtn, SIGNAL(clicked()), ui->actionImage2, SLOT(trigger()));
-	connect(ui->LLBtn, SIGNAL(clicked()), ui->actionImage3, SLOT(trigger()));
-	connect(ui->LRBtn, SIGNAL(clicked()), ui->actionImage4, SLOT(trigger()));
-	connect(ui->ULBtn2, SIGNAL(clicked()), ui->actionFourViews, SLOT(trigger()));
-	connect(ui->URBtn2, SIGNAL(clicked()), ui->actionFourViews, SLOT(trigger()));
-	connect(ui->LLBtn2, SIGNAL(clicked()), ui->actionFourViews, SLOT(trigger()));
-	connect(ui->LRBtn2, SIGNAL(clicked()), ui->actionFourViews, SLOT(trigger()));
-	connect(ui->actionImage1, SIGNAL(triggered()), this, SLOT(slotImage()));
-	connect(ui->actionImage2, SIGNAL(triggered()), this, SLOT(slotImage()));
-	connect(ui->actionImage3, SIGNAL(triggered()), this, SLOT(slotImage()));
-	connect(ui->actionImage4, SIGNAL(triggered()), this, SLOT(slotImage()));
-	connect(ui->actionFourViews, SIGNAL(triggered()), this, SLOT(slotImage()));
+	QActionGroup* actionGroupActionImage = new QActionGroup(this);
+	actionGroupActionImage->addAction(ui->actionImage1);
+	actionGroupActionImage->addAction(ui->actionImage2);
+	actionGroupActionImage->addAction(ui->actionImage3);
+	actionGroupActionImage->addAction(ui->actionImage4);
+	actionGroupActionImage->addAction(ui->actionFourViews);
+	actionGroupActionImage->setExclusive(true);
+
+	connect(ui->actionImage1, SIGNAL(toggled(bool)), this, SLOT(slotImage(bool)));
+	connect(ui->actionImage2, SIGNAL(toggled(bool)), this, SLOT(slotImage(bool)));
+	connect(ui->actionImage3, SIGNAL(toggled(bool)), this, SLOT(slotImage(bool)));
+	connect(ui->actionImage4, SIGNAL(toggled(bool)), this, SLOT(slotImage(bool)));
+	connect(ui->actionFourViews, SIGNAL(toggled(bool)), this, SLOT(slotImage(bool)));
 
 	QActionGroup* actionGroupView = new QActionGroup(this);
 	actionGroupView->addAction(ui->actionAll_axial_view);
@@ -88,51 +106,6 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-//void MainWindow::setRenderWindow(unsigned short i, vtkRenderWindow * renderWindow)
-//{
-//	switch (i)
-//	{
-//	case 0:
-//		ui->image1View->SetRenderWindow(renderWindow);
-//		break;
-//	case 1:
-//		ui->image2View->SetRenderWindow(renderWindow);
-//		break;
-//	case 2:
-//		ui->image3View->SetRenderWindow(renderWindow);
-//		break;
-//	case 3:
-//		ui->image4View->SetRenderWindow(renderWindow);
-//		break;
-//
-//	default:
-//		break;
-//	}
-//}
-
-//vtkRenderWindow * MainWindow::getRenderWindow(unsigned short i)
-//{
-//	switch (i)
-//	{
-//	case 0:
-//		return ui->image1View->GetRenderWindow();
-//		break;
-//	case 1:
-//		return ui->image2View->GetRenderWindow();
-//		break;
-//	case 2:
-//		return ui->image3View->GetRenderWindow();
-//		break;
-//	case 3:
-//		return ui->image4View->GetRenderWindow();
-//		break;
-//
-//	default:
-//		return nullptr;
-//		break;
-//	}
-//}
-
 void MainWindow::slotOpenRecentImage()
 {
 	QCoreApplication::processEvents();
@@ -165,59 +138,52 @@ void MainWindow::slotSaveOverlay()
 	emit signalOverlayExportSave(path);
 }
 
-void MainWindow::slotImage()
+void MainWindow::slotImage(bool flag)
 {
-	ui->image1frame->setHidden(true);
-	ui->image2frame->setHidden(true);
-	ui->image3frame->setHidden(true);
-	ui->image4frame->setHidden(true);
 	QAction *action = qobject_cast<QAction *>(sender());
+	//qDebug() << actionGroupActionImage->checkedAction();
+	if (!flag) {
+		if (ui->actionImage1->isChecked() ||
+			ui->actionImage2->isChecked() ||
+			ui->actionImage3->isChecked() ||
+			ui->actionImage4->isChecked()) {
+			return;
+		}
+		else {
+			ui->actionFourViews->setChecked(true);
+			return;
+		}
+	}
+	for (int i = 0; i < NUM_OF_VIEWERS; ++i) {
+		if (!this->viewerWidgets[i]->isFloating()) {
+			this->viewerWidgets[i]->setHidden(true);
+		}
+	}
+
 	if (action == ui->actionFourViews) {
-		ui->ULBtn->setHidden(false);
-		ui->URBtn->setHidden(false);
-		ui->LLBtn->setHidden(false);
-		ui->LRBtn->setHidden(false);
-		ui->ULBtn2->setHidden(true);
-		ui->URBtn2->setHidden(true);
-		ui->LLBtn2->setHidden(true);
-		ui->LRBtn2->setHidden(true);
-		ui->image1frame->setHidden(false);
-		ui->image2frame->setHidden(false);
-		ui->image3frame->setHidden(false);
-		ui->image4frame->setHidden(false);
+		for (int i = 0; i < NUM_OF_VIEWERS; ++i) {
+			this->viewerWidgets[i]->setHidden(false);
+			this->viewerWidgets[i]->getUi()->pushButtonRestore->setChecked(false);
+		}
 	}
 	else if (action == ui->actionImage1) {
-		ui->ULBtn->setHidden(true);
-		ui->ULBtn2->setHidden(false);
-		ui->image1frame->setHidden(false);
-		ui->image2frame->setHidden(true);
-		ui->image3frame->setHidden(true);
-		ui->image4frame->setHidden(true);
+		this->viewerWidgets[0]->setHidden(false);
+		this->viewerWidgets[0]->getUi()->pushButtonRestore->setChecked(true);
+
 	}
 	else if (action == ui->actionImage2) {
-		ui->URBtn->setHidden(true);
-		ui->URBtn2->setHidden(false);
-		ui->image1frame->setHidden(true);
-		ui->image2frame->setHidden(false);
-		ui->image3frame->setHidden(true);
-		ui->image4frame->setHidden(true);
+		this->viewerWidgets[1]->setHidden(false);
+		this->viewerWidgets[1]->getUi()->pushButtonRestore->setChecked(true);
+
 	}
 	else if (action == ui->actionImage3) {
-		ui->LLBtn->setHidden(true);
-		ui->LLBtn2->setHidden(false);
-		ui->image1frame->setHidden(true);
-		ui->image2frame->setHidden(true);
-		ui->image3frame->setHidden(false);
-		ui->image4frame->setHidden(true);
+		this->viewerWidgets[2]->setHidden(false);
+		this->viewerWidgets[2]->getUi()->pushButtonRestore->setChecked(true);
 	}
 	else if (action == ui->actionImage4)
 	{
-		ui->LRBtn->setHidden(true);
-		ui->LRBtn2->setHidden(false);
-		ui->image1frame->setHidden(true);
-		ui->image2frame->setHidden(true);
-		ui->image3frame->setHidden(true);
-		ui->image4frame->setHidden(false);
+		this->viewerWidgets[3]->setHidden(false);
+		this->viewerWidgets[3]->getUi()->pushButtonRestore->setChecked(true);
 	}
 	//m_core->RenderAllViewer();
 }
@@ -256,16 +222,6 @@ void MainWindow::initialization()
 
 	ui->ActionToolBar->setEnabled(true);
 
-	ui->image1frame->setEnabled(true);
-	ui->image2frame->setEnabled(true);
-	ui->image3frame->setEnabled(true);
-	ui->image4frame->setEnabled(true);
-	ui->image1View->setEnabled(true);
-	ui->image2View->setEnabled(true);
-	ui->image3View->setEnabled(true);
-	ui->image4View->setEnabled(true);
-
-
 	ui->actionMulti_planar_view->trigger();
 	ui->actionNavigation->trigger();
 
@@ -273,16 +229,7 @@ void MainWindow::initialization()
 
 void MainWindow::enableInteractor(bool flag)
 {
-	if (!flag) {
-		ui->image1View->GetInteractor()->Disable();
-		ui->image2View->GetInteractor()->Disable();
-		ui->image3View->GetInteractor()->Disable();
-		ui->image4View->GetInteractor()->Disable();
-	}
-	ui->image1View->setEnabled(flag);
-	ui->image2View->setEnabled(flag);
-	ui->image3View->setEnabled(flag);
-	ui->image4View->setEnabled(flag);
+
 }
 
 //void MainWindow::setModuleWidget(QWidget * moduleWidget)
@@ -314,21 +261,30 @@ void MainWindow::clearModalityNames()
 	}
 }
 
-QMainWindow * MainWindow::getCentralWidget()
+Ui::MainWindow * MainWindow::getUi()
 {
-	return this->centralWidget;
+	return this->ui;
+}
+
+//QMainWindow * MainWindow::getCentralWidget()
+//{
+//	return &this->centralWidget;
+//}
+
+ModuleWidget * MainWindow::getModuleWidget()
+{
+	return this->moduleWiget;
+}
+
+ViewerWidget * MainWindow::getViewerWidget(unsigned int num)
+{
+	return this->viewerWidgets[num];
 }
 
 QMenu * MainWindow::getSelectImgMenu(unsigned int i)
 {
 	return selectImgMenus[i];
 }
-
-QList<QMenu*>* MainWindow::getSelectImgMenus()
-{
-	return &selectImgMenus;
-}
-
 
 void MainWindow::setEnabled(bool flag)
 {

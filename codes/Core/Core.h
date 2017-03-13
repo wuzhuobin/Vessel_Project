@@ -5,8 +5,8 @@
 
 
 #include "MainWindow.h"
-#include "ModuleWidget.h"
-#include "ViewerWidget.h"
+//#include "ModuleWidget.h"
+//#include "ViewerWidget.h"
 #include "IADEIOManager.h"
 #include "IADEImageManager.h"
 #include "IADEInteractorStyleSwitch.h"
@@ -65,6 +65,9 @@ private slots:
 	void slotChangeImage(int viewer, int image);
 	void slotChangeCurved(int viewer, bool curvedFlag);
 	void slotChangeSliceOrientation(int viewer, int sliceOrientation);
+	void slotChangeSliceOrientationToYZ(int viewer);
+	void slotChangeSliceOrientationToXZ(int viewer);
+	void slotChangeSliceOrientationToXY(int viewer);
 	void slotUpdateImageViewersToCurrent(int viewer);
 	void slotMultiPlanarView();
 	void slotAllAxialView();
@@ -81,8 +84,8 @@ private slots:
 
 private:
 	MainWindow mainWindow;
-	ModuleWidget moduleWiget;
-	ViewerWidget viewerWidgets[MainWindow::NUM_OF_2D_VIEWERS + MainWindow::NUM_OF_3D_VIEWERS];
+	//ModuleWidget moduleWiget;
+	//ViewerWidget viewerWidgets[MainWindow::NUM_OF_2D_VIEWERS + MainWindow::NUM_OF_3D_VIEWERS];
 	IADEIOManager ioManager;
 	IADEImageManager imageManager;
 	DataProcessor dataProcessor;
