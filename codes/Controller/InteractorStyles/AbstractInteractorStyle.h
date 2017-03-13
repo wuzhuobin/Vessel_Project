@@ -18,24 +18,23 @@ Copyright (C) 2016
 #ifndef ABSTRACT_INTERACTOR_STYLE_H
 #define ABSTRACT_INTERACTOR_STYLE_H
 
-//#include <vtkSetGet.h>
 #include <list>
-#include <vtkObject.h>
+class vtkObject;
 /**
  * Macro for iterate specified @param STYLE_NAME class to run its @param METHOD
  * saving human labor to type this iterate again!
  */
 
-#ifndef STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
-#define STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD) \
-for(std::list<AbstractInteractorStyle*>::const_iterator cit = \
-	m_abstractInteractorStyles.cbegin(); cit != m_abstractInteractorStyles.cend(); ++cit){\
-	STYLE_NAME* _style = STYLE_NAME::SafeDownCast(*cit); \
-	if (_style != nullptr && _style->GetCustomEnabled()) { \
-		_style->##METHOD; \
-	} \
-}
-#endif // !STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
+//#ifndef STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
+//#define STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD) \
+//for(std::list<AbstractInteractorStyle*>::const_iterator cit = \
+//	m_abstractInteractorStyles.cbegin(); cit != m_abstractInteractorStyles.cend(); ++cit){\
+//	STYLE_NAME* _style = STYLE_NAME::SafeDownCast(*cit); \
+//	if (_style != nullptr && _style->GetCustomEnabled()) { \
+//		_style->##METHOD; \
+//	} \
+//}
+//#endif // !STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
 
 #ifndef STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
 #define STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD) \

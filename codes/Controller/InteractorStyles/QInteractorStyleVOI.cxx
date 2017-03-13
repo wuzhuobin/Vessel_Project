@@ -23,15 +23,15 @@ void QInteractorStyleVOI::SetCustomEnabled(bool flag)
 	if (flag) {
 		m_roi->SetBorderWidgetsInteractor(m_uniqueROIId, this->Interactor);
 		m_roi->GetRepresentation()->PlaceWidget(
-			m_imageViewer->GetInput()->GetBounds());
+			GetImageViewer()->GetInput()->GetBounds());
 		m_roi->SetPositionPointer(
-			m_imageViewer->GetFocalPointWithWorldCoordinate());
+			GetImageViewer()->GetFocalPointWithWorldCoordinate());
 		m_roi->EnabledOn();
 	}
 	else {
 		m_roi->EnabledOff();
 	}
-	m_imageViewer->Render();
+	GetImageViewer()->Render();
 	// suppose it should able to disappear by the following
 	//m_roi->Render();
 	uniqueInvoke(flag);
@@ -85,8 +85,8 @@ void QInteractorStyleVOI::ExtractVOI()
 		//extent[i*2] = extent[i*2] > GetExtent()[i*2] ? extent[i*2] : GetExtent()[i*2];
 		//extent[i*2 + 1] = extent[i*2 + 1] < GetExtent()[i*2 + 1] ? extent[i*2 + 1] : GetExtent()[i*2 +1];
 	}
-	m_imageViewer->UpdateDisplayExtent(extent);
-	m_imageViewer->Render();
+	GetImageViewer()->UpdateDisplayExtent(extent);
+	GetImageViewer()->Render();
 	//m_imageViewer->SetImageVOI(extent);
 	//m_imageViewer->SetOverlayVOI(extent);
 }
@@ -96,8 +96,8 @@ void QInteractorStyleVOI::ResetVOI()
 	//int* extent = GetExtent();
 	//m_imageViewer->SetDisplayExtent(extent);
 	//m_imageViewer->UpdateDisplayExtent();
-	m_imageViewer->ResetDisplayExtent();
-	m_imageViewer->Render();
+	GetImageViewer()->ResetDisplayExtent();
+	GetImageViewer()->Render();
 	//m_imageViewer->ResetImageVOI();
 	//m_imageViewer->ResetOverlayVOI();
 }

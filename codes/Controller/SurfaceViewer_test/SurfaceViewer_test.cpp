@@ -1,7 +1,7 @@
 #include "SurfaceViewer.h"
-#include "InteractorStyleSurfaceCenterLineReslicer.h"
 
 #include <vtkRenderWindowInteractor.h>
+#include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkNIFTIImageReader.h>
 #include <vtkLookupTable.h>
 #include <vtkRenderer.h>
@@ -80,15 +80,14 @@ int main(int argc, char *argv[])
 	viewer->GetRenderer()->ResetCameraClippingRange();
 	viewer->Render();
 
-	vtkSmartPointer<InteractorStyleSurfaceCenterLineReslicer> style =
-		vtkSmartPointer<InteractorStyleSurfaceCenterLineReslicer>::New();
-	//vtkSmartPointer<vtkInteractorStyleTrackballCamera> style =
-	//	vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
+
+	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style =
+		vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
 
 
 	interactor->SetInteractorStyle(style);
-	style->SetSurfaceViewer(viewer);
-	style->SetCustomEnabled(true);
+	//style->SetSurfaceViewer(viewer);
+	//style->SetCustomEnabled(true);
 
 	interactor->Start();
 

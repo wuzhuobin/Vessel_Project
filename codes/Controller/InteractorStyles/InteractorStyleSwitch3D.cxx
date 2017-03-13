@@ -20,6 +20,7 @@ Copyright (C) 2016
 #include "AbstractInteractorStyle.h"
 #include "vtkRenderWindowInteractor.h"
 #include "AbstractInteractorStyleSurface.h"
+#include "SurfaceViewer.h"
 //#include "MainWindow.h"
 
 //class MyViewer;
@@ -122,7 +123,7 @@ void InteractorStyleSwitch3D::SetSurfaceViewer(SurfaceViewer * surfaceViewer)
 		AbstractInteractorStyleSurface* _style =
 			AbstractInteractorStyleSurface::SafeDownCast(*cit);
 		if (_style != NULL) {
-			_style->SetSurfaceViewer(surfaceViewer);
+			_style->SetViewer(surfaceViewer);
 		}
 	}
 }

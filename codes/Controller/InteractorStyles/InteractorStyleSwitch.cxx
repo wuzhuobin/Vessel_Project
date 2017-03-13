@@ -18,6 +18,7 @@ Copyright (C) 2016
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
 
+#include "ImageViewer.h"
 #include "AbstractNavigation.h"
 
 vtkStandardNewMacro(InteractorStyleSwitch);
@@ -117,7 +118,7 @@ void InteractorStyleSwitch::SetImageViewer(ImageViewer* imageViewer)
 		AbstractNavigation* _style = 
 			AbstractNavigation::SafeDownCast(*cit);
 		if (_style != NULL) {
-			_style->SetImageViewer(imageViewer);
+			_style->SetViewer(imageViewer);
 		}
 	}
 }

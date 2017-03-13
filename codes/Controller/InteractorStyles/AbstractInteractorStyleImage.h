@@ -21,7 +21,7 @@ Copyright (C) 2016
 
 #include "AbstractInteractorStyle.h"
 
-#include <vtkInteractorStyleImage.h>
+#include <vtkInteractorStyleTrackballCamera.h>
 
 
 
@@ -35,14 +35,14 @@ for(std::list<vtkImageViewer2*>::const_iterator cit = \
 
 class vtkImageViewer2;
 
-class AbstractInteractorStyleImage : public vtkInteractorStyleImage, 
+class AbstractInteractorStyleImage : public vtkInteractorStyleTrackballCamera, 
 	public AbstractInteractorStyle
 {
 public:
-	vtkTypeMacro(AbstractInteractorStyleImage, vtkInteractorStyleImage);
+	vtkTypeMacro(AbstractInteractorStyleImage, vtkInteractorStyleTrackballCamera);
 	static AbstractInteractorStyleImage *New();
 	
-	virtual void SetImageViewer(vtkImageViewer2* imageViewer);
+	virtual vtkImageViewer2* GetVtkImageViewer2();
 	virtual void SetCurrentSlice(int slice);
 	virtual void EnableSynchronalZooming(bool flag);
 
@@ -50,7 +50,6 @@ protected:
 	AbstractInteractorStyleImage();
 	~AbstractInteractorStyleImage();
 
-	virtual void AddSynchronalViewer(vtkImageViewer2* imageViewer);
 	virtual void SynchronalZooming();
 	
 	void OnMouseWheelForward();
@@ -76,8 +75,6 @@ protected:
 	virtual double* GetSpacing();
 	virtual int* GetExtent();
 
-	static std::list<vtkImageViewer2*> m_synchronalViewers;
-	vtkImageViewer2* m_imageViewer;
 
 private:
 	const static int RESET_PIXEL_DISTANCE = 5;

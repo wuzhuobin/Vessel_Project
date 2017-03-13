@@ -29,17 +29,17 @@ void AbstractSurfaceCenterLine::SetCustomEnabled(bool flag)
 			m_centerLineActor = vtkSmartPointer<vtkActor>::New();
 			m_centerLineActor->SetMapper(vtkSmartPointer<vtkPolyDataMapper>::New());
 		}
-		m_surfaceViewer->GetRenderer()->AddActor(m_centerLineActor);
+		GetSurfaceViewer()->GetRenderer()->AddActor(m_centerLineActor);
 		VisualizeCenterLine(m_centerLine);
 	}
 	else {
 		if (m_centerLineActor) {
-			m_surfaceViewer->GetRenderer()->RemoveActor(m_centerLineActor);
+			GetSurfaceViewer()->GetRenderer()->RemoveActor(m_centerLineActor);
 			m_centerLineActor->GetMapper()->SetInputConnection(nullptr);
 			m_centerLineActor = nullptr;
 		}
 	}
-	m_surfaceViewer->Render();
+	GetSurfaceViewer()->Render();
 
 }
 
@@ -66,9 +66,6 @@ void AbstractSurfaceCenterLine::VisualizeCenterLine(vtkPolyData * centerLine)
 	vtkPolyDataMapper* mapper = vtkPolyDataMapper::SafeDownCast(m_centerLineActor->GetMapper());
 	mapper->SetInputData(centerLine);
 	mapper->Update();
-	m_surfaceViewer->Render();
+	GetSurfaceViewer()->Render();
 }
 
-//void AbstractSurfaceCenterLine::CreateCenterLine()
-//{
-//}

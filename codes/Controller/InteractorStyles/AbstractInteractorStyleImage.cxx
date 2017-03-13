@@ -28,36 +28,25 @@ Copyright (C) 2016
 #include <vtkWorldPointPicker.h>
 
 vtkStandardNewMacro(AbstractInteractorStyleImage);
-std::list<vtkImageViewer2*> AbstractInteractorStyleImage::m_synchronalViewers;
 
-AbstractInteractorStyleImage::AbstractInteractorStyleImage() : vtkInteractorStyleImage()
+AbstractInteractorStyleImage::AbstractInteractorStyleImage() : vtkInteractorStyleTrackballCamera()
 {
-	//vtkWorldPointPicker* _picker = vtkWorldPointPicker::New();
-	//this->Interactor->SetPicker(_picker);
-	//_picker->Delete();
+
 }
 
 AbstractInteractorStyleImage::~AbstractInteractorStyleImage()
 {
 }
 
-void AbstractInteractorStyleImage::SetImageViewer(vtkImageViewer2 * imageViewer)
+vtkImageViewer2 * AbstractInteractorStyleImage::GetVtkImageViewer2()
 {
-	this->m_imageViewer = imageViewer;
-	AddSynchronalViewer(imageViewer);
-}
-
-void AbstractInteractorStyleImage::AddSynchronalViewer(vtkImageViewer2 * imageViewer)
-{
-	if (std::find(m_synchronalViewers.cbegin(), m_synchronalViewers.cend(), imageViewer)
-		== m_synchronalViewers.cend()) {
-		m_synchronalViewers.push_back(imageViewer);
-	}
+	return vtkImageViewer2::SafeDownCast(this->m_viewer);
 }
 
 void AbstractInteractorStyleImage::SetCurrentSlice(int slice)
 {
-	VIEWER_CONSTITERATOR(SetSlice(slice));
+	STYLE_DOWN_CAST_CONSTITERATOR(AbstractInteractorStyleImage, GetVtkImageViewer2()->SetSlice(slice));
+
 }
 
 void AbstractInteractorStyleImage::EnableSynchronalZooming(bool flag)
@@ -70,60 +59,55 @@ void AbstractInteractorStyleImage::SynchronalZooming()
 {
 	if (!m_synchronalZoomingFlag)
 		return;
-	double scale = m_imageViewer->GetRenderer()->GetActiveCamera()->GetParallelScale();
-	VIEWER_CONSTITERATOR(GetRenderer()->GetActiveCamera()->SetParallelScale(scale));
-	VIEWER_CONSTITERATOR(Render());
+	double scale = GetVtkImageViewer2()->GetRenderer()->GetActiveCamera()->GetParallelScale();
+	STYLE_DOWN_CAST_CONSTITERATOR(AbstractInteractorStyleImage, GetVtkImageViewer2()->GetRenderer()->GetActiveCamera()->SetParallelScale(scale));
+	STYLE_DOWN_CAST_CONSTITERATOR(AbstractInteractorStyleImage, GetVtkImageViewer2()->Render());
 
-	//for (std::list<vtkImageViewer2*>::iterator it = m_synchronalViewers.begin();
-	//	it != m_synchronalViewers.end(); ++it) {
-	//	(*it)->GetRenderer()->GetActiveCamera()->SetParallelScale(scale);
-	//	(*it)->Render();
-	//}
 }
 
 int AbstractInteractorStyleImage::GetSlice()
 {
-	return m_imageViewer->GetSlice();
+	return GetVtkImageViewer2()->GetSlice();
 }
 
 int AbstractInteractorStyleImage::GetMinSlice()
 {
-	return m_imageViewer->GetSliceMin();
+	return GetVtkImageViewer2()->GetSliceMin();
 }
 
 int AbstractInteractorStyleImage::GetMaxSlice()
 {
-	return m_imageViewer->GetSliceMax();
+	return GetVtkImageViewer2()->GetSliceMax();
 }
 
 int AbstractInteractorStyleImage::GetSliceOrientation()
 {
-	return m_imageViewer->GetSliceOrientation();
+	return GetVtkImageViewer2()->GetSliceOrientation();
 }
 
 double * AbstractInteractorStyleImage::GetOrigin()
 {
-	return m_imageViewer->GetInput()->GetOrigin();
+	return GetVtkImageViewer2()->GetInput()->GetOrigin();
 }
 
 double * AbstractInteractorStyleImage::GetSpacing()
 {
-	return m_imageViewer->GetInput()->GetSpacing();
+	return GetVtkImageViewer2()->GetInput()->GetSpacing();
 }
 
 int * AbstractInteractorStyleImage::GetExtent()
 {
-	return m_imageViewer->GetInput()->GetExtent();
+	return GetVtkImageViewer2()->GetInput()->GetExtent();
 }
 
 void AbstractInteractorStyleImage::OnMouseWheelForward()
 {
-	vtkInteractorStyleImage::OnMouseWheelForward();
+	vtkInteractorStyleTrackballCamera::OnMouseWheelForward();
 }
 
 void AbstractInteractorStyleImage::OnMouseWheelBackward()
 {
-	vtkInteractorStyleImage::OnMouseWheelBackward();
+	vtkInteractorStyleTrackballCamera::OnMouseWheelBackward();
 }
 
 void AbstractInteractorStyleImage::OnLeftButtonDown()
@@ -141,13 +125,13 @@ void AbstractInteractorStyleImage::OnLeftButtonDown()
 		this->m_numberOfLeftClicks = 0;
 	}
 	AbstractInteractorStyle::OnLeftButtonDown();
-	//vtkInteractorStyleImage::OnLeftButtonDown();
+	//vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
 }
 
 void AbstractInteractorStyleImage::OnLeftButtonUp()
 {
 	AbstractInteractorStyle::OnLeftButtonUp();
-	//vtkInteractorStyleImage::OnLeftButtonUp();
+	//vtkInteractorStyleTrackballCamera::OnLeftButtonUp();
 }
 
 void AbstractInteractorStyleImage::OnLeftDoubleClick()
@@ -172,13 +156,13 @@ void AbstractInteractorStyleImage::OnRightButtonDown()
 	}
 
 	AbstractInteractorStyle::OnRightButtonDown();
-	vtkInteractorStyleImage::OnRightButtonDown();
+	vtkInteractorStyleTrackballCamera::OnRightButtonDown();
 }
 
 void AbstractInteractorStyleImage::OnRightButtonUp()
 {
 	AbstractInteractorStyle::OnRightButtonUp();
-	vtkInteractorStyleImage::OnRightButtonUp();
+	vtkInteractorStyleTrackballCamera::OnRightButtonUp();
 }
 
 void AbstractInteractorStyleImage::OnRightDoubleClick()
@@ -203,13 +187,13 @@ void AbstractInteractorStyleImage::OnMiddleButtonDown()
 		this->m_numberOfMiddleClicks = 0;
 	}
 	AbstractInteractorStyle::OnMiddleButtonDown();
-	vtkInteractorStyleImage::OnMiddleButtonDown();
+	vtkInteractorStyleTrackballCamera::OnMiddleButtonDown();
 }
 
 void AbstractInteractorStyleImage::OnMiddleButtonUp()
 {
 	AbstractInteractorStyle::OnMiddleButtonUp();
-	vtkInteractorStyleImage::OnMiddleButtonUp();
+	vtkInteractorStyleTrackballCamera::OnMiddleButtonUp();
 }
 
 void AbstractInteractorStyleImage::OnMiddleDoubleClick()
@@ -218,17 +202,17 @@ void AbstractInteractorStyleImage::OnMiddleDoubleClick()
 
 void AbstractInteractorStyleImage::OnMouseMove()
 {
-	vtkInteractorStyleImage::OnMouseMove();
+	vtkInteractorStyleTrackballCamera::OnMouseMove();
 }
 
 void AbstractInteractorStyleImage::OnChar()
 {
-	vtkInteractorStyleImage::OnChar();
+	vtkInteractorStyleTrackballCamera::OnChar();
 }
 
 void AbstractInteractorStyleImage::OnKeyPress()
 {
-	vtkInteractorStyleImage::OnKeyPress();
+	vtkInteractorStyleTrackballCamera::OnKeyPress();
 }
 
 bool AbstractInteractorStyleImage::CheckMoveDistance()

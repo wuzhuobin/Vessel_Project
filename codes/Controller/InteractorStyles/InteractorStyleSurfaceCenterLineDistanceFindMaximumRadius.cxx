@@ -63,7 +63,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled
 	InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(flag);
 	if (m_customFlag) {
 		InitializeHandleWidgets();
-		m_surfaceViewer->GetRenderer()->AddActor(m_measurementText);
+		GetSurfaceViewer()->GetRenderer()->AddActor(m_measurementText);
 	}
 	else {
 		for (int i = 0; i < NUM_OF_HANDLES; ++i) {
@@ -74,7 +74,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled
 			m_handleWidgets[i] = nullptr;
 		}
 		m_pointLocator = nullptr;
-		m_surfaceViewer->GetRenderer()->RemoveActor(m_measurementText);
+		GetSurfaceViewer()->GetRenderer()->RemoveActor(m_measurementText);
 	}
 	
 
@@ -201,7 +201,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::FindMaximumRadiu
 	char buff[100];
 	sprintf(buff, "Maximum radius: %.2f mm\n Minimum radius: %.2f mm\n Center line length: %.2f mm", maxRadius, minRadius, GeodesicPathDistance);
 	m_measurementText->SetInput(buff);
-	this->m_surfaceViewer->Render();
+	this->GetSurfaceViewer()->Render();
 }
 
 void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::OnKeyPress()

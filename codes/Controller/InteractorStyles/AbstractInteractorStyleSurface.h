@@ -41,16 +41,12 @@ public:
 	vtkTypeMacro(AbstractInteractorStyleSurface, vtkInteractorStyleTrackballCamera);
 	static AbstractInteractorStyleSurface *New();
 	
-	virtual void SetSurfaceViewer(SurfaceViewer* imageViewer);
-	//virtual void SetCurrentSlice(int slice);
-	//virtual void EnableSynchronalZooming(bool flag);
+	virtual SurfaceViewer* GetSurfaceViewer();
 
 protected:
 	AbstractInteractorStyleSurface();
 	virtual ~AbstractInteractorStyleSurface();
 
-	virtual void AddSynchronalViewer(SurfaceViewer* imageViewer);
-	//virtual void SynchronalZooming();
 	
 	void OnMouseWheelForward();
 	void OnMouseWheelBackward();
@@ -67,21 +63,14 @@ protected:
 	void OnChar();
 	void OnKeyPress();
 
-	//virtual int GetSlice();
-	//virtual int GetMinSlice();
-	//virtual int GetMaxSlice();
-	//virtual int GetSliceOrientation();
 	virtual double* GetOrigin();
 	virtual double* GetSpacing();
 	virtual int* GetExtent();
 
-	static std::list<SurfaceViewer*> m_synchronalViewers;
-	SurfaceViewer* m_surfaceViewer;
 
 private:
 	const static int RESET_PIXEL_DISTANCE = 5;
 	bool CheckMoveDistance();
-	//bool m_synchronalZoomingFlag = true;
 	int PreviousPosition[2] = { 0,0 };
 
 };

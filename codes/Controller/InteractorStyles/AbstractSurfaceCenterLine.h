@@ -12,7 +12,6 @@ class AbstractSurfaceCenterLine: public AbstractInteractorStyleSurface
 {
 public:
 	vtkTypeMacro(AbstractSurfaceCenterLine, AbstractInteractorStyleSurface);
-	//static AbstractSurfaceCenterLine* New();
 
 	virtual void SetCustomEnabled(bool flag);
 

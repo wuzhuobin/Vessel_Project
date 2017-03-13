@@ -47,7 +47,7 @@ namespace Ui { class QAbstractInteractorStyle; }
 	}\
 	void STYLE_NAME::setupUi()\
 	{\
-		switch (uiType)\
+		switch (this->uiType)\
 		{\
 			case UNIQUE_UI:\
 				if (m_uis.size() < 1) {\
@@ -87,6 +87,10 @@ namespace Ui { class QAbstractInteractorStyle; }
 
 #ifndef QDELETE_UI()
 #define QDELETE_UI() \
+	if (numOfMyself == 1) { \
+		uniqueDestroy(); \
+	} \
+	destroy();\
 	--numOfMyself;\
 	switch (this->uiType)\
 	{\
@@ -152,9 +156,18 @@ protected:
 	*/
 	void uniqueInitialization() {};
 	/**
+	* @brief	function be invoked once in destructor.
+	* This function only be invoked in the last instance.
+	*/
+	void uniqueDestroy() {};
+	/**
 	* @brief	function be invokded in constructor.
 	*/
 	void initialization() {};
+	/**
+	* @brief	function be invokded in destructor.
+	*/
+	void destroy() {};
 	/**
 	 * @brief	function be invoked once requirement. 
 	 * @see	#uniqueEnable()

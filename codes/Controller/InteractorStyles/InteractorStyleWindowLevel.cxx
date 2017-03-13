@@ -38,7 +38,7 @@ void InteractorStyleWindowLevel::SetWindow(double window)
 		InteractorStyleWindowLevel* windowLevel =
 			dynamic_cast<InteractorStyleWindowLevel*>(*cit);
 		if (windowLevel != nullptr && windowLevel->m_customFlag &&
-			m_imageViewer->GetInput() == windowLevel->m_imageViewer->GetInput()) {
+			GetImageViewer()->GetInput() == windowLevel->GetImageViewer()->GetInput()) {
 			windowLevel->SetWindowByViewer(window);
 		}
 	}
@@ -52,7 +52,7 @@ void InteractorStyleWindowLevel::SetLevel(double level)
 		InteractorStyleWindowLevel* windowLevel =
 			dynamic_cast<InteractorStyleWindowLevel*>(*cit);
 		if (windowLevel != nullptr && windowLevel->m_customFlag &&
-			m_imageViewer->GetInput() == windowLevel->m_imageViewer->GetInput()) {
+			GetImageViewer()->GetInput() == windowLevel->GetImageViewer()->GetInput()) {
 			windowLevel->SetLevelByViewer(level);
 		}
 	}
@@ -62,9 +62,9 @@ void InteractorStyleWindowLevel::SetWindowByViewer(double window)
 {
 	if (m_window != window) {
 		m_window = window;
-		m_imageViewer->GetImageActor()->GetProperty()->SetColorWindow(
+		GetImageViewer()->GetImageActor()->GetProperty()->SetColorWindow(
 			m_window);
-		m_imageViewer->Render();
+		GetImageViewer()->Render();
 	}
 }
 
@@ -72,9 +72,9 @@ void InteractorStyleWindowLevel::SetLevelByViewer(double level)
 {
 	if (m_level != level) {
 		m_level = level;
-		m_imageViewer->GetImageActor()->GetProperty()->SetColorLevel(
+		GetImageViewer()->GetImageActor()->GetProperty()->SetColorLevel(
 			m_level);
-		m_imageViewer->Render();
+		GetImageViewer()->Render();
 	}
 }
 
@@ -96,40 +96,40 @@ InteractorStyleWindowLevel::~InteractorStyleWindowLevel()
 
 void InteractorStyleWindowLevel::StartWindowLevel()
 {
-	if (this->State != VTKIS_NONE)
-	{
-		return;
-	}
-	this->StartState(VTKIS_WINDOW_LEVEL);
+	//if (this->State != VTKIS_NONE)
+	//{
+	//	return;
+	//}
+	//this->StartState(VTKIS_WINDOW_LEVEL);
 
-	// Get the last (the topmost) image
-	this->SetCurrentImageToNthImage(0);
+	//// Get the last (the topmost) image
+	//this->SetCurrentImageToNthImage(0);
 
-	if (this->HandleObservers &&
-		this->HasObserver(vtkCommand::StartWindowLevelEvent))
-	{
-		this->InvokeEvent(vtkCommand::StartWindowLevelEvent, this);
-	}
-	else
-	{
-		if (this->CurrentImageProperty)
-		{
-			vtkImageProperty *property = this->CurrentImageProperty;
-			this->WindowLevelInitial[0] = property->GetColorWindow();
-			this->WindowLevelInitial[1] = property->GetColorLevel();
-		}
-	}
+	//if (this->HandleObservers &&
+	//	this->HasObserver(vtkCommand::StartWindowLevelEvent))
+	//{
+	//	this->InvokeEvent(vtkCommand::StartWindowLevelEvent, this);
+	//}
+	//else
+	//{
+	//	if (this->CurrentImageProperty)
+	//	{
+	//		vtkImageProperty *property = this->CurrentImageProperty;
+	//		this->WindowLevelInitial[0] = property->GetColorWindow();
+	//		this->WindowLevelInitial[1] = property->GetColorLevel();
+	//	}
+	//}
 }
 
 void InteractorStyleWindowLevel::OnMouseMove()
 {
-	vtkInteractorStyleImage::OnMouseMove();
+	//vtkInteractorStyleImage::OnMouseMove();
 	AbstractNavigation::OnMouseMove();
 }
 
 void InteractorStyleWindowLevel::OnLeftButtonDown()
 {
-	vtkInteractorStyleImage::OnLeftButtonDown();
+	//vtkInteractorStyleImage::OnLeftButtonDown();
 	AbstractNavigation::OnLeftButtonDown();
 	//this->WindowLevelInitial[0] = m_imageViewer->GetImageActor()->
 	//	GetProperty()->GetColorWindow();
@@ -139,17 +139,17 @@ void InteractorStyleWindowLevel::OnLeftButtonDown()
 
 void InteractorStyleWindowLevel::OnLeftButtonUp()
 {
-	vtkInteractorStyleImage::OnLeftButtonUp();
+	//vtkInteractorStyleImage::OnLeftButtonUp();
 	AbstractNavigation::OnLeftButtonUp();
 }
 
 void InteractorStyleWindowLevel::WindowLevel()
 {
-	vtkInteractorStyleImage::WindowLevel();
-	m_window = CurrentImageProperty->GetColorWindow();
-	m_level = CurrentImageProperty->GetColorLevel();
-	SetWindow(m_window);
-	SetLevel(m_level);
+	//vtkInteractorStyleImage::WindowLevel();
+	//m_window = CurrentImageProperty->GetColorWindow();
+	//m_level = CurrentImageProperty->GetColorLevel();
+	//SetWindow(m_window);
+	//SetLevel(m_level);
 }
 
 //void InteractorStyleWindowLevel::OnKeyPress()

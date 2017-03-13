@@ -28,7 +28,12 @@ Copyright (C) 2016
 
 
 vtkStandardNewMacro(AbstractInteractorStyleSurface);
-std::list<SurfaceViewer*> AbstractInteractorStyleSurface::m_synchronalViewers;
+//std::list<SurfaceViewer*> AbstractInteractorStyleSurface::m_synchronalViewers;
+
+SurfaceViewer * AbstractInteractorStyleSurface::GetSurfaceViewer()
+{
+	return SurfaceViewer::SafeDownCast(m_viewer);
+}
 
 AbstractInteractorStyleSurface::AbstractInteractorStyleSurface() : vtkInteractorStyleTrackballCamera()
 {
@@ -38,79 +43,19 @@ AbstractInteractorStyleSurface::~AbstractInteractorStyleSurface()
 {
 }
 
-void AbstractInteractorStyleSurface::SetSurfaceViewer(SurfaceViewer * imageViewer)
-{
-	this->m_surfaceViewer = imageViewer;
-	AddSynchronalViewer(imageViewer);
-}
-
-void AbstractInteractorStyleSurface::AddSynchronalViewer(SurfaceViewer * imageViewer)
-{
-	if (std::find(m_synchronalViewers.cbegin(), m_synchronalViewers.cend(), imageViewer)
-		== m_synchronalViewers.cend()) {
-		m_synchronalViewers.push_back(imageViewer);
-	}
-}
-
-//void AbstractInteractorStyleSurface::SetCurrentSlice(int slice)
-//{
-//	SURFACE_VIEWER_CONSTITERATOR(SetSlice(slice));
-//}
-//
-//void AbstractInteractorStyleSurface::EnableSynchronalZooming(bool flag)
-//{
-//	this->m_synchronalZoomingFlag = flag;
-//	SynchronalZooming();
-//}
-
-//void AbstractInteractorStyleSurface::SynchronalZooming()
-//{
-//	if (!m_synchronalZoomingFlag)
-//		return;
-//	//double scale = m_surfaceViewer->GetRenderer()->GetActiveCamera()->GetParallelScale();
-//	//SURFACE_VIEWER_CONSTITERATOR(GetRenderer()->GetActiveCamera()->SetParallelScale(scale));
-//	//SURFACE_VIEWER_CONSTITERATOR(Render());
-//
-//	//for (std::list<vtkImageViewer2*>::iterator it = m_synchronalViewers.begin();
-//	//	it != m_synchronalViewers.end(); ++it) {
-//	//	(*it)->GetRenderer()->GetActiveCamera()->SetParallelScale(scale);
-//	//	(*it)->Render();
-//	//}
-//}
-//
-//int AbstractInteractorStyleSurface::GetSlice()
-//{
-//	return m_surfaceViewer->GetSlice();
-//}
-//
-//int AbstractInteractorStyleSurface::GetMinSlice()
-//{
-//	return m_surfaceViewer->GetSliceMin();
-//}
-//
-//int AbstractInteractorStyleSurface::GetMaxSlice()
-//{
-//	return m_surfaceViewer->GetSliceMax();
-//}
-//
-//int AbstractInteractorStyleSurface::GetSliceOrientation()
-//{
-//	return m_surfaceViewer->GetSliceOrientation();
-//}
-//
 double * AbstractInteractorStyleSurface::GetOrigin()
 {
-	return m_surfaceViewer->GetInput()->GetOrigin();
+	return GetSurfaceViewer()->GetInput()->GetOrigin();
 }
 
 double * AbstractInteractorStyleSurface::GetSpacing()
 {
-	return m_surfaceViewer->GetInput()->GetSpacing();
+	return GetSurfaceViewer()->GetInput()->GetSpacing();
 }
 
 int * AbstractInteractorStyleSurface::GetExtent()
 {
-	return m_surfaceViewer->GetInput()->GetExtent();
+	return GetSurfaceViewer()->GetInput()->GetExtent();
 }
 
 void AbstractInteractorStyleSurface::OnMouseWheelForward()

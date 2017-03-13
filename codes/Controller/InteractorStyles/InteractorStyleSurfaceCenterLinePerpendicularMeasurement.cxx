@@ -24,7 +24,7 @@ void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::SetCustomEnabled(
 	InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(flag);
 	if (m_customFlag) {
 		InitializeLinePerpendicularMeasurementWidget();
-		m_surfaceViewer->GetRenderer()->AddActor(m_measurementText);
+		GetSurfaceViewer()->GetRenderer()->AddActor(m_measurementText);
 	}
 	else {
 		m_lineWidget2->SetInteractor(nullptr);
@@ -35,7 +35,7 @@ void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::SetCustomEnabled(
 		//m_distanceWidget->EnabledOff();
 		//m_distanceWidget = nullptr;
 
-		m_surfaceViewer->GetRenderer()->RemoveActor(m_measurementText);
+		GetSurfaceViewer()->GetRenderer()->RemoveActor(m_measurementText);
 	}
 	
 

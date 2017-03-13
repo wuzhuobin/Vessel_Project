@@ -47,7 +47,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine()
 
 void InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reClipSurface)
 {
-	if (!m_surfaceViewer->GetInput()) {
+	if (!GetSurfaceViewer()->GetInput()) {
 		vtkErrorMacro(<< "SurfaceViewer has no input");
 		return;
 	}
@@ -104,7 +104,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reCli
 void InteractorStyleSurfaceCenterLineSimpleClipping::ClipAndCap()
 {
 	double bounds[6];
-	memcpy(bounds, m_surfaceViewer->GetSurfaceActor()->GetBounds(), sizeof(bounds));
+	memcpy(bounds, GetSurfaceViewer()->GetSurfaceActor()->GetBounds(), sizeof(bounds));
 	bounds[m_centerLineOrientation * 2] = bounds[m_centerLineOrientation * 2]
 		+ GetSpacing()[m_centerLineOrientation] * m_ClipingDistance;
 	bounds[m_centerLineOrientation * 2 + 1] = bounds[m_centerLineOrientation * 2 + 1]
@@ -115,7 +115,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::ClipAndCap()
 
 	vtkSmartPointer<vtkThreshold> Threshold =
 		vtkSmartPointer<vtkThreshold>::New();
-	Threshold->SetInputData(m_surfaceViewer->GetSurfaceActor()->GetMapper()->GetInput());
+	Threshold->SetInputData(GetSurfaceViewer()->GetSurfaceActor()->GetMapper()->GetInput());
 	Threshold->ThresholdBetween(2,2);
 	Threshold->SetInputArrayToProcess(0, 0, 0, vtkDataObject::FIELD_ASSOCIATION_CELLS, vtkDataSetAttributes::SCALARS);
 	Threshold->Update();
@@ -130,7 +130,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::ClipAndCap()
 	vtkSmartPointer<vtkClipPolyData> clipPolyData =
 		vtkSmartPointer<vtkClipPolyData>::New();
 	clipPolyData->SetInputConnection(GeometryFilter->GetOutputPort());
-	//clipPolyData->SetInputData(m_surfaceViewer->GetSurfaceActor()->GetMapper()->GetInput());
+	//clipPolyData->SetInputData(GetSurfaceViewer()->GetSurfaceActor()->GetMapper()->GetInput());
 	clipPolyData->SetClipFunction(clipBox);
 	clipPolyData->InsideOutOn();
 	clipPolyData->Update();

@@ -77,7 +77,7 @@ list<int*> InteractorStyleSeedsPlacer::m_seeds;
 void InteractorStyleSeedsPlacer::SetCustomEnabled(bool flag)
 {
 	if (flag) {
-		SeedsPlacerRepresentation::SafeDownCast(m_seedRep)->GetImagePointPlacer()->SetImageActor(m_imageViewer->GetImageActor());
+		SeedsPlacerRepresentation::SafeDownCast(m_seedRep)->GetImagePointPlacer()->SetImageActor(GetImageViewer()->GetImageActor());
 		// SetInteractor CANNOT place in the constructor
 		m_seedWidget->SetInteractor(this->Interactor);
 		m_seedWidget->EnabledOn();
@@ -123,7 +123,7 @@ void InteractorStyleSeedsPlacer::SetCurrentFocalPointWithImageCoordinate(int i, 
 	// Only Generate seedWidgets when it is needed
 	// if its slice has not changed, it needs not to re-generate
 	int oldIJK[3];
-	m_imageViewer->GetFocalPointWithImageCoordinate(oldIJK);
+	GetImageViewer()->GetFocalPointWithImageCoordinate(oldIJK);
 	AbstractNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
 	for (list<AbstractInteractorStyle*>::const_iterator cit =
 		m_abstractInteractorStyles.cbegin(); cit != m_abstractInteractorStyles.cend(); ++cit) {
@@ -201,7 +201,7 @@ void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds(const list<int*>& seeds
 		for (int pos = 0; pos < 3; ++pos) {
 			worldPos[pos] = (imagePos[pos] * GetSpacing()[pos]) + GetOrigin()[pos];
 		}
-		if (imagePos[GetSliceOrientation()] == m_imageViewer->GetSlice()) {
+		if (imagePos[GetSliceOrientation()] == GetImageViewer()->GetSlice()) {
 			vtkHandleWidget* newSeed = m_seedWidget->CreateNewHandle();
 			newSeed->GetHandleRepresentation()->SetWorldPosition(worldPos);
 			newSeed->EnabledOn();
@@ -274,7 +274,7 @@ void InteractorStyleSeedsPlacer::DropSeed()
 
 void InteractorStyleSeedsPlacer::DropSeed(list<int*>& seeds)
 {
-	double* worldPos = m_imageViewer->GetFocalPointWithWorldCoordinate();
+	double* worldPos = GetImageViewer()->GetFocalPointWithWorldCoordinate();
 	vtkHandleWidget* newSeed = m_seedWidget->CreateNewHandle();
 	newSeed->GetHandleRepresentation()->SetWorldPosition(worldPos);
 	newSeed->EnabledOn();

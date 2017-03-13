@@ -70,7 +70,7 @@ void QInteractorStyleLumenSeedsPlacer::SlotClearAllSeeds()
 void QInteractorStyleLumenSeedsPlacer::SetFocalSeed(int i)
 {
 	InteractorStyleSeedsPlacer::SetFocalSeed(i);
-	const double* worldCoordinate = m_imageViewer->GetFocalPointWithWorldCoordinate();
+	const double* worldCoordinate = GetImageViewer()->GetFocalPointWithWorldCoordinate();
 
 	//char label[60];
 	//sprintf_s(label, "(%.3f, %.3f, %.3f)", worldCoordinate[0], worldCoordinate[1], worldCoordinate[2]);
@@ -121,8 +121,8 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumen()
 
 	vtkSmartPointer<vtkExtractVOI> extractVOI =
 		vtkSmartPointer<vtkExtractVOI>::New();
-	extractVOI->SetInputData(m_imageViewer->GetInput());
-	extractVOI->SetVOI(m_imageViewer->GetDisplayExtent());
+	extractVOI->SetInputData(GetImageViewer()->GetInput());
+	extractVOI->SetVOI(GetImageViewer()->GetDisplayExtent());
 	extractVOI->Update();
 
 	vtkSmartPointer<LumenExtractionFilter> lumenExtractionFilter =
@@ -142,14 +142,14 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumen()
 
 
 
-	for (int i = m_imageViewer->GetDisplayExtent()[0];
-		i <= m_imageViewer->GetDisplayExtent()[1]; ++i) {
-		for (int j = m_imageViewer->GetDisplayExtent()[2];
-			j <= m_imageViewer->GetDisplayExtent()[3]; ++j) {
-			for (int k = m_imageViewer->GetDisplayExtent()[4];
-				k <= m_imageViewer->GetDisplayExtent()[5]; ++k) {
+	for (int i = GetImageViewer()->GetDisplayExtent()[0];
+		i <= GetImageViewer()->GetDisplayExtent()[1]; ++i) {
+		for (int j = GetImageViewer()->GetDisplayExtent()[2];
+			j <= GetImageViewer()->GetDisplayExtent()[3]; ++j) {
+			for (int k = GetImageViewer()->GetDisplayExtent()[4];
+				k <= GetImageViewer()->GetDisplayExtent()[5]; ++k) {
 				unsigned char* pixelLayer = static_cast<unsigned char*>
-					(m_imageViewer->GetInputLayer()->GetScalarPointer(i, j, k));
+					(GetImageViewer()->GetInputLayer()->GetScalarPointer(i, j, k));
 				unsigned char* pixel = static_cast<unsigned char*>
 					(lumenExtractionFilter->GetOutput()->GetScalarPointer(i, j, k));
 				*pixelLayer = *pixel;
@@ -157,8 +157,9 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumen()
 		}
 	}
 
-	m_imageViewer->GetInputLayer()->Modified();
-	MY_VIEWER_CONSTITERATOR(Render());
+	GetImageViewer()->GetInputLayer()->Modified();
+	//MY_VIEWER_CONSTITERATOR(Render());
+	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());
 
 	//ExtractLumenPolyData();
 }

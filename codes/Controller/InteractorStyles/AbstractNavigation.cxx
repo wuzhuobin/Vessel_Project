@@ -25,8 +25,6 @@ Copyright (C) 2016
 #include <vtkObjectFactory.h>
 
 vtkStandardNewMacro(AbstractNavigation);
-std::list<ImageViewer*> AbstractNavigation::m_synchronalViewers;
-
 
 AbstractNavigation::AbstractNavigation() 
 {
@@ -36,61 +34,20 @@ AbstractNavigation::~AbstractNavigation()
 {
 }
 
-//void AbstractNavigation::SynchronalZooming()
-//{
-//	double scale = m_imageViewer->GetRenderer()->GetActiveCamera()->GetParallelScale();
-//	for (std::list<vtkImageViewer2*>::iterator it = m_synchronalViewers.begin();
-//		it != m_synchronalViewers.end(); ++it) {
-//		(*it)->GetRenderer()->GetActiveCamera()->SetParallelScale(scale);
-//		(*it)->Render();
-//	}
-//}
-
-void AbstractNavigation::SetImageViewer(ImageViewer * imageViewer)
+ImageViewer* AbstractNavigation::GetImageViewer()
 {
-	m_imageViewer = imageViewer;
-	AddSynchronalViewer(imageViewer);
-	AbstractInteractorStyleImage::SetImageViewer(imageViewer);
+	return ImageViewer::SafeDownCast(m_viewer);
 }
-
-//ImageViewer* AbstractNavigation::GetImageViewer()
-//{
-//
-//}
-
-void AbstractNavigation::AddSynchronalViewer(ImageViewer * imageViewer)
-{
-	if (std::find(m_synchronalViewers.cbegin(), m_synchronalViewers.cend(), imageViewer)
-		== m_synchronalViewers.cend()) {
-		m_synchronalViewers.push_back(imageViewer);
-	}
-	AbstractInteractorStyleImage::AddSynchronalViewer(imageViewer);
-}
-
-//vtkActor * AbstractNavigation::PickActor(int x, int y)
-//{
-//	vtkSmartPointer<vtkPropPicker> picker = vtkSmartPointer<vtkPropPicker>::New();
-//	if (this->m_imageViewer->GetRenderer()) {
-//		picker->Pick(x, y, 0, this->m_imageViewer->GetRenderer());
-//	}
-//	if (picker->GetActor()) {
-//		return picker->GetActor();
-//	}
-//	else {
-//		return nullptr;
-//	}
-//}
 
 void AbstractNavigation::SetCurrentSlice(int slice)
 {
 	int ijk[3];
-	ImageViewer* viewer = ImageViewer::SafeDownCast(m_imageViewer);
-	if (viewer != nullptr) {
-		viewer->GetFocalPointWithImageCoordinate(ijk);
+	if (GetImageViewer() != nullptr) {
+		GetImageViewer()->GetFocalPointWithImageCoordinate(ijk);
 		ijk[GetSliceOrientation()] = slice;
 		SetCurrentFocalPointWithImageCoordinate(ijk[0], ijk[1], ijk[2]);
 	}
-	else {
+	else if(!GetVtkImageViewer2()) {
 		AbstractInteractorStyleImage::SetCurrentSlice(slice);
 	}
 }
@@ -103,7 +60,7 @@ void AbstractNavigation::SetCurrentFocalPointWithImageCoordinate(int * ijk)
 void AbstractNavigation::SetCurrentFocalPointWithImageCoordinate(int i, int j, int k)
 {
 	int ijk[3];
-	m_imageViewer->GetFocalPointWithImageCoordinate(ijk);
+	GetImageViewer()->GetFocalPointWithImageCoordinate(ijk);
 	if (i != ijk[0] || j != ijk[1] || k != ijk[2]) {
 		STYLE_DOWN_CAST_CONSTITERATOR(AbstractNavigation,
 			SetCurrentFocalPointWithImageCoordinateByViewer(i, j, k));
@@ -127,9 +84,8 @@ void AbstractNavigation::OnKeyPress()
 {
 	std::string key = this->Interactor->GetKeySym();
 	int coordinate[3];
-	ImageViewer* viewer = ImageViewer::SafeDownCast(m_imageViewer);
-	if (viewer != nullptr) {
-		viewer->GetFocalPointWithImageCoordinate(coordinate);
+	if (!GetImageViewer()) {
+		GetImageViewer()->GetFocalPointWithImageCoordinate(coordinate);
 
 		// quite ugly here
 		if (key == "Prior") {
@@ -208,7 +164,7 @@ void AbstractNavigation::OnKeyPress()
 		}
 	}
 	else {
-		vtkInteractorStyleImage::OnKeyPress();
+		AbstractInteractorStyleImage::OnKeyPress();
 	}
 
 
@@ -233,9 +189,9 @@ void AbstractNavigation::MoveSliceBackward()
 void AbstractNavigation::SetCurrentFocalPointWithImageCoordinateByViewer(int i, int j, int k)
 {
 	int ijk[3];
-	m_imageViewer->GetFocalPointWithImageCoordinate(ijk);
+	GetImageViewer()->GetFocalPointWithImageCoordinate(ijk);
 	if (i != ijk[0] || j != ijk[1] || k != ijk[2]) {
-		m_imageViewer->SetFocalPointWithImageCoordinate(i, j, k);
+		GetImageViewer()->SetFocalPointWithImageCoordinate(i, j, k);
 	}
 }
 

@@ -55,8 +55,8 @@ void QInteractorStyleVBDSmokerSeeds::GenerateWidgetFromSeeds()
 			//worldPos[0] = displayExtent[1] * GetSpacing()[0] + GetOrigin()[0];
 			//worldPos[1] = displayExtent[3] * GetSpacing()[1] + GetOrigin()[1];
 			//worldPos[0] = displayExtent[1] * GetSpacing()[2] + GetOrigin()[2];
-			m_imageViewer->GetFocalPointWithWorldCoordinate(worldPos);
-			m_imageViewer->GetFocalPointWithImageCoordinate(imagePos);
+			GetImageViewer()->GetFocalPointWithWorldCoordinate(worldPos);
+			GetImageViewer()->GetFocalPointWithImageCoordinate(imagePos);
 
 			if (i < NUM_OF_ELONGATION) {
 				if (GetSliceOrientation() == ImageViewer::SLICE_ORIENTATION_XY && 
@@ -190,12 +190,12 @@ void QInteractorStyleVBDSmokerSeeds::slotUpdateBasilarArteryBifurcationLocation(
 void QInteractorStyleVBDSmokerSeeds::slotUpdatePonsCentralSectionLocation()
 {
 	int range[6];
-	memcpy(range, m_imageViewer->GetDisplayExtent(), sizeof(range));
+	memcpy(range, GetImageViewer()->GetDisplayExtent(), sizeof(range));
 	range[4] = ui->spinBoxPonsCentralSectionLocation->value();
 	range[5] = ui->spinBoxPonsCentralSectionLocation->value();
 	vtkSmartPointer<vtkMarchingSquares> marchingSquare =
 		vtkSmartPointer<vtkMarchingSquares>::New();
-	marchingSquare->SetInputData(m_imageViewer->GetInputLayer());
+	marchingSquare->SetInputData(GetImageViewer()->GetInputLayer());
 	marchingSquare->GenerateValues(1, 1, 1);
 	marchingSquare->SetImageRange(range);
 	marchingSquare->Update();
@@ -265,14 +265,14 @@ void QInteractorStyleVBDSmokerSeeds::uniqueDisable()
 void QInteractorStyleVBDSmokerSeeds::slotBasilarArteryBifurcationLocationCurrentSlice() 
 {
 	int ijk[3];
-	m_imageViewer->GetFocalPointWithImageCoordinate(ijk);
+	GetImageViewer()->GetFocalPointWithImageCoordinate(ijk);
 	ui->spinBoxBasilarArteryBifurcationLocation->setValue(ijk[2]);
 }
 
 void QInteractorStyleVBDSmokerSeeds::slotPonsCentralSectionLocationCurrentSlice()
 {
 	int ijk[3];
-	m_imageViewer->GetFocalPointWithImageCoordinate(ijk);
+	GetImageViewer()->GetFocalPointWithImageCoordinate(ijk);
 	ui->spinBoxPonsCentralSectionLocation->setValue(ijk[2]);
 }
 
@@ -305,7 +305,7 @@ void QInteractorStyleVBDSmokerSeeds::OnLeftButtonDown()
 				this->GetInteractor()->GetEventPosition()[0],
 				this->GetInteractor()->GetEventPosition()[1],
 				0,  // always zero.
-				m_imageViewer->GetRenderer());
+				GetImageViewer()->GetRenderer());
 
 			double* picked = this->GetInteractor()->GetPicker()->GetPickPosition();
 
@@ -313,7 +313,7 @@ void QInteractorStyleVBDSmokerSeeds::OnLeftButtonDown()
 			if (picked[0] == 0.0&&picked[1] == 0.0)
 				break;
 			int imagePos[3];
-			m_imageViewer->GetFocalPointWithImageCoordinate(imagePos);
+			GetImageViewer()->GetFocalPointWithImageCoordinate(imagePos);
 			picked[GetSliceOrientation()] = imagePos[GetSliceOrientation()] * 
 				GetSpacing()[GetSliceOrientation()] + GetOrigin()[GetSliceOrientation()];
 			m_seedWidget->GetSeed(i)->SetEnabled(pushButtons[i]->isChecked());

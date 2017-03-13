@@ -38,11 +38,11 @@ class ImageViewer;
 class AbstractNavigation : public AbstractInteractorStyleImage
 {
 public:
-	vtkTypeMacro(AbstractNavigation, vtkInteractorStyleImage);
+	vtkTypeMacro(AbstractNavigation, AbstractInteractorStyleImage);
 	static AbstractNavigation *New();
 	
-	virtual void SetImageViewer(ImageViewer* imageViewer);
-	//virtual ImageViewer* GetImageViewer();
+	virtual ImageViewer* GetImageViewer();
+
 	virtual void SetCurrentSlice(int slice);
 	virtual void SetCurrentFocalPointWithImageCoordinate(int* ijk);
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
@@ -52,7 +52,6 @@ protected:
 	AbstractNavigation();
 	~AbstractNavigation();
 
-	virtual void AddSynchronalViewer(ImageViewer* imageViewer);
 	
 	virtual void OnMouseWheelForward();
 	virtual void OnMouseWheelBackward();
@@ -61,8 +60,6 @@ protected:
 
 
 
-	static std::list<ImageViewer*> m_synchronalViewers;
-	ImageViewer* m_imageViewer;
 
 private:
 	void MoveSliceForward();
