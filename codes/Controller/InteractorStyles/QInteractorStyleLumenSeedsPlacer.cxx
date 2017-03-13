@@ -186,9 +186,10 @@ void QInteractorStyleLumenSeedsPlacer::ExtractSegmentation(std::list<int*>& seed
 	
 	vtkSmartPointer<vtkTransform> translation =
 		vtkSmartPointer<vtkTransform>::New();
+	// because default is premultiply 
+	// T* (S * Points)
+	translation->Translate(GetOrigin());
 	translation->Scale(GetSpacing());
-	//translation->Translate(GetOrigin());
-	translation->Translate(-GetOrigin()[0], -GetOrigin()[1], -GetOrigin()[2]);
 	translation->Update();
 
 	vtkSmartPointer<vtkTransformPolyDataFilter> transformFilter =
@@ -196,6 +197,7 @@ void QInteractorStyleLumenSeedsPlacer::ExtractSegmentation(std::list<int*>& seed
 	transformFilter->SetInputData(splinePoints);
 	transformFilter->SetTransform(translation);
 	transformFilter->Update();
+
 
 	vtkSmartPointer<vtkParametricSpline> spline =
 		vtkSmartPointer<vtkParametricSpline>::New();
@@ -209,9 +211,9 @@ void QInteractorStyleLumenSeedsPlacer::ExtractSegmentation(std::list<int*>& seed
 
 	vtkSmartPointer<vtkPolylineToTubularVolume> polylineToTubularVolume =
 		vtkSmartPointer<vtkPolylineToTubularVolume>::New();
+	polylineToTubularVolume->SetInputData(GetImageViewer()->GetInputLayer());
 	polylineToTubularVolume->SetPolyline(functionSource->GetOutput());
 	polylineToTubularVolume->SetTubeRadius(m_extractRadius);
-	polylineToTubularVolume->SetInputData(GetImageViewer()->GetInputLayer());
 	polylineToTubularVolume->Update();
 
 	vtkSmartPointer<vtkImageMask> maskFilter = vtkSmartPointer<vtkImageMask>::New();
@@ -220,6 +222,8 @@ void QInteractorStyleLumenSeedsPlacer::ExtractSegmentation(std::list<int*>& seed
 	maskFilter->Update();
 
 	GetImageViewer()->GetInputLayer()->ShallowCopy(maskFilter->GetOutput());
+	GetImageViewer()->GetInputLayer()->Modified();
+	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());
 
 }
 

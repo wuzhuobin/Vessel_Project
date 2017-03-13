@@ -3,15 +3,14 @@
 #include "vtkImageThreshold.h"
 #include "vtkTubeFilter.h"
 #include "vtkImageStencil.h"
-#include "vtkImageStencilToImage.h"
+//#include "vtkImageStencilToImage.h"
 #include "vtkImageEuclideanDistance.h"
 #include "vtkPolyDataToImageStencil.h"
 #include "vtkPolyData.h"
-#include "vtkTriangleFilter.h"
 #include "vtkSmartPointer.h"
+#include "vtkPointData.h"
 
 vtkStandardNewMacro(vtkPolylineToTubularVolume);
-#include "vtkPolyDataWriter.h"
 int vtkPolylineToTubularVolume::RequestData(vtkInformation *vtkNotUsed(request),
 											vtkInformationVector **inputVector,
 											vtkInformationVector *outputVector)
@@ -30,18 +29,9 @@ int vtkPolylineToTubularVolume::RequestData(vtkInformation *vtkNotUsed(request),
 	}
 
 	try {
-		/// Prepare output
-		output->SetDimensions(input->GetDimensions());
-		output->SetOrigin(input->GetOrigin());
-		output->SetExtent(input->GetExtent());
-		output->SetSpacing(input->GetSpacing());
-		output->AllocateScalars(VTK_FLOAT, 1);
-
 		/// Creates a tube from the input polyline
 		// Calculate average spacing
-		double tubeRadius = (input->GetSpacing()[0] + input->GetSpacing()[1] +
-			input->GetSpacing()[2]) / 3.;
-
+		double tubeRadius = fmin(fmin(input->GetSpacing()[0], input->GetSpacing()[1]), input->GetSpacing()[2]) * 0.5;
 		// Create tube polydata
 		vtkSmartPointer<vtkTubeFilter> tubeFilter
 			= vtkSmartPointer<vtkTubeFilter>::New();
@@ -51,47 +41,40 @@ int vtkPolylineToTubularVolume::RequestData(vtkInformation *vtkNotUsed(request),
 		tubeFilter->CappingOn();
 		tubeFilter->Update();
 
-		vtkSmartPointer<vtkPolyDataWriter> w =
-			vtkSmartPointer<vtkPolyDataWriter>::New();
-		w->SetFileName("C:/Users/user/Desktop/bbb.vtk");
-		w->SetInputConnection(tubeFilter->GetOutputPort());
-		w->Write();
-
-		// Triangulate output
-		vtkSmartPointer<vtkTriangleFilter> triFilter
-			= vtkSmartPointer<vtkTriangleFilter>::New();
-		triFilter->SetInputConnection(tubeFilter->GetOutputPort());
-		triFilter->Update();
-
 		/// Creates an image stencil from the tube for DT (Distance transform)
-		float inVal = 0;
-		float outVal = VTK_FLOAT_MAX;
 		vtkSmartPointer<vtkPolyDataToImageStencil> pol2stenc
 			= vtkSmartPointer<vtkPolyDataToImageStencil>::New();
-		pol2stenc->SetInputData(triFilter->GetOutput());
-		pol2stenc->SetOutputSpacing(output->GetSpacing());
-		pol2stenc->SetOutputWholeExtent(output->GetExtent());
-		pol2stenc->SetOutputOrigin(output->GetOrigin());
+		pol2stenc->SetInputData(tubeFilter->GetOutput());
+		pol2stenc->SetOutputSpacing(input->GetSpacing());
+		pol2stenc->SetOutputWholeExtent(input->GetExtent());
+		pol2stenc->SetOutputOrigin(input->GetOrigin());
 		pol2stenc->Update();
 
 		// cut the corresponding white image and set the background:
+		vtkSmartPointer<vtkImageData> blackImage =
+			vtkSmartPointer<vtkImageData>::New();
+		blackImage->DeepCopy(input);
+		vtkIdType count = blackImage->GetNumberOfPoints();
+		for (vtkIdType i = 0; i < count; ++i)
+		{
+			blackImage->GetPointData()->GetScalars()->SetTuple1(i, VTK_UNSIGNED_CHAR_MIN);
+		}
 		vtkSmartPointer<vtkImageStencil> imgstenc
 			= vtkSmartPointer<vtkImageStencil>::New();
-		imgstenc->SetInputData(output);
+		imgstenc->SetInputData(blackImage);
 		imgstenc->SetStencilConnection(pol2stenc->GetOutputPort());
 		imgstenc->ReverseStencilOff();
-		imgstenc->SetBackgroundValue(outVal);
+		imgstenc->SetBackgroundValue(VTK_UNSIGNED_CHAR_MAX);
 		imgstenc->Update();
 
 		/// Carry out distance transform
 		vtkSmartPointer<vtkImageEuclideanDistance> distanceTransform
 			= vtkSmartPointer<vtkImageEuclideanDistance>::New();
 		distanceTransform->SetInputData(imgstenc->GetOutput());
-		distanceTransform->SetConsiderAnisotropy(1); // Note that something was done to VTK source code before this works properly
-		distanceTransform->SetMaximumDistance(500);
+		distanceTransform->ConsiderAnisotropyOn(); // Note that something was done to VTK source code before this works properly
+		distanceTransform->SetMaximumDistance(VTK_UNSIGNED_CHAR_MAX);
 		distanceTransform->InitializeOn();
 		distanceTransform->Update();
-
 
 		/// Carry out thresholding according to desired radius
 		vtkSmartPointer<vtkImageThreshold> threshold
@@ -104,7 +87,7 @@ int vtkPolylineToTubularVolume::RequestData(vtkInformation *vtkNotUsed(request),
 		threshold->Update();
 
 		/// Copy result to output
-		output->DeepCopy(threshold->GetOutput());
+		output->ShallowCopy(threshold->GetOutput());
 	}
 	catch (...) {
 		return 0;
