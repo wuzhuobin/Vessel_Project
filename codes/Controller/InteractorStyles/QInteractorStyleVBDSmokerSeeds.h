@@ -27,9 +27,9 @@ public:
 	void SetCustomEnabled(bool flag);
 	void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 
-	//virtual void GenerateWidgetFromSeeds(const std::list<int*>& seeds) override;
+	//virtual void GenerateWidgetFromSeeds(const std::vector<int*>& seeds) override;
 	/**
-	 * save all widgets into the 2 list
+	 * save all widgets into the 2 vector
 	 * since all seeds has already created beforehand, no need to check and push
 	 * juse replacing
 	 */
@@ -49,7 +49,7 @@ public:
 	* do nothing
 	*/
 	virtual void UpdateWidgetToSeeds(
-		std::list<int*>& seeds,
+		std::vector<int*>& seeds,
 		int* newImagePos,
 		int* oldImagePos = nullptr) override;
 	virtual void ClearAllSeeds() override;
@@ -80,7 +80,7 @@ protected:
 	virtual void uniqueEnable() override;
 	virtual void uniqueDisable() override;
 
-	static std::list<int*> m_VBDSmokerSeeds;
+	static std::vector<int*> m_VBDSmokerSeeds;
 
 private:
 	

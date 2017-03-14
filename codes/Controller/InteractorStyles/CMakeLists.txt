@@ -114,6 +114,8 @@ target_link_libraries(
 	Widgets
 	LumenExtraction
 	PolylineToTubularVolume
+	ReorderPointIdOfContourFilter
+	LumenSegmentationFilter
 )
 
 target_include_directories(

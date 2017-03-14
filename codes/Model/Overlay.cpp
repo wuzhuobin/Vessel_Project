@@ -8,16 +8,16 @@
 #include <qdebug.h>
 
 vtkStandardNewMacro(OverlayImageData);
-vtkStandardNewMacro(OverlayModifiedObserver);
+vtkStandardNewMacro(OverlayUpdatedObserver);
 
 Overlay::Overlay(QObject * parent)
 	:QObject(parent)
 {
 	m_data = vtkSmartPointer<OverlayImageData>::New();
 
-	m_modifiedObserver = vtkSmartPointer<OverlayModifiedObserver>::New();
-	m_modifiedObserver->overlay = this;
-	m_data->AddObserver(vtkCommand::ModifiedEvent, m_modifiedObserver);
+	m_updatedObserver = vtkSmartPointer<OverlayUpdatedObserver>::New();
+	m_updatedObserver->overlay = this;
+	m_data->AddObserver(vtkCommand::UpdateDataEvent, m_updatedObserver);
 
 	m_lookupTable = vtkSmartPointer<vtkLookupTable>::New();
 	m_lookupTable->SetNumberOfTableValues(1);
@@ -66,7 +66,7 @@ int Overlay::getOpacity(int color)
 	return value[3]*100;
 }
 
-void Overlay::modified()
+void Overlay::updatedOverlay()
 {
 	qDebug() << "Modified";
 }
@@ -82,35 +82,32 @@ void OverlayImageData::PrintSelf(ostream & os, vtkIndent indent)
 void OverlayImageData::ShallowCopy(vtkDataObject * dataObject)
 {
 	OverlayImageData* overlayImageData = OverlayImageData::SafeDownCast(dataObject);
-	if (overlayImageData) {
-		m_itkImage->Graft(overlayImageData->GetItkImage());
-		return;
-	}
-
 	vtkImageData *imageData = vtkImageData::SafeDownCast(dataObject);
-	if (imageData != NULL)
+
+	if (imageData)
 	{
 		vtkImageData::ShallowCopy(imageData);
-		updateITKImage();
-		return;
+		if (overlayImageData) {
+			m_itkImage->Graft(overlayImageData->GetItkImage());
+		}
+		else {
+			updateITKImage();
+		}
+		InvokeEvent(vtkCommand::UpdateDataEvent, nullptr);
 	}
+
 }
 
 void OverlayImageData::DeepCopy(vtkDataObject * dataObject)
 {
 
 	OverlayImageData* overlayImageData = OverlayImageData::SafeDownCast(dataObject);
-	if (overlayImageData) {
-		m_itkImage->Graft(overlayImageData->GetItkImage());
-		return;
-	}
-
 	vtkImageData *imageData = vtkImageData::SafeDownCast(dataObject);
-	if (imageData != NULL)
+	if (imageData)
 	{
 		vtkImageData::DeepCopy(imageData);
 		updateITKImage();
-		return;
+		InvokeEvent(vtkCommand::UpdateDataEvent, nullptr);
 	}
 }
 
@@ -119,6 +116,33 @@ void OverlayImageData::Graft(itkImageType::Pointer dataObject)
 	m_itkImage->Graft(dataObject);
 
 	updateVTKImage();
+	InvokeEvent(vtkCommand::UpdateDataEvent, nullptr);
+}
+
+void OverlayImageData::SetExtent(int * extent)
+{
+	int description;
+
+	description = vtkStructuredData::SetExtent(extent, this->Extent);
+	if (description < 0) //improperly specified
+	{
+		vtkErrorMacro(<< "Bad Extent, retaining previous values");
+	}
+
+	if (description == VTK_UNCHANGED)
+	{
+		return;
+	}
+
+	this->SetDataDescription(description);
+
+	this->vtkImageData::Modified();
+}
+
+void OverlayImageData::Modified()
+{
+	vtkImageData::Modified();
+	InvokeEvent(vtkCommand::UpdateDataEvent, nullptr);
 }
 
 OverlayImageData::itkImageType::Pointer OverlayImageData::GetItkImage()
@@ -159,7 +183,7 @@ void OverlayImageData::updateVTKImage()
 	vtkImageData::ShallowCopy(imageToVTKImageFilter->GetOutput());
 }
 
-void OverlayModifiedObserver::Execute(vtkObject * caller, unsigned long eventId, void * callData)
+void OverlayUpdatedObserver::Execute(vtkObject * caller, unsigned long eventId, void * callData)
 {
-	overlay->modified();
+	overlay->updatedOverlay();
 }

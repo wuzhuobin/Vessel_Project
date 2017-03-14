@@ -40,6 +40,7 @@ Core::Core(QObject * parent)
 		imageViewers[i] = ImageViewer::New();
 		imageViewers[i]->SetRenderWindow(mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetRenderWindow());
 		imageViewers[i]->SetupInteractor(mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetInteractor());
+		//imageViewers[i]->EnableDepthPeelingOn();
 
 		// Never use below method to set the interactorsyle
 		//imageInteractorStyle[i]->SetInteractor(imageInteractor[i]);
@@ -55,6 +56,7 @@ Core::Core(QObject * parent)
 	surfaceViewer->SetRenderWindow(mainWindow.getViewerWidget(3)->getUi()->qvtkWidget2->GetRenderWindow());
 	surfaceViewer->SetupInteractor(mainWindow.getViewerWidget(3)->getUi()->qvtkWidget2->GetInteractor());
 	surfaceViewer->EnableDepthPeelingOn();
+
 	//surfaceViewer->EnableDepthSortingOn();
 
 

@@ -7,13 +7,13 @@
 
 #include <vtkSmartPointer.h>
 #include <vtkImageData.h>
-#include <vtkCallbackCommand.h>
+#include <vtkCommand.h>
 
 #include <itkImage.h>
 
 class vtkLookupTable;
 class OverlayImageData;
-class OverlayModifiedObserver;
+class OverlayUpdatedObserver;
 class Overlay;
 
 class OverlayImageData :public vtkImageData {
@@ -31,6 +31,12 @@ public:
 	virtual void DeepCopy(vtkDataObject *dataObject);
 
 	virtual void Graft(itkImageType::Pointer dataObject);
+
+	/**
+	 * tmp fix
+	 */
+	virtual void SetExtent(int* extent) override;
+	virtual void Modified() override;
 
 	itkImageType::Pointer GetItkImage();
 protected:
@@ -52,10 +58,10 @@ private:
 
 };
 
-class OverlayModifiedObserver : public vtkCallbackCommand {
+class OverlayUpdatedObserver : public vtkCommand {
 public:
-	static OverlayModifiedObserver* New();
-	vtkTypeMacro(OverlayModifiedObserver, vtkCallbackCommand);
+	static OverlayUpdatedObserver* New();
+	vtkTypeMacro(OverlayUpdatedObserver, vtkCommand);
 	Overlay* overlay;
 	virtual void Execute(vtkObject *caller, unsigned long eventId, void* callData);
 };
@@ -73,18 +79,15 @@ public:
 
 	OverlayImageData* getData() const;
 	vtkLookupTable* getLookupTable() const;
+	virtual void updatedOverlay();
 
 	int getOpacity(int color);
 	void setOpacity(int color, int opacity);
 
-
 protected:
 	vtkSmartPointer<OverlayImageData> m_data;
 	vtkSmartPointer<vtkLookupTable> m_lookupTable;
-
-	friend class OverlayModifiedObserver;
-	vtkSmartPointer<OverlayModifiedObserver> m_modifiedObserver;
-	virtual void modified();
+	vtkSmartPointer<OverlayUpdatedObserver> m_updatedObserver;
 
 };
 

@@ -2,13 +2,31 @@
 #define __IADE_OVERLAY_H__
 
 #include "Overlay.h"
-
+#include <qmap.h>
 
 
 
 class IADEOverlay : public Overlay 
 {
 	Q_OBJECT;
+
+	//struct Measurements2D
+	//{
+	//	double vesselWall;
+	//	double lumen;
+	//	double NMI;
+	//};
+
+	//struct Measurements3D
+	//{
+	//	double vesselWall;
+	//	double lumen;
+	//	double calcification;
+	//	double hemorrhage;
+	//	double lrnc;
+	//	double lm;
+
+	//};
 
 public:
 
@@ -28,8 +46,16 @@ public:
 	IADEOverlay(OverlayImageData::itkImageType::Pointer data, QObject* parent = nullptr);
 	IADEOverlay(OverlayImageData* data, QObject* parent = nullptr);
 
+	// total plaque, vessel wall, lumen, calcification, hemorrhage, lrnc, lm,
+	double Measurements3D[7] = { 0 };
+	// vessel wall, lumen, NMI
+	double Measurements2D[3] = { 0 };
 
+protected:
+	virtual void updatedOverlay() override;
 
+	virtual void updateMeasurement3D();
+	virtual void updateMeasurement2D(int slice);
 
 };
 

@@ -21,18 +21,18 @@ void IVtkImageData::PrintSelf(ostream & os, vtkIndent indent)
 void IVtkImageData::ShallowCopy(vtkDataObject * dataObject)
 {
 	IVtkImageData* ivtkImageData = IVtkImageData::SafeDownCast(dataObject);
-	if (ivtkImageData) {
-		m_itkImage->Graft(ivtkImageData->GetItkImage());
-		vtkImageData::ShallowCopy(ivtkImageData);
-		return;
-	}
-
 	vtkImageData *imageData = vtkImageData::SafeDownCast(dataObject);
-	if (imageData != NULL)
+
+	if (imageData)
 	{
 		vtkImageData::ShallowCopy(imageData);
-		updateITKImage();
-		return;
+		if (ivtkImageData) {
+			m_itkImage->Graft(ivtkImageData->GetItkImage());
+		}
+		else
+		{
+			updateITKImage();
+		}
 	}
 
 }
@@ -40,18 +40,12 @@ void IVtkImageData::ShallowCopy(vtkDataObject * dataObject)
 void IVtkImageData::DeepCopy(vtkDataObject * dataObject)
 {
 	IVtkImageData* ivtkImageData = IVtkImageData::SafeDownCast(dataObject);
-	if (ivtkImageData) {
-		m_itkImage->Graft(ivtkImageData->GetItkImage());
-		vtkImageData::DeepCopy(ivtkImageData);
-		return;
-	}
-
 	vtkImageData *imageData = vtkImageData::SafeDownCast(dataObject);
-	if (imageData != NULL)
+
+	if (imageData)
 	{
 		vtkImageData::DeepCopy(imageData);
 		updateITKImage();
-		return;
 	}
 }
 

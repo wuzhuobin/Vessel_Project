@@ -33,6 +33,7 @@ Copyright (C) 2016
 #include <vtkImageData.h>
 #include <vtkLookupTable.h>
 #include <vtkRenderWindow.h>
+#include <vtkSmartPointer.h>
 
 #include "ImageViewer.h"
 
@@ -726,7 +727,7 @@ void InteractorStylePaintBrush::WriteToImageData()
 	extent[GetSliceOrientation() * 2 + 1] = GetSlice();
 
 
-	double pixelval;
+	unsigned char pixelval;
 
 	for (int x = extent[0]; x <= extent[1]; ++x) {
 		for (int y = extent[2]; y <= extent[3]; ++y) {
@@ -763,7 +764,6 @@ void InteractorStylePaintBrush::WriteToImageData()
 			}
 		}
 	}
-
 	GetImageViewer()->GetInputLayer()->Modified();
 
 }

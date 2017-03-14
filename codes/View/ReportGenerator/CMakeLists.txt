@@ -4,82 +4,54 @@ IF(COMMAND CMAKE_POLICY)
 	   CMAKE_POLICY(SET CMP0003 NEW)
 ENDIF(COMMAND CMAKE_POLICY)
 
-project(View)
+project(ReportGenerator)
 
 find_package(Qt5Core)
-find_package(Qt5Widgets)
-find_package(Qt5OpenGL)
-
-
-add_subdirectory(RegistrationWizard)
-add_subdirectory(ReportGenerator)
+find_package(Qt5PrintSupport)
 
 set(
-	VIEW_H
-	MainWindow.h
-	LabelWidget.h
-	ModuleWidget.h
-	ViewerWidget.h
-	MeasurementWidget.h
+	REPORT_GENERATOR_H
+	AbstractFilter.h
+	ReportGenerator.h
 )
 
 set(
-	VIEW_SRC
-	MainWindow.cpp
-	LabelWidget.cpp
-	ModuleWidget.cpp
-	ViewerWidget.cpp
-	MeasurementWidget.cpp
+	REPORT_GENERATOR_SRC
+	AbstractFilter.cxx
+	ReportGenerator.cxx
 )
 
-set(
-	VIEW_UI
-	MainWindow.ui
-	LabelWidget.ui
-	ModuleWidget.ui
-	ViewerWidget.ui
-	MeasurementWidget.ui
-)
 #Generate moc and ui file
 qt5_wrap_cpp(
-	VIEW_MOC
-	${VIEW_H}
+	REPORT_GENERATOR_MOC
+	${REPORT_GENERATOR_H}
 )
 
-qt5_wrap_ui(
-	VIEW_UI_H
-	${VIEW_UI}
-)
 
 add_library(
-	View
+	ReportGenerator
 	SHARED
-	${VIEW_H}
-	${VIEW_SRC}
-	${VIEW_UI}
-	${VIEW_MOC}
-	${VIEW_UI_H}
+	${REPORT_GENERATOR_H}
+	${REPORT_GENERATOR_SRC}
+	${REPORT_GENERATOR_MOC}	
 )
 
 #link libraries
 target_link_libraries(
-	View
-	Qt5::Core
-	Qt5::Widgets
-	Qt5::OpenGL
-	RegistrationWizard
 	ReportGenerator
+	Qt5::Core
+	Qt5::PrintSupport
 	)
 
 target_include_directories(
-	View
+	ReportGenerator
 	PUBLIC
 	${PROJECT_SOURCE_DIR}
 	${PROJECT_BINARY_DIR}
 )
 
 set_target_properties(
-    View
+    ReportGenerator
     PROPERTIES
     WINDOWS_EXPORT_ALL_SYMBOLS 
     true

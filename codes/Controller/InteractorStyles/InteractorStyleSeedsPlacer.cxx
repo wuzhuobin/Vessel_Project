@@ -6,7 +6,7 @@ Department of Imaging and Inteventional Radiology,
 Junior Research Assistant
 
 
-This class is an interactor modified from TrackBallCamera, providing an extra function
+This class is an interactor updatedOverlay from TrackBallCamera, providing an extra function
 of switching slice planes position to the world position clicked on.
 
 
@@ -28,6 +28,7 @@ Copyright (C) 2016
 #include <vtkHandleWidget.h>
 #include <vtkSeedWidget.h>
 #include <vtkSeedRepresentation.h>
+
 
 #include <algorithm>
 
@@ -72,12 +73,14 @@ vtkStandardNewMacro(SeedsPlacerWidget);
 vtkStandardNewMacro(InteractorStyleSeedsPlacer);
 
 //int InteractorStyleSeedsPlacer::m_oldSeedsSize = 0;
-list<int*> InteractorStyleSeedsPlacer::m_seeds;
+vector<int*> InteractorStyleSeedsPlacer::m_seeds;
 
 void InteractorStyleSeedsPlacer::SetCustomEnabled(bool flag)
 {
 	if (flag) {
 		SeedsPlacerRepresentation::SafeDownCast(m_seedRep)->GetImagePointPlacer()->SetImageActor(GetImageViewer()->GetImageActor());
+		// for some opengl error
+		//SeedsPlacerRepresentation::SafeDownCast(m_seedRep)->GetImagePointPlacer()->SetPixelTolerance(2);
 		// SetInteractor CANNOT place in the constructor
 		m_seedWidget->SetInteractor(this->Interactor);
 		m_seedWidget->EnabledOn();
@@ -92,7 +95,7 @@ void InteractorStyleSeedsPlacer::SetCustomEnabled(bool flag)
 	m_customFlag = flag;
 }
 
-void InteractorStyleSeedsPlacer::SetFocalSeed(int i, list<int*>& seeds)
+void InteractorStyleSeedsPlacer::SetFocalSeed(int i, vector<int*>& seeds)
 {
 	//if (i >= m_seedRep->GetNumberOfSeeds() || i == m_focalSeed) {
 	//	return;
@@ -101,16 +104,10 @@ void InteractorStyleSeedsPlacer::SetFocalSeed(int i, list<int*>& seeds)
 	if (i < 0 || i > seeds.size()) {
 		return;
 	}
-	int index = 0;
-	for (list<int*>::const_iterator cit = seeds.cbegin(); cit != seeds.cend(); ++cit, ++index) {
-		if (index == i) {
-			int imageCoordinate[3];
-			memcpy(imageCoordinate, *cit, sizeof(imageCoordinate));
-			SetCurrentFocalPointWithImageCoordinate(imageCoordinate[0], imageCoordinate[1],
-				imageCoordinate[2]);
-			break;
-		}
-	}
+	int imageCoordinate[3];
+	memcpy(imageCoordinate, m_seeds[i], sizeof(imageCoordinate));
+	SetCurrentFocalPointWithImageCoordinate(imageCoordinate[0], imageCoordinate[1],
+		imageCoordinate[2]);
 }
 
 void InteractorStyleSeedsPlacer::SetFocalSeed(int i)
@@ -189,12 +186,12 @@ void InteractorStyleSeedsPlacer::OnKeyPress()
 //	GenerateWidgetFromSeeds(m_seeds);
 //}
 
-void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds(const list<int*>& seeds)
+void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds(const vector<int*>& seeds)
 {
 	ClearAllSeedWidget();
 
 
-	for (list<int*>::const_iterator cit = seeds.cbegin();
+	for (vector<int*>::const_iterator cit = seeds.cbegin();
 		cit != seeds.cend(); ++cit) {
 		int* imagePos = (*cit);
 		double worldPos[3];
@@ -220,7 +217,7 @@ void InteractorStyleSeedsPlacer::UpdateWidgetToSeeds(int* newImagePos, int* oldI
 	UpdateWidgetToSeeds(m_seeds, newImagePos, oldImagePos);
 }
 
-void InteractorStyleSeedsPlacer::UpdateWidgetToSeeds(list<int*>& seeds, int * newImagePos, int * oldImagePos)
+void InteractorStyleSeedsPlacer::UpdateWidgetToSeeds(vector<int*>& seeds, int * newImagePos, int * oldImagePos)
 {
 
 	// if oldImagePos is nullptr or oldImagePos is not a valid number, 
@@ -231,7 +228,7 @@ void InteractorStyleSeedsPlacer::UpdateWidgetToSeeds(list<int*>& seeds, int * ne
 		oldImagePos[2] < 0) {
 		oldImagePos = newImagePos;
 	}
-	list<int*>::iterator it = find_if(seeds.begin(),
+	vector<int*>::iterator it = find_if(seeds.begin(),
 		seeds.end(), [oldImagePos](int* index)->bool {
 		return
 			oldImagePos[0] == index[0] &&
@@ -252,7 +249,7 @@ void InteractorStyleSeedsPlacer::ClearAllSeeds()
 	ClearAllSeeds(m_seeds);
 }
 
-void InteractorStyleSeedsPlacer::SaveWidgetToSeeds(list<int*>& seeds)
+void InteractorStyleSeedsPlacer::SaveWidgetToSeeds(vector<int*>& seeds)
 {
 	for (int i = m_seedRep->GetNumberOfSeeds() - 1; i >= 0; --i) {
 		//double* worldPos = new double[3]; // #MemLeakHere
@@ -272,7 +269,7 @@ void InteractorStyleSeedsPlacer::DropSeed()
 	DropSeed(m_seeds);
 }
 
-void InteractorStyleSeedsPlacer::DropSeed(list<int*>& seeds)
+void InteractorStyleSeedsPlacer::DropSeed(vector<int*>& seeds)
 {
 	double* worldPos = GetImageViewer()->GetFocalPointWithWorldCoordinate();
 	vtkHandleWidget* newSeed = m_seedWidget->CreateNewHandle();
@@ -296,7 +293,7 @@ void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds()
 	GenerateWidgetFromSeeds(m_seeds);
 }
 
-void InteractorStyleSeedsPlacer::ClearAllSeeds(list<int*>& seed)
+void InteractorStyleSeedsPlacer::ClearAllSeeds(vector<int*>& seed)
 {
 	if (seed.size() != 0) {
 		while (!seed.empty())

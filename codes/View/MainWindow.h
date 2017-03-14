@@ -31,6 +31,7 @@ class QMenu;
 class QSettings;
 class ModuleWidget;
 class ViewerWidget;
+class MeasurementWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -98,6 +99,8 @@ private:
 	ViewerWidget* viewerWidgets[NUM_OF_VIEWERS] = { nullptr };
 
 	ModuleWidget* moduleWiget = nullptr;
+
+	MeasurementWidget* measurementWidget = nullptr;
 
 	//QMainWindow* centralWidget = nullptr;
 

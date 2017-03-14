@@ -4,6 +4,7 @@
 #include "ui_ViewerWidget.h"
 #include "ModuleWidget.h"
 #include "ViewerWidget.h"
+#include "MeasurementWidget.h"
 
 #include <qdebug.h>
 #include <qsettings.h>
@@ -23,6 +24,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 	this->moduleWiget = new ModuleWidget(this);
 	ui->moduleWidgetDockWidget->setWidget(this->moduleWiget);
+
+	this->measurementWidget = new MeasurementWidget(this);
+	ui->measurementDockWidget->setWidget(measurementWidget);
+
+	this->tabifyDockWidget(ui->measurementDockWidget, ui->moduleWidgetDockWidget);
 
 	QMainWindow* centralWidget = new QMainWindow(this);
 	centralWidget->setDockNestingEnabled(true);

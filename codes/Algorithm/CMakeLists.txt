@@ -15,3 +15,7 @@ include(${VTK_USE_FILE})
 
 add_subdirectory(LumenExtraction)
 add_subdirectory(PolylineToTubularVolume)
+add_subdirectory(LumenSegmentationFilter)
+add_subdirectory(ReorderPointIdOfContourFilter)
+add_subdirectory(MaximumWallThickness)
+add_subdirectory(Measurements)

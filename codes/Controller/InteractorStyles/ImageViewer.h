@@ -129,6 +129,9 @@ public:
 	 */
 	virtual void SetupInteractor(vtkRenderWindowInteractor* arg);
 
+	vtkBooleanMacro(EnableDepthPeeling, bool);
+	virtual void SetEnableDepthPeeling(bool flag);
+
 	// Description:
 	// Update the display extent manually so that the proper slice for the
 	// given m_orientation is displayed. It will also try to set a
@@ -258,6 +261,12 @@ protected:
 	bool AllBlackFlag = false;
 
 	int DisplayExtent[6] = { -1 };
+
+	// MaxNoOfPeels maximum number of depth peels(multi - pass rendering)
+	int MaxNoOfPeels = 0;
+	// OcclusionRatio the occlusion ration(0.0 means a perfect image,
+	// >0.0 means a non - perfect image which in general results in faster rendering)
+	double OcclusionRatio = 0.0;
 
 	friend class vtkResizeHeaderAndOrientationTextCallback;
 

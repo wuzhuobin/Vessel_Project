@@ -791,4 +791,29 @@ void ImageViewer::SetupInteractor(vtkRenderWindowInteractor * arg)
 	//}
 }
 
+void ImageViewer::SetEnableDepthPeeling(bool flag)
+{
+	if (this->RenderWindow || !this->Renderer) {
+		// 1. Use a render window with alpha bits (as initial value is 0 (false)):
+		this->RenderWindow->SetAlphaBitPlanes(flag);
+
+		if (flag) {
+			// 2. Force to not pick a framebuffer with a multisample buffer
+			// (as initial value is 8):
+			this->RenderWindow->SetMultiSamples(0);
+		}
+		else {
+			this->RenderWindow->SetMultiSamples(8);
+		}
+
+		// 3. Choose to use depth peeling (if supported) (initial value is 0 (false)):
+		this->Renderer->SetUseDepthPeeling(flag);
+		// 4. Set depth peeling parameters
+		// - Set the maximum number of this->Rendering passes (initial value is 4):
+		this->Renderer->SetMaximumNumberOfPeels(this->MaxNoOfPeels);
+		// - Set the occlusion ratio (initial value is 0.0, exact image):
+		this->Renderer->SetOcclusionRatio(this->OcclusionRatio);
+	}
+}
+
 

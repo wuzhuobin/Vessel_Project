@@ -20,7 +20,7 @@ QSETUP_UI_SRC(QInteractorStyleVBDSmokerSeeds);
 
 
 // using a initial value
-list<int*> QInteractorStyleVBDSmokerSeeds::m_VBDSmokerSeeds;
+vector<int*> QInteractorStyleVBDSmokerSeeds::m_VBDSmokerSeeds;
 
 QPushButton* QInteractorStyleVBDSmokerSeeds::pushButtons[];
 
@@ -44,7 +44,7 @@ void QInteractorStyleVBDSmokerSeeds::GenerateWidgetFromSeeds()
 {
 	ClearAllSeedWidget();
 	int i = 0;
-	for (list<int*>::const_iterator cit = m_VBDSmokerSeeds.cbegin();
+	for (vector<int*>::const_iterator cit = m_VBDSmokerSeeds.cbegin();
 		cit != m_VBDSmokerSeeds.cend(); ++cit, ++i) {
 		int imagePos[3];
 		vtkHandleWidget* newSeed = m_seedWidget->CreateNewHandle();
@@ -98,7 +98,7 @@ void QInteractorStyleVBDSmokerSeeds::GenerateWidgetFromSeeds()
 		}
 	}
 	m_seedWidget->Render();
-	//for (list<int*>::const_iterator cit = m_VBDSmokerDetour.cbegin();
+	//for (vector<int*>::const_iterator cit = m_VBDSmokerDetour.cbegin();
 	//	cit != m_VBDSmokerDetour.cend(); ++cit) {
 	//	int* imagePos = (*cit);
 	//	vtkHandleWidget* newSeed = m_seedWidget->CreateNewHandle();
@@ -112,17 +112,17 @@ void QInteractorStyleVBDSmokerSeeds::GenerateWidgetFromSeeds()
 	//}
 }
 
-//void QInteractorStyleVBDSmokerSeeds::GenerateWidgetFromSeeds(const std::list<int*>& seeds)
+//void QInteractorStyleVBDSmokerSeeds::GenerateWidgetFromSeeds(const std::vector<int*>& seeds)
 //{
 //
 //}
 
 void QInteractorStyleVBDSmokerSeeds::SaveWidgetToSeeds()
 {
-	list<int*>::const_iterator cit1 = m_VBDSmokerSeeds.cbegin();
-	//list<int*>::const_iterator cit2 = m_VBDSmokerDetour.cbegin();
+	//vector<int*>::const_iterator cit1 = m_VBDSmokerSeeds.cbegin();
+	//vector<int*>::const_iterator cit2 = m_VBDSmokerDetour.cbegin();
 
-	for (int i = 0; i < m_seedRep->GetNumberOfSeeds(); ++i, ++cit1) {
+	for (int i = 0; i < m_seedRep->GetNumberOfSeeds(); ++i/*, ++cit1*/) {
 		if (m_seedWidget->GetSeed(i)->GetEnabled() && pushButtons[i]->isChecked()) {
 			double worldPos[3];
 			m_seedWidget->GetSeedRepresentation()->GetSeedWorldPosition(i, worldPos);
@@ -130,7 +130,7 @@ void QInteractorStyleVBDSmokerSeeds::SaveWidgetToSeeds()
 			for (int pos = 0; pos < 3; ++pos) {
 				imagePos[pos] = (worldPos[pos] - GetOrigin()[pos]) / GetSpacing()[pos] + 0.5;
 			}
-			memcpy(*cit1, imagePos, sizeof(imagePos));
+			memcpy(m_VBDSmokerSeeds[i], imagePos, sizeof(imagePos));
 			//if (i < NUM_OF_ELONGATION) {
 
 			//}
@@ -152,7 +152,7 @@ void QInteractorStyleVBDSmokerSeeds::UpdateWidgetToSeeds(int * newImagePos, int 
 	GenerateWidgetFromSeeds();
 }
 
-void QInteractorStyleVBDSmokerSeeds::UpdateWidgetToSeeds(std::list<int*>& seeds, int * newImagePos, int * oldImagePos)
+void QInteractorStyleVBDSmokerSeeds::UpdateWidgetToSeeds(std::vector<int*>& seeds, int * newImagePos, int * oldImagePos)
 {
 	// do nothing
 }
@@ -165,10 +165,13 @@ void QInteractorStyleVBDSmokerSeeds::ClearAllSeeds()
 void QInteractorStyleVBDSmokerSeeds::slotUpdateBasilarArteryBifurcationLocation()
 {
 	int i = 0;
-	list<int*>::const_iterator cit = m_VBDSmokerSeeds.cbegin();
-	int class0 = (*cit++)[2];
-	int class1 = (*cit++)[2];
-	int class2 = (*cit++)[2];
+	//vector<int*>::const_iterator cit = m_VBDSmokerSeeds.cbegin();
+	//int class0 = (*cit++)[2];
+	//int class1 = (*cit++)[2];
+	//int class2 = (*cit++)[2];
+	int class0 = m_VBDSmokerSeeds[0][2];
+	int class1 = m_VBDSmokerSeeds[1][2];
+	int class2 = m_VBDSmokerSeeds[2][2];
 	int value = ui->spinBoxBasilarArteryBifurcationLocation->value();
 	if (value <= class0) {
 		ui->lineEditElongation->setText("class0");
@@ -211,17 +214,26 @@ void QInteractorStyleVBDSmokerSeeds::slotUpdatePonsCentralSectionLocation()
 	int centerY = (center[1] - GetOrigin()[1]) / GetSpacing()[1] + 0.5;
 	int centerZ = (center[2] - GetOrigin()[2]) / GetSpacing()[2] + 0.5;
 
-	list<int*>::const_iterator cit = m_VBDSmokerSeeds.cbegin();
-	int class0 = (*cit++)[2];
-	int class1 = (*cit++)[2];
-	int class2 = (*cit++)[2];
-	int class0M = (*cit++)[0];
-	int class1R = (*cit++)[0];
-	int class1L = (*cit++)[0];
-	int class2R = (*cit++)[0];
-	int class2L = (*cit++)[0];
-	int class3R = (*cit++)[0];
-	int class3L = (*cit++)[0];
+	//vector<int*>::const_iterator cit = m_VBDSmokerSeeds.cbegin();
+	//int class0 = (*cit++)[2];
+	//int class1 = (*cit++)[2];
+	//int class2 = (*cit++)[2];
+	//int class0M = (*cit++)[0];
+	//int class1R = (*cit++)[0];
+	//int class1L = (*cit++)[0];
+	//int class2R = (*cit++)[0];
+	//int class2L = (*cit++)[0];
+	//int class3R = (*cit++)[0];
+	//int class3L = (*cit++)[0];
+
+
+	int class0M = m_VBDSmokerSeeds[3][0];
+	int class1R = m_VBDSmokerSeeds[4][0];
+	int class1L = m_VBDSmokerSeeds[5][0];
+	int class2R = m_VBDSmokerSeeds[6][0];
+	int class2L = m_VBDSmokerSeeds[7][0];
+	int class3R = m_VBDSmokerSeeds[8][0];
+	int class3L = m_VBDSmokerSeeds[9][0];
 
 	if ((class1R < centerX && centerX <= class0M) ||
 		(class0M < centerX && centerX <= class1L)) {
@@ -295,11 +307,11 @@ void QInteractorStyleVBDSmokerSeeds::OnLeftButtonDown()
 {
 	InteractorStyleSeedsPlacer::OnLeftButtonDown();
 
-	list<int*>::const_iterator cit1 = m_VBDSmokerSeeds.cbegin();
-	for (int i = 0; i < NUM_OF_DETOUR + NUM_OF_ELONGATION; ++i, ++cit1) {
+	//vector<int*>::const_iterator cit1 = m_VBDSmokerSeeds.cbegin();
+	for (int i = 0; i < NUM_OF_DETOUR + NUM_OF_ELONGATION; ++i/*, ++cit1*/) {
 		if (!m_seedWidget->GetSeed(i)->GetEnabled() &&
 			pushButtons[i]->isChecked() && 
-			(*cit1)[0] == -1) {
+			m_VBDSmokerSeeds[i][0] == -1) {
 
 			this->GetInteractor()->GetPicker()->Pick(
 				this->GetInteractor()->GetEventPosition()[0],
@@ -393,7 +405,7 @@ void QInteractorStyleVBDSmokerSeeds::initialization()
 
 void QInteractorStyleVBDSmokerSeeds::print()
 {
-	for (list<int*>::const_iterator cit = m_VBDSmokerSeeds.cbegin();
+	for (vector<int*>::const_iterator cit = m_VBDSmokerSeeds.cbegin();
 		cit != m_VBDSmokerSeeds.cend(); ++cit) {
 		int* imagePos = (*cit);
 		cout << "Elongation" << endl;
@@ -401,7 +413,7 @@ void QInteractorStyleVBDSmokerSeeds::print()
 			<< imagePos[2] << endl;
 	}
 
-	//for (list<int*>::const_iterator cit = m_VBDSmokerDetour.cbegin();
+	//for (vector<int*>::const_iterator cit = m_VBDSmokerDetour.cbegin();
 	//	cit != m_VBDSmokerDetour.cend(); ++cit) {
 	//	int* imagePos = (*cit);
 	//	cout << "Detour" << endl;

@@ -5,6 +5,7 @@
 #include "QAbstractNavigation.h"
 
 class vtkImageData;
+//class UpdateTargetViewerCallback;
 
 namespace Ui { class QInteractorStyleLumenSeedsPlacer; }
 class QInteractorStyleLumenSeedsPlacer: public QAbstractNavigation, 
@@ -16,34 +17,42 @@ class QInteractorStyleLumenSeedsPlacer: public QAbstractNavigation,
 public:
 	vtkTypeMacro(QInteractorStyleLumenSeedsPlacer, InteractorStyleSeedsPlacer);
 	static QInteractorStyleLumenSeedsPlacer* New();
-	void SetCustomEnabled(bool flag);
-	void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
+	virtual void SetCustomEnabled(bool flag);
+	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
+
+	virtual void SetFocalSeed(int i, QList<int*>& seeds);
+
+	virtual void GenerateWidgetFromSeeds(const QList<int*>& seeds);
+
+	virtual void SaveWidgetToSeeds(QList<int*>& seeds);
+	virtual void DropSeed(QList<int*>& seeds);
+
+	virtual void UpdateWidgetToSeeds(
+		QList<int*>& seeds,
+		int* newImagePos,
+		int* oldImagePos = nullptr);
+	virtual void ClearAllSeeds(QList<int*>& seeds);
+	virtual void DeleteFocalSeed(QList<int*>& seeds);
+
+	virtual void ExtractLumen(QList<int*>& seeds);
+	void ExtractSegmentation(QList<int*>& seed);
+
 	/**
 	 * temporary fix
 	 */
-	void SetTargetImages(
-		QList<vtkSmartPointer<vtkImageData>> listOfVtkImages, 
-		QList<QString> listOfModalityNames);
-	virtual void SaveWidgetToSeeds(std::list<int*>& seed = m_seeds)override;
+	virtual void UpdateTargetViewer();
+public slots:
+	virtual void GenerateWidgetFromSeeds() override;
+	virtual void SaveWidgetToSeeds() override;
+	virtual void ClearAllSeeds() override;
+	virtual void SetFocalSeed(int i) override;
+	virtual void DeleteFocalSeed();
+	virtual void DropSeed() override;
 	virtual void UpdateWidgetToSeeds(
 		int* newImagePos,
 		int* oldImagePos = nullptr);
-	//virtual void UpdateWidgetToSeeds(
-	//	std::list<int*>& seeds,
-	//	int* newImagePos,
-	//	int* oldImagePos = nullptr);
-	//virtual void UpdateWidgetToSeeds(int* oldImagePos, int* newImagePos);
 
-public slots:
-	void SlotClearAllSeeds();
-	virtual void SetFocalSeed(int i);
-	void DeleteFocalSeed();
-	void DropSeed();
-
-	void ExtractLumen();
-	/**
-	 */
-	void ExtractSegmentation(std::list<int*>& seed);
+	virtual void ExtractLumen();
 	void ExtractSegmentation();
 	void SetExtractRadius(int radius);
 	void SetMultipier(double value);
@@ -54,15 +63,18 @@ protected:
 	QInteractorStyleLumenSeedsPlacer(int uiType = UNIQUE_UI, QWidget* parent = Q_NULLPTR);
 	~QInteractorStyleLumenSeedsPlacer();
 
-	//void uniqueInvoke(bool flag);
-
-	void OnKeyPress();
-
-private:
-
 	void uniqueInitialization();
 	void initialization();
 
+	virtual void uniqueEnable() override;
+	
+	virtual void OnKeyPress() override;
+	virtual void enterEvent(QEvent* event) override;
+
+	static QList<int*> m_lumenSeeds;
+
+
+private:
 	Ui::QInteractorStyleLumenSeedsPlacer* ui = nullptr;
 
 	int m_numberOfIteractions = 3;
@@ -70,9 +82,11 @@ private:
 	int m_initialNeighborhoodRadius = 1;
 	int m_extractRadius = 10;
 
+	//friend class UpdateTargetViewerCallback;
+	//UpdateTargetViewerCallback* callback = nullptr;
 
-	QList<vtkSmartPointer<vtkImageData>> m_listOfVtkImages;
-	QList<QString> m_listOfModalityNames;
+	//QList<vtkSmartPointer<vtkImageData>> m_listOfVtkImages;
+	QStringList m_listOfModalityNames;
 
 };
 
