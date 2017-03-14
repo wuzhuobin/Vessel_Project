@@ -47,10 +47,10 @@ void IADEOverlay::updatedOverlay()
 	cout << "3" << endl;
 	updateMeasurement3D();
 	cout << "3" << endl;
-	cout << "2" << endl;
-	for( int i=m_data->GetExtent()[4]; i <= m_data->GetExtent()[5]; ++i)
-		updateMeasurement2D(i);
-	cout << "2" << endl;
+	//cout << "2" << endl;
+	//for( int i=m_data->GetExtent()[4]; i <= m_data->GetExtent()[5]; ++i)
+	//	updateMeasurement2D(i);
+	//cout << "2" << endl;
 
 }
 

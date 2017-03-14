@@ -72,18 +72,22 @@ void QInteractorStyleLumenSeedsPlacer::SetCurrentFocalPointWithImageCoordinate(i
 
 void QInteractorStyleLumenSeedsPlacer::UpdateTargetViewer()
 {
-	ui->comboBoxTargeImage->clear();
-	m_listOfModalityNames.clear();
+	QStringList listOfModalityName;
 	for (list<AbstractInteractorStyle*>::const_iterator cit = m_abstractInteractorStyles.cbegin();
 		cit != m_abstractInteractorStyles.cend(); ++cit) {
 		QInteractorStyleLumenSeedsPlacer* _style = dynamic_cast<QInteractorStyleLumenSeedsPlacer*>(*cit);
 		if (_style && _style->GetCustomEnabled()) {
-			m_listOfModalityNames.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
+			listOfModalityName.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
 		}
 	}
-	m_listOfModalityNames.removeDuplicates();
-	for (int i = 0; i < m_listOfModalityNames.size(); ++i) {
-		ui->comboBoxTargeImage->addItem(m_listOfModalityNames[i]);
+	listOfModalityName.removeDuplicates();
+	if (m_listOfModalityNames != listOfModalityName)
+	{
+		m_listOfModalityNames = listOfModalityName;
+		ui->comboBoxTargeImage->clear();
+		for (int i = 0; i < m_listOfModalityNames.size(); ++i) {
+			ui->comboBoxTargeImage->addItem(m_listOfModalityNames[i]);
+		}
 	}
 }
 
@@ -461,6 +465,7 @@ void QInteractorStyleLumenSeedsPlacer::OnKeyPress()
 void QInteractorStyleLumenSeedsPlacer::enterEvent(QEvent * event)
 {
 	QWidget::enterEvent(event);
+	qDebug() << "Enter";
 	UpdateTargetViewer();
 }
 

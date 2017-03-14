@@ -301,6 +301,8 @@ void InteractorStylePolygonDraw::FillPolygon(
 						(*cit)->GetPoints()->GetData()->GetVoidPointer(0)),
 							(*cit)->GetPoints()->GetBounds(), normalVector)) {
 						fillPoints->InsertNextPoint(p);
+						unsigned char * pixel = static_cast<unsigned char *>(GetImageViewer()->GetInputLayer()->GetScalarPointer(p[0], p[1], p[2]));
+						*pixel = label;
 					}
 				}
 			}
@@ -366,6 +368,8 @@ void InteractorStylePolygonDraw::FillPolygon(
 							(*cit)->GetPoints()->GetBounds(), normalVector)) {
 						p[GetSliceOrientation()] = slice;
 						fillPoints->InsertNextPoint(p[0], p[1], p[2]);
+						unsigned char * pixel = static_cast<unsigned char *>(GetImageViewer()->GetInputLayer()->GetScalarPointer(p[0], p[1], p[2]));
+						*pixel = label;
 					}
 				}
 			}
