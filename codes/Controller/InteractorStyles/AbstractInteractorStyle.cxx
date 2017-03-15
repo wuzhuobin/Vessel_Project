@@ -16,11 +16,21 @@ Copyright (C) 2016
 
 #include "AbstractInteractorStyle.h"
 
+#include <vtkCallbackCommand.h>
+
 std::list<AbstractInteractorStyle*> AbstractInteractorStyle::m_abstractInteractorStyles;
+
+
 
 void AbstractInteractorStyle::SetCustomEnabled(bool flag)
 {
 	m_customFlag = flag;
+	if (flag && m_viewer) {
+		m_viewer->AddObserver(vtkCommand::UpdateDataEvent, callback);
+	}
+	else if(m_viewer){
+		m_viewer->RemoveObserver(callback);
+	}
 }
 
 bool AbstractInteractorStyle::GetCustomEnabled()
@@ -45,10 +55,21 @@ void AbstractInteractorStyle::SetViewer(vtkObject * viewer)
 
 AbstractInteractorStyle::AbstractInteractorStyle() {
 	m_abstractInteractorStyles.push_back(this);
+
+	callback = vtkCallbackCommand::New();
+	callback->SetClientData(this);
+	callback->SetCallback([](vtkObject* caller, unsigned long id, void* clientData, void*) {
+		reinterpret_cast<AbstractInteractorStyle*>(clientData)->CustomEnabledOff();
+		reinterpret_cast<AbstractInteractorStyle*>(clientData)->CustomEnabledOn();
+		cout << caller->GetClassName() << endl;
+	});
 }
 
 AbstractInteractorStyle::~AbstractInteractorStyle() {
+	m_viewer = nullptr;
 	m_abstractInteractorStyles.remove(this);
+	callback->Delete();
+	callback = nullptr;
 }
 
 void AbstractInteractorStyle::OnLeftButtonDown()

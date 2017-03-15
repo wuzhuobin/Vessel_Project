@@ -40,7 +40,7 @@ AbstractInteractorStyleImage::~AbstractInteractorStyleImage()
 
 vtkImageViewer2 * AbstractInteractorStyleImage::GetVtkImageViewer2()
 {
-	return vtkImageViewer2::SafeDownCast(this->m_viewer);
+	return reinterpret_cast<vtkImageViewer2*>(this->m_viewer);
 }
 
 void AbstractInteractorStyleImage::SetCurrentSlice(int slice)
@@ -213,6 +213,9 @@ void AbstractInteractorStyleImage::OnMiddleDoubleClick()
 void AbstractInteractorStyleImage::OnMouseMove()
 {
 	vtkInteractorStyleTrackballCamera::OnMouseMove();
+	if (m_rightFunctioning) {
+		SynchronalZooming();
+	}
 }
 
 void AbstractInteractorStyleImage::OnChar()

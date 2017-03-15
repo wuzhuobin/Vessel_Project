@@ -32,7 +32,7 @@ vtkStandardNewMacro(AbstractInteractorStyleSurface);
 
 SurfaceViewer * AbstractInteractorStyleSurface::GetSurfaceViewer()
 {
-	return SurfaceViewer::SafeDownCast(m_viewer);
+	return reinterpret_cast<SurfaceViewer*>(m_viewer);
 }
 
 AbstractInteractorStyleSurface::AbstractInteractorStyleSurface() : vtkInteractorStyleTrackballCamera()

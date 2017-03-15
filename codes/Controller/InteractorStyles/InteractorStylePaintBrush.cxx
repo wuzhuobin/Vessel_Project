@@ -240,8 +240,8 @@ void InteractorStylePaintBrush::OnLeave()
 
 void InteractorStylePaintBrush::OnMouseMove()
 {
-	if (!this->m_customFlag)
-		this->SetCustomEnabled(true);
+	//if (!this->m_customFlag)
+	//	this->SetCustomEnabled(true);
 
 	if (m_leftFunctioning == true) {
 		// if paint is in eraser mode, the left click will also eraser the painting 
@@ -261,6 +261,7 @@ void InteractorStylePaintBrush::OnMouseMove()
 
 void InteractorStylePaintBrush::SetCustomEnabled(bool b)
 {
+	AbstractNavigation::SetCustomEnabled(b);
 	if (b)
 	{
 		m_retangleRep = vtkBorderRepresentation::New();

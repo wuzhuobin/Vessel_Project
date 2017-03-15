@@ -6,6 +6,8 @@
 #include "ui_ViewerWidget.h"
 #include "ViewerWidget.h"
 #include "ModuleWidget.h"
+#include "ui_QAbstractNavigation.h"
+#include "MeasurementWidget.h"
 
 
 #include <qdebug.h>
@@ -190,6 +192,9 @@ Core::Core(QObject * parent)
 	connect(mainWindow.getModuleWidget()->getUi()->labelComboBox, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(slotUpdateOpacity(int)));
 
+	// Measurement 
+	//connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
+	//	mainWindow.getMeasurementWidget(), SLOT(slotUpdate2DMeasurements()));
 
 	mainWindow.show();
 }
@@ -224,11 +229,23 @@ void Core::slotIOManagerToImageManager()
 	// set input to image viewer
 	ioManager.slotInitializeOverlay();
 
+
 	// update selectImgMenus 
 	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
 		mainWindow.setSelectImgMenuVisible(i, imageManager.getImage(i));
 	}
 	mainWindow.initialization();
+	// initialization
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		imageViewers[i]->ResetDisplayExtent();
+	}
+	const int* extent = imageViewers[DEFAULT_IMAGE]->GetDisplayExtent();
+	imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->SetCurrentFocalPointWithImageCoordinate(
+		(extent[1] - extent[0])*0.5,
+		(extent[3] - extent[2])*0.5,
+		(extent[5] - extent[4])*0.5
+	);
+
 	// clear the memory later, sometimes it will clear too early
 	// make no different, if it has not been clear
 	//ioManager.clearListOfItkImages();
@@ -241,14 +258,24 @@ void Core::slotOverlayToImageManager()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		slotUpdateImageViewersToCurrent(i);
 	}
+
+
+
+
 	// clear the memory later, sometimes it will clear too early
 	// make no different, if it has not been clear
 	//ioManager.clearOverlay();
 }
 
-void Core::slotCurvedToImageManager()
+void Core::slotUpdateMeasurements()
 {
+	IADEOverlay* overlay = dynamic_cast<IADEOverlay*>(sender());
+	if (overlay) {
+		mainWindow.getMeasurementWidget()->slotUpdate2DMeasurements(overlay->Measurements2D[overlay->currentSlice].data());
+		mainWindow.getMeasurementWidget()->slotUpdate3DMeasurements(overlay->Measurements3D);
+	}
 }
+
 
 void Core::slotNavigation()
 {
@@ -392,17 +419,39 @@ void Core::slotChangeSliceOrientationToXY(int viewer)
 
 void Core::slotUpdateImageViewersToCurrent(int viewer)
 {
+
 	if (currentCurved[viewer]) {
 		imageViewers[viewer]->SetInputDataLayer(imageManager.getCurvedIADEOverlay()->getData());
 		imageViewers[viewer]->SetInputData(imageManager.getCurvedImage(currentImage[viewer]));
+		// Measurement 
+		// tmp fix
+		disconnect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
+			imageManager.getIADEOverlay(), SLOT(SetCurrentSlice(int)));
+		disconnect(imageManager.getIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
+			this, SLOT(slotUpdateMeasurements()));
+		connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
+			imageManager.getCurvedIADEOverlay(), SLOT(SetCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+		connect(imageManager.getCurvedIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
+			this, SLOT(slotUpdateMeasurements()), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
 	}
 	else
 	{
 		imageViewers[viewer]->SetInputDataLayer(imageManager.getIADEOverlay()->getData());
 		imageViewers[viewer]->SetInputData(imageManager.getImage(currentImage[viewer]));
+		// Measurement 
+		// tmp fix
+		disconnect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
+			imageManager.getCurvedIADEOverlay(), SLOT(SetCurrentSlice(int)));
+		disconnect(imageManager.getCurvedIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
+			this, SLOT(slotUpdateMeasurements()));
+		connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
+			imageManager.getIADEOverlay(), SLOT(SetCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+		connect(imageManager.getIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
+			this, SLOT(slotUpdateMeasurements()), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+
 	}
 	imageViewers[viewer]->InitializeHeader(imageManager.getModalityName(currentImage[viewer]).toStdString());
-	imageViewers[viewer]->GetRenderWindow()->SetWindowName(imageManager.getModalityName(currentImage[viewer]).toStdString().c_str());
+	//imageViewers[viewer]->GetRenderWindow()->SetWindowName(imageManager.getModalityName(currentImage[viewer]).toStdString().c_str());
 	imageViewers[viewer]->SetLookupTable(imageManager.getIADEOverlay()->getLookupTable());
 	imageViewers[viewer]->SetSliceOrientation(currentSliceOrientation[viewer]);
 	imageViewers[viewer]->Render();
@@ -412,10 +461,10 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 	mainWindow.getViewerWidget(viewer)->setWindowTitle(imageManager.getModalityName(currentImage[viewer]));
 
 	// tmp fix
-	imageInteractorStyle[viewer]->GetNavigation()->SetCustomEnabled(
-		!imageInteractorStyle[viewer]->GetNavigation()->GetCustomEnabled());
-	imageInteractorStyle[viewer]->GetNavigation()->SetCustomEnabled(
-		!imageInteractorStyle[viewer]->GetNavigation()->GetCustomEnabled());
+	//imageInteractorStyle[viewer]->GetNavigation()->SetCustomEnabled(
+	//	!imageInteractorStyle[viewer]->GetNavigation()->GetCustomEnabled());
+	//imageInteractorStyle[viewer]->GetNavigation()->SetCustomEnabled(
+	//	!imageInteractorStyle[viewer]->GetNavigation()->GetCustomEnabled());
 }
 
 void Core::slotMultiPlanarView()

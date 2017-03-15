@@ -32,36 +32,11 @@ QSETUP_UI_SRC(QInteractorStyleLumenSeedsPlacer);
 QList<int*> QInteractorStyleLumenSeedsPlacer::m_lumenSeeds;
 
 using namespace std;
-//class UpdateTargetViewerCallback: public vtkCommand
-//{
-//public:
-//	static UpdateTargetViewerCallback* New() { return new UpdateTargetViewerCallback; }
-//
-//	virtual void Execute(vtkObject *caller, unsigned long eventId,
-//		void *callData) {
-//		self->UpdateTargetViewer();
-//	}
-//	QInteractorStyleLumenSeedsPlacer* self = nullptr;
-//};
 
 void QInteractorStyleLumenSeedsPlacer::SetCustomEnabled(bool flag)
 {
 	InteractorStyleSeedsPlacer::SetCustomEnabled(flag);
 	uniqueInvoke(flag);
-
-
-	//if (flag) {
-	//	callback = UpdateTargetViewerCallback::New();
-	//	callback->self = this;
-	//	GetImageViewer()->GetRenderWindow()->AddObserver(vtkCommand::RenderEvent, callback);
-	//}
-	//else
-	//{
-	//	GetImageViewer()->GetRenderWindow()->RemoveObserver(callback);
-	//	callback->Delete();
-	//}
-
-
 }
 
 void QInteractorStyleLumenSeedsPlacer::SetCurrentFocalPointWithImageCoordinate(int i, int j, int k)
@@ -72,23 +47,23 @@ void QInteractorStyleLumenSeedsPlacer::SetCurrentFocalPointWithImageCoordinate(i
 
 void QInteractorStyleLumenSeedsPlacer::UpdateTargetViewer()
 {
-	QStringList listOfModalityName;
+	//QStringList listOfModalityName;
+	ui->comboBoxTargeImage->clear();
+	m_listOfModalityNames.clear();
 	for (list<AbstractInteractorStyle*>::const_iterator cit = m_abstractInteractorStyles.cbegin();
 		cit != m_abstractInteractorStyles.cend(); ++cit) {
 		QInteractorStyleLumenSeedsPlacer* _style = dynamic_cast<QInteractorStyleLumenSeedsPlacer*>(*cit);
 		if (_style && _style->GetCustomEnabled()) {
-			listOfModalityName.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
+			m_listOfModalityNames.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
 		}
 	}
-	listOfModalityName.removeDuplicates();
-	if (m_listOfModalityNames != listOfModalityName)
-	{
-		m_listOfModalityNames = listOfModalityName;
-		ui->comboBoxTargeImage->clear();
+	m_listOfModalityNames.removeDuplicates();
+	//if (m_listOfModalityNames != listOfModalityName)
+	//{
 		for (int i = 0; i < m_listOfModalityNames.size(); ++i) {
 			ui->comboBoxTargeImage->addItem(m_listOfModalityNames[i]);
 		}
-	}
+	//}
 }
 
 void QInteractorStyleLumenSeedsPlacer::UpdateWidgetToSeeds(int * newImagePos, int* oldImagePos)
@@ -416,39 +391,6 @@ QInteractorStyleLumenSeedsPlacer::~QInteractorStyleLumenSeedsPlacer()
 	QDELETE_UI();
 
 }
-//
-//void QInteractorStyleLumenSeedsPlacer::uniqueInvoke(bool flag)
-//{
-//	QAbstractNavigation::uniqueInvoke(flag);
-//
-//	if (flag && flag != initializationFlag) {
-//		// turn on codes
-//
-//		connect(QAbstractNavigation::getUi()->sliceSpinBoxX, SIGNAL(valueChanged(int)),
-//			this, SLOT(slotChangeSlice()),
-//			static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
-//		connect(QAbstractNavigation::getUi()->sliceSpinBoxY, SIGNAL(valueChanged(int)),
-//			this, SLOT(slotChangeSlice()),
-//			static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
-//		connect(QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-//			this, SLOT(slotChangeSlice()),
-//			static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
-//	}
-//	// turn off
-//	if (!flag && flag != initializationFlag) {
-//		// turn off codes
-//		disconnect(QAbstractNavigation::getUi()->sliceSpinBoxX, SIGNAL(valueChanged(int)),
-//			this, SLOT(slotChangeSlice()));
-//		disconnect(QAbstractNavigation::getUi()->sliceSpinBoxY, SIGNAL(valueChanged(int)),
-//			this, SLOT(slotChangeSlice()));
-//		disconnect(QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-//			this, SLOT(slotChangeSlice()));
-//	}
-//	if (flag != initializationFlag) {
-//
-//	}
-//	initializationFlag = flag;
-//}
 
 void QInteractorStyleLumenSeedsPlacer::OnKeyPress()
 {
@@ -466,7 +408,7 @@ void QInteractorStyleLumenSeedsPlacer::enterEvent(QEvent * event)
 {
 	QWidget::enterEvent(event);
 	qDebug() << "Enter";
-	UpdateTargetViewer();
+	//UpdateTargetViewer();
 }
 
 void QInteractorStyleLumenSeedsPlacer::uniqueInitialization()

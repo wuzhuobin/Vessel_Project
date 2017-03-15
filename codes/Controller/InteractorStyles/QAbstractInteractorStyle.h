@@ -22,8 +22,8 @@ namespace Ui { class QAbstractInteractorStyle; }
 #ifndef QSETUP_UI_HEAD(STYLE_NAME)
 #define QSETUP_UI_HEAD(STYLE_NAME) \
 	public:\
-	protected:\
 		Ui::##STYLE_NAME* getUi();\
+	protected:\
 	private:\
 		virtual bool getInitializationFlag();\
 		virtual void setInitializationFlag(bool flag); \

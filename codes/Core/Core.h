@@ -39,7 +39,7 @@ private slots:
 	//	QList<itk::GDCMImageIO::Pointer>* dicoms);
 	void slotIOManagerToImageManager();
 	void slotOverlayToImageManager();
-	void slotCurvedToImageManager();
+	void slotUpdateMeasurements();
 	// Image interactorstyle
 	void slotNavigation();
 	void slotWindowLevel();

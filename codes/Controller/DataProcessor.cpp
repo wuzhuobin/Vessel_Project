@@ -353,7 +353,7 @@ void DataProcessor::initializeCurved()
 	curvedMPRImageFilter->SetInplaneOutputSize(outputSize, outputSize);
 	curvedMPRImageFilter->SetReslicingBackgroundLevel(0.0);
 	curvedMPRImageFilter->Update();
-	
+	curvedMPRImageFilter->GetOutput()->Print(cout);
 
 	imageManager->setCurvedOverlay(curvedMPRImageFilter->GetOutput());
 

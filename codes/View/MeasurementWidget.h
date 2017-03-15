@@ -20,8 +20,8 @@ public:
 	Ui::MeasurementWidget* getUi();
 
 public slots:
-	void slotUpdate3DMeasurements();
-	void slotUpdate2DMeasurements();
+	void slotUpdate3DMeasurements(double* Measurements3D);
+	void slotUpdate2DMeasurements(double* Measurements2D);
 	void slotUpdate2DMeasurements(int slice);
 	void slotUpdateImformation();
 	void slotReportGetInput();

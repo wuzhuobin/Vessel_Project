@@ -26,7 +26,6 @@ PURPOSE.  See the above copyright notice for more information.
 #include <vtkRenderWindowInteractor.h>
 #include <vtkInteractorStyleImage.h>
 #include <vtkCommand.h>
-//#include <vtkCallbackCommand.h>
 
 #include <vtkTextActor.h>
 #include <vtkImageMapToWindowLevelColors.h>
@@ -43,7 +42,6 @@ PURPOSE.  See the above copyright notice for more information.
 #include <algorithm>
 
 
-//#include <QList>
 using std::string;
 using std::min;
 using std::max;
@@ -70,8 +68,7 @@ public:
 };
 
 //----------------------------------------------------------------------------
-ImageViewer::ImageViewer(/*QObject* parent*/)
-	//:QObject(parent)
+ImageViewer::ImageViewer()
 {
 	this->ImageActor->VisibilityOff();
 	this->OverlayActor = vtkImageActor::New();
@@ -102,39 +99,14 @@ ImageViewer::ImageViewer(/*QObject* parent*/)
 	if (this->CursorActor && this->CursorMapper) {
 		this->CursorActor->SetMapper(this->CursorMapper);
 	}
-	//AnnotationRenderer
-	//AnnotationRenderer->SetLayer(1);
-
-	//RenderWindow->SetNumberOfLayers(2);
 
 	this->InstallPipeline();
 	UpdateOrientation();
-	//this->OverlayActor->SetVisibility(false);
-	// Error blocking fot windowLevel
-	// temporary fixation
-	//vtkSmartPointer<vtkCallbackCommand> windowLevelErrorBlocker =
-	//	vtkSmartPointer<vtkCallbackCommand>::New();
-	//this->WindowLevel->GetExecutive()->AddObserver(
-	//	vtkCommand::ErrorEvent, windowLevelErrorBlocker);
-	//this->OverlayWindowLevel->GetExecutive()->AddObserver(
-	//	vtkCommand::ErrorEvent, windowLevelErrorBlocker);
-	//this->WindowLevel->GetInputAlgorithm()->AddObserver(
-	//	vtkCommand::ErrorEvent, windowLevelErrorBlocker);
-	//this->OverlayWindowLevel->GetInputAlgorithm()->AddObserver(
-	//	vtkCommand::ErrorEvent, windowLevelErrorBlocker);
 }
 
 //----------------------------------------------------------------------------
 ImageViewer::~ImageViewer()
 {
-	//if (this->ImageExtractVOI) {
-	//	this->ImageExtractVOI->Delete();
-	//	this->ImageExtractVOI = NULL;
-	//}
-	//if (this->OverlayExtractVOI) {
-	//	this->OverlayExtractVOI->Delete();
-	//	this->OverlayExtractVOI = NULL;
-	//}
 	if (this->OverlayWindowLevel) {
 		this->OverlayWindowLevel->Delete();
 		this->OverlayWindowLevel = NULL;
@@ -143,10 +115,6 @@ ImageViewer::~ImageViewer()
 		this->OverlayActor->Delete();
 		this->OverlayActor = NULL;
 	}
-	//if (this->AnnotationRenderer != NULL) {
-	//	this->AnnotationRenderer->Delete();
-	//	this->AnnotationRenderer = NULL;
-	//}
 	// OrientationTextActor
 	if (IntTextActor != NULL) {
 		this->IntTextActor->Delete();
@@ -179,9 +147,9 @@ ImageViewer::~ImageViewer()
 
 }
 
-void ImageViewer::UpdateDisplayExtent(int * displayExtent)
+void ImageViewer::SetDisplayExtent(int * displayExtent)
 {
-	SetDisplayExtent(displayExtent);
+	memcpy(DisplayExtent, displayExtent, sizeof(DisplayExtent));
 	UpdateDisplayExtent();
 }
 
@@ -196,20 +164,6 @@ void ImageViewer::UpdateDisplayExtent()
 
 	input->UpdateInformation();
 	vtkInformation* outInfo = input->GetOutputInformation(0);
-	//int *DisplayExtent = outInfo->Get(
-	//	vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
-	//DisplayExtent[0] = max(DisplayExtent[0], DisplayExtent[0]);
-	//DisplayExtent[2] = max(DisplayExtent[2], DisplayExtent[2]);
-	//DisplayExtent[4] = max(DisplayExtent[4], DisplayExtent[4]);
-	//DisplayExtent[1] = min(DisplayExtent[1], DisplayExtent[1]);
-	//DisplayExtent[3] = min(DisplayExtent[3], DisplayExtent[3]);
-	//DisplayExtent[5] = min(DisplayExtent[5], DisplayExtent[5]);
-	//if (FirstRender) {
-	//	memcpy(DisplayExtent, DisplayExtent, sizeof(DisplayExtent));
-	//}
-	//else {
-	//	memcpy(DisplayExtent, DisplayExtent, sizeof(DisplayExtent));
-	//}
 
 	// Is the slice in range ? If not, fix it
 
@@ -286,25 +240,21 @@ void ImageViewer::ResetDisplayExtent()
 	vtkInformation* outInfo = input->GetOutputInformation(0);
 	int *ResetExtent = outInfo->Get(
 		vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
-	memcpy(DisplayExtent, ResetExtent, sizeof(DisplayExtent));
-	UpdateDisplayExtent();
+	SetDisplayExtent(ResetExtent);
 }
 
 void ImageViewer::SetColorLevel(double level)
 {
-	if (GetColorLevel() == level)
-		return;
-	vtkImageViewer2::SetColorLevel(level);
-	//emit ColorLevelChanged(level);
-
+	if (level > 0) {
+		vtkImageViewer2::SetColorLevel(level);
+	}
 }
 
 void ImageViewer::SetColorWindow(double window)
 {
-	if (GetColorWindow() == window)
-		return;
-	vtkImageViewer2::SetColorWindow(window);
-	//emit ColorWindowChanged(window);
+	if (window > 0) {
+		vtkImageViewer2::SetColorWindow(window);
+	}
 }
 
 //----------------------------------------------------------------------------
@@ -420,6 +370,7 @@ void ImageViewer::Render()
 {
 	if (this->FirstRender)
 	{
+		this->ResetDisplayExtent();
 		this->InitializeOrientationText();
 		this->InitializeIntensityText("");
 		this->InitializeHeader(string());
@@ -427,7 +378,6 @@ void ImageViewer::Render()
 
 	vtkImageViewer2::Render();
 
-	//ResizeHeaderAndOrientationText();
 }
 //----------------------------------------------------------------------------
 void ImageViewer::SetInputData(vtkImageData *in)
@@ -435,37 +385,33 @@ void ImageViewer::SetInputData(vtkImageData *in)
 	// when there is a new input, Update the member DisplayExtent 
 	this->ImageActor->VisibilityOn();
 	vtkImageViewer2::SetInputData(in);
-	ResetDisplayExtent();
+	//ResetDisplayExtent();
 	//Color Map
 	double* range = in->GetScalarRange();
 	this->SetColorWindow(range[1] - range[0]);
 	this->SetColorLevel((range[1] + range[0])*0.5);
 
-
-	//DefaultWindowLevel[0] = this->GetColorWindow();
-	//DefaultWindowLevel[1] = this->GetColorLevel();
+	this->InvokeEvent(vtkCommand::UpdateDataEvent);
 }
 
 void ImageViewer::SetInputDataLayer(vtkImageData *in)
 {
-	//OverlayExtractVOI->SetInputData(in);
-	//OverlayExtractVOI->SetVOI(in->GetExtent());
-	//OverlayExtractVOI->Update();
 	this->OverlayActor->VisibilityOn();
 	OverlayWindowLevel->SetInputData(in);
 	// in case when LookupTable has not been set
-	//if (this->LookupTable != NULL) {
-	//	int num = this->LookupTable->GetNumberOfTableValues();
-	//	OverlayWindowLevel->SetWindow(num - 1 );
-	//	OverlayWindowLevel->SetLevel((num - 1)*0.5);
-	//}
 	//this->UpdateDisplayExtent();
-
+	this->InvokeEvent(vtkCommand::UpdateDataEvent);
 }
 //----------------------------------------------------------------------------
 vtkImageData* ImageViewer::GetInputLayer()
 {
 	return vtkImageData::SafeDownCast(this->OverlayWindowLevel->GetInput());
+}
+
+void ImageViewer::SetSliceOrientation(int orientation)
+{
+	vtkImageViewer2::SetSliceOrientation(orientation);
+	this->InvokeEvent(vtkCommand::UpdateDataEvent);
 }
 //----------------------------------------------------------------------------
 
@@ -520,28 +466,6 @@ void ImageViewer::InitializeCursorBoundary()
 	Cursor3D->Update();
 }
 
-//void ImageViewer::SetAnnotationRenderer(vtkRenderer * arg)
-//{
-//	if (this->AnnotationRenderer == arg) {
-//		return;
-//	}
-//	this->UnInstallPipeline();
-//
-//	if (this->AnnotationRenderer)
-//	{
-//		this->AnnotationRenderer->UnRegister(this);
-//	}
-//
-//	this->AnnotationRenderer = arg;
-//
-//	if (this->AnnotationRenderer)
-//	{
-//		this->AnnotationRenderer->Register(this);
-//	}
-//
-//	this->InstallPipeline();
-//	this->UpdateOrientation();
-//}
 
 vtkLookupTable* ImageViewer::GetLookupTable()
 {
@@ -601,7 +525,6 @@ void ImageViewer::SetFocalPointWithImageCoordinate(int i, int j, int k)
 		(GetInput()->GetScalarComponentAsFloat(i, j, k, 0))));
 	this->Render();
 
-	//emit FocalPointWithImageCoordinateChanged(i, j, k);
 }
 
 void ImageViewer::GetFocalPointWithImageCoordinate(int * coordinate)
@@ -661,11 +584,6 @@ bool ImageViewer::GetAllBlack()
 	return AllBlackFlag;
 }
 
-//double* ImageViewer::GetDefaultWindowLevel()
-//{
-//	return DefaultWindowLevel;
-//}
-
 void ImageViewer::InitializeHeader(string file)
 {
 
@@ -679,18 +597,15 @@ void ImageViewer::InitializeHeader(string file)
 		Renderer->AddActor2D(HeaderActor);
 	}
 
-	if (GetInput() != NULL)
+	if (GetInput() != NULL) {
 		HeaderActor->SetInput(file.c_str());
+		RenderWindow->SetWindowName(file.c_str());
+	}
 	else {
 		HeaderActor->SetInput("");
 		cout << "Error in setting text, file not found" << endl;
 	}
 }
-
-//void ImageViewer::InitializeHeader(QString file)
-//{
-//	InitializeHeader(file.toStdString());
-//}
 
 void ImageViewer::InitializeIntensityText(string IntText)
 {
@@ -780,15 +695,11 @@ void ImageViewer::SetSlice(int s)
 	if (Slice == s)
 		return;
 	vtkImageViewer2::SetSlice(s);
-	//emit SliceChanged(s);
 }
 
 void ImageViewer::SetupInteractor(vtkRenderWindowInteractor * arg)
 {
 	vtkImageViewer2::SetupInteractor(arg);
-	//if (this->AnnotationRenderer) {
-	//	this->AnnotationRenderer->SetActiveCamera(this->Renderer->GetActiveCamera());
-	//}
 }
 
 void ImageViewer::SetEnableDepthPeeling(bool flag)

@@ -4,6 +4,8 @@
 #include "ImageViewer.h"
 
 #include <vtkObjectFactory.h>
+#include <vtkCallbackCommand.h>
+//#include <vtkImageData.h>
 
 vtkStandardNewMacro(QInteractorStyleNavigation);
 QSETUP_UI_SRC(QInteractorStyleNavigation);
@@ -14,12 +16,20 @@ void QInteractorStyleNavigation::SetCustomEnabled(bool flag)
 {
 	InteractorStyleNavigation::SetCustomEnabled(flag);
 	uniqueInvoke(flag);
+	if (flag) {
+		SetExtentRange(GetImageViewer()->GetDisplayExtent());
+	}
 }
 
 void QInteractorStyleNavigation::SetCurrentFocalPointWithImageCoordinate(int i, int j, int k)
 {
 	InteractorStyleNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
 	QAbstractNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
+}
+
+void QInteractorStyleNavigation::SetViewer(vtkObject * viewer)
+{
+	InteractorStyleNavigation::SetViewer(viewer);
 }
 
 QInteractorStyleNavigation::QInteractorStyleNavigation(int uiType, QWidget * parent)
@@ -34,28 +44,30 @@ QInteractorStyleNavigation::~QInteractorStyleNavigation() {
 void QInteractorStyleNavigation::uniqueEnable()
 {
 	QAbstractNavigation::uniqueEnable();
-	// checking whether extent is equal to the old extent
-	// if different, update the maximum and minimum of the ui
-	const int* extent = GetImageViewer()->GetDisplayExtent();
-	for (int i = 0; i < 6; ++i) {
-		if (extent[i] != m_oldExtent[i]) {
-			memcpy(m_oldExtent, extent, sizeof(m_oldExtent));
+}
 
-			QAbstractNavigation::getUi()->sliceSpinBoxX->setMinimum(extent[0]);
-			QAbstractNavigation::getUi()->sliceSpinBoxY->setMinimum(extent[2]);
-			QAbstractNavigation::getUi()->sliceSpinBoxZ->setMinimum(extent[4]);
-			QAbstractNavigation::getUi()->sliceSpinBoxX->setMaximum(extent[1]);
-			QAbstractNavigation::getUi()->sliceSpinBoxY->setMaximum(extent[3]);
-			QAbstractNavigation::getUi()->sliceSpinBoxZ->setMaximum(extent[5]);
+void QInteractorStyleNavigation::initialization()
+{
+	//callback = vtkCallbackCommand::New();
+	//callback->SetClientData(this);
+	//callback->SetCallback([](vtkObject* caller, unsigned long, void* clientData, void*) {
+	//	ImageViewer* viewer = reinterpret_cast<ImageViewer*>(caller);
+	//	QInteractorStyleNavigation* self = reinterpret_cast<QInteractorStyleNavigation*>(clientData);
+	//	if (viewer->GetInput()) {
+	//		cout << "extent" << endl;
+	//		cout << viewer->GetDisplayExtent()[0] << endl;
+	//		cout << viewer->GetDisplayExtent()[1] << endl;
+	//		cout << viewer->GetDisplayExtent()[2] << endl;
+	//		cout << viewer->GetDisplayExtent()[3] << endl;
+	//		cout << viewer->GetDisplayExtent()[4] << endl;
+	//		cout << viewer->GetDisplayExtent()[5] << endl;
+	//		self->SetExtentRange(viewer->GetDisplayExtent());
+	//	}
 
-			QAbstractNavigation::getUi()->sliceHorizontalSliderX->setMinimum(extent[0]);
-			QAbstractNavigation::getUi()->sliceHorizontalSliderY->setMinimum(extent[2]);
-			QAbstractNavigation::getUi()->sliceHorizontalSliderZ->setMinimum(extent[4]);
-			QAbstractNavigation::getUi()->sliceHorizontalSliderX->setMaximum(extent[1]);
-			QAbstractNavigation::getUi()->sliceHorizontalSliderY->setMaximum(extent[3]);
-			QAbstractNavigation::getUi()->sliceHorizontalSliderZ->setMaximum(extent[5]);
-			break;
-		}
-	}
-	
+	//});
+}
+
+void QInteractorStyleNavigation::destroy()
+{
+	//callback->Delete();
 }

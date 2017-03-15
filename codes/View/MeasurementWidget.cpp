@@ -70,26 +70,25 @@ Ui::MeasurementWidget* MeasurementWidget::getUi()
 //	m->Update();
 //}
 
-void MeasurementWidget::slotUpdate3DMeasurements()
+void MeasurementWidget::slotUpdate3DMeasurements(double* Measurements3D)
 {
-	if (this->isTopLevel())
-	{
-		//m_mainWnd->m_core->GetMyImageManager()->getOverlay()->Measure3D();
-		//ui->measurement3DTableWidget->clearContents();
-		//QStringList volumes = m_mainWnd->GetCore()->GetMyImageManager()->
-		//	getOverlay()->Get3DMeasurementsStrings();
-		//int numOfVolumes = m_mainWnd->GetCore()->GetMyImageManager()->getOverlay()->GetLookupTable()->
-		//	GetNumberOfColors();
-		//for (int i = 0; i < numOfVolumes; ++i) {
-		//	ui->measurement3DTableWidget->setItem(i, 0,
-		//		new QTableWidgetItem(volumes[i]));
-		//}
+	//m_mainWnd->m_core->GetMyImageManager()->getOverlay()->Measure3D();
+	ui->measurement3DTableWidget->clearContents();
+	for (int i = 0; i < 7; ++i) {
+		ui->measurement3DTableWidget->setItem(i, 0,
+			new QTableWidgetItem(QString::number(Measurements3D[i])));
 	}
 }
 
-void MeasurementWidget::slotUpdate2DMeasurements()
+void MeasurementWidget::slotUpdate2DMeasurements(double* Measurements2D)
 {
 	//slotUpdate2DMeasurements(m_mainWnd->ui->zSpinBox->value());
+	//m_mainWnd->m_core->GetMyImageManager()->getOverlay()->Measure3D();
+	ui->measurement2DTableWidget->clearContents();
+	for (int i = 0; i < 3; ++i) {
+		ui->measurement2DTableWidget->setItem(i, 0,
+			new QTableWidgetItem(QString::number(Measurements2D[i])));
+	}
 }
 
 void MeasurementWidget::slotUpdate2DMeasurements(int slice)

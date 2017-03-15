@@ -20,6 +20,7 @@ Copyright (C) 2016
 
 #include <list>
 class vtkObject;
+class vtkCallbackCommand;
 /**
  * Macro for iterate specified @param STYLE_NAME class to run its @param METHOD
  * saving human labor to type this iterate again!
@@ -87,6 +88,7 @@ protected:
 	static std::list<AbstractInteractorStyle*> m_abstractInteractorStyles;
 
 	vtkObject* m_viewer = nullptr;
+	vtkCallbackCommand* callback = nullptr;
 };
 
 #endif //ABSTRACT_INTERACTOR_STYLE_H

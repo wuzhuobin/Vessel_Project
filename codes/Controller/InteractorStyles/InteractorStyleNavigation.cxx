@@ -44,9 +44,6 @@ void InteractorStyleNavigation::OnMouseMove()
 		this->CalculateIndex();
 		SetCurrentFocalPointWithImageCoordinate(m_index[0], m_index[1], m_index[2]);
 	}
-	if (m_rightFunctioning) {
-		SynchronalZooming();
-	}
 }
 
 

@@ -287,6 +287,11 @@ ViewerWidget * MainWindow::getViewerWidget(unsigned int num)
 	return this->viewerWidgets[num];
 }
 
+MeasurementWidget * MainWindow::getMeasurementWidget()
+{
+	return this->measurementWidget;
+}
+
 QMenu * MainWindow::getSelectImgMenu(unsigned int i)
 {
 	return selectImgMenus[i];

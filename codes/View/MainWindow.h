@@ -59,6 +59,7 @@ public:
 	//QMainWindow* getCentralWidget();
 	ModuleWidget* getModuleWidget();
 	ViewerWidget* getViewerWidget(unsigned int num);
+	MeasurementWidget* getMeasurementWidget();
 	QMenu* getSelectImgMenu(unsigned int i);
 
 signals:

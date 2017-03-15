@@ -37,7 +37,7 @@ public:
 	vtkGetMacro(Navigation, QInteractorStyleNavigation*);
 	SetInteractorStyleMacro(Navigation);
 	CurrentStyleMacro(Navigation);
-	//vtkGetMacro(PolygonDraw, QInteractorStyleVesselSegmentation*);
+
 	vtkGetMacro(PaintBrush, QInteractorStylePaintBrush*);
 	SetInteractorStyleMacro(PaintBrush);
 	CurrentStyleMacro(PaintBrush);
@@ -53,21 +53,6 @@ public:
 	vtkGetMacro(VBDSmoker, QInteractorStyleVBDSmokerSeeds*);
 	SetInteractorStyleMacro(VBDSmoker);
 	CurrentStyleMacro(VBDSmoker);
-	//vtkGetMacro(Ruler, QInteractorStyleRuler*);
-
-
-	//SetInteractorStyleMacro(InteractorStyleTesting);
-	//SetInteractorStyleMacro(Navigation);
-	//void SetInteractorStyleToNavigation();
-	//SetInteractorStyleMacro(WindowLevel);
-	//SetInteractorStyleMacro(PolygonDraw);
-	//SetInteractorStyleMacro(Ruler);
-
-	//CurrentStyleMacro(InteractorStyleTesting);
-	//CurrentStyleMacro(Navigation);
-	//CurrentStyleMacro(WindowLevel);
-	//CurrentStyleMacro(PolygonDraw);
-	//CurrentStyleMacro(Ruler);
 
 protected:
 	IADEInteractorStyleSwitch();

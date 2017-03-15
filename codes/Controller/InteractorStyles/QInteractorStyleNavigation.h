@@ -42,6 +42,9 @@ public:
 	*/
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k) override;
 
+	virtual void SetViewer(vtkObject* viewer) override;
+
+
 protected:
 	/**
 	 * @brief	Constructor.
@@ -63,11 +66,15 @@ protected:
 	*/
 	virtual void uniqueEnable() override;
 
+	void initialization();
+	void destroy();
+
 private:
+
 	///< ui pointer.
 	Ui::QInteractorStyleNavigation* ui = nullptr;
-	///< for using in whether to update the spinbox. 
-	int m_oldExtent[6] = { -1 };
+	//vtkCallbackCommand* callback = nullptr;
+
 };
 
 #endif // !__QINTERACTOR_STYLE_NAVIGATION_H__

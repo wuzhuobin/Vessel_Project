@@ -21,6 +21,9 @@ namespace Ui {class QInteractorStyleWindowLevel;}
 * using cursor to change window level.
 */
 class QSpinBox;
+class QSlider;
+class QPushButton;
+class QLabel;
 class QInteractorStyleWindowLevel : public QAbstractNavigation,
 	public InteractorStyleWindowLevel
 {
@@ -81,14 +84,20 @@ protected:
 	virtual void uniqueCall();
 	virtual void SetWindowByViewer(double window);
 	virtual void SetLevelByViewer(double level);
+	protected slots:
+	virtual void ResetWindowLevel() override;
 
 
 private:
 	void initialization();
 	///< the pointer of the navigation ui.
 	Ui::QInteractorStyleWindowLevel *ui = nullptr;
-	QSpinBox* m_spinBoxWindowLevel;
-	QSpinBox* m_spinBoxWindowWidth;
+	QLabel* m_label = nullptr;
+	QSpinBox* m_spinBoxWindowLevel = nullptr;
+	QSpinBox* m_spinBoxWindowWidth = nullptr;
+	QSlider* m_sliderWindowLevel = nullptr;
+	QSlider* m_sliderWindowWidth = nullptr;
+	QPushButton* m_pushButtonReset = nullptr;
 };
 
 

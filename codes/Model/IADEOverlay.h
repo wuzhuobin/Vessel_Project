@@ -3,7 +3,7 @@
 
 #include "Overlay.h"
 #include <qmap.h>
-
+#include <qsharedpointer.h>
 
 
 class IADEOverlay : public Overlay 
@@ -46,16 +46,21 @@ public:
 	IADEOverlay(OverlayImageData::itkImageType::Pointer data, QObject* parent = nullptr);
 	IADEOverlay(OverlayImageData* data, QObject* parent = nullptr);
 
+
 	// total plaque, vessel wall, lumen, calcification, hemorrhage, lrnc, lm,
 	double Measurements3D[7] = { 0 };
 	// vessel wall, lumen, NMI
-	double Measurements2D[3] = { 0 };
+	//double Measurements2D[3] = { 0 };
+	int currentSlice = 0;;
+	QMap<int, QSharedPointer<double>> Measurements2D;
+	public slots:
+	virtual void updateMeasurement3D();
+	virtual void SetCurrentSlice(int slice);
+	virtual void updateMeasurement2D(int slice);
 
 protected:
 	virtual void updatedOverlay() override;
 
-	virtual void updateMeasurement3D();
-	virtual void updateMeasurement2D(int slice);
 
 };
 

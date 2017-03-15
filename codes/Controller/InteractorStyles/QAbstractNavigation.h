@@ -31,6 +31,7 @@ public:
 	 */
 	virtual void SetCurrentFocalPointWithImageCoordinate(int* ijk);
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
+	virtual void SetExtentRange(int* extent);
 public slots:
 	/**
 	 * @slot
@@ -81,6 +82,8 @@ protected:
 private:
 	///< the pointer of the navigation ui.
 	Ui::QAbstractNavigation* ui = nullptr;
+	///< for using in whether to update the spinbox. 
+	int m_oldExtent[6] = { -1 };
 };
 
 #endif // !__QABSTRACT_NAVIGATION_H__

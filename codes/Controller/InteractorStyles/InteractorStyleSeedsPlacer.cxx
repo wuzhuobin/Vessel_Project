@@ -77,6 +77,7 @@ vector<int*> InteractorStyleSeedsPlacer::m_seeds;
 
 void InteractorStyleSeedsPlacer::SetCustomEnabled(bool flag)
 {
+	AbstractNavigation::SetCustomEnabled(flag);
 	if (flag) {
 		SeedsPlacerRepresentation::SafeDownCast(m_seedRep)->GetImagePointPlacer()->SetImageActor(GetImageViewer()->GetImageActor());
 		// for some opengl error
@@ -178,13 +179,6 @@ void InteractorStyleSeedsPlacer::OnKeyPress()
 		AbstractNavigation::OnKeyPress();
 	}
 }
-
-
-
-//void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds()
-//{
-//	GenerateWidgetFromSeeds(m_seeds);
-//}
 
 void InteractorStyleSeedsPlacer::GenerateWidgetFromSeeds(const vector<int*>& seeds)
 {

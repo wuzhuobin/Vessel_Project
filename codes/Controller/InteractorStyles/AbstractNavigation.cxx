@@ -36,7 +36,7 @@ AbstractNavigation::~AbstractNavigation()
 
 ImageViewer* AbstractNavigation::GetImageViewer()
 {
-	return ImageViewer::SafeDownCast(m_viewer);
+	return reinterpret_cast<ImageViewer*>(m_viewer);
 }
 
 void AbstractNavigation::SetCurrentSlice(int slice)

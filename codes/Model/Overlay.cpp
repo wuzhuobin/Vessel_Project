@@ -69,6 +69,7 @@ int Overlay::getOpacity(int color)
 void Overlay::updatedOverlay()
 {
 	qDebug() << "Modified";
+	emit signalUpdatedOverlay();
 }
 
 void OverlayImageData::PrintSelf(ostream & os, vtkIndent indent)

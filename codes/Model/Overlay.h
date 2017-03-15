@@ -83,6 +83,8 @@ public:
 
 	int getOpacity(int color);
 	void setOpacity(int color, int opacity);
+signals:
+	void signalUpdatedOverlay();
 
 protected:
 	vtkSmartPointer<OverlayImageData> m_data;
