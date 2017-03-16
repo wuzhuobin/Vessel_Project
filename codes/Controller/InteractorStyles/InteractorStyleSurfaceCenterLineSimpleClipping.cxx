@@ -12,6 +12,7 @@
 #include <vtkThreshold.h>
 #include <vtkDataSetAttributes.h>
 #include <vtkGeometryFilter.h>
+#include <vtkCleanPolyData.h>
 
 
 #include <vtkvmtkCapPolyData.h>
@@ -98,7 +99,14 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reCli
 	//centerlinesFilter->SetEdgeArrayName("Edge");
 	//centerlinesFilter->SetEdgePCoordArrayName("PCoord");
 	centerlinesFilter->Update();
-	m_centerLine->ShallowCopy(centerlinesFilter->GetOutput());
+
+	vtkSmartPointer<vtkCleanPolyData> cleanPolyData =
+		vtkSmartPointer<vtkCleanPolyData>::New();
+	cleanPolyData->SetInputConnection(centerlinesFilter->GetOutputPort());
+	cleanPolyData->PointMergingOn();
+	cleanPolyData->Update();
+
+	m_centerLine->ShallowCopy(cleanPolyData->GetOutput());
 }
 
 void InteractorStyleSurfaceCenterLineSimpleClipping::ClipAndCap()

@@ -4,7 +4,6 @@
 #include "IADEImageManager.h"
 #include "IADEOverlay.h"
 
-#include <vtkImageResample.h>
 #include <vtkSplineFilter.h>
 
 #include <vtkvmtkCurvedMPRImageFilter.h>
@@ -318,17 +317,14 @@ void DataProcessor::initializeCurved()
 	for (int i = 0; i < imageManager->getNumOfImages(); ++i) {
 
 
+		inputImage = imageManager->getImage(i);
+		if (!inputImage) {
+			continue;
+		}
 
-
-		//vtkSmartPointer<vtkImageResample> imageResample =
-		//	vtkSmartPointer<vtkImageResample>::New();
-		//imageResample->SetInputData(inputImage);
-		//imageResample->SetOutputSpacing(outputSpacing, outputSpacing, outputSpacing);
-		//imageResample->Update();
 
 		vtkSmartPointer<vtkvmtkCurvedMPRImageFilter> curvedMPRImageFilter =
 			vtkSmartPointer<vtkvmtkCurvedMPRImageFilter>::New();
-		//curvedMPRImageFilter->SetInputConnection(imageResample->GetOutputPort());
 		curvedMPRImageFilter->SetInputData(inputImage);
 		curvedMPRImageFilter->SetCenterline(centerlineAttributes->GetOutput());
 		curvedMPRImageFilter->SetParallelTransportNormalsArrayName("Normals");

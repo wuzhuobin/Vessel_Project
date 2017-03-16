@@ -55,8 +55,8 @@ Core::Core(QObject * parent)
 	//surfaceInteractor = vtkRenderWindowInteractor::New();
 
 	surfaceViewer = SurfaceViewer::New();
-	surfaceViewer->SetRenderWindow(mainWindow.getViewerWidget(3)->getUi()->qvtkWidget2->GetRenderWindow());
-	surfaceViewer->SetupInteractor(mainWindow.getViewerWidget(3)->getUi()->qvtkWidget2->GetInteractor());
+	surfaceViewer->SetRenderWindow(mainWindow.getViewerWidget(MainWindow::NUM_OF_VIEWERS - MainWindow::NUM_OF_3D_VIEWERS)->getUi()->qvtkWidget2->GetRenderWindow());
+	surfaceViewer->SetupInteractor(mainWindow.getViewerWidget(MainWindow::NUM_OF_VIEWERS - MainWindow::NUM_OF_3D_VIEWERS)->getUi()->qvtkWidget2->GetInteractor());
 	surfaceViewer->EnableDepthPeelingOn();
 
 	//surfaceViewer->EnableDepthSortingOn();
@@ -66,7 +66,7 @@ Core::Core(QObject * parent)
 	//surfaceInteractorStyle[i]->SetInteractor(imageInteractor[i]);
 	surfaceInteractorStyle = IADEInteractorStyleSwitch3D::New();
 	surfaceInteractorStyle->SetSurfaceViewer(surfaceViewer);
-	mainWindow.getViewerWidget(3)->getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle);
+	mainWindow.getViewerWidget(MainWindow::NUM_OF_VIEWERS - MainWindow::NUM_OF_3D_VIEWERS)->getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle);
 
 	dataProcessor.imageInteractorStyle = imageInteractorStyle;
 	dataProcessor.surfaceInteractorStyle = surfaceInteractorStyle;
@@ -270,7 +270,7 @@ void Core::slotOverlayToImageManager()
 void Core::slotUpdateMeasurements()
 {
 	IADEOverlay* overlay = dynamic_cast<IADEOverlay*>(sender());
-	if (overlay) {
+	if (overlay && overlay->Measurements2D.contains(overlay->currentSlice)) {
 		mainWindow.getMeasurementWidget()->slotUpdate2DMeasurements(overlay->Measurements2D[overlay->currentSlice].data());
 		mainWindow.getMeasurementWidget()->slotUpdate3DMeasurements(overlay->Measurements3D);
 	}

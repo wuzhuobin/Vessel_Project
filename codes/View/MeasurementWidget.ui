@@ -219,12 +219,12 @@
         </row>
         <row>
          <property name="text">
-          <string>Lumen /mm^3</string>
+          <string>Vessel Wall /mm^3</string>
          </property>
         </row>
         <row>
          <property name="text">
-          <string>Vessel Wall /mm^3</string>
+          <string>Lumen /mm^3</string>
          </property>
         </row>
         <row>
