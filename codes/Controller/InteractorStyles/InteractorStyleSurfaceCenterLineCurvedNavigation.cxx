@@ -1,6 +1,6 @@
 #include "InteractorStyleSurfaceCenterLineCurvedNavigation.h"
 
-#include "SurfaceViewer.h"
+#include "CenterlineSurfaceViewer.h"
 
 #include <vtkObjectFactory.h>
 #include <vtkPointHandleRepresentation3D.h>
@@ -75,7 +75,7 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::SetCustomEnabled(bool fla
 			m_handleWidgets[i]->RemoveAllObservers();
 			m_handleWidgets[i] = nullptr;
 		}
-		m_pointLocator = nullptr;
+		//m_pointLocator = nullptr;
 		//m_surfaceViewer->GetRenderer()->RemoveActor(m_measurementText);
 		//m_imageActor = nullptr;
 	}
@@ -117,16 +117,16 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::InitializeHandleWidgets()
 
 
 
-	m_pointLocator = vtkSmartPointer<vtkKdTreePointLocator>::New();
-	m_pointLocator->SetDataSet(m_centerLine);
-	m_pointLocator->BuildLocator();
+	//m_pointLocator = vtkSmartPointer<vtkKdTreePointLocator>::New();
+	//m_pointLocator->SetDataSet(m_centerLine);
+	//m_pointLocator->BuildLocator();
 
 	vtkSmartPointer<vtkPolygonalSurfacePointPlacer> pointPlacer =
 		vtkSmartPointer<vtkPolygonalSurfacePointPlacer>::New();
-	pointPlacer->AddProp(m_centerLineActor);
+	pointPlacer->AddProp(GetCenterlineSurfaceViewer()->GetCenterlineActor());
 
 	double* worldPos =
-		m_centerLine->GetPoint(0);
+		GetCenterlineSurfaceViewer()->GetCenterline()->GetPoint(0);
 
 	for (int i = 0; i < NUM_OF_HANDLES; ++i) {
 
@@ -135,7 +135,7 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::InitializeHandleWidgets()
 		vtkSmartPointer<vtkPointHandleRepresentation3D> handleRep =
 			vtkSmartPointer<vtkPointHandleRepresentation3D>::New();
 		handleRep->SetPointPlacer(pointPlacer);
-		handleRep->SetWorldPosition(m_centerLine->GetPoint(i));
+		handleRep->SetWorldPosition(GetCenterlineSurfaceViewer()->GetCenterline()->GetPoint(i));
 
 		vtkSmartPointer<InteractorStyleSurfaceCenterLineCurvedNavigationCallback> callback =
 			vtkSmartPointer<InteractorStyleSurfaceCenterLineCurvedNavigationCallback>::New();
@@ -229,7 +229,7 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::Update2DViewers()
 
 	
 	//int k = (worldPos[2] - GetOrigin()[2]) / GetSpacing()[2] + 0.5;
-	int k = m_pointLocator->FindClosestPoint(worldPos);
+	int k = GetCenterlineSurfaceViewer()->GetKdTreePointLocator()->FindClosestPoint(worldPos);
 
 	STYLE_DOWN_CAST_CONSTITERATOR(AbstractNavigation, SetCurrentFocalPointWithImageCoordinate(i, j, k));
 

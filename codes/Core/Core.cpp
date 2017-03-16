@@ -54,7 +54,7 @@ Core::Core(QObject * parent)
 
 	//surfaceInteractor = vtkRenderWindowInteractor::New();
 
-	surfaceViewer = SurfaceViewer::New();
+	surfaceViewer = CenterlineSurfaceViewer::New();
 	surfaceViewer->SetRenderWindow(mainWindow.getViewerWidget(MainWindow::NUM_OF_VIEWERS - MainWindow::NUM_OF_3D_VIEWERS)->getUi()->qvtkWidget2->GetRenderWindow());
 	surfaceViewer->SetupInteractor(mainWindow.getViewerWidget(MainWindow::NUM_OF_VIEWERS - MainWindow::NUM_OF_3D_VIEWERS)->getUi()->qvtkWidget2->GetInteractor());
 	surfaceViewer->EnableDepthPeelingOn();
@@ -532,6 +532,7 @@ void Core::slotUpdateSurfaceView()
 	//surfaceViewer->SetInputData(imageManager.getOverlay()->getData());
 	surfaceViewer->SetInputData(image);
 	surfaceViewer->SetLookupTable(imageManager.getOverlay()->getLookupTable());
+	surfaceViewer->SetCenterline(imageManager.getIADEOverlay()->getCenterLine());
 	surfaceViewer->GetRenderer()->ResetCameraClippingRange();
 	surfaceViewer->GetRenderer()->ResetCamera();
 	surfaceViewer->Render();

@@ -6,6 +6,11 @@
 class vtkActor;
 class vtkPolyDataMapper;
 class vtkPolyData;
+class vtkCleanPolyData;
+class vtkKdTreePointLocator;
+class vtkTubeFilter;
+
+
 class CenterlineSurfaceViewer: public SurfaceViewer
 {
 public:
@@ -24,7 +29,9 @@ public:
 	// Get the internal render window, renderer, image actor, and
 	// image map instances.
 	vtkGetObjectMacro(CenterlineActor, vtkActor);
-
+	vtkGetObjectMacro(CleanPolyData, vtkCleanPolyData);
+	vtkGetObjectMacro(TubeFilter, vtkTubeFilter);
+	vtkGetObjectMacro(KdTreePointLocator, vtkKdTreePointLocator);
 
 protected:
 	CenterlineSurfaceViewer();
@@ -32,6 +39,9 @@ protected:
 
 	vtkActor* CenterlineActor = nullptr;
 	vtkPolyDataMapper* CenterlineMapper = nullptr;
+	vtkCleanPolyData* CleanPolyData = nullptr;
+	vtkTubeFilter* TubeFilter = nullptr;
+	vtkKdTreePointLocator* KdTreePointLocator = nullptr;
 
 	virtual void InstallPipeline();
 	virtual void UnInstallPipeline();

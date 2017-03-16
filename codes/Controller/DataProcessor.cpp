@@ -271,7 +271,7 @@ DataProcessor::~DataProcessor()
 void DataProcessor::initializeCurved() 
 {
 	vtkPolyData* centerline;
-	centerline = surfaceInteractorStyle->GetCenterLine()->GetCenterLine();
+	centerline = imageManager->getIADEOverlay()->getCenterLine();
 	vtkImageData* inputImage;
 	inputImage = imageManager->getImage(0);
 	if (!inputImage) {

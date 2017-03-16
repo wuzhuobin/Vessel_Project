@@ -18,6 +18,7 @@
 #include <vtkDepthSortPolyData.h>
 #include <vtkAxesActor.h>
 #include <vtkCommand.h>
+#include <vtkOrientationMarkerWidget.h>
 
 #include <algorithm>
 
@@ -62,9 +63,11 @@ void SurfaceViewer::Render(void)
 				this->Renderer->GetActiveCamera()->SetParallelScale(
 					xs < 150 ? 75 : (xs - 1) / 2.0);
 			}
-			this->AxesActor->SetOrigin(GetInput()->GetOrigin());
-			this->AxesActor->VisibilityOn();
-			this->AxesActor->VisibilityOff();
+			OrientationMarkerWidget->EnabledOn();
+			OrientationMarkerWidget->InteractiveOff();
+			//this->AxesActor->SetOrigin(GetInput()->GetOrigin());
+			//this->AxesActor->VisibilityOn();
+			//this->AxesActor->VisibilityOff();
 			this->FirstRender = 0;
 		}
 	}
@@ -261,9 +264,6 @@ SurfaceViewer::SurfaceViewer()
 {
 	this->RenderWindow = nullptr;
 	this->Renderer = nullptr;
-	this->AxesActor = vtkAxesActor::New();
-	this->AxesActor->DragableOff();
-	this->AxesActor->VisibilityOff();
 	this->SurfaceActor = vtkActor::New();
 	this->SurfaceActor->VisibilityOff();
 	this->SurfaceMapper = vtkPolyDataMapper::New();
@@ -300,9 +300,7 @@ SurfaceViewer::SurfaceViewer()
 		this->SurfaceActor->SetMapper(this->SurfaceMapper);
 	}
 
-	//this->Slice = 0;
 	this->FirstRender = true;
-	//this->SliceOrientation = vtkImageViewer2::SLICE_ORIENTATION_XY;
 
 	// Setup the pipeline
 
@@ -313,6 +311,15 @@ SurfaceViewer::SurfaceViewer()
 	vtkRenderer *ren = vtkRenderer::New();
 	this->SetRenderer(ren);
 	ren->Delete();
+
+	this->AxesActor = vtkAxesActor::New();
+	this->AxesActor->SetXAxisLabelText("L");
+	this->AxesActor->SetYAxisLabelText("P");
+	this->AxesActor->SetZAxisLabelText("S");
+	//this->AxesActor->DragableOff();
+	//this->AxesActor->VisibilityOff();
+	this->OrientationMarkerWidget = vtkOrientationMarkerWidget::New();
+	OrientationMarkerWidget->SetOrientationMarker(this->AxesActor);
 
 	this->InstallPipeline();
 }
@@ -393,10 +400,13 @@ void SurfaceViewer::InstallPipeline()
 		this->Interactor->SetInteractorStyle(this->InteractorStyle);
 		this->Interactor->SetRenderWindow(this->RenderWindow);
 	}
-	if (this->Renderer && this->AxesActor)
-	{
-		this->Renderer->AddViewProp(this->AxesActor);
+	if (this->Interactor && this->OrientationMarkerWidget) {
+		this->OrientationMarkerWidget->SetInteractor(this->Interactor);
 	}
+	//if (this->Renderer && this->AxesActor)
+	//{
+	//	this->Renderer->AddViewProp(this->AxesActor);
+	//}
 	if (this->Renderer && this->SurfaceActor)
 	{
 		this->Renderer->AddViewProp(this->SurfaceActor);
@@ -417,10 +427,10 @@ void SurfaceViewer::UnInstallPipeline()
 	{
 		this->SurfaceActor->GetMapper()->SetInputConnection(nullptr);
 	}
-	if (this->Renderer && this->AxesActor)
-	{
-		this->Renderer->RemoveActor(this->AxesActor);
-	}
+	//if (this->Renderer && this->AxesActor)
+	//{
+	//	this->Renderer->RemoveActor(this->AxesActor);
+	//}
 	if (this->Renderer && this->SurfaceActor)
 	{
 		this->Renderer->RemoveViewProp(this->SurfaceActor);

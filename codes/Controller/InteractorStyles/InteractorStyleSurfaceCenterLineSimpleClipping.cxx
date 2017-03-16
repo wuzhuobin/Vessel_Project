@@ -1,6 +1,6 @@
 #include "InteractorStyleSurfaceCenterLineSimpleClipping.h"
 
-#include "SurfaceViewer.h"
+#include "CenterlineSurfaceViewer.h"
 
 #include <vtkObjectFactory.h>
 #include <vtkClipPolyData.h>
@@ -12,7 +12,7 @@
 #include <vtkThreshold.h>
 #include <vtkDataSetAttributes.h>
 #include <vtkGeometryFilter.h>
-#include <vtkCleanPolyData.h>
+//#include <vtkCleanPolyData.h>
 
 
 #include <vtkvmtkCapPolyData.h>
@@ -22,7 +22,7 @@
 
 
 vtkStandardNewMacro(InteractorStyleSurfaceCenterLineSimpleClipping);
-
+const char InteractorStyleSurfaceCenterLineSimpleClipping::RADIUS[] = "Radius";
 void InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(bool flag)
 {
 	AbstractSurfaceCenterLine::SetCustomEnabled(flag);
@@ -38,27 +38,27 @@ InteractorStyleSurfaceCenterLineSimpleClipping::~InteractorStyleSurfaceCenterLin
 {
 }
 
-void InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine()
+bool InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine()
 {
 
-	CreateCenterLine(true);
+	return CreateCenterLine(true);
 	//cout << "num of center id: " << capPolyData->GetCapCenterIds()->GetNumberOfIds() << endl;
 
 }
 
-void InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reClipSurface)
+bool InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reClipSurface)
 {
 	if (!GetSurfaceViewer()->GetInput()) {
 		vtkErrorMacro(<< "SurfaceViewer has no input");
-		return;
+		return false;
 	}
 	if (reClipSurface) {
 		m_sourceIdId = 0;
 		ClipAndCap();
 	}
 	else {
-		if (m_capCenterIds->GetNumberOfIds() <= 0) {
-			vtkErrorMacro(<< "no cap center. ");
+		if (!m_ClipAndCapSurface || m_capCenterIds->GetNumberOfIds() <= 0) {
+			vtkErrorMacro(<< "no cap surface or center. ");
 			vtkErrorMacro(<< "re cap anyway");
 			m_sourceIdId = 0;
 			ClipAndCap();
@@ -70,9 +70,9 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reCli
 			m_sourceIdId = 0;
 		}
 	}
-	if (m_capCenterIds->GetNumberOfIds() <= 0) {
-		vtkErrorMacro(<< "still no cap center. ");
-		return;
+	if (!m_ClipAndCapSurface || m_capCenterIds->GetNumberOfIds() <= 0) {
+		vtkErrorMacro(<< "still no cap surface or center. ");
+		return false;
 	}
 
 	vtkSmartPointer<vtkIdList> sourceIds = nullptr;
@@ -86,7 +86,6 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reCli
 		if (i != m_sourceIdId) {
 			targetIds->InsertNextId(m_capCenterIds->GetId(i));
 		}
-
 	}
 
 	vtkSmartPointer<vtkvmtkPolyDataCenterlines> centerlinesFilter = vtkSmartPointer<vtkvmtkPolyDataCenterlines>::New();
@@ -94,19 +93,21 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reCli
 	centerlinesFilter->SetSourceSeedIds(sourceIds);
 	centerlinesFilter->SetTargetSeedIds(targetIds);
 	//centerlinesFilter->AppendEndPointsToCenterlinesOn();
-	centerlinesFilter->SetRadiusArrayName("Radius");
+	centerlinesFilter->SetRadiusArrayName(RADIUS);
 	//centerlinesFilter->
 	//centerlinesFilter->SetEdgeArrayName("Edge");
 	//centerlinesFilter->SetEdgePCoordArrayName("PCoord");
 	centerlinesFilter->Update();
 
-	vtkSmartPointer<vtkCleanPolyData> cleanPolyData =
-		vtkSmartPointer<vtkCleanPolyData>::New();
-	cleanPolyData->SetInputConnection(centerlinesFilter->GetOutputPort());
-	cleanPolyData->PointMergingOn();
-	cleanPolyData->Update();
-
-	m_centerLine->ShallowCopy(cleanPolyData->GetOutput());
+	//vtkSmartPointer<vtkCleanPolyData> cleanPolyData =
+	//	vtkSmartPointer<vtkCleanPolyData>::New();
+	//cleanPolyData->SetInputConnection(centerlinesFilter->GetOutputPort());
+	//cleanPolyData->PointMergingOn();
+	//cleanPolyData->Update();
+	GetCenterlineSurfaceViewer()->GetCenterline()->ShallowCopy(centerlinesFilter->GetOutput());
+	GetCenterlineSurfaceViewer()->Render();
+	//m_centerLine->ShallowCopy();
+	return true;
 }
 
 void InteractorStyleSurfaceCenterLineSimpleClipping::ClipAndCap()
@@ -134,15 +135,12 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::ClipAndCap()
 	GeometryFilter->Update();
 
 
-
 	vtkSmartPointer<vtkClipPolyData> clipPolyData =
 		vtkSmartPointer<vtkClipPolyData>::New();
 	clipPolyData->SetInputConnection(GeometryFilter->GetOutputPort());
-	//clipPolyData->SetInputData(GetSurfaceViewer()->GetSurfaceActor()->GetMapper()->GetInput());
 	clipPolyData->SetClipFunction(clipBox);
 	clipPolyData->InsideOutOn();
 	clipPolyData->Update();
-	//clipPolyData->GetOutput()->Print(cout);
 
 	vtkSmartPointer<vtkvmtkCapPolyData> capPolyData =
 		vtkSmartPointer<vtkvmtkCapPolyData>::New();
@@ -161,7 +159,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress()
 	cout << key << endl;
 	if (key == "space") {
 		CreateCenterLine(false);
-		VisualizeCenterLine(m_centerLine);
+		//VisualizeCenterLine(m_centerLine);
 	}
 	else if (key == "Tab") {
 		if (m_centerLineOrientation != CENTER_LINE_ORIENTATION_XY) {
@@ -172,7 +170,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress()
 			m_centerLineOrientation = CENTER_LINE_ORIENTATION_YZ;
 		}
 		CreateCenterLine(true);
-		VisualizeCenterLine(m_centerLine);
+		//VisualizeCenterLine(m_centerLine);
 	}
 	else {
 		AbstractSurfaceCenterLine::OnKeyPress();

@@ -1,6 +1,6 @@
 #include "InteractorStyleSurfaceCenterLinePerpendicularMeasurement.h"
 
-#include "SurfaceViewer.h"
+#include "CenterlineSurfaceViewer.h"
 #include "PerpendicularMeasurementLineWidget.h"
 
 #include <vtkObjectFactory.h>
@@ -66,7 +66,7 @@ void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::InitializeLinePer
 {
 	vtkSmartPointer<vtkPolygonalSurfacePointPlacer> pointPlacer =
 		vtkSmartPointer<vtkPolygonalSurfacePointPlacer>::New();
-	pointPlacer->AddProp(m_centerLineActor);
+	pointPlacer->AddProp(GetCenterlineSurfaceViewer()->GetCenterlineActor());
 
 
 	m_lineWidget2 = vtkSmartPointer<PerpendicularMeasurementLineWidget>::New();
@@ -75,10 +75,10 @@ void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::InitializeLinePer
 	m_lineWidget2->GetLineRepresentation()->GetPoint1Representation()->SetPointPlacer(pointPlacer);
 	m_lineWidget2->GetLineRepresentation()->GetPoint2Representation()->SetPointPlacer(pointPlacer);
 	m_lineWidget2->GetLineRepresentation()->SetPoint1WorldPosition(
-		m_centerLine->GetPoint(0));
+		GetCenterlineSurfaceViewer()->GetCenterline()->GetPoint(0));
 	m_lineWidget2->GetLineRepresentation()->SetPoint2WorldPosition(
-		m_centerLine->GetPoint(1));
-	m_lineWidget2->SetLine(m_centerLine);
+		GetCenterlineSurfaceViewer()->GetCenterline()->GetPoint(1));
+	m_lineWidget2->SetLine(GetCenterlineSurfaceViewer()->GetCenterline());
 	m_lineWidget2->EnabledOn();
 
 }

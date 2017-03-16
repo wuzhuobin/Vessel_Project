@@ -19,6 +19,7 @@ public:
 		CENTER_LINE_ORIENTATION_XZ = 1,
 		CENTER_LINE_ORIENTATION_XY = 2
 	};
+	static const char RADIUS[];
 
 
 	vtkTypeMacro(InteractorStyleSurfaceCenterLineSimpleClipping, AbstractSurfaceCenterLine);
@@ -34,12 +35,12 @@ protected:
 	InteractorStyleSurfaceCenterLineSimpleClipping();
 	virtual ~InteractorStyleSurfaceCenterLineSimpleClipping() override;
 
-	virtual void CreateCenterLine() override;
+	virtual bool CreateCenterLine() override;
 	/**
 	 * if true, re clip
 	 * false, change source id 
 	 */
-	virtual void CreateCenterLine(bool reClipSurface);
+	virtual bool CreateCenterLine(bool reClipSurface);
 	virtual void ClipAndCap();
 	
 	virtual void OnKeyPress();

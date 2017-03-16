@@ -19,6 +19,7 @@ class vtkImageResample;
 class vtkWindowedSincPolyDataFilter;
 class vtkDepthSortPolyData;
 class vtkAxesActor;
+class vtkOrientationMarkerWidget;
 
 class SurfaceViewer: public vtkObject
 {
@@ -56,7 +57,8 @@ public:
 	vtkGetObjectMacro(WindowedSincPolyDataFilter, vtkWindowedSincPolyDataFilter);
 	vtkGetObjectMacro(DepthSortPolyData, vtkDepthSortPolyData);
 	vtkGetObjectMacro(InteractorStyle, vtkInteractorStyle);
-	vtkGetObjectMacro(AxesActor, vtkAxesActor);
+	//vtkGetObjectMacro(AxesActor, vtkAxesActor);
+	//vtkGetObjectMacro(OrientationMarkerWidget, vtkOrientationMarkerWidget);
 	// Description:
 	// Set your own renderwindow and renderer
 	virtual void SetRenderWindow(vtkRenderWindow *arg);
@@ -102,6 +104,7 @@ protected:
 	vtkRenderWindowInteractor* Interactor = nullptr;
 	vtkInteractorStyle* InteractorStyle = nullptr;
 	vtkAxesActor* AxesActor = nullptr;
+	vtkOrientationMarkerWidget* OrientationMarkerWidget = nullptr;
 
 	vtkLookupTable* LookupTable = nullptr;
 

@@ -3,6 +3,12 @@
 #include <vtkObjectFactory.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkActor.h>
+#include <vtkCommand.h>
+#include <vtkCleanPolyData.h>
+#include <vtkKdTreePointLocator.h>
+#include <vtkRenderer.h>
+#include <vtkTubeFilter.h>
+
 vtkStandardNewMacro(CenterlineSurfaceViewer);
 
 void CenterlineSurfaceViewer::PrintSelf(ostream & os, vtkIndent indent)
@@ -12,15 +18,28 @@ void CenterlineSurfaceViewer::PrintSelf(ostream & os, vtkIndent indent)
 
 void CenterlineSurfaceViewer::SetCenterline(vtkPolyData * centerline)
 {
+	this->CenterlineActor->VisibilityOn();
+	this->CleanPolyData->SetInputData(centerline);
+	this->KdTreePointLocator->SetDataSet(centerline);
+	InvokeEvent(vtkCommand::UpdateDataEvent);
 }
 
 vtkPolyData * CenterlineSurfaceViewer::GetCenterline()
 {
-	return nullptr;
+	return vtkPolyData::SafeDownCast(this->CleanPolyData->GetInput());
 }
 
 CenterlineSurfaceViewer::CenterlineSurfaceViewer()
 {
+	this->CleanPolyData = vtkCleanPolyData::New();
+	this->CleanPolyData->PointMergingOn();
+	this->TubeFilter = vtkTubeFilter::New();
+	this->TubeFilter->SetInputConnection(this->CleanPolyData->GetOutputPort());
+	this->TubeFilter->CappingOn();
+	this->TubeFilter->SetRadius(0.01);
+	this->TubeFilter->SetRadiusFactor(0.01);
+	this->TubeFilter->SetNumberOfSides(10);
+	this->KdTreePointLocator = vtkKdTreePointLocator::New();
 	this->CenterlineActor = vtkActor::New();
 	this->CenterlineActor->VisibilityOff();
 	this->CenterlineMapper = vtkPolyDataMapper::New();
@@ -34,6 +53,14 @@ CenterlineSurfaceViewer::CenterlineSurfaceViewer()
 
 CenterlineSurfaceViewer::~CenterlineSurfaceViewer()
 {
+	if (this->CleanPolyData) {
+		this->CleanPolyData->Delete();
+		this->CleanPolyData = nullptr;
+	}
+	if (this->KdTreePointLocator) {
+		this->KdTreePointLocator->Delete();
+		this->KdTreePointLocator = nullptr;
+	}
 	if (this->CenterlineMapper)
 	{
 		this->CenterlineMapper->Delete();
@@ -49,13 +76,24 @@ CenterlineSurfaceViewer::~CenterlineSurfaceViewer()
 void CenterlineSurfaceViewer::InstallPipeline()
 {
 	SurfaceViewer::InstallPipeline();
-
+	if (this->CenterlineActor && this->CleanPolyData)
+	{
+		this->CenterlineActor->GetMapper()->SetInputConnection(this->TubeFilter->GetOutputPort());
+	}
+	if (this->Renderer && this->CenterlineActor) {
+		this->Renderer->AddActor(this->CenterlineActor);
+	}
 }
 
 void CenterlineSurfaceViewer::UnInstallPipeline()
 {
+	SurfaceViewer::UnInstallPipeline();
 	if (this->CenterlineActor)
 	{
 		this->CenterlineActor->GetMapper()->SetInputConnection(nullptr);
+	}
+
+	if (this->Renderer && this->CenterlineActor) {
+		this->Renderer->RemoveActor(this->CenterlineActor);
 	}
 }

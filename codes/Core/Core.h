@@ -11,7 +11,7 @@
 #include "IADEImageManager.h"
 #include "IADEInteractorStyleSwitch.h"
 #include "IADEInteractorStyleSwitch3D.h"
-#include "SurfaceViewer.h"
+#include "CenterlineSurfaceViewer.h"
 #include "ImageViewer.h"
 #include "DataProcessor.h"
 
@@ -101,7 +101,7 @@ private:
 	ImageViewer* imageViewers[MainWindow::NUM_OF_2D_VIEWERS];
 	IADEInteractorStyleSwitch* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
 
-	SurfaceViewer* surfaceViewer;
+	CenterlineSurfaceViewer* surfaceViewer;
 	IADEInteractorStyleSwitch3D* surfaceInteractorStyle;
 
 	void RenderALlViewers();

@@ -29,7 +29,7 @@ public:
 	SetInteractorStyle3DMacro(CurvedNavigation);
 	CurrentStyle3DMacro(CurvedNavigation);
 
-	virtual void SetCenterLine(vtkPolyData* centerline);
+	//virtual void SetCenterLine(vtkPolyData* centerline);
 
 protected:
 	IADEInteractorStyleSwitch3D();

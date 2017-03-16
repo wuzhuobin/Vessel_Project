@@ -11,35 +11,36 @@
 
 //vtkStandardNewMacro(AbstractSurfaceCenterLine);
 
-vtkSmartPointer<vtkPolyData> AbstractSurfaceCenterLine::m_centerLine = nullptr;
+//vtkSmartPointer<vtkPolyData> AbstractSurfaceCenterLine::m_centerLine = nullptr;
 
 void AbstractSurfaceCenterLine::SetCustomEnabled(bool flag)
 {
 	AbstractInteractorStyleSurface::SetCustomEnabled(flag);
 	if (m_customFlag) {
-		if (!m_centerLine) {
-			//vtkErrorMacro(<< "please set a centerline before using this interactorStyle");
-			m_centerLine = vtkSmartPointer<vtkPolyData>::New();	
-			//return;
-		}
-		if (m_centerLine->GetNumberOfPoints() < 1) {
+		//if (!m_centerLine) {
+		//	//vtkErrorMacro(<< "please set a centerline before using this interactorStyle");
+		//	m_centerLine = vtkSmartPointer<vtkPolyData>::New();	
+		//	//return;
+		//}
+		if (GetCenterlineSurfaceViewer()->GetCenterline() ||
+			GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
 			CreateCenterLine();
 		}
-		if (!m_centerLineActor) {
-			m_centerLineActor = vtkSmartPointer<vtkActor>::New();
-			m_centerLineActor->SetMapper(vtkSmartPointer<vtkPolyDataMapper>::New());
-		}
-		GetSurfaceViewer()->GetRenderer()->AddActor(m_centerLineActor);
-		VisualizeCenterLine(m_centerLine);
+		//if (!m_centerLineActor) {
+		//	m_centerLineActor = vtkSmartPointer<vtkActor>::New();
+		//	m_centerLineActor->SetMapper(vtkSmartPointer<vtkPolyDataMapper>::New());
+		//}
+		//GetSurfaceViewer()->GetRenderer()->AddActor(m_centerLineActor);
+		//VisualizeCenterLine(m_centerLine);
 	}
-	else {
-		if (m_centerLineActor) {
-			GetSurfaceViewer()->GetRenderer()->RemoveActor(m_centerLineActor);
-			m_centerLineActor->GetMapper()->SetInputConnection(nullptr);
-			m_centerLineActor = nullptr;
-		}
-	}
-	GetSurfaceViewer()->Render();
+	//else {
+	//	if (m_centerLineActor) {
+	//		GetSurfaceViewer()->GetRenderer()->RemoveActor(m_centerLineActor);
+	//		m_centerLineActor->GetMapper()->SetInputConnection(nullptr);
+	//		m_centerLineActor = nullptr;
+	//	}
+	//}
+	//GetSurfaceViewer()->Render();
 
 }
 
@@ -48,15 +49,15 @@ CenterlineSurfaceViewer * AbstractSurfaceCenterLine::GetCenterlineSurfaceViewer(
 	return reinterpret_cast<CenterlineSurfaceViewer*>(m_viewer);
 }
 
-void AbstractSurfaceCenterLine::SetCenterLine(vtkPolyData* centerLine)
-{
-	m_centerLine = centerLine;
-}
-
-vtkPolyData* AbstractSurfaceCenterLine::GetCenterLine()
-{
-	return m_centerLine;
-}
+//void AbstractSurfaceCenterLine::SetCenterLine(vtkPolyData* centerLine)
+//{
+//	m_centerLine = centerLine;
+//}
+//
+//vtkPolyData* AbstractSurfaceCenterLine::GetCenterLine()
+//{
+//	return m_centerLine;
+//}
 
 AbstractSurfaceCenterLine::AbstractSurfaceCenterLine()
 {
@@ -66,11 +67,11 @@ AbstractSurfaceCenterLine::~AbstractSurfaceCenterLine()
 {
 }
 
-void AbstractSurfaceCenterLine::VisualizeCenterLine(vtkPolyData * centerLine)
-{
-	vtkPolyDataMapper* mapper = vtkPolyDataMapper::SafeDownCast(m_centerLineActor->GetMapper());
-	mapper->SetInputData(centerLine);
-	mapper->Update();
-	GetSurfaceViewer()->Render();
-}
+//void AbstractSurfaceCenterLine::VisualizeCenterLine(vtkPolyData * centerLine)
+//{
+//	vtkPolyDataMapper* mapper = vtkPolyDataMapper::SafeDownCast(m_centerLineActor->GetMapper());
+//	mapper->SetInputData(centerLine);
+//	mapper->Update();
+//	GetSurfaceViewer()->Render();
+//}
 

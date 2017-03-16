@@ -5,7 +5,7 @@
 
 //class vtkSeedWidget;
 class vtkHandleWidget;
-class vtkKdTreePointLocator;
+//class vtkKdTreePointLocator;
 class vtkPolyData;
 class vtkTextActor;
 class InteractorStyleSurfaceCenterLineDistanceFindMaximumRadiusCallback;
@@ -36,7 +36,7 @@ protected:
 	virtual void OnKeyPress() override;
 
 
-	vtkSmartPointer<vtkKdTreePointLocator> m_pointLocator = nullptr;
+	//vtkSmartPointer<vtkKdTreePointLocator> m_pointLocator = nullptr;
 	//vtkSmartPointer<vtkSeedWidget> m_seedWidget = nullptr;
 	vtkSmartPointer<vtkHandleWidget> m_handleWidgets[NUM_OF_HANDLES] = {nullptr};
 	vtkSmartPointer<vtkPolyData> m_triangulatedCenterLine = nullptr;
