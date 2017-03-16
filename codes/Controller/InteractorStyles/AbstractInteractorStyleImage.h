@@ -25,13 +25,13 @@ Copyright (C) 2016
 
 
 
-#ifndef VIEWER_CONSTITERATOR(METHOD)
-#define VIEWER_CONSTITERATOR(METHOD) \
-for(std::list<vtkImageViewer2*>::const_iterator cit = \
-	m_synchronalViewers.cbegin(); cit != m_synchronalViewers.cend(); ++cit){\
-	(*cit)->##METHOD; \
-}
-#endif // !VIEWER_CONSTITERATOR(METHOD)
+//#ifndef VIEWER_CONSTITERATOR(METHOD)
+//#define VIEWER_CONSTITERATOR(METHOD) \
+//for(std::list<vtkImageViewer2*>::const_iterator cit = \
+//	m_synchronalViewers.cbegin(); cit != m_synchronalViewers.cend(); ++cit){\
+//	(*cit)->##METHOD; \
+//}
+//#endif // !VIEWER_CONSTITERATOR(METHOD)
 
 class vtkImageViewer2;
 
@@ -48,7 +48,7 @@ public:
 
 protected:
 	AbstractInteractorStyleImage();
-	~AbstractInteractorStyleImage();
+	virtual ~AbstractInteractorStyleImage();
 
 	virtual void SynchronalZooming();
 	

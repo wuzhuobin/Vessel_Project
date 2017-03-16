@@ -385,7 +385,6 @@ void ImageViewer::SetInputData(vtkImageData *in)
 	// when there is a new input, Update the member DisplayExtent 
 	this->ImageActor->VisibilityOn();
 	vtkImageViewer2::SetInputData(in);
-	//ResetDisplayExtent();
 	//Color Map
 	double* range = in->GetScalarRange();
 	this->SetColorWindow(range[1] - range[0]);

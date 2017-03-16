@@ -4,6 +4,7 @@
 
 #include <vtkImageAccumulate.h>
 #include <vtkExtractVOI.h>
+#include <vtkPolyData.h>
 IADEOverlay::IADEOverlay(QObject * parent)
 	:Overlay(parent)
 {
@@ -27,7 +28,8 @@ IADEOverlay::IADEOverlay(QObject * parent)
 		m_lookupTable->SetTableValue(i, rgba);
 	}
 	m_lookupTable->Build();
-
+	
+	m_centerline = vtkSmartPointer<vtkPolyData>::New();
 }
 
 IADEOverlay::IADEOverlay(OverlayImageData::itkImageType::Pointer data, QObject * parent)
@@ -37,8 +39,14 @@ IADEOverlay::IADEOverlay(OverlayImageData::itkImageType::Pointer data, QObject *
 }
 
 IADEOverlay::IADEOverlay(OverlayImageData * data, QObject * parent)
+	:IADEOverlay(parent)
 {
 	m_data->ShallowCopy(data);
+}
+
+vtkPolyData * IADEOverlay::getCenterLine()
+{
+	return this->m_centerline;
 }
 
 void IADEOverlay::updatedOverlay()
@@ -81,11 +89,16 @@ void IADEOverlay::updateMeasurement3D()
 	cerr << endl;
 }
 
-void IADEOverlay::SetCurrentSlice(int slice)
+void IADEOverlay::setCurrentSlice(int slice)
 {
 	this->currentSlice = slice;
 	updateMeasurement2D(this->currentSlice);
 	Overlay::updatedOverlay();
+}
+
+int IADEOverlay::getCurrentSlice()
+{
+	return this->currentSlice;
 }
 
 void IADEOverlay::updateMeasurement2D(int slice)

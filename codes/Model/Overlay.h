@@ -1,8 +1,6 @@
 #ifndef __OVERLAY_H__
 #define __OVERLAY_H__
 
-//#include "IVtkImageData.h"
-
 #include <qobject.h>
 
 #include <vtkSmartPointer.h>
@@ -31,12 +29,6 @@ public:
 	virtual void DeepCopy(vtkDataObject *dataObject);
 
 	virtual void Graft(itkImageType::Pointer dataObject);
-
-	/**
-	 * tmp fix
-	 */
-	virtual void SetExtent(int* extent) override;
-	virtual void Modified() override;
 
 	itkImageType::Pointer GetItkImage();
 protected:

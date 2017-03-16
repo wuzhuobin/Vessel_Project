@@ -16,7 +16,7 @@
 #include <vtkHandleWidget.h>
 #include <vtkHandleRepresentation.h>
 #include <vtkSeedRepresentation.h>
-//#include <vtkCommand.h>
+#include <vtkCommand.h>
 #include <vtkRenderWindow.h>
 
 #include "vtkPolylineToTubularVolume.h"
@@ -187,6 +187,7 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumen(QList<int*>& seeds)
 	}
 
 	GetImageViewer()->GetInputLayer()->Modified();
+	GetImageViewer()->GetInputLayer()->InvokeEvent(vtkCommand::UpdateDataEvent);
 	//MY_VIEWER_CONSTITERATOR(Render());
 	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());
 
@@ -351,7 +352,6 @@ void QInteractorStyleLumenSeedsPlacer::ExtractSegmentation(QList<int*>& seed)
 	maskFilter->Update();
 
 	GetImageViewer()->GetInputLayer()->ShallowCopy(maskFilter->GetOutput());
-	GetImageViewer()->GetInputLayer()->Modified();
 	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());
 
 }

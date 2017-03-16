@@ -120,32 +120,6 @@ void OverlayImageData::Graft(itkImageType::Pointer dataObject)
 	InvokeEvent(vtkCommand::UpdateDataEvent, nullptr);
 }
 
-void OverlayImageData::SetExtent(int * extent)
-{
-	int description;
-
-	description = vtkStructuredData::SetExtent(extent, this->Extent);
-	if (description < 0) //improperly specified
-	{
-		vtkErrorMacro(<< "Bad Extent, retaining previous values");
-	}
-
-	if (description == VTK_UNCHANGED)
-	{
-		return;
-	}
-
-	this->SetDataDescription(description);
-
-	this->vtkImageData::Modified();
-}
-
-void OverlayImageData::Modified()
-{
-	vtkImageData::Modified();
-	InvokeEvent(vtkCommand::UpdateDataEvent, nullptr);
-}
-
 OverlayImageData::itkImageType::Pointer OverlayImageData::GetItkImage()
 {
 	return m_itkImage;

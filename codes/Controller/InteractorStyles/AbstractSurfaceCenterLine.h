@@ -7,6 +7,7 @@
 
 class vtkPolyData;
 class vtkActor;
+class CenterlineSurfaceViewer;
 
 class AbstractSurfaceCenterLine: public AbstractInteractorStyleSurface
 {
@@ -14,6 +15,8 @@ public:
 	vtkTypeMacro(AbstractSurfaceCenterLine, AbstractInteractorStyleSurface);
 
 	virtual void SetCustomEnabled(bool flag);
+
+	virtual CenterlineSurfaceViewer* GetCenterlineSurfaceViewer();
 
 	virtual void SetCenterLine(vtkPolyData* centerLine);
 	virtual vtkPolyData* GetCenterLine();

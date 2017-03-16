@@ -1,6 +1,6 @@
 #include "AbstractSurfaceCenterLine.h"
 
-#include "SurfaceViewer.h"
+#include "CenterlineSurfaceViewer.h"
 
 #include <vtkObjectFactory.h>
 #include <vtkPolyData.h>
@@ -41,6 +41,11 @@ void AbstractSurfaceCenterLine::SetCustomEnabled(bool flag)
 	}
 	GetSurfaceViewer()->Render();
 
+}
+
+CenterlineSurfaceViewer * AbstractSurfaceCenterLine::GetCenterlineSurfaceViewer()
+{
+	return reinterpret_cast<CenterlineSurfaceViewer*>(m_viewer);
 }
 
 void AbstractSurfaceCenterLine::SetCenterLine(vtkPolyData* centerLine)

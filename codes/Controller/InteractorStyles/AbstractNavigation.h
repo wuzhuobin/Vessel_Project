@@ -22,16 +22,16 @@ Copyright (C) 2016
 #include "AbstractInteractorStyleImage.h"
 
 
-#ifndef MY_VIEWER_CONSTITERATOR(METHOD)
-#define MY_VIEWER_CONSTITERATOR(METHOD) \
-for(std::list<vtkImageViewer2*>::const_iterator cit = \
-	AbstractInteractorStyleImage::m_synchronalViewers.cbegin(); \
-	cit != AbstractInteractorStyleImage::m_synchronalViewers.cend(); ++cit){\
-	ImageViewer* _viewer = dynamic_cast<ImageViewer*>(*cit);\
-	if(_viewer != nullptr)\
-		_viewer->##METHOD; \
-}
-#endif // !MY_VIEWER_CONSTITERATOR(METHOD)
+//#ifndef MY_VIEWER_CONSTITERATOR(METHOD)
+//#define MY_VIEWER_CONSTITERATOR(METHOD) \
+//for(std::list<vtkImageViewer2*>::const_iterator cit = \
+//	AbstractInteractorStyleImage::m_synchronalViewers.cbegin(); \
+//	cit != AbstractInteractorStyleImage::m_synchronalViewers.cend(); ++cit){\
+//	ImageViewer* _viewer = dynamic_cast<ImageViewer*>(*cit);\
+//	if(_viewer != nullptr)\
+//		_viewer->##METHOD; \
+//}
+//#endif // !MY_VIEWER_CONSTITERATOR(METHOD)
 
 class ImageViewer;
 
@@ -56,9 +56,6 @@ protected:
 	virtual void OnMouseWheelForward();
 	virtual void OnMouseWheelBackward();
 	virtual void OnKeyPress();
-
-
-
 
 
 private:

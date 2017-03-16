@@ -34,6 +34,7 @@ Copyright (C) 2016
 #include <vtkLookupTable.h>
 #include <vtkRenderWindow.h>
 #include <vtkSmartPointer.h>
+#include <vtkCommand.h>
 
 #include "ImageViewer.h"
 
@@ -110,7 +111,7 @@ void InteractorStylePaintBrush::OnLeftButtonUp()
 		//Clear Layer
 		m_brush->SetDrawColor(0, 0, 0, 0);
 		this->FillBox3D();
-		this->Render();
+		STYLE_DOWN_CAST_CONSTITERATOR(InteractorStylePaintBrush, Render());
 		m_isDraw = true;
 	}
 	m_leftFunctioning = false;
@@ -766,6 +767,7 @@ void InteractorStylePaintBrush::WriteToImageData()
 		}
 	}
 	GetImageViewer()->GetInputLayer()->Modified();
+	GetImageViewer()->GetInputLayer()->InvokeEvent(vtkCommand::UpdateDataEvent);
 
 }
 

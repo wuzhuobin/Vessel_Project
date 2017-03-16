@@ -89,12 +89,6 @@ vtkImageData * SurfaceViewer::GetInput()
 	return vtkImageData::SafeDownCast(this->ImageResample->GetInput());
 }
 
-//void SurfaceViewer::SetInputConnection(vtkAlgorithmOutput * input)
-//{
-//	this->ImageResample->SetInputConnection(input);
-//	UpdateDisplayExtent();
-//}
-
 void SurfaceViewer::UpdateDisplayExtent()
 {
 	vtkAlgorithm *input = this->GetInputAlgorithm();
@@ -129,7 +123,6 @@ void SurfaceViewer::SetLookupTable(vtkLookupTable* lookupTable)
 		0, this->LookupTable->GetNumberOfTableValues() - 1);
 	SurfaceMapper->SetScalarRange(0, this->LookupTable->GetNumberOfTableValues());
 	SurfaceMapper->SetLookupTable(lookupTable);
-	//SurfaceMapper->UseLookupTableScalarRangeOn();
 }
 
 vtkLookupTable* SurfaceViewer::GetLookupTable()
@@ -183,7 +176,6 @@ void SurfaceViewer::SetRenderer(vtkRenderer * arg)
 	}
 
 	this->InstallPipeline();
-	//this->UpdateOrientation();
 }
 
 void SurfaceViewer::SetupInteractor(vtkRenderWindowInteractor * arg)
@@ -279,7 +271,6 @@ SurfaceViewer::SurfaceViewer()
 	this->ImageResample->SetNumberOfThreads(16);
 	this->ImageResample->SetInterpolationModeToLinear();
 	this->ImageResample->SetDimensionality(3);
-	//this->ImageResample->SetOutputSpacing(0.3,0.3,0.3);
 	this->MarchingCubes = vtkDiscreteMarchingCubes::New();
 	this->MarchingCubes->SetInputConnection(ImageResample->GetOutputPort());
 	this->MarchingCubes->ComputeGradientsOff();
@@ -397,15 +388,6 @@ void SurfaceViewer::InstallPipeline()
 		if (!this->InteractorStyle)
 		{
 			this->InteractorStyle = vtkInteractorStyle::New();
-			//vtkImageViewer2Callback *cbk = vtkImageViewer2Callback::New();
-			//cbk->IV = this;
-			//this->InteractorStyle->AddObserver(
-			//	vtkCommand::WindowLevelEvent, cbk);
-			//this->InteractorStyle->AddObserver(
-			//	vtkCommand::StartWindowLevelEvent, cbk);
-			//this->InteractorStyle->AddObserver(
-			//	vtkCommand::ResetWindowLevelEvent, cbk);
-			//cbk->Delete();
 		}
 
 		this->Interactor->SetInteractorStyle(this->InteractorStyle);

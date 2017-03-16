@@ -60,7 +60,7 @@ public:
 	virtual void CustomEnabledOff();
 
 	virtual void SetViewer(vtkObject* viewer);
-
+	virtual vtkObject* GetViewer();
 protected:
 	AbstractInteractorStyle();
 	virtual ~AbstractInteractorStyle();
@@ -88,6 +88,7 @@ protected:
 	static std::list<AbstractInteractorStyle*> m_abstractInteractorStyles;
 
 	vtkObject* m_viewer = nullptr;
+	///< callback for re-eanbled when Viewer invoke vtkCommand#UpdateDataEvent
 	vtkCallbackCommand* callback = nullptr;
 };
 

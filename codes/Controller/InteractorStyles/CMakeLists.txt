@@ -33,6 +33,7 @@ set(
 	${PROJECT_SOURCE_DIR}/ImageViewer.cxx
 	${PROJECT_SOURCE_DIR}/ResliceImageViewer.cxx
 	${PROJECT_SOURCE_DIR}/SurfaceViewer.cxx
+	${PROJECT_SOURCE_DIR}/CenterlineSurfaceViewer.cxx
 )
 
 set(
@@ -40,6 +41,7 @@ set(
 	${PROJECT_SOURCE_DIR}/ImageViewer.h
 	${PROJECT_SOURCE_DIR}/ResliceImageViewer.h
 	${PROJECT_SOURCE_DIR}/SurfaceViewer.h	
+	${PROJECT_SOURCE_DIR}/CenterlineSurfaceViewer.h
 )
 
 file(

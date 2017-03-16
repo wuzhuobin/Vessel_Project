@@ -53,6 +53,11 @@ void AbstractInteractorStyle::SetViewer(vtkObject * viewer)
 	m_viewer = viewer;
 }
 
+vtkObject * AbstractInteractorStyle::GetViewer()
+{
+	return m_viewer;
+}
+
 AbstractInteractorStyle::AbstractInteractorStyle() {
 	m_abstractInteractorStyles.push_back(this);
 
@@ -61,7 +66,6 @@ AbstractInteractorStyle::AbstractInteractorStyle() {
 	callback->SetCallback([](vtkObject* caller, unsigned long id, void* clientData, void*) {
 		reinterpret_cast<AbstractInteractorStyle*>(clientData)->CustomEnabledOff();
 		reinterpret_cast<AbstractInteractorStyle*>(clientData)->CustomEnabledOn();
-		cout << caller->GetClassName() << endl;
 	});
 }
 

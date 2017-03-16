@@ -56,7 +56,7 @@ public:
 	vtkGetObjectMacro(WindowedSincPolyDataFilter, vtkWindowedSincPolyDataFilter);
 	vtkGetObjectMacro(DepthSortPolyData, vtkDepthSortPolyData);
 	vtkGetObjectMacro(InteractorStyle, vtkInteractorStyle);
-
+	vtkGetObjectMacro(AxesActor, vtkAxesActor);
 	// Description:
 	// Set your own renderwindow and renderer
 	virtual void SetRenderWindow(vtkRenderWindow *arg);

@@ -24,13 +24,13 @@ Copyright (C) 2016
 #include <vtkInteractorStyleTrackballCamera.h>
 
 
-#ifndef SURFACE_VIEWER_CONSTITERATOR(METHOD)
-#define SURFACE_VIEWER_CONSTITERATOR(METHOD) \
-for(std::list<SurfaceViewer*>::const_iterator cit = \
-	m_synchronalViewers.cbegin(); cit != m_synchronalViewers.cend(); ++cit){\
-	(*cit)->##METHOD; \
-}
-#endif // !SURFACE_VIEWER_CONSTITERATOR(METHOD)
+//#ifndef SURFACE_VIEWER_CONSTITERATOR(METHOD)
+//#define SURFACE_VIEWER_CONSTITERATOR(METHOD) \
+//for(std::list<SurfaceViewer*>::const_iterator cit = \
+//	m_synchronalViewers.cbegin(); cit != m_synchronalViewers.cend(); ++cit){\
+//	(*cit)->##METHOD; \
+//}
+//#endif // !SURFACE_VIEWER_CONSTITERATOR(METHOD)
 
 class SurfaceViewer;
 
@@ -47,7 +47,6 @@ protected:
 	AbstractInteractorStyleSurface();
 	virtual ~AbstractInteractorStyleSurface();
 
-	
 	void OnMouseWheelForward();
 	void OnMouseWheelBackward();
 	void OnLeftButtonDown();
