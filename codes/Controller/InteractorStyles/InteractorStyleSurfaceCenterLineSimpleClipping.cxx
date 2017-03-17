@@ -12,13 +12,15 @@
 #include <vtkThreshold.h>
 #include <vtkDataSetAttributes.h>
 #include <vtkGeometryFilter.h>
-//#include <vtkCleanPolyData.h>
-
+#include <vtkButtonWidget.h>
+#include <vtkTexturedButtonRepresentation2D.h>
+#include <vtkFreeTypeUtilities.h>
+#include <vtkTextProperty.h>
+#include <vtkImageData.h>
+#include <vtkCallbackCommand.h>
 
 #include <vtkvmtkCapPolyData.h>
 #include <vtkvmtkPolyDataCenterlines.h>
-
-//#include <vtkPolyDataWriter.h>
 
 
 vtkStandardNewMacro(InteractorStyleSurfaceCenterLineSimpleClipping);
@@ -26,6 +28,120 @@ const char InteractorStyleSurfaceCenterLineSimpleClipping::RADIUS[] = "Radius";
 void InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(bool flag)
 {
 	AbstractSurfaceCenterLine::SetCustomEnabled(flag);
+	if (flag) {
+		vtkSmartPointer<vtkImageData> reClipButton =
+			vtkSmartPointer<vtkImageData>::New();
+		vtkSmartPointer<vtkImageData> ChangeSourceButton =
+			vtkSmartPointer<vtkImageData>::New();
+
+		vtkSmartPointer<vtkTextProperty> textProperty = 
+			vtkSmartPointer<vtkTextProperty>::New();
+		textProperty->SetColor(1.0, 1.0, 1.0); 
+		textProperty->SetFontSize(15);
+		vtkSmartPointer<vtkFreeTypeUtilities> freeType = vtkSmartPointer<vtkFreeTypeUtilities>::New();
+		freeType->RenderString(textProperty, "Re-generate", reClipButton);
+		freeType->RenderString(textProperty, "Change Source", ChangeSourceButton);
+
+		vtkSmartPointer<vtkCallbackCommand> reClipCallback =
+			vtkSmartPointer<vtkCallbackCommand>::New();
+		reClipCallback->SetClientData(this);
+		reClipCallback->SetCallback([](vtkObject*, unsigned long, void* clientData, void* calldata) {
+			InteractorStyleSurfaceCenterLineSimpleClipping* self =
+				reinterpret_cast<InteractorStyleSurfaceCenterLineSimpleClipping*>(clientData);
+			self->CreateCenterLine(true);
+		});
+
+
+
+		double bds1[6] = { 
+			0, 
+			reClipButton->GetExtent()[1], 
+			15, 
+			15 + reClipButton->GetExtent()[3], 
+			0, 
+			0 };
+
+		m_reClipButtonRep = vtkSmartPointer<vtkTexturedButtonRepresentation2D>::New();
+		m_reClipButtonRep->SetNumberOfStates(1);
+		m_reClipButtonRep->SetButtonTexture(0, reClipButton);
+		m_reClipButtonRep->SetPlaceFactor(1);
+		m_reClipButtonRep->PlaceWidget(bds1);
+
+		m_reClipButtonWidget = vtkSmartPointer<vtkButtonWidget>::New();
+		m_reClipButtonWidget->SetRepresentation(m_reClipButtonRep);
+		m_reClipButtonWidget->SetInteractor(this->Interactor);
+		m_reClipButtonWidget->AddObserver(vtkCommand::StateChangedEvent, reClipCallback);
+		m_reClipButtonWidget->EnabledOn();
+
+
+		vtkSmartPointer<vtkCallbackCommand> changeSourceCallback =
+			vtkSmartPointer<vtkCallbackCommand>::New();
+		changeSourceCallback->SetClientData(this);
+		changeSourceCallback->SetCallback([](vtkObject*, unsigned long, void* clientData, void* calldata) {
+			InteractorStyleSurfaceCenterLineSimpleClipping* self =
+				reinterpret_cast<InteractorStyleSurfaceCenterLineSimpleClipping*>(clientData);
+			self->CreateCenterLine(false);
+		});
+
+		double bds2[6] = {
+			0,
+			ChangeSourceButton->GetExtent()[1],
+			15 + reClipButton->GetExtent()[3],
+			15 + reClipButton->GetExtent()[3] + ChangeSourceButton->GetExtent()[3],
+			0,
+			0 };
+		m_ChangeSourceButtonRep = vtkSmartPointer<vtkTexturedButtonRepresentation2D>::New();
+		m_ChangeSourceButtonRep->SetNumberOfStates(1);
+		m_ChangeSourceButtonRep->SetButtonTexture(0, ChangeSourceButton);
+		m_ChangeSourceButtonRep->SetPlaceFactor(1);
+		m_ChangeSourceButtonRep->PlaceWidget(bds2);
+
+
+		m_ChangeSourceButtonWidget = vtkSmartPointer<vtkButtonWidget>::New();
+		m_ChangeSourceButtonWidget->SetRepresentation(m_ChangeSourceButtonRep);
+		m_ChangeSourceButtonWidget->SetInteractor(this->Interactor);
+		m_ChangeSourceButtonWidget->AddObserver(vtkCommand::StateChangedEvent, changeSourceCallback);
+		m_ChangeSourceButtonWidget->EnabledOn();
+	}
+	else {
+		m_reClipButtonWidget->EnabledOff();
+		m_reClipButtonWidget = nullptr;
+		m_reClipButtonRep = nullptr;
+
+		m_ChangeSourceButtonWidget->EnabledOff();
+		m_ChangeSourceButtonWidget = nullptr;
+		m_ChangeSourceButtonRep = nullptr;
+	}
+}
+
+void InteractorStyleSurfaceCenterLineSimpleClipping::SetCenterlineOrientation(int Orientation)
+{
+	this->m_centerLineOrientation = Orientation;
+}
+
+int InteractorStyleSurfaceCenterLineSimpleClipping::GetCenterlineOrientation()
+{
+	return m_centerLineOrientation;
+}
+
+void InteractorStyleSurfaceCenterLineSimpleClipping::SetClipingDistantce(int Distance)
+{
+	m_ClipingDistance = Distance;
+}
+
+int InteractorStyleSurfaceCenterLineSimpleClipping::GetClipingDistance()
+{
+	return m_ClipingDistance;
+}
+
+void InteractorStyleSurfaceCenterLineSimpleClipping::SetLumenLabel(int label)
+{
+	this->m_lumenLabel = label;
+}
+
+int InteractorStyleSurfaceCenterLineSimpleClipping::GetLumenDistance()
+{
+	return this->m_lumenLabel;
 }
 
 InteractorStyleSurfaceCenterLineSimpleClipping::InteractorStyleSurfaceCenterLineSimpleClipping()
@@ -42,7 +158,6 @@ bool InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine()
 {
 
 	return CreateCenterLine(true);
-	//cout << "num of center id: " << capPolyData->GetCapCenterIds()->GetNumberOfIds() << endl;
 
 }
 
@@ -57,7 +172,7 @@ bool InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reCli
 		ClipAndCap();
 	}
 	else {
-		if (!m_ClipAndCapSurface || m_capCenterIds->GetNumberOfIds() <= 0) {
+		if (!m_capCenterIds || m_capCenterIds->GetNumberOfIds() <= 0) {
 			vtkErrorMacro(<< "no cap surface or center. ");
 			vtkErrorMacro(<< "re cap anyway");
 			m_sourceIdId = 0;
@@ -70,7 +185,7 @@ bool InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reCli
 			m_sourceIdId = 0;
 		}
 	}
-	if (!m_ClipAndCapSurface || m_capCenterIds->GetNumberOfIds() <= 0) {
+	if (!m_capCenterIds || m_capCenterIds->GetNumberOfIds() <= 0) {
 		vtkErrorMacro(<< "still no cap surface or center. ");
 		return false;
 	}
@@ -125,7 +240,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::ClipAndCap()
 	vtkSmartPointer<vtkThreshold> Threshold =
 		vtkSmartPointer<vtkThreshold>::New();
 	Threshold->SetInputData(GetSurfaceViewer()->GetSurfaceActor()->GetMapper()->GetInput());
-	Threshold->ThresholdBetween(2,2);
+	Threshold->ThresholdBetween(m_lumenLabel, m_lumenLabel);
 	Threshold->SetInputArrayToProcess(0, 0, 0, vtkDataObject::FIELD_ASSOCIATION_CELLS, vtkDataSetAttributes::SCALARS);
 	Threshold->Update();
 

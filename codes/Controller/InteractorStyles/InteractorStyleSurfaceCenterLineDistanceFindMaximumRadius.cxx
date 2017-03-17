@@ -106,7 +106,10 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializeHandle
 	//cleanPolyData->PointMergingOn();
 	////cleanPolyData->PointMergingOff();
 	//cleanPolyData->Update();
-
+	if (GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
+		vtkErrorMacro( << "no centerline ");
+		return;
+	}
 	vtkSmartPointer<vtkTriangleFilter> triangleFilter =
 		vtkSmartPointer<vtkTriangleFilter>::New();
 	triangleFilter->SetInputData(GetCenterlineSurfaceViewer()->GetCenterline());

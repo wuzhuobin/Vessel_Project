@@ -64,6 +64,11 @@ InteractorStyleSurfaceCenterLinePerpendicularMeasurement::~InteractorStyleSurfac
 
 void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::InitializeLinePerpendicularMeasurementWidget()
 {
+	if (GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
+		vtkErrorMacro(<< "no centerline ");
+		return;
+	}
+
 	vtkSmartPointer<vtkPolygonalSurfacePointPlacer> pointPlacer =
 		vtkSmartPointer<vtkPolygonalSurfacePointPlacer>::New();
 	pointPlacer->AddProp(GetCenterlineSurfaceViewer()->GetCenterlineActor());

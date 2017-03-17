@@ -1,7 +1,8 @@
-#include "SurfaceViewer.h"
+#include "CenterlineSurfaceViewer.h"
 
 #include <vtkRenderWindowInteractor.h>
 #include <vtkInteractorStyleTrackballCamera.h>
+#include <InteractorStyleSurfaceCenterLineSimpleClipping.h>
 #include <vtkNIFTIImageReader.h>
 #include <vtkLookupTable.h>
 #include <vtkRenderer.h>
@@ -24,7 +25,7 @@ int main(int argc, char *argv[])
 {
 	vtkSmartPointer<vtkNIFTIImageReader> niftiReader =
 		vtkSmartPointer<vtkNIFTIImageReader>::New();
-	niftiReader->SetFileName("C:/Users/jieji/Desktop/singletube.nii");
+	niftiReader->SetFileName("C:/Users/user/Desktop/singletube.nii");
 	niftiReader->Update();
 
 	//vtkSmartPointer<vtkDICOMImageReader> dicomReader =
@@ -65,13 +66,16 @@ int main(int argc, char *argv[])
 	//imageActor->GetProperty()->UseLookupTableScalarRangeOn();
 	//imageActor->SetDisplayExtent(niftiReader->GetOutput()->GetExtent());
 
+	vtkSmartPointer<vtkPolyData> centerline =
+		vtkSmartPointer<vtkPolyData>::New();
 
-
-	vtkSmartPointer<SurfaceViewer> viewer =
-		vtkSmartPointer<SurfaceViewer>::New();
+	vtkSmartPointer<CenterlineSurfaceViewer> viewer =
+		vtkSmartPointer<CenterlineSurfaceViewer>::New();
 	viewer->EnableDepthPeelingOn();
 	viewer->SetLookupTable(lookupTable);
 	viewer->SetInputData(niftiReader->GetOutput());
+	
+	viewer->SetCenterline(centerline);
 	viewer->SetupInteractor(interactor);
 	//viewer->GetRenderer()->AddActor(actor);
 	//viewer->GetRenderer()->AddActor(imageActor);
@@ -81,11 +85,11 @@ int main(int argc, char *argv[])
 	viewer->Render();
 
 
-	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style =
-		vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
-
-
+	vtkSmartPointer<InteractorStyleSurfaceCenterLineSimpleClipping> style =
+		vtkSmartPointer<InteractorStyleSurfaceCenterLineSimpleClipping>::New();
+	style->SetViewer(viewer);
 	interactor->SetInteractorStyle(style);
+	style->SetCustomEnabled(true);
 	//style->SetSurfaceViewer(viewer);
 	//style->SetCustomEnabled(true);
 

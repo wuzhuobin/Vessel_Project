@@ -7,6 +7,8 @@
 
 class vtkPolyData;
 class vtkIdList;
+class vtkButtonWidget;
+class vtkTexturedButtonRepresentation2D;
 
 class InteractorStyleSurfaceCenterLineSimpleClipping: 
 	public AbstractSurfaceCenterLine
@@ -26,31 +28,40 @@ public:
 	static InteractorStyleSurfaceCenterLineSimpleClipping* New();
 
 	virtual void SetCustomEnabled(bool flag) override;
-	vtkSetMacro(m_centerLineOrientation, unsigned short);
-	vtkGetMacro(m_centerLineOrientation, unsigned short);
-	vtkSetMacro(m_ClipingDistance, int);
-	vtkGetMacro(m_ClipingDistance, int);
+	virtual void SetCenterlineOrientation(int Orientation);
+	virtual int GetCenterlineOrientation();
+	virtual void SetClipingDistantce(int Distance);
+	virtual int GetClipingDistance();
+	virtual void SetLumenLabel(int label);
+	virtual int GetLumenDistance();
+
+	virtual bool CreateCenterLine() override;
+	/**
+	* if true, re clip
+	* false, change source id
+	*/
+	virtual bool CreateCenterLine(bool reClipSurface);
 
 protected:
 	InteractorStyleSurfaceCenterLineSimpleClipping();
 	virtual ~InteractorStyleSurfaceCenterLineSimpleClipping() override;
 
-	virtual bool CreateCenterLine() override;
-	/**
-	 * if true, re clip
-	 * false, change source id 
-	 */
-	virtual bool CreateCenterLine(bool reClipSurface);
+
 	virtual void ClipAndCap();
 	
 	virtual void OnKeyPress();
 
-	unsigned short m_centerLineOrientation = CENTER_LINE_ORIENTATION_XY;
+	int m_lumenLabel = 2;
+	int m_centerLineOrientation = CENTER_LINE_ORIENTATION_XY;
 	int m_ClipingDistance = 3;
+	vtkIdType m_sourceIdId = 0;
 
 	vtkSmartPointer<vtkIdList> m_capCenterIds = nullptr;
-	vtkIdType m_sourceIdId = 0;
 	vtkSmartPointer<vtkPolyData> m_ClipAndCapSurface = nullptr;
+	vtkSmartPointer<vtkButtonWidget> m_reClipButtonWidget = nullptr;
+	vtkSmartPointer<vtkTexturedButtonRepresentation2D> m_reClipButtonRep = nullptr;
+	vtkSmartPointer<vtkButtonWidget> m_ChangeSourceButtonWidget = nullptr;
+	vtkSmartPointer<vtkTexturedButtonRepresentation2D> m_ChangeSourceButtonRep = nullptr;
 
 
 private:

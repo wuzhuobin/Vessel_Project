@@ -234,8 +234,8 @@
     <addaction name="actionTesting"/>
     <addaction name="actionNavigation"/>
     <addaction name="actionWindow_level"/>
-    <addaction name="actionDistance_measure"/>
     <addaction name="acitonVOI_selection"/>
+    <addaction name="actionTubular_VOI"/>
     <addaction name="actionPaint_brush"/>
     <addaction name="actionSeeds_placer"/>
    </widget>
@@ -297,6 +297,7 @@
    <addaction name="actionDistance_measure"/>
    <addaction name="separator"/>
    <addaction name="acitonVOI_selection"/>
+   <addaction name="actionTubular_VOI"/>
    <addaction name="actionSeeds_placer"/>
    <addaction name="actionVBD_Smoker"/>
    <addaction name="actionContour"/>
@@ -905,6 +906,21 @@
    </property>
    <property name="toolTip">
     <string>Restore docking</string>
+   </property>
+  </action>
+  <action name="actionTubular_VOI">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/aami10-90-512.png</normaloff>:/icons/aami10-90-512.png</iconset>
+   </property>
+   <property name="text">
+    <string>Tubular VOI</string>
+   </property>
+   <property name="toolTip">
+    <string>Tubular VOI</string>
    </property>
   </action>
  </widget>

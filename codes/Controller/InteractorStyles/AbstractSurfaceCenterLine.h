@@ -18,25 +18,20 @@ public:
 
 	virtual CenterlineSurfaceViewer* GetCenterlineSurfaceViewer();
 
-	//virtual void SetCenterLine(vtkPolyData* centerLine);
-	//virtual vtkPolyData* GetCenterLine();
+	/**
+	* whether centerline is created successful
+	* @return	true, succeed
+	*			false, failed
+	*/
+	virtual bool CreateCenterLine() = 0;
 
 protected:
 	AbstractSurfaceCenterLine();
 	
 	virtual ~AbstractSurfaceCenterLine() override;
 
-	//virtual void VisualizeCenterLine(vtkPolyData* centerLine);
-	/**
-	 * whether centerline is created successful
-	 * @return	true, succeed
-	 *			false, failed
-	 */
-	virtual bool CreateCenterLine() = 0;
-	
-	//static vtkSmartPointer<vtkPolyData> m_centerLine;
-	//vtkSmartPointer<vtkActor> m_centerLineActor = nullptr;
 
+	
 
 private:
 

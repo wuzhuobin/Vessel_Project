@@ -103,23 +103,11 @@ InteractorStyleSurfaceCenterLineCurvedNavigation::~InteractorStyleSurfaceCenterL
 //#include <vtkPolyDataWriter.h>
 void InteractorStyleSurfaceCenterLineCurvedNavigation::InitializeHandleWidgets()
 {
-	//vtkSmartPointer<vtkCleanPolyData> cleanPolyData =
-	//	vtkSmartPointer<vtkCleanPolyData>::New();
-	//cleanPolyData->SetInputData(m_centerLine);
-	//cleanPolyData->PointMergingOn();
-	////cleanPolyData->PointMergingOff();
-	//cleanPolyData->Update();
 
-	//vtkSmartPointer<vtkTriangleFilter> triangleFilter =
-	//	vtkSmartPointer<vtkTriangleFilter>::New();
-	//triangleFilter->SetInputConnection(cleanPolyData->GetOutputPort());
-	//triangleFilter->Update();
-
-
-
-	//m_pointLocator = vtkSmartPointer<vtkKdTreePointLocator>::New();
-	//m_pointLocator->SetDataSet(m_centerLine);
-	//m_pointLocator->BuildLocator();
+	if (GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
+		vtkErrorMacro(<< "no centerline ");
+		return;
+	}
 
 	vtkSmartPointer<vtkPolygonalSurfacePointPlacer> pointPlacer =
 		vtkSmartPointer<vtkPolygonalSurfacePointPlacer>::New();

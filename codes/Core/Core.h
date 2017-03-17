@@ -47,6 +47,7 @@ private slots:
 	void slotTesting();
 	void slotSeedsPlacer();
 	void slotVOI();
+	void slotTubularVOI();
 
 	// Surface interactorStyle
 	void slotTrackballCamera();

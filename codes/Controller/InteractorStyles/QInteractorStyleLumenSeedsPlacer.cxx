@@ -8,18 +8,13 @@
 #include <vtkImageData.h>
 #include <vtkExtractVOI.h>
 #include <vtkSeedWidget.h>
-#include <vtkParametricSpline.h>
-#include <vtkParametricFunctionSource.h>
-#include <vtkTransformPolyDataFilter.h>
-#include <vtkTransform.h>
-#include <vtkImageMask.h>
+
 #include <vtkHandleWidget.h>
 #include <vtkHandleRepresentation.h>
 #include <vtkSeedRepresentation.h>
 #include <vtkCommand.h>
 #include <vtkRenderWindow.h>
 
-#include "vtkPolylineToTubularVolume.h"
 #include "LumenExtractionFilter.h"
 #include "ImageViewer.h"
 #include "ui_QInteractorStyleLumenSeedsPlacer.h"
@@ -94,7 +89,7 @@ void QInteractorStyleLumenSeedsPlacer::UpdateWidgetToSeeds(QList<int*>& seeds, i
 			QString::number(newImagePos[0]) + "," +
 			QString::number(newImagePos[1]) + "," +
 			QString::number(newImagePos[2]) + "]";
-		ui->listWidgetSeedList->item(m_lumenSeeds.indexOf(*it))->setText(listItem);
+		GetListWidget()->item(seeds.indexOf(*it))->setText(listItem);
 	}
 	else {
 		seeds.push_back(new int[3]);
@@ -103,7 +98,7 @@ void QInteractorStyleLumenSeedsPlacer::UpdateWidgetToSeeds(QList<int*>& seeds, i
 			QString::number(seeds.back()[0]) + "," +
 			QString::number(seeds.back()[1]) + "," +
 			QString::number(seeds.back()[2]) + "]";
-		ui->listWidgetSeedList->addItem(listItem);
+		GetListWidget()->addItem(listItem);
 	}
 }
 
@@ -116,14 +111,16 @@ void QInteractorStyleLumenSeedsPlacer::ClearAllSeeds(QList<int*>& seed)
 			seed.pop_back();
 		}
 	}
+	GetListWidget()->clear();
+	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, ClearAllSeedWidget());
 }
 
 void QInteractorStyleLumenSeedsPlacer::DeleteFocalSeed(QList<int*>& seeds)
 {
-	int i = ui->listWidgetSeedList->currentRow();
+	int i = GetListWidget()->currentRow();
 	if (i >= 0 && i < seeds.size()) {
-		ui->listWidgetSeedList->removeItemWidget(
-			ui->listWidgetSeedList->takeItem(i));
+		GetListWidget()->removeItemWidget(
+			GetListWidget()->takeItem(i));
 		delete[] seeds[i];
 		seeds.removeAt(i);
 	}
@@ -197,8 +194,6 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumen(QList<int*>& seeds)
 void QInteractorStyleLumenSeedsPlacer::ClearAllSeeds()
 {
 	ClearAllSeeds(m_lumenSeeds);
-	ui->listWidgetSeedList->clear();
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, ClearAllSeedWidget());
 	//m_seedWidget->Render();
 }
 
@@ -300,72 +295,6 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumen()
 	ExtractLumen(m_lumenSeeds);
 }
 
-void QInteractorStyleLumenSeedsPlacer::ExtractSegmentation(QList<int*>& seed)
-{
-	vtkSmartPointer<vtkPolyData> splinePoints =
-		vtkSmartPointer<vtkPolyData>::New();
-	splinePoints->SetPoints(vtkSmartPointer<vtkPoints>::New());
-	for (QList<int*>::const_iterator cit = seed.cbegin(); cit != seed.cend(); ++cit) {
-		splinePoints->GetPoints()->InsertNextPoint((*cit)[0], (*cit)[1], (*cit)[2]);
-		//double worldPos[3];
-		//for (int pos = 0; pos < 3; ++pos) {
-		//	worldPos[pos] = ((*cit)[pos] * GetSpacing()[pos]) + GetOrigin()[pos];
-		//}
-		//splinePoints->GetPoints()->InsertNextPoint(worldPos);
-	}
-	
-	vtkSmartPointer<vtkTransform> translation =
-		vtkSmartPointer<vtkTransform>::New();
-	// because default is premultiply 
-	// T* (S * Points)
-	translation->Translate(GetOrigin());
-	translation->Scale(GetSpacing());
-	translation->Update();
-
-	vtkSmartPointer<vtkTransformPolyDataFilter> transformFilter =
-		vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-	transformFilter->SetInputData(splinePoints);
-	transformFilter->SetTransform(translation);
-	transformFilter->Update();
-
-
-	vtkSmartPointer<vtkParametricSpline> spline =
-		vtkSmartPointer<vtkParametricSpline>::New();
-	//spline->SetPoints(splinePoints->GetPoints());
-	spline->SetPoints(transformFilter->GetOutput()->GetPoints());
-
-	vtkSmartPointer<vtkParametricFunctionSource> functionSource =
-		vtkSmartPointer<vtkParametricFunctionSource>::New();
-	functionSource->SetParametricFunction(spline);
-	functionSource->Update();
-
-	vtkSmartPointer<vtkPolylineToTubularVolume> polylineToTubularVolume =
-		vtkSmartPointer<vtkPolylineToTubularVolume>::New();
-	polylineToTubularVolume->SetInputData(GetImageViewer()->GetInputLayer());
-	polylineToTubularVolume->SetPolyline(functionSource->GetOutput());
-	polylineToTubularVolume->SetTubeRadius(m_extractRadius);
-	polylineToTubularVolume->Update();
-
-	vtkSmartPointer<vtkImageMask> maskFilter = vtkSmartPointer<vtkImageMask>::New();
-	maskFilter->SetInput1Data(GetImageViewer()->GetInputLayer());
-	maskFilter->SetMaskInputData(polylineToTubularVolume->GetOutput());
-	maskFilter->Update();
-
-	GetImageViewer()->GetInputLayer()->ShallowCopy(maskFilter->GetOutput());
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());
-
-}
-
-void QInteractorStyleLumenSeedsPlacer::ExtractSegmentation()
-{
-	ExtractSegmentation(m_lumenSeeds);
-}
-
-void QInteractorStyleLumenSeedsPlacer::SetExtractRadius(int radius)
-{
-	this->m_extractRadius = radius;
-}
-
 void QInteractorStyleLumenSeedsPlacer::SetMultipier(double value)
 {
 	m_multiplier = value;
@@ -404,11 +333,9 @@ void QInteractorStyleLumenSeedsPlacer::OnKeyPress()
 	}
 }
 
-void QInteractorStyleLumenSeedsPlacer::enterEvent(QEvent * event)
+QListWidget * QInteractorStyleLumenSeedsPlacer::GetListWidget()
 {
-	QWidget::enterEvent(event);
-	qDebug() << "Enter";
-	//UpdateTargetViewer();
+	return ui->listWidgetSeedList;
 }
 
 void QInteractorStyleLumenSeedsPlacer::uniqueInitialization()
@@ -416,7 +343,7 @@ void QInteractorStyleLumenSeedsPlacer::uniqueInitialization()
 	connect(ui->pushBtnDeleteSeed, SIGNAL(clicked()),
 		this, SLOT(DeleteFocalSeed()));
 
-	connect(ui->listWidgetSeedList, SIGNAL(currentRowChanged(int)),
+	connect(GetListWidget(), SIGNAL(currentRowChanged(int)),
 		this, SLOT(SetFocalSeed(int)));
 
 	connect(ui->dropSeedPushButton, SIGNAL(clicked()),
@@ -432,10 +359,10 @@ void QInteractorStyleLumenSeedsPlacer::uniqueInitialization()
 		this, SLOT(SetNumberOfIteractions(int)));
 	connect(ui->initialNeighbodhoodSpinBox, SIGNAL(valueChanged(int)),
 		this, SLOT(SetInitialNeighborhoodRadius(int)));
-	connect(ui->spinBoxExtractRadius, SIGNAL(valueChanged(int)),
-		this, SLOT(SetExtractRadius(int)));
-	connect(ui->pushBtnExtractSegmentation, SIGNAL(clicked()),
-		this, SLOT(ExtractSegmentation()));
+	//connect(ui->spinBoxExtractRadius, SIGNAL(valueChanged(int)),
+	//	this, SLOT(SetExtractRadius(int)));
+	//connect(ui->pushBtnExtractSegmentation, SIGNAL(clicked()),
+	//	this, SLOT(ExtractSegmentation()));
 }
 
 void QInteractorStyleLumenSeedsPlacer::initialization()

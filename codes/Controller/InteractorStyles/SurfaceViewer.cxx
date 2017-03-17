@@ -320,6 +320,7 @@ SurfaceViewer::SurfaceViewer()
 	//this->AxesActor->VisibilityOff();
 	this->OrientationMarkerWidget = vtkOrientationMarkerWidget::New();
 	OrientationMarkerWidget->SetOrientationMarker(this->AxesActor);
+	OrientationMarkerWidget->SetViewport(0, 0.8, 0.2, 1);
 
 	this->InstallPipeline();
 }

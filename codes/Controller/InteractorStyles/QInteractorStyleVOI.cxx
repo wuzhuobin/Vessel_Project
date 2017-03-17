@@ -86,24 +86,15 @@ void QInteractorStyleVOI::ExtractVOI()
 		//extent[i*2 + 1] = extent[i*2 + 1] < GetExtent()[i*2 + 1] ? extent[i*2 + 1] : GetExtent()[i*2 +1];
 	}
 	GetImageViewer()->SetDisplayExtent(extent);
-	GetImageViewer()->Render();
 	SetExtentRange(GetImageViewer()->GetDisplayExtent());
-	//uniqueEnable();
-	//m_imageViewer->SetImageVOI(extent);
-	//m_imageViewer->SetOverlayVOI(extent);
+	GetImageViewer()->Render();
 }
 
 void QInteractorStyleVOI::ResetVOI()
 {
-	//int* extent = GetExtent();
-	//m_imageViewer->SetDisplayExtent(extent);
-	//m_imageViewer->UpdateDisplayExtent();
 	GetImageViewer()->ResetDisplayExtent();
-	GetImageViewer()->Render();
 	SetExtentRange(GetImageViewer()->GetDisplayExtent());
-	//uniqueEnable();
-	//m_imageViewer->ResetImageVOI();
-	//m_imageViewer->ResetOverlayVOI();
+	GetImageViewer()->Render();
 }
 
 QInteractorStyleVOI::QInteractorStyleVOI(int uiType, QWidget * parent)

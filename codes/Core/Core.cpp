@@ -78,6 +78,7 @@ Core::Core(QObject * parent)
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
+	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetTubularVOI());
 	//imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel()->show();
 	//moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	
@@ -95,6 +96,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotSeedsPlacer()));
 	connect(mainWindow.getUi()->acitonVOI_selection, SIGNAL(triggered()),
 		this, SLOT(slotVOI()));
+	connect(mainWindow.getUi()->actionTubular_VOI, SIGNAL(triggered()),
+		this, SLOT(slotTubularVOI()));
 	connect(mainWindow.getUi()->actionVBD_Smoker, SIGNAL(triggered()),
 		this, SLOT(slotVBDSmoker()));
 
@@ -327,6 +330,15 @@ void Core::slotVOI()
 		imageInteractorStyle[i]->SetInteractorStyleToVOI();
 	}
 	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
+
+}
+
+void Core::slotTubularVOI()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		imageInteractorStyle[i]->SetInteractorStyleToTubularVOI();
+	}
+	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetTubularVOI());
 
 }
 

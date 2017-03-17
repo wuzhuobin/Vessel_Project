@@ -37,6 +37,8 @@ IADEInteractorStyleSwitch::IADEInteractorStyleSwitch()
 	allStyles.push_back(PaintBrush);
 	VOI = QInteractorStyleVOI::New();
 	allStyles.push_back(VOI);
+	TubularVOI = QInteractorStyleTubularVOI::New();
+	allStyles.push_back(TubularVOI);
 	//Ruler = QInteractorStyleRuler::New();
 
 	// IADE specified

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>QInteractorStyleLumenSeedsPlacer</class>
- <widget class="QWidget" name="QInteractorStyleLumenSeedsPlacer">
+ <class>QInteractorStyleTubularVOI</class>
+ <widget class="QWidget" name="QInteractorStyleTubularVOI">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>295</width>
-    <height>706</height>
+    <height>671</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>SeedsPlacer</string>
+   <string>TubularVOI</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -100,13 +100,13 @@
    <item>
     <widget class="QGroupBox" name="groupBox_4">
      <property name="title">
-      <string>Lumen Extraction</string>
+      <string>Axial Reconstruction</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QLabel" name="label_60">
         <property name="text">
-         <string>Seed List:</string>
+         <string>Way Point List</string>
         </property>
        </widget>
       </item>
@@ -125,7 +125,7 @@
         <item>
          <widget class="QLabel" name="label_61">
           <property name="text">
-           <string>Seed Coordinate: </string>
+           <string>Way Point Coordinate</string>
           </property>
          </widget>
         </item>
@@ -208,6 +208,20 @@
        </layout>
       </item>
       <item>
+       <widget class="Line" name="line_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Preprocessing</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="Line" name="line">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -215,30 +229,70 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_35">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QLabel" name="label_62">
+         <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>Targe Image (T1 recommanded): </string>
+           <string>Extract Radius</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBoxTargeImage"/>
+         <widget class="QSlider" name="hSliderExtractRadius">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>50</number>
+          </property>
+          <property name="singleStep">
+           <number>5</number>
+          </property>
+          <property name="value">
+           <number>10</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinBoxExtractRadius">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>60</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="suffix">
+           <string> mm</string>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="maximum">
+           <number>50</number>
+          </property>
+          <property name="singleStep">
+           <number>5</number>
+          </property>
+          <property name="value">
+           <number>10</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_10">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Multiplier</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_3">
+         <spacer name="horizontalSpacer_7">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -251,179 +305,41 @@
          </spacer>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="doubleSpinBoxMultiplier">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
+         <widget class="QPushButton" name="pushBtnExtractVOI">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <double>1.700000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>2.500000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.050000000000000</double>
-          </property>
-          <property name="value">
-           <double>2.100000000000000</double>
+          <property name="text">
+           <string>Extract Segmentation</string>
           </property>
          </widget>
         </item>
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QPushButton" name="pushBtnExtractLumen">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Extract Lumen</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="checkBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Advance</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QLabel" name="labelReconstructionStatus">
+        <property name="styleSheet">
+         <string notr="true">QWidget {
+	color: rgb(255, 0, 0);
+}</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </item>
      </layout>
+     <zorder>labelReconstructionStatus</zorder>
      <zorder>line</zorder>
      <zorder>listWidgetSeedList</zorder>
      <zorder>label_60</zorder>
-    </widget>
-   </item>
-   <item>
-    <widget class="QFrame" name="frame">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="2" column="1">
-       <widget class="QSpinBox" name="spinBox">
-        <property name="value">
-         <number>2</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>Holes filling iterations: </string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Initial neighborhood radius:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="initialNeighbodhoodSpinBox">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>10</number>
-        </property>
-        <property name="displayIntegerBase" stdset="0">
-         <number>10</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" colspan="2">
-       <layout class="QHBoxLayout" name="horizontalLayout_14">
-        <item>
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>Number Of Iterations</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="numberOfIterationsSliderInit">
-          <property name="minimum">
-           <number>3</number>
-          </property>
-          <property name="maximum">
-           <number>20</number>
-          </property>
-          <property name="value">
-           <number>3</number>
-          </property>
-          <property name="sliderPosition">
-           <number>3</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="numberOfIterationsSpinBox">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>20</number>
-          </property>
-          <property name="value">
-           <number>3</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
+     <zorder>line_2</zorder>
+     <zorder>label_6</zorder>
+     <zorder>layoutWidget</zorder>
+     <zorder>layoutWidget_2</zorder>
     </widget>
    </item>
    <item>
@@ -442,54 +358,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>numberOfIterationsSliderInit</sender>
-   <signal>sliderMoved(int)</signal>
-   <receiver>numberOfIterationsSpinBox</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>218</x>
-     <y>437</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>274</x>
-     <y>436</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>numberOfIterationsSpinBox</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>numberOfIterationsSliderInit</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>274</x>
-     <y>436</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>218</x>
-     <y>437</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>frame</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>274</x>
-     <y>383</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>237</x>
-     <y>426</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
