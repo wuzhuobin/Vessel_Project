@@ -77,10 +77,16 @@ ImageViewer::ImageViewer()
 
 	// OrientationTextActor 
 	this->IntTextActor = vtkTextActor::New();
+	this->IntTextActor->GetTextProperty()->SetFontSize(15);
+	this->IntTextActor->GetTextProperty()->SetColor(1.0, 0.7490, 0.0);
 	this->HeaderActor = vtkTextActor::New();
+	this->HeaderActor->GetTextProperty()->SetFontSize(15);
+	this->HeaderActor->GetTextProperty()->SetColor(1.0, 0.7490, 0.0);
 	for (int i = 0; i < 4; i++)
 	{
 		this->OrientationTextActor[i] = vtkTextActor::New();
+		this->OrientationTextActor[i]->GetTextProperty()->SetFontSize(15);
+		this->OrientationTextActor[i]->GetTextProperty()->SetColor(1.0, 0.7490, 0.0);
 	}
 
 	//Cursor
@@ -145,6 +151,18 @@ ImageViewer::~ImageViewer()
 		this->CursorActor = NULL;
 	}
 
+}
+
+void ImageViewer::SetDisplayExtent(int displayExtent1, int displayExtent2, int displayExtent3,
+	int displayExtent4, int displayExtent5, int displayExtent6)
+{
+	this->DisplayExtent[0] = displayExtent1;
+	this->DisplayExtent[1] = displayExtent2;
+	this->DisplayExtent[2] = displayExtent3;
+	this->DisplayExtent[3] = displayExtent4;
+	this->DisplayExtent[4] = displayExtent5;
+	this->DisplayExtent[5] = displayExtent6;
+	UpdateDisplayExtent();
 }
 
 void ImageViewer::SetDisplayExtent(int * displayExtent)
@@ -245,14 +263,14 @@ void ImageViewer::ResetDisplayExtent()
 
 void ImageViewer::SetColorLevel(double level)
 {
-	if (level > 0) {
+	if (level >= 0) {
 		vtkImageViewer2::SetColorLevel(level);
 	}
 }
 
 void ImageViewer::SetColorWindow(double window)
 {
-	if (window > 0) {
+	if (window >= 0) {
 		vtkImageViewer2::SetColorWindow(window);
 	}
 }
@@ -371,9 +389,6 @@ void ImageViewer::Render()
 	if (this->FirstRender)
 	{
 		this->ResetDisplayExtent();
-		this->InitializeOrientationText();
-		this->InitializeIntensityText("");
-		this->InitializeHeader(string());
 	}
 
 	vtkImageViewer2::Render();
@@ -393,7 +408,7 @@ void ImageViewer::SetInputData(vtkImageData *in)
 	this->InvokeEvent(vtkCommand::UpdateDataEvent);
 }
 
-void ImageViewer::SetInputDataLayer(vtkImageData *in)
+void ImageViewer::SetOverlay(vtkImageData *in)
 {
 	this->OverlayActor->VisibilityOn();
 	OverlayWindowLevel->SetInputData(in);
@@ -402,7 +417,7 @@ void ImageViewer::SetInputDataLayer(vtkImageData *in)
 	this->InvokeEvent(vtkCommand::UpdateDataEvent);
 }
 //----------------------------------------------------------------------------
-vtkImageData* ImageViewer::GetInputLayer()
+vtkImageData* ImageViewer::GetOverlay()
 {
 	return vtkImageData::SafeDownCast(this->OverlayWindowLevel->GetInput());
 }
@@ -465,12 +480,6 @@ void ImageViewer::InitializeCursorBoundary()
 	Cursor3D->Update();
 }
 
-
-vtkLookupTable* ImageViewer::GetLookupTable()
-{
-	return this->LookupTable;
-}
-
 void ImageViewer::SetLookupTable(vtkLookupTable * LookupTable)
 {
 	this->LookupTable = LookupTable;
@@ -509,19 +518,12 @@ void ImageViewer::SetFocalPointWithImageCoordinate(int i, int j, int k)
 		j*spacing[1] + origin[1], 
 		k*spacing[2] + origin[2] };
 
-	const double* pointOld = Cursor3D->GetFocalPoint();
-
-	if (pointOld[0] == point[0] && pointOld[1] == point[1] && pointOld[2] == point[2]) {
-		return;
-	}
-	
-
 	Cursor3D->SetFocalPoint(point);
 	Cursor3D->Update();
 	int ijk[3] = { i, j, k };
 	SetSlice(ijk[this->SliceOrientation]);
-	InitializeIntensityText(std::to_string(
-		(GetInput()->GetScalarComponentAsFloat(i, j, k, 0))));
+	IntTextActor->SetInput(std::to_string(
+		(GetInput()->GetScalarComponentAsFloat(i, j, k, 0))).c_str());
 	this->Render();
 
 }
@@ -585,68 +587,20 @@ bool ImageViewer::GetAllBlack()
 
 void ImageViewer::InitializeHeader(string file)
 {
-
-	const int* size = Renderer->GetSize();
-	const int margin = 15;
-	int coord[2] = { 5,size[1] - margin };
-	if (this->FirstRender && HeaderActor != NULL) {
-		HeaderActor->SetDisplayPosition(coord[0], coord[1]);
-		HeaderActor->GetTextProperty()->SetFontSize(15);
-		HeaderActor->GetTextProperty()->SetColor(1.0, 0.7490, 0.0);
-		Renderer->AddActor2D(HeaderActor);
-	}
-
-	if (GetInput() != NULL) {
-		HeaderActor->SetInput(file.c_str());
-		RenderWindow->SetWindowName(file.c_str());
-	}
-	else {
-		HeaderActor->SetInput("");
-		cout << "Error in setting text, file not found" << endl;
-	}
+	HeaderActor->SetInput(file.c_str());
+	RenderWindow->SetWindowName(file.c_str());
 }
 
-void ImageViewer::InitializeIntensityText(string IntText)
-{
-	const int* size = Renderer->GetSize();
-	const int coord[2] = { 5,5 };
-	if (this->FirstRender && IntTextActor != NULL) {
-		IntTextActor->SetDisplayPosition(coord[0], coord[1]);
-		IntTextActor->GetTextProperty()->SetFontSize(15);
-		IntTextActor->GetTextProperty()->SetColor(1.0, 0.7490, 0.0);
-		Renderer->AddActor2D(IntTextActor);
-		return;
-	}
-
-	if (GetInput() != NULL)
-		IntTextActor->SetInput(IntText.c_str());
-	else {
-		IntTextActor->SetInput("");
-		cout << "Error in setting text, file not found" << endl;
-	}
-
-}
-
-void ImageViewer::InitializeOrientationText()
+void ImageViewer::ResizeHeaderAndOrientationText()
 {
 	int* size = Renderer->GetSize();
 	int margin = 15;
-
+	int coord[2] = { 5,size[1] - margin };
 	int down[2] = { size[0] / 2	,5 };
 	int up[2] = { size[0] / 2	,size[1] - margin };
 	int left[2] = { 5			,size[1] / 2 };
 	int right[2] = { size[0] - margin	,size[1] / 2 };
 	int* position[4] = { up, down, left, right };
-
-	for (int i = 0; i<4; i++)
-	{
-		if (this->FirstRender && OrientationTextActor[i] != NULL) {
-			OrientationTextActor[i]->SetDisplayPosition(position[i][0], position[i][1]);
-			OrientationTextActor[i]->GetTextProperty()->SetFontSize(15);
-			OrientationTextActor[i]->GetTextProperty()->SetColor(1.0, 0.7490, 0.0);
-			Renderer->AddActor2D(OrientationTextActor[i]);
-		}
-	}
 	switch (SliceOrientation)
 	{
 	case 0:
@@ -668,37 +622,13 @@ void ImageViewer::InitializeOrientationText()
 		OrientationTextActor[3]->SetInput("L");
 		break;
 	}
-
-}
-
-void ImageViewer::ResizeHeaderAndOrientationText()
-{
-	int* size = Renderer->GetSize();
-	int margin = 15;
-	int coord[2] = { 5,size[1] - margin };
-	int down[2] = { size[0] / 2	,5 };
-	int up[2] = { size[0] / 2	,size[1] - margin };
-	int left[2] = { 5			,size[1] / 2 };
-	int right[2] = { size[0] - margin	,size[1] / 2 };
-	int* position[4] = { up, down, left, right };
-
 	for (int i = 0; i<4; i++)
 	{
 		OrientationTextActor[i]->SetDisplayPosition(position[i][0], position[i][1]);
 	}
 	HeaderActor->SetDisplayPosition(coord[0], coord[1]);
-}
+	IntTextActor->SetDisplayPosition(5, 5);
 
-void ImageViewer::SetSlice(int s)
-{
-	if (Slice == s)
-		return;
-	vtkImageViewer2::SetSlice(s);
-}
-
-void ImageViewer::SetupInteractor(vtkRenderWindowInteractor * arg)
-{
-	vtkImageViewer2::SetupInteractor(arg);
 }
 
 void ImageViewer::SetEnableDepthPeeling(bool flag)

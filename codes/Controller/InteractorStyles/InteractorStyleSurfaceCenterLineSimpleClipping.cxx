@@ -14,10 +14,11 @@
 #include <vtkGeometryFilter.h>
 #include <vtkButtonWidget.h>
 #include <vtkTexturedButtonRepresentation2D.h>
-#include <vtkFreeTypeUtilities.h>
+//#include <vtkFreeTypeUtilities.h>
 #include <vtkTextProperty.h>
 #include <vtkImageData.h>
 #include <vtkCallbackCommand.h>
+#include <vtkProperty2D.h>
 
 #include <vtkvmtkCapPolyData.h>
 #include <vtkvmtkPolyDataCenterlines.h>
@@ -38,9 +39,9 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(bool flag)
 			vtkSmartPointer<vtkTextProperty>::New();
 		textProperty->SetColor(1.0, 1.0, 1.0); 
 		textProperty->SetFontSize(15);
-		vtkSmartPointer<vtkFreeTypeUtilities> freeType = vtkSmartPointer<vtkFreeTypeUtilities>::New();
+/*		vtkSmartPointer<vtkFreeTypeUtilities> freeType = vtkSmartPointer<vtkFreeTypeUtilities>::New();
 		freeType->RenderString(textProperty, "Re-generate", reClipButton);
-		freeType->RenderString(textProperty, "Change Source", ChangeSourceButton);
+		freeType->RenderString(textProperty, "Change Source", ChangeSourceButton)*/;
 
 		vtkSmartPointer<vtkCallbackCommand> reClipCallback =
 			vtkSmartPointer<vtkCallbackCommand>::New();
@@ -62,6 +63,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(bool flag)
 			0 };
 
 		m_reClipButtonRep = vtkSmartPointer<vtkTexturedButtonRepresentation2D>::New();
+		m_reClipButtonRep->GetProperty()->SetOpacity(1);
 		m_reClipButtonRep->SetNumberOfStates(1);
 		m_reClipButtonRep->SetButtonTexture(0, reClipButton);
 		m_reClipButtonRep->SetPlaceFactor(1);
@@ -91,6 +93,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(bool flag)
 			0,
 			0 };
 		m_ChangeSourceButtonRep = vtkSmartPointer<vtkTexturedButtonRepresentation2D>::New();
+		m_ChangeSourceButtonRep->GetProperty()->SetOpacity(1);
 		m_ChangeSourceButtonRep->SetNumberOfStates(1);
 		m_ChangeSourceButtonRep->SetButtonTexture(0, ChangeSourceButton);
 		m_ChangeSourceButtonRep->SetPlaceFactor(1);

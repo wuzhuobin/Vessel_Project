@@ -7,8 +7,10 @@ class vtkActor;
 class vtkPolyDataMapper;
 class vtkPolyData;
 class vtkCleanPolyData;
-class vtkKdTreePointLocator;
+//class vtkKdTreePointLocator;
 class vtkTubeFilter;
+class vtkSplineFilter;
+
 
 
 class CenterlineSurfaceViewer: public SurfaceViewer
@@ -31,7 +33,8 @@ public:
 	vtkGetObjectMacro(CenterlineActor, vtkActor);
 	vtkGetObjectMacro(CleanPolyData, vtkCleanPolyData);
 	vtkGetObjectMacro(TubeFilter, vtkTubeFilter);
-	vtkGetObjectMacro(KdTreePointLocator, vtkKdTreePointLocator);
+	//vtkGetObjectMacro(KdTreePointLocator, vtkKdTreePointLocator);
+	vtkGetObjectMacro(SplineFilter, vtkSplineFilter);
 
 protected:
 	CenterlineSurfaceViewer();
@@ -40,8 +43,9 @@ protected:
 	vtkActor* CenterlineActor = nullptr;
 	vtkPolyDataMapper* CenterlineMapper = nullptr;
 	vtkCleanPolyData* CleanPolyData = nullptr;
+	vtkSplineFilter* SplineFilter = nullptr;
 	vtkTubeFilter* TubeFilter = nullptr;
-	vtkKdTreePointLocator* KdTreePointLocator = nullptr;
+	//vtkKdTreePointLocator* KdTreePointLocator = nullptr;
 
 	virtual void InstallPipeline();
 	virtual void UnInstallPipeline();

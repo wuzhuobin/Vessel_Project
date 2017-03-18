@@ -19,6 +19,7 @@
 //#include <vtkTextProperty.h>
 #include <vtkRenderer.h>
 #include <vtkCommand.h>
+#include <vtkSplineFilter.h>
 #include "AbstractNavigation.h"
 
 #include <vtkDijkstraGraphInternals.h>
@@ -75,7 +76,7 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::SetCustomEnabled(bool fla
 			m_handleWidgets[i]->RemoveAllObservers();
 			m_handleWidgets[i] = nullptr;
 		}
-		//m_pointLocator = nullptr;
+		m_pointLocator = nullptr;
 		//m_surfaceViewer->GetRenderer()->RemoveActor(m_measurementText);
 		//m_imageActor = nullptr;
 	}
@@ -108,6 +109,8 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::InitializeHandleWidgets()
 		vtkErrorMacro(<< "no centerline ");
 		return;
 	}
+	m_pointLocator = vtkSmartPointer<vtkKdTreePointLocator>::New();
+	m_pointLocator->SetDataSet(GetCenterlineSurfaceViewer()->GetSplineFilter()->GetOutput());
 
 	vtkSmartPointer<vtkPolygonalSurfacePointPlacer> pointPlacer =
 		vtkSmartPointer<vtkPolygonalSurfacePointPlacer>::New();
@@ -217,7 +220,7 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::Update2DViewers()
 
 	
 	//int k = (worldPos[2] - GetOrigin()[2]) / GetSpacing()[2] + 0.5;
-	int k = GetCenterlineSurfaceViewer()->GetKdTreePointLocator()->FindClosestPoint(worldPos);
+	int k = m_pointLocator->FindClosestPoint(worldPos);
 
 	STYLE_DOWN_CAST_CONSTITERATOR(AbstractNavigation, SetCurrentFocalPointWithImageCoordinate(i, j, k));
 

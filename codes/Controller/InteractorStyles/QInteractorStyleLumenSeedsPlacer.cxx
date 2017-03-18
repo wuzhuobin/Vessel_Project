@@ -175,7 +175,7 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumen(QList<int*>& seeds)
 			for (int k = GetImageViewer()->GetDisplayExtent()[4];
 				k <= GetImageViewer()->GetDisplayExtent()[5]; ++k) {
 				unsigned char* pixelLayer = static_cast<unsigned char*>
-					(GetImageViewer()->GetInputLayer()->GetScalarPointer(i, j, k));
+					(GetImageViewer()->GetOverlay()->GetScalarPointer(i, j, k));
 				unsigned char* pixel = static_cast<unsigned char*>
 					(lumenExtractionFilter->GetOutput()->GetScalarPointer(i, j, k));
 				*pixelLayer = *pixel;
@@ -183,8 +183,8 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumen(QList<int*>& seeds)
 		}
 	}
 
-	GetImageViewer()->GetInputLayer()->Modified();
-	GetImageViewer()->GetInputLayer()->InvokeEvent(vtkCommand::UpdateDataEvent);
+	GetImageViewer()->GetOverlay()->Modified();
+	GetImageViewer()->GetOverlay()->InvokeEvent(vtkCommand::UpdateDataEvent);
 	//MY_VIEWER_CONSTITERATOR(Render());
 	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());
 

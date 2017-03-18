@@ -198,7 +198,7 @@ void QInteractorStyleVBDSmokerSeeds::slotUpdatePonsCentralSectionLocation()
 	range[5] = ui->spinBoxPonsCentralSectionLocation->value();
 	vtkSmartPointer<vtkMarchingSquares> marchingSquare =
 		vtkSmartPointer<vtkMarchingSquares>::New();
-	marchingSquare->SetInputData(GetImageViewer()->GetInputLayer());
+	marchingSquare->SetInputData(GetImageViewer()->GetOverlay());
 	marchingSquare->GenerateValues(1, 1, 1);
 	marchingSquare->SetImageRange(range);
 	marchingSquare->Update();

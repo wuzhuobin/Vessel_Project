@@ -301,7 +301,7 @@ void InteractorStylePolygonDraw::FillPolygon(
 						(*cit)->GetPoints()->GetData()->GetVoidPointer(0)),
 							(*cit)->GetPoints()->GetBounds(), normalVector)) {
 						fillPoints->InsertNextPoint(p);
-						unsigned char * pixel = static_cast<unsigned char *>(GetImageViewer()->GetInputLayer()->GetScalarPointer(p[0], p[1], p[2]));
+						unsigned char * pixel = static_cast<unsigned char *>(GetImageViewer()->GetOverlay()->GetScalarPointer(p[0], p[1], p[2]));
 						*pixel = label;
 					}
 				}
@@ -313,7 +313,7 @@ void InteractorStylePolygonDraw::FillPolygon(
 	if (fillPoints->GetNumberOfPoints() < 1)
 		return;
 	//m_imageViewer->GetOverlay()->SetPixels(fillPoints, (unsigned char)label);
-	GetImageViewer()->GetInputLayer()->Modified();
+	GetImageViewer()->GetOverlay()->Modified();
 
 	STYLE_DOWN_CAST_CONSTITERATOR(InteractorStylePolygonDraw, GetImageViewer()->Render());
 
@@ -368,7 +368,7 @@ void InteractorStylePolygonDraw::FillPolygon(
 							(*cit)->GetPoints()->GetBounds(), normalVector)) {
 						p[GetSliceOrientation()] = slice;
 						fillPoints->InsertNextPoint(p[0], p[1], p[2]);
-						unsigned char * pixel = static_cast<unsigned char *>(GetImageViewer()->GetInputLayer()->GetScalarPointer(p[0], p[1], p[2]));
+						unsigned char * pixel = static_cast<unsigned char *>(GetImageViewer()->GetOverlay()->GetScalarPointer(p[0], p[1], p[2]));
 						*pixel = label;
 					}
 				}
@@ -378,7 +378,7 @@ void InteractorStylePolygonDraw::FillPolygon(
 	if (fillPoints->GetNumberOfPoints() < 1)
 		return;
 	//m_imageViewer->GetOverlay()->SetPixels(fillPoints, (unsigned char)label);
-	GetImageViewer()->GetInputLayer()->Modified();
+	GetImageViewer()->GetOverlay()->Modified();
 	STYLE_DOWN_CAST_CONSTITERATOR(InteractorStylePolygonDraw, GetImageViewer()->Render());
 
 
@@ -483,7 +483,7 @@ void InteractorStylePolygonDraw::FillPolygon(
 //	}
 //
 //
-//	m_imageViewer->GetInputLayer()->Modified();
+//	m_imageViewer->GetOverlay()->Modified();
 //	for (std::list<MyImageViewer*>::iterator it = m_synchronalViewers.begin();
 //		it != m_synchronalViewers.end(); ++it) {
 //		(*it)->Render();

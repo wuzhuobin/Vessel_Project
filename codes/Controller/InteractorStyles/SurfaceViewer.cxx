@@ -119,6 +119,52 @@ void SurfaceViewer::UpdateDisplayExtent()
 	}
 }
 
+//----------------------------------------------------------------------------
+void SurfaceViewer::SetPosition(int a, int b)
+{
+	this->RenderWindow->SetPosition(a, b);
+}
+
+//----------------------------------------------------------------------------
+int* SurfaceViewer::GetPosition()
+{
+	return this->RenderWindow->GetPosition();
+}
+
+//----------------------------------------------------------------------------
+void SurfaceViewer::SetDisplayId(void *a)
+{
+	this->RenderWindow->SetDisplayId(a);
+}
+
+//----------------------------------------------------------------------------
+void SurfaceViewer::SetWindowId(void *a)
+{
+	this->RenderWindow->SetWindowId(a);
+}
+
+//----------------------------------------------------------------------------
+void SurfaceViewer::SetParentId(void *a)
+{
+	this->RenderWindow->SetParentId(a);
+}
+
+//----------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
+void SurfaceViewer::SetSize(int a, int b)
+{
+	this->RenderWindow->SetSize(a, b);
+}
+
+//----------------------------------------------------------------------------
+int* SurfaceViewer::GetSize()
+{
+	return this->RenderWindow->GetSize();
+}
+
+//----------------------------------------------------------------------------
+
 void SurfaceViewer::SetLookupTable(vtkLookupTable* lookupTable)
 {
 	this->LookupTable = lookupTable;
@@ -126,11 +172,6 @@ void SurfaceViewer::SetLookupTable(vtkLookupTable* lookupTable)
 		0, this->LookupTable->GetNumberOfTableValues() - 1);
 	SurfaceMapper->SetScalarRange(0, this->LookupTable->GetNumberOfTableValues());
 	SurfaceMapper->SetLookupTable(lookupTable);
-}
-
-vtkLookupTable* SurfaceViewer::GetLookupTable()
-{
-	return this->LookupTable;
 }
 
 void SurfaceViewer::SetRenderWindow(vtkRenderWindow * arg)

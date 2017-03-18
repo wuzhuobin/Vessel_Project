@@ -62,13 +62,13 @@ void QInteractorStyleTubularVOI::ExtractSegmentation(QList<int*>& seed)
 
 	vtkSmartPointer<vtkPolylineToTubularVolume> polylineToTubularVolume =
 		vtkSmartPointer<vtkPolylineToTubularVolume>::New();
-	polylineToTubularVolume->SetInputData(GetImageViewer()->GetInputLayer());
+	polylineToTubularVolume->SetInputData(GetImageViewer()->GetOverlay());
 	polylineToTubularVolume->SetPolyline(functionSource->GetOutput());
 	polylineToTubularVolume->SetTubeRadius(m_extractRadius);
 	polylineToTubularVolume->Update();
 
 	vtkSmartPointer<vtkImageMask> maskFilter = vtkSmartPointer<vtkImageMask>::New();
-	maskFilter->SetInput1Data(GetImageViewer()->GetInputLayer());
+	maskFilter->SetInput1Data(GetImageViewer()->GetOverlay());
 	maskFilter->SetMaskInputData(polylineToTubularVolume->GetOutput());
 	maskFilter->Update();
 	int extent[6] = {
@@ -79,7 +79,7 @@ void QInteractorStyleTubularVOI::ExtractSegmentation(QList<int*>& seed)
 		static_cast<int>(splinePoints->GetBounds()[4] - m_extractRadius / GetSpacing()[2] * 2),
 		static_cast<int>(splinePoints->GetBounds()[5] + m_extractRadius / GetSpacing()[2] * 2)
 	};
-	GetImageViewer()->GetInputLayer()->ShallowCopy(maskFilter->GetOutput());
+	GetImageViewer()->GetOverlay()->ShallowCopy(maskFilter->GetOutput());
 	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->SetDisplayExtent(extent));
 	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, SetExtentRange(extent));
 	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());

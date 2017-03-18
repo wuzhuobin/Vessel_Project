@@ -693,7 +693,7 @@ void InteractorStylePaintBrush::ReadfromImageData()
 				pos[0] = x;
 				pos[1] = y;
 				pos[2] = z;
-				unsigned char* val = static_cast<unsigned char*>(GetImageViewer()->GetInputLayer()->GetScalarPointer(pos));
+				unsigned char* val = static_cast<unsigned char*>(GetImageViewer()->GetOverlay()->GetScalarPointer(pos));
 				if (val == nullptr)
 					continue;
 				if (*val > 0) {
@@ -760,14 +760,14 @@ void InteractorStylePaintBrush::WriteToImageData()
 				pos[0] = x;
 				pos[1] = y;
 				pos[2] = z;
-				unsigned char* pixel = static_cast<unsigned char*>(GetImageViewer()->GetInputLayer()->GetScalarPointer(pos));
+				unsigned char* pixel = static_cast<unsigned char*>(GetImageViewer()->GetOverlay()->GetScalarPointer(pos));
 				*pixel = pixelval;
 				//GetImageViewer()->GetOverlay()->SetPixel(pos, pixelval);
 			}
 		}
 	}
-	GetImageViewer()->GetInputLayer()->Modified();
-	GetImageViewer()->GetInputLayer()->InvokeEvent(vtkCommand::UpdateDataEvent);
+	GetImageViewer()->GetOverlay()->Modified();
+	GetImageViewer()->GetOverlay()->InvokeEvent(vtkCommand::UpdateDataEvent);
 
 }
 

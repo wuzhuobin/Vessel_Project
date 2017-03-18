@@ -42,7 +42,7 @@ Core::Core(QObject * parent)
 		imageViewers[i] = ImageViewer::New();
 		imageViewers[i]->SetRenderWindow(mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetRenderWindow());
 		imageViewers[i]->SetupInteractor(mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetInteractor());
-		//imageViewers[i]->EnableDepthPeelingOn();
+		imageViewers[i]->EnableDepthPeelingOn();
 
 		// Never use below method to set the interactorsyle
 		//imageInteractorStyle[i]->SetInteractor(imageInteractor[i]);
@@ -433,7 +433,7 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 {
 
 	if (currentCurved[viewer]) {
-		imageViewers[viewer]->SetInputDataLayer(imageManager.getCurvedIADEOverlay()->getData());
+		imageViewers[viewer]->SetOverlay(imageManager.getCurvedIADEOverlay()->getData());
 		imageViewers[viewer]->SetInputData(imageManager.getCurvedImage(currentImage[viewer]));
 		// Measurement 
 		// tmp fix
@@ -448,7 +448,7 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 	}
 	else
 	{
-		imageViewers[viewer]->SetInputDataLayer(imageManager.getIADEOverlay()->getData());
+		imageViewers[viewer]->SetOverlay(imageManager.getIADEOverlay()->getData());
 		imageViewers[viewer]->SetInputData(imageManager.getImage(currentImage[viewer]));
 		// Measurement 
 		// tmp fix

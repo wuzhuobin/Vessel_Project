@@ -17,6 +17,7 @@ void AbstractSurfaceCenterLine::SetCustomEnabled(bool flag)
 		if (GetCenterlineSurfaceViewer()->GetCenterline() ||
 			GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
 			CreateCenterLine();
+			
 		}
 
 	}

@@ -73,7 +73,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled
 			m_handleWidgets[i]->RemoveAllObservers();
 			m_handleWidgets[i] = nullptr;
 		}
-		//m_pointLocator = nullptr;
+		m_pointLocator = nullptr;
 		GetSurfaceViewer()->GetRenderer()->RemoveActor(m_measurementText);
 	}
 	
@@ -117,8 +117,8 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializeHandle
 	triangleFilter->Update();
 	m_triangulatedCenterLine = triangleFilter->GetOutput();
 
-	//m_pointLocator = vtkSmartPointer<vtkKdTreePointLocator>::New();
-	//m_pointLocator->SetDataSet(m_triangulatedCenterLine);
+	m_pointLocator = vtkSmartPointer<vtkKdTreePointLocator>::New();
+	m_pointLocator->SetDataSet(m_triangulatedCenterLine);
 	//m_pointLocator->BuildLocator();
 
 	vtkSmartPointer<vtkPolygonalSurfacePointPlacer> pointPlacer =
@@ -160,9 +160,9 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializeHandle
 
 void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::FindMaximumRadius()
 {
-	vtkIdType seed1 = GetCenterlineSurfaceViewer()->GetKdTreePointLocator()->FindClosestPoint(
+	vtkIdType seed1 = m_pointLocator->FindClosestPoint(
 		m_handleWidgets[0]->GetHandleRepresentation()->GetWorldPosition());
-	vtkIdType seed2 = GetCenterlineSurfaceViewer()->GetKdTreePointLocator()->FindClosestPoint(
+	vtkIdType seed2 = m_pointLocator->FindClosestPoint(
 		m_handleWidgets[1]->GetHandleRepresentation()->GetWorldPosition());
 	vtkSmartPointer<vtkDijkstraGraphGeodesicPathDistance> dijkstra =
 		vtkSmartPointer<vtkDijkstraGraphGeodesicPathDistance>::New();

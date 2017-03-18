@@ -3,6 +3,7 @@
 #include "IADEInteractorStyleSwitch3D.h"
 #include "IADEImageManager.h"
 #include "IADEOverlay.h"
+#include "CenterlineSurfaceViewer.h"
 
 #include <vtkSplineFilter.h>
 
@@ -271,7 +272,7 @@ DataProcessor::~DataProcessor()
 void DataProcessor::initializeCurved() 
 {
 	vtkPolyData* centerline;
-	centerline = imageManager->getIADEOverlay()->getCenterLine();
+	centerline = surfaceInteractorStyle->GetCurvedNavigation()->GetCenterlineSurfaceViewer()->GetSplineFilter()->GetOutput();
 	vtkImageData* inputImage;
 	inputImage = imageManager->getImage(0);
 	if (!inputImage) {
@@ -284,19 +285,10 @@ void DataProcessor::initializeCurved()
 	int outputSize = std::max(std::max(extent[1] - extent[0], extent[3] - extent[2]),
 		extent[5] - extent[4]);
 	
-	
-	vtkSmartPointer<vtkSplineFilter> splineFilter =
-		vtkSmartPointer<vtkSplineFilter>::New();
-	splineFilter->SetInputData(centerline);
-	splineFilter->SetLength(outputSpacing);
-	splineFilter->Update();
-
-
 
 	vtkSmartPointer<vtkvmtkCenterlineGeometry> centerlineGeometry =
 		vtkSmartPointer<vtkvmtkCenterlineGeometry>::New();
-	centerlineGeometry->SetInputConnection(splineFilter->GetOutputPort());
-	//centerlineGeometry->SetInputData(centerline);
+	centerlineGeometry->SetInputData(centerline);
 	centerlineGeometry->SetLengthArrayName("Length");
 	centerlineGeometry->SetCurvatureArrayName("Curvature");
 	centerlineGeometry->SetTorsionArrayName("Torsion");

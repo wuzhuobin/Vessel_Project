@@ -8,6 +8,8 @@
 #include <vtkKdTreePointLocator.h>
 #include <vtkRenderer.h>
 #include <vtkTubeFilter.h>
+#include <vtkSplineFilter.h>
+#include <vtkImageData.h>
 
 vtkStandardNewMacro(CenterlineSurfaceViewer);
 
@@ -20,7 +22,11 @@ void CenterlineSurfaceViewer::SetCenterline(vtkPolyData * centerline)
 {
 	this->CenterlineActor->VisibilityOn();
 	this->CleanPolyData->SetInputData(centerline);
-	this->KdTreePointLocator->SetDataSet(centerline);
+	if (GetInput()) {
+		const double* spacing = GetInput()->GetSpacing();
+		this->SplineFilter->SetLength(fmin(spacing[0], fmin(spacing[1], spacing[2])));
+	}
+	//this->KdTreePointLocator->SetDataSet(centerline);
 	InvokeEvent(vtkCommand::UpdateDataEvent);
 }
 
@@ -33,13 +39,16 @@ CenterlineSurfaceViewer::CenterlineSurfaceViewer()
 {
 	this->CleanPolyData = vtkCleanPolyData::New();
 	this->CleanPolyData->PointMergingOn();
+	this->SplineFilter = vtkSplineFilter::New();
+	this->SplineFilter->SetInputConnection(this->CleanPolyData->GetOutputPort());
+	this->SplineFilter->SetSubdivideToLength();
 	this->TubeFilter = vtkTubeFilter::New();
-	this->TubeFilter->SetInputConnection(this->CleanPolyData->GetOutputPort());
+	this->TubeFilter->SetInputConnection(this->SplineFilter->GetOutputPort());
 	this->TubeFilter->CappingOn();
-	this->TubeFilter->SetRadius(0.01);
-	this->TubeFilter->SetRadiusFactor(0.01);
+	this->TubeFilter->SetRadius(0.05);
+	this->TubeFilter->SetRadiusFactor(0.05);
 	this->TubeFilter->SetNumberOfSides(10);
-	this->KdTreePointLocator = vtkKdTreePointLocator::New();
+	//this->KdTreePointLocator = vtkKdTreePointLocator::New();
 	this->CenterlineActor = vtkActor::New();
 	this->CenterlineActor->VisibilityOff();
 	this->CenterlineMapper = vtkPolyDataMapper::New();
@@ -57,10 +66,18 @@ CenterlineSurfaceViewer::~CenterlineSurfaceViewer()
 		this->CleanPolyData->Delete();
 		this->CleanPolyData = nullptr;
 	}
-	if (this->KdTreePointLocator) {
-		this->KdTreePointLocator->Delete();
-		this->KdTreePointLocator = nullptr;
+	if (this->SplineFilter) {
+		this->SplineFilter->Delete();
+		this->SplineFilter = nullptr;
 	}
+	if (this->TubeFilter) {
+		this->TubeFilter->Delete();
+		this->TubeFilter = nullptr;
+	}
+	//if (this->KdTreePointLocator) {
+	//	this->KdTreePointLocator->Delete();
+	//	this->KdTreePointLocator = nullptr;
+	//}
 	if (this->CenterlineMapper)
 	{
 		this->CenterlineMapper->Delete();

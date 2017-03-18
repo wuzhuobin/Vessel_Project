@@ -32,16 +32,24 @@ public:
 	 */
 	void PrintSelf(ostream& os, vtkIndent indent);
 	/**
+	 * @override
+	 * Render method
+	 */
+	virtual void Render(void);
+	/**
 	 * set the header by the MRI sequence name 
 	 * @param	file, the MRI sequence name
 	 */
 	virtual void InitializeHeader(std::string file);
-	//virtual void InitializeHeader(QString file);
 	/**
-	 * Get the current focal point in image coordinate(extent), or in world coordinate
+	 * Get the current focal point in image coordinate(extent)
 	 * @param	coordinate, focal point's coordinate
 	 */
 	virtual void GetFocalPointWithImageCoordinate(int* coordinate);
+	/**
+	* Get the current focal point in world coordinate
+	* @param	coordinate, focal point's coordinate
+	*/
 	virtual void GetFocalPointWithWorldCoordinate(double* coordinate);
 	/**
 	 * Get the current focal point in world coordinate
@@ -54,6 +62,23 @@ public:
 	 */
 	virtual double* GetCursorBoundWithWorldCoordinate();
 	/**
+	* the following methods of setting focal point will also change current slice and
+	* the cursor3D focal point with world coordinate or image coordinate
+	* @param	x	world coordinate
+	* @param	y
+	* @param	z
+	*/
+	virtual void SetFocalPointWithWorldCoordinate(double x, double y, double z);
+	/**
+	* the following methods of setting focal point will also change current slice and
+	* the cursor3D focal point with world coordinate or image coordinate
+	* @param	i	image coordinate
+	* @param	j
+	* @param	k
+	*/
+	virtual void SetFocalPointWithImageCoordinate(int i, int j, int k);
+
+	/**
 	 * return the all black flag
 	 * @return	true, if in all black
 	 *			false, if not
@@ -61,21 +86,14 @@ public:
 	virtual bool GetAllBlack();
 
 	/**
-	 * @override
-	 * Render method
-	 */
-	virtual void Render(void);
-
-	/**
 	 * Set/Get the input image to the viewer.
-	 * the GetInput() method return image after VOI extraction
 	 * @param	in, input image
 	 */
 	virtual void SetInputData(vtkImageData * in);
 
 	// Set/Get Input Layer which is supposed to be the output of overlay
-	virtual void SetInputDataLayer(vtkImageData *in);
-	virtual vtkImageData *GetInputLayer();
+	virtual void SetOverlay(vtkImageData *in);
+	virtual vtkImageData *GetOverlay();
 
 	virtual void SetSliceOrientation(int orientation);
 
@@ -90,14 +108,8 @@ public:
 	 * @param	LookupTable
 	 * @return	lookupTable
 	 */
-	virtual vtkLookupTable* GetLookupTable();
+	vtkGetObjectMacro(LookupTable, vtkLookupTable);
 	virtual void SetLookupTable(vtkLookupTable* LookupTable);
-
-	/**
-	 * Attach an interactor for the internal render window.
-	 * @param	arg, interactor
-	 */
-	virtual void SetupInteractor(vtkRenderWindowInteractor* arg);
 
 	vtkBooleanMacro(EnableDepthPeeling, bool);
 	virtual void SetEnableDepthPeeling(bool flag);
@@ -115,47 +127,25 @@ public:
 	// extent is reset properly.
 	vtkGetVector6Macro(DisplayExtent, int);
 	virtual void SetDisplayExtent(int* displayExtent);
+	virtual void SetDisplayExtent(int displayExtent1, int displayExtent2, int displayExtent3,
+		int displayExtent4, int displayExtent5, int displayExtent6);
 	virtual void UpdateDisplayExtent();
 	virtual void ResetDisplayExtent();
 
 	/**
-	 * the method only change the slice, while focal point of Cursor3D will not change
-	 * @param	s slice 
-	 */
-	virtual void SetSlice(int s);
-
-	/**
-	 * the following methods of setting focal point will also change current slice and 
-	 * the cursor3D focal point with world coordinate or image coordinate
-	 * @param	x	world coordinate
-	 * @param	y
-	 * @param	z
-	 */
-	virtual void SetFocalPointWithWorldCoordinate(double x, double y, double z);
-	/**
-	 * the following methods of setting focal point will also change current slice and
-	 * the cursor3D focal point with world coordinate or image coordinate
-	 * @param	i	image coordinate
-	 * @param	j
-	 * @param	k
-     */
-	virtual void SetFocalPointWithImageCoordinate(int i, int j, int k);
-	/**
-	 * @slot
-	 * set the window level and window width of the image
-	 * or the same saying image contrast
-	 * @param	level window level
-	 */
+	* set the window level and window width of the image
+	* or the same saying image contrast
+	* @param	level window level
+	*/
 	virtual void SetColorLevel(double level);
 	/**
-	 * @slot
-	 * set the window level and window width of the image
-	 * or the same saying image contrast
-	 * @param	window window width
-	 */
+	* set the window level and window width of the image
+	* or the same saying image contrast
+	* @param	window window width
+	*/
 	virtual void SetColorWindow(double window);
+
 	/**
-	 * @slot
 	 * Setting and Getting all visibility of all actor, which means it will somehow look 
 	 * like turn off, it will invoke Render()
 	 * it will also set AllBlackFlag = flag
@@ -170,8 +160,6 @@ protected:
 
 	// Text Method
 	virtual void ResizeHeaderAndOrientationText();
-	virtual void InitializeIntensityText(std::string IntText);
-	virtual void InitializeOrientationText();
 	// Cursor method
 	virtual void InitializeCursorBoundary();
 
@@ -200,8 +188,6 @@ protected:
 	// LookupTable for OverlayActor
 	vtkLookupTable* LookupTable = nullptr;
 
-
-
 	// All Black flag
 	bool AllBlackFlag = false;
 
@@ -218,7 +204,7 @@ protected:
 private:
 	ImageViewer(const ImageViewer&);  // Not implemented.
 	void operator=(const ImageViewer&);  // Not implemented.
-	void SetInputConnection(vtkAlgorithmOutput* input) {}
+	void SetInputConnection(vtkAlgorithmOutput* input) {} // Not implemented.
 
 };
 #endif // !__IMAGE_VIEWER_H__
