@@ -23,7 +23,7 @@ Copyright (C) 2016
 
 #include <vtkInteractorStyleTrackballCamera.h>
 
-#ifndef SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(STYLE_NAME, METHOD)
+#ifndef SAFE_DOWN_CAST_IMAGE_CONSTITERATOR
 #define SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(STYLE_NAME, METHOD) \
 for(std::list<AbstractInteractorStyleImage*>::const_iterator cit = \
 	m_imageStyles.cbegin(); cit != m_imageStyles.cend(); ++cit){\
@@ -32,7 +32,7 @@ for(std::list<AbstractInteractorStyleImage*>::const_iterator cit = \
 		_style->##METHOD; \
 	} \
 }
-#endif // !SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(STYLE_NAME, METHOD)
+#endif // !SAFE_DOWN_CAST_IMAGE_CONSTITERATOR
 
 class vtkImageViewer2;
 
@@ -41,7 +41,7 @@ class AbstractInteractorStyleImage : public vtkInteractorStyleTrackballCamera,
 {
 public:
 	vtkTypeMacro(AbstractInteractorStyleImage, vtkInteractorStyleTrackballCamera);
-	static AbstractInteractorStyleImage *New();
+	//static AbstractInteractorStyleImage *New();
 	
 	virtual vtkImageViewer2* GetVtkImageViewer2();
 	virtual void SetCurrentSlice(int slice);
@@ -69,19 +69,18 @@ protected:
 	virtual void OnKeyPress();
 
 
-	virtual int GetWindow();
-	virtual int GetLevel();
-	virtual int GetSlice();
-	virtual int GetMinSlice();
-	virtual int GetMaxSlice();
-	virtual int GetSliceOrientation();
-	virtual double* GetOrigin();
-	virtual double* GetSpacing();
-	virtual int* GetExtent();
+	int GetWindow();
+	int GetLevel();
+	int GetSlice();
+	int GetMinSlice();
+	int GetMaxSlice();
+	int GetSliceOrientation();
+	double* GetOrigin();
+	double* GetSpacing();
+	int* GetExtent();
 
 	static std::list<AbstractInteractorStyleImage*> m_imageStyles;
 
-private:
 	const static int RESET_PIXEL_DISTANCE = 5;
 	bool CheckMoveDistance();
 	bool m_synchronalZoomingFlag = true;

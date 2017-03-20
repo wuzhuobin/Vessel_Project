@@ -53,7 +53,11 @@ public:
 	virtual void SetBrushSize(int size);
 	virtual void EnableEraserMode(bool flag);
 
-
+	void DrawCircle(int x0, int y0, int x1, int y1, double radius);
+	void DrawLine3D(int x0, int y0, int x1, int y1);
+	void FillBox3D();
+	void Draw(bool b);
+	void UpdateBorderWidgetPosition();
 protected:
 	InteractorStylePaintBrush();
 	~InteractorStylePaintBrush();
@@ -67,12 +71,7 @@ protected:
 
 	virtual void Render();
 
-private:
-	void DrawCircle(int x0, int y0, int x1, int y1, double radius);
-	void DrawLine3D(int x0, int y0, int x1, int y1);
-	void FillBox3D();
-	void Draw(bool b);
-	void UpdateBorderWidgetPosition();
+
 	/**
 	*@deprecated
 	*/

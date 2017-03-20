@@ -13,33 +13,7 @@ public:
 	vtkTypeMacro(QInteractorStyleTubularVOI, QInteractorStyleLumenSeedsPlacer);
 	static QInteractorStyleTubularVOI* New();
 
-
-	virtual void ExtractSegmentation(QList<int*>& seed);
-	virtual void ExtractVOI(QList<int*> &seed);
-	//virtual void SetCustomEnabled(bool flag);
-	//virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
-
-	//virtual void SetFocalSeed(int i, QList<int*>& seeds);
-
-	//virtual void GenerateWidgetFromSeeds(const QList<int*>& seeds);
-
-	//virtual void SaveWidgetToSeeds(QList<int*>& seeds);
-	//virtual void DropSeed(QList<int*>& seeds);
-
-	virtual void UpdateWidgetToSeeds(
-		QList<int*>& seeds,
-		int* newImagePos,
-		int* oldImagePos = nullptr);
-	//virtual void ClearAllSeeds(QList<int*>& seeds);
-	//virtual void DeleteFocalSeed(QList<int*>& seeds);
-
-	//virtual void ExtractLumen(QList<int*>& seeds);
-	//void ExtractSegmentation(QList<int*>& seed);
-
-	/**
-	* temporary fix
-	*/
-	public slots:
+public slots:
 	virtual void GenerateWidgetFromSeeds() override;
 	virtual void SaveWidgetToSeeds() override;
 	virtual void ClearAllSeeds() override;
@@ -57,6 +31,13 @@ public:
 protected:
 	QInteractorStyleTubularVOI(int uiType = UNIQUE_UI, QWidget* parent = Q_NULLPTR);
 	~QInteractorStyleTubularVOI();
+
+	virtual void ExtractSegmentation(QList<int*>& seed);
+	virtual void ExtractVOI(QList<int*> &seed);
+	virtual void UpdateWidgetToSeeds(
+		QList<int*>& seeds,
+		int* newImagePos,
+		int* oldImagePos = nullptr);
 
 	void uniqueInitialization();
 	void initialization();

@@ -17,29 +17,12 @@ class QInteractorStyleLumenSeedsPlacer: public QAbstractNavigation,
 public:
 	vtkTypeMacro(QInteractorStyleLumenSeedsPlacer, InteractorStyleSeedsPlacer);
 	static QInteractorStyleLumenSeedsPlacer* New();
+
+public slots:
 	virtual void SetCustomEnabled(bool flag);
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 
-	virtual void SetFocalSeed(int i, QList<int*>& seeds);
 
-	virtual void GenerateWidgetFromSeeds(const QList<int*>& seeds);
-
-	virtual void SaveWidgetToSeeds(QList<int*>& seeds);
-	virtual void DropSeed(QList<int*>& seeds);
-
-	virtual void UpdateWidgetToSeeds(
-		QList<int*>& seeds,
-		int* newImagePos,
-		int* oldImagePos = nullptr);
-	virtual void ClearAllSeeds(QList<int*>& seeds);
-	virtual void DeleteFocalSeed(QList<int*>& seeds);
-
-	virtual void ExtractLumen(QList<int*>& seeds);
-
-	/**
-	 * temporary fix
-	 */
-public slots:
 	virtual void GenerateWidgetFromSeeds() override;
 	virtual void SaveWidgetToSeeds() override;
 	virtual void ClearAllSeeds() override;
@@ -58,6 +41,22 @@ public slots:
 protected:
 	QInteractorStyleLumenSeedsPlacer(int uiType = UNIQUE_UI, QWidget* parent = Q_NULLPTR);
 	~QInteractorStyleLumenSeedsPlacer();
+
+	virtual void SetFocalSeed(int i, QList<int*>& seeds);
+
+	virtual void GenerateWidgetFromSeeds(const QList<int*>& seeds);
+
+	virtual void SaveWidgetToSeeds(QList<int*>& seeds);
+	virtual void DropSeed(QList<int*>& seeds);
+
+	virtual void UpdateWidgetToSeeds(
+		QList<int*>& seeds,
+		int* newImagePos,
+		int* oldImagePos = nullptr);
+	virtual void ClearAllSeeds(QList<int*>& seeds);
+	virtual void DeleteFocalSeed(QList<int*>& seeds);
+
+	virtual void ExtractLumen(QList<int*>& seeds);
 
 	void uniqueInitialization();
 	void initialization();

@@ -96,7 +96,7 @@ void InteractorStyleSeedsPlacer::SetCustomEnabled(bool flag)
 	m_customFlag = flag;
 }
 
-void InteractorStyleSeedsPlacer::SetFocalSeed(int i, vector<int*>& seeds)
+void InteractorStyleSeedsPlacer::SetFocalSeed(vector<int*>& seeds, int i)
 {
 	//if (i >= m_seedRep->GetNumberOfSeeds() || i == m_focalSeed) {
 	//	return;
@@ -113,7 +113,7 @@ void InteractorStyleSeedsPlacer::SetFocalSeed(int i, vector<int*>& seeds)
 
 void InteractorStyleSeedsPlacer::SetFocalSeed(int i)
 {
-	SetFocalSeed(i, m_seeds);
+	SetFocalSeed(m_seeds, i);
 }
 
 void InteractorStyleSeedsPlacer::SetCurrentFocalPointWithImageCoordinate(int i, int j, int k)

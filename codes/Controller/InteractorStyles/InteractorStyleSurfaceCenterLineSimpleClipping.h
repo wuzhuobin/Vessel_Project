@@ -41,15 +41,14 @@ public:
 	* false, change source id
 	*/
 	virtual bool CreateCenterLine(bool reClipSurface);
+	virtual void ClipAndCap();
 
 protected:
 	InteractorStyleSurfaceCenterLineSimpleClipping();
 	virtual ~InteractorStyleSurfaceCenterLineSimpleClipping() override;
 
-
-	virtual void ClipAndCap();
 	
-	virtual void OnKeyPress();
+	virtual void OnKeyPress() override;
 
 	int m_lumenLabel = 2;
 	int m_centerLineOrientation = CENTER_LINE_ORIENTATION_XY;

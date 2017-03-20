@@ -33,6 +33,7 @@ class QInteractorStyleWindowLevelThreshold : public QAbstractNavigation,
 public:
 	vtkTypeMacro(QInteractorStyleWindowLevelThreshold, InteractorStyleWindowLevelThreshold)
 	static QInteractorStyleWindowLevelThreshold* New();
+public slots:
 	/**
 	* @brief	Enabled/Disable this InteractorStyle.
 	* @param	flag	true, enable. false, disable.
@@ -46,7 +47,6 @@ public:
 	*/
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 
-	public slots:
 	/**
 	 * @override
 	 * @brief	function to set the window width spinbox
@@ -62,7 +62,9 @@ public:
 	virtual void ThresholdTargetViewerToOverlay();
 	virtual void SetOutputLabel(int label)override;
 
-
+	virtual void SetWindowByViewer(double window);
+	virtual void SetLevelByViewer(double level);
+	virtual void ResetWindowLevel() override;
 
 protected:
 
@@ -76,25 +78,12 @@ protected:
 	 * @brief	Destructor. 
 	 */
 	virtual ~QInteractorStyleWindowLevelThreshold();
-	virtual void uniqueInvoke(bool flag);
-	/**
-	* @override
-	* @brief	abstract funtion to call once.
-	* @see #uniqueInvoke()
-	*
-	* The #uniqueCall() function used to guarantee only call once.
-	* For updating the spinbox's boundaries.
-	*/
-	virtual void uniqueCall();
+
 	virtual void uniqueEnable() override;
-	virtual void SetWindowByViewer(double window);
-	virtual void SetLevelByViewer(double level);
 
 	void UpdateTargetViewer();
 
 
-	protected slots:
-	virtual void ResetWindowLevel() override;
 
 
 

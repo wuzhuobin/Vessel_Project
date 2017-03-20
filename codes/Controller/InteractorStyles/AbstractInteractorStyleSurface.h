@@ -23,7 +23,7 @@ Copyright (C) 2016
 
 #include <vtkInteractorStyleTrackballCamera.h>
 
-#ifndef SAFE_DOWN_CAST_SURFACE_CONSTITERATOR(STYLE_NAME, METHOD)
+#ifndef SAFE_DOWN_CAST_SURFACE_CONSTITERATOR
 #define SAFE_DOWN_CAST_SURFACE_CONSTITERATOR(STYLE_NAME, METHOD) \
 for(std::list<AbstractInteractorStyleSurface*>::const_iterator cit = \
 	m_surfaceStyles.cbegin(); cit != m_surfaceStyles.cend(); ++cit){\
@@ -32,7 +32,7 @@ for(std::list<AbstractInteractorStyleSurface*>::const_iterator cit = \
 		_style->##METHOD; \
 	} \
 }
-#endif // !SAFE_DOWN_CAST_SURFACE_CONSTITERATOR(STYLE_NAME, METHOD)
+#endif // !SAFE_DOWN_CAST_SURFACE_CONSTITERATOR
 
 
 class SurfaceViewer;
@@ -42,7 +42,7 @@ class AbstractInteractorStyleSurface : public vtkInteractorStyleTrackballCamera,
 {
 public:
 	vtkTypeMacro(AbstractInteractorStyleSurface, vtkInteractorStyleTrackballCamera);
-	static AbstractInteractorStyleSurface *New();
+	//static AbstractInteractorStyleSurface *New();
 	
 	virtual SurfaceViewer* GetSurfaceViewer();
 
@@ -65,16 +65,17 @@ protected:
 	virtual void OnChar();
 	virtual void OnKeyPress();
 
-	virtual double* GetOrigin();
-	virtual double* GetSpacing();
-	virtual int* GetExtent();
+	double* GetOrigin();
+	double* GetSpacing();
+	int* GetExtent();
 
 	static std::list<AbstractInteractorStyleSurface*> m_surfaceStyles;
 
-private:
 	const static int RESET_PIXEL_DISTANCE = 5;
 	bool CheckMoveDistance();
 	int PreviousPosition[2] = { 0,0 };
+
+private:
 
 };
 

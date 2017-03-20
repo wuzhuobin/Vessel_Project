@@ -27,7 +27,7 @@ Copyright (C) 2016
 #include "SurfaceViewer.h"
 
 
-vtkStandardNewMacro(AbstractInteractorStyleSurface);
+//vtkStandardNewMacro(AbstractInteractorStyleSurface);
 std::list<AbstractInteractorStyleSurface*> AbstractInteractorStyleSurface::m_surfaceStyles;
 
 SurfaceViewer * AbstractInteractorStyleSurface::GetSurfaceViewer()

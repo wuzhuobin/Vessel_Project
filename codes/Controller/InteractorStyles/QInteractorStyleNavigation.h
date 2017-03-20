@@ -29,6 +29,7 @@ class QInteractorStyleNavigation: public QAbstractNavigation,
 public:
 	vtkTypeMacro(QInteractorStyleNavigation, InteractorStyleNavigation);
 	static QInteractorStyleNavigation* New();
+public slots:
 	/**
 	* @brief	Enabled/Disable this InteractorStyle.
 	* @param	flag	true, enable. false, disable. 
@@ -42,8 +43,6 @@ public:
 	*/
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k) override;
 
-	virtual void SetViewer(vtkObject* viewer) override;
-
 
 protected:
 	/**
@@ -56,18 +55,6 @@ protected:
 	 * @brief	Destructor.
 	 */
 	virtual ~QInteractorStyleNavigation() override;
-	/**
-	* @override
-	* @brief	abstract funtion to enable once.
-	* @see #uniqueInvoke()
-	*
-	* The #uniqueEnable() function used to guarantee only enable once.
-	* For updating the spinbox's boundaries.
-	*/
-	virtual void uniqueEnable() override;
-
-	void initialization();
-	void destroy();
 
 private:
 

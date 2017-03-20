@@ -33,6 +33,7 @@ class QInteractorStyleWindowLevel : public QAbstractNavigation,
 public:
 	vtkTypeMacro(QInteractorStyleWindowLevel, InteractorStyleWindowLevel)
 	static QInteractorStyleWindowLevel* New();
+public slots:
 	/**
 	* @brief	Enabled/Disable this InteractorStyle.
 	* @param	flag	true, enable. false, disable.
@@ -46,7 +47,7 @@ public:
 	*/
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 
-	public slots:
+	virtual void ResetWindowLevel() override;
 	/**
 	 * @override
 	 * @brief	function to set the window width spinbox
@@ -60,7 +61,8 @@ public:
 	virtual void SetLevel(int level);
 
 
-
+	virtual void SetWindowByViewer(double window);
+	virtual void SetLevelByViewer(double level);
 protected:
 
 	/**
@@ -73,21 +75,8 @@ protected:
 	 * @brief	Destructor. 
 	 */
 	virtual ~QInteractorStyleWindowLevel();
-	virtual void uniqueInvoke(bool flag);
-	/**
-	* @override
-	* @brief	abstract funtion to call once.
-	* @see #uniqueInvoke()
-	*
-	* The #uniqueCall() function used to guarantee only call once.
-	* For updating the spinbox's boundaries.
-	*/
-	virtual void uniqueCall();
-	virtual void SetWindowByViewer(double window);
-	virtual void SetLevelByViewer(double level);
-	protected slots:
-	virtual void ResetWindowLevel() override;
 
+	virtual void uniqueInvoke(bool flag);
 
 private:
 	void initialization();

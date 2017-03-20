@@ -85,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroupImage->addAction(ui->actionSeeds_placer);
 	actionGroupImage->addAction(ui->actionVBD_Smoker);
 	actionGroupImage->addAction(ui->actionTubular_VOI);
+	actionGroupImage->addAction(ui->actionDistance_measure);
 	actionGroupImage->addAction(ui->actionTesting);
 	actionGroupImage->setExclusive(true);
 

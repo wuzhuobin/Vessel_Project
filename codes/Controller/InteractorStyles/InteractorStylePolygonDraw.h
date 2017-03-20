@@ -67,7 +67,14 @@ public:
 		std::list<vtkSmartPointer<vtkPolygon>>* contourPolygon, 
 		unsigned char label,
 		int slice);
-
+	
+	/**
+	* For using delete contours one by one
+	* if all contour is deleted, it set m_currentContour = nullptr
+	*/
+	virtual void CleanCurrentContour();
+	virtual void CleanAllContours();
+	virtual void SetAllContoursEnabled(int flag);
 
 protected:
 	InteractorStylePolygonDraw();
@@ -78,13 +85,7 @@ protected:
 	virtual void OnMouseMove();
 	virtual void OnKeyPress();
 
-	/**
-	 * For using delete contours one by one
-	 * if all contour is deleted, it set m_currentContour = nullptr
-	 */
-	virtual void CleanCurrentContour();
-	virtual void CleanAllContours();
-	virtual void SetAllContoursEnabled(int flag);
+
 
 	bool m_polygonDrawEnabledFlag = false;
 

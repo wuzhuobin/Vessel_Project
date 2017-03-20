@@ -79,6 +79,7 @@ Core::Core(QObject * parent)
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetTubularVOI());
+	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetRuler());
 	//imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel()->show();
 	//moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	
@@ -98,25 +99,16 @@ Core::Core(QObject * parent)
 		this, SLOT(slotVOI()));
 	connect(mainWindow.getUi()->actionTubular_VOI, SIGNAL(triggered()),
 		this, SLOT(slotTubularVOI()));
+	connect(mainWindow.getUi()->actionDistance_measure, SIGNAL(triggered()),
+		this, SLOT(slotRuler()));
 	connect(mainWindow.getUi()->actionVBD_Smoker, SIGNAL(triggered()),
 		this, SLOT(slotVBDSmoker()));
 
 
 
-	//connect(&mainWindow, SIGNAL(signalImageImportInitialize()),
-	//	&ioManager, SLOT(slotCleanListsOfFileNames()));
-	//connect(&mainWindow, SIGNAL(signalImageImportAdd(QStringList*)),
-	//	&ioManager, SLOT(slotAddToListOfFileNames(QStringList*)));
-	//connect(&mainWindow, SIGNAL(signalImageImportLoad()),
-	//	&ioManager, SLOT(slotOpenMultiImages()));
 
 	connect(&mainWindow, SIGNAL(signalImageImportLoad(QList<QStringList>*)),
 		&ioManager, SLOT(slotAddToListOfFileNamesAndOpen(QList<QStringList>*)));
-	//connect(&mainWindow, SIGNAL(signalImageImportLoad(QList<QStringList>*)),
-	//	&ioManager, SLOT(slotAddToListOfFileNamesAndOpen(QList<QStringList>*)));
-
-	//connect(&ioManager, SIGNAL(signalFinishOpenMultiImages(QList<ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>*)),
-	//	this, SLOT(slotIOManagerToImageManager(QList<IOManager::ImageType::Pointer>*, QList<itk::GDCMImageIO::Pointer>* dicoms)));
 	
 	// find loading images and overlay
 	connect(&ioManager, SIGNAL(signalFinishOpenMultiImages()),
@@ -355,6 +347,15 @@ void Core::slotTubularVOI()
 
 }
 
+void Core::slotRuler()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		imageInteractorStyle[i]->SetInteractorStyleToRuler();
+	}
+	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetRuler());
+
+}
+
 void Core::slotTrackballCamera()
 {
 	surfaceInteractorStyle->SetInteractorStyleTo3DTrackballCamera();
@@ -485,22 +486,17 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 
 	mainWindow.getViewerWidget(viewer)->setWindowTitle(imageManager.getModalityName(currentImage[viewer]));
 
-	// tmp fix
-	//imageInteractorStyle[viewer]->GetNavigation()->SetCustomEnabled(
-	//	!imageInteractorStyle[viewer]->GetNavigation()->GetCustomEnabled());
-	//imageInteractorStyle[viewer]->GetNavigation()->SetCustomEnabled(
-	//	!imageInteractorStyle[viewer]->GetNavigation()->GetCustomEnabled());
 }
 
-void Core::slotMultiPlanarView()
-{
-	slotChangeView(MULTIPLANAR_VIEW);
-}
-
-void Core::slotAllAxialView()
-{
-	slotChangeView(ALL_AXIAL_VIEW);
-}
+//void Core::slotMultiPlanarView()
+//{
+//	slotChangeView(MULTIPLANAR_VIEW);
+//}
+//
+//void Core::slotAllAxialView()
+//{
+//	slotChangeView(ALL_AXIAL_VIEW);
+//}
 #include <qmessagebox.h>
 #include <vtkPolyData.h>
 void Core::slotCurvedView(bool flag)
@@ -520,47 +516,47 @@ void Core::slotCurvedView(bool flag)
 	}
 }
 
-void Core::slotChangeView(unsigned int viewMode)
-{
-	if (m_viewMode == viewMode)
-		return;
-	switch (viewMode)
-	{
-	case MULTIPLANAR_VIEW:
-		// MULTIPLANAR_VIEW
-		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-			//currentCurved[i] = false;
-			currentSliceOrientation[i] = i % 3;
-			slotUpdateImageViewersToCurrent(i);
-
-		}
-		break;
-	case ALL_AXIAL_VIEW:
-		 // ALL_AXIAL_VIEW
-
-		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-			//currentCurved[i] = false;
-			currentSliceOrientation[i] = ImageViewer::SLICE_ORIENTATION_XY;
-			slotUpdateImageViewersToCurrent(i);
-		}
-
-
-			break;
-	//case CURVED_VIEW:
-	//	// CURVED_VIEW
-	//	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-	//		if (!imageManager.getCurvedIADEOverlay()) {
-	//			dataProcessor.initializeCurved();
-	//		}
-	//		currentCurved[i] = true;
-	//		slotUpdateImageViewersToCurrent(i);
-
-	//	}
-	//	break;
-	default:
-		break;
-	}
-}
+//void Core::slotChangeView(unsigned int viewMode)
+//{
+//	if (m_viewMode == viewMode)
+//		return;
+//	switch (viewMode)
+//	{
+//	case MULTIPLANAR_VIEW:
+//		// MULTIPLANAR_VIEW
+//		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+//			//currentCurved[i] = false;
+//			currentSliceOrientation[i] = i % 3;
+//			slotUpdateImageViewersToCurrent(i);
+//
+//		}
+//		break;
+//	case ALL_AXIAL_VIEW:
+//		 // ALL_AXIAL_VIEW
+//
+//		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+//			//currentCurved[i] = false;
+//			currentSliceOrientation[i] = ImageViewer::SLICE_ORIENTATION_XY;
+//			slotUpdateImageViewersToCurrent(i);
+//		}
+//
+//
+//			break;
+//	//case CURVED_VIEW:
+//	//	// CURVED_VIEW
+//	//	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+//	//		if (!imageManager.getCurvedIADEOverlay()) {
+//	//			dataProcessor.initializeCurved();
+//	//		}
+//	//		currentCurved[i] = true;
+//	//		slotUpdateImageViewersToCurrent(i);
+//
+//	//	}
+//	//	break;
+//	default:
+//		break;
+//	}
+//}
 
 void Core::slotUpdateSurfaceView()
 {

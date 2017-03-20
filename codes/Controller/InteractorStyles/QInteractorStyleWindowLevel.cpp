@@ -31,11 +31,6 @@ void QInteractorStyleWindowLevel::uniqueInvoke(bool flag)
 	SetLevelByViewer(GetLevel());
 }
 
-void QInteractorStyleWindowLevel::uniqueCall()
-{
-	QAbstractNavigation::uniqueCall();
-}
-
 void QInteractorStyleWindowLevel::SetWindowByViewer(double window)
 {
 	InteractorStyleWindowLevel::SetWindowByViewer(window);

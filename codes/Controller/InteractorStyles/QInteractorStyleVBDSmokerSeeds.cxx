@@ -288,9 +288,6 @@ void QInteractorStyleVBDSmokerSeeds::slotPonsCentralSectionLocationCurrentSlice(
 	ui->spinBoxPonsCentralSectionLocation->setValue(ijk[2]);
 }
 
-void QInteractorStyleVBDSmokerSeeds::slotEnableTest(bool flag)
-{
-}
 
 QInteractorStyleVBDSmokerSeeds::QInteractorStyleVBDSmokerSeeds(int uiType, QWidget * parent)
 {

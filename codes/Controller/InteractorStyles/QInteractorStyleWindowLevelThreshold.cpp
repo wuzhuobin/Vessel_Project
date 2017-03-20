@@ -24,16 +24,6 @@ QInteractorStyleWindowLevelThreshold::~QInteractorStyleWindowLevelThreshold()
 	QDELETE_UI();
 }
 
-void QInteractorStyleWindowLevelThreshold::uniqueInvoke(bool flag)
-{
-	QAbstractNavigation::uniqueInvoke(flag);
-}
-
-void QInteractorStyleWindowLevelThreshold::uniqueCall()
-{
-	QAbstractNavigation::uniqueCall();
-}
-
 void QInteractorStyleWindowLevelThreshold::uniqueEnable()
 {
 	QAbstractNavigation::uniqueEnable();
@@ -94,19 +84,6 @@ void QInteractorStyleWindowLevelThreshold::initialization()
 	ui->gridLayout->addWidget(m_sliderWindowLevel, numOfMyself, 4);
 	ui->gridLayout->addWidget(m_pushButtonReset, numOfMyself, 5);
 
-
-	//QSpinBox* spinBoxWindowLevel[] = {
-	//	ui->spinBoxWindowLevel0,
-	//	ui->spinBoxWindowLevel1,
-	//	ui->spinBoxWindowLevel2
-	//};
-	//QSpinBox* spinBoxWindowWidth[] = {
-	//	ui->spinBoxWindowWidth0,
-	//	ui->spinBoxWindowWidth1,
-	//	ui->spinBoxWindowWidth2
-	//};
-	//m_spinBoxWindowLevel = spinBoxWindowLevel[numOfMyself - 1];
-	//m_spinBoxWindowWidth = spinBoxWindowWidth[numOfMyself - 1];
 	connect(m_pushButtonReset, SIGNAL(clicked()),
 		this, SLOT(ResetWindowLevel()), Qt::UniqueConnection);
 	connect(m_spinBoxWindowLevel, SIGNAL(valueChanged(int)),

@@ -11,10 +11,10 @@ class QInteractorStylePaintBrush: public QAbstractNavigation,
 public:
 	vtkTypeMacro(QInteractorStylePaintBrush, InteractorStylePaintBrush);
 	static QInteractorStylePaintBrush* New();
+public slots:
 	virtual void SetCustomEnabled(bool flag);
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 
-public slots:
 	virtual void SetPaintBrushLabel(int paintBrushLabel);
 	virtual void SetDrawOpacity(int opacity);
 

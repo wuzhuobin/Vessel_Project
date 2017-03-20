@@ -37,7 +37,7 @@ class vtkCallbackCommand;
 //}
 //#endif // !DYNAMIC_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
 
-#ifndef DYNAMIC_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
+#ifndef DYNAMIC_CAST_CONSTITERATOR
 #define DYNAMIC_CAST_CONSTITERATOR(STYLE_NAME, METHOD) \
 for(std::list<AbstractInteractorStyle*>::const_iterator cit = \
 	m_abstractInteractorStyles.cbegin(); cit != m_abstractInteractorStyles.cend(); ++cit){\
@@ -46,7 +46,7 @@ for(std::list<AbstractInteractorStyle*>::const_iterator cit = \
 		_style->##METHOD; \
 	} \
 }
-#endif // !DYNAMIC_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
+#endif // !DYNAMIC_CAST_CONSTITERATOR
 
 
 

@@ -7,7 +7,6 @@
 #include "InteractorStyleSurfaceCenterLinePerpendicularMeasurement.h"
 #include "InteractorStyleSurfaceCenterLineCurvedNavigation.h"
 
-
 class IADEInteractorStyleSwitch3D: public InteractorStyleSwitch3D
 {
 public:
@@ -38,6 +37,7 @@ protected:
 	InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius* FindMaximumRadius;
 	InteractorStyleSurfaceCenterLinePerpendicularMeasurement* PerpendicularMeasurement;
 	InteractorStyleSurfaceCenterLineCurvedNavigation* CurvedNavigation;
+
 
 private:
 

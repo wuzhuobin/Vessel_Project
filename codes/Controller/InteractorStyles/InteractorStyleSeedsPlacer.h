@@ -35,32 +35,31 @@ public:
 	virtual void SetCustomEnabled(bool flag);
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 	virtual void SetFocalSeed(int i);
-	virtual void SetFocalSeed(int i, std::vector<int*>& seeds);
-
-
-
-
 	virtual void ClearAllSeedWidget();
 	virtual void GenerateWidgetFromSeeds();
-	virtual void GenerateWidgetFromSeeds(const std::vector<int*>& seeds);
 	virtual void SaveWidgetToSeeds();
-	virtual void SaveWidgetToSeeds(std::vector<int*>& seeds);
 	virtual void DropSeed();
-	virtual void DropSeed(std::vector<int*>& seeds);
 	virtual void UpdateWidgetToSeeds(
 		int* newImagePos,
 		int* oldImagePos = nullptr);
-	virtual void UpdateWidgetToSeeds(
-		std::vector<int*>& seeds,
-		int* newImagePos,
-		int* oldImagePos = nullptr);
+
 	virtual void ClearAllSeeds();
-	virtual void ClearAllSeeds(std::vector<int*>& seed);
 	//virtual void DropSeed();
 
 protected:
 	InteractorStyleSeedsPlacer();
 	~InteractorStyleSeedsPlacer();
+
+	virtual void SetFocalSeed(std::vector<int*>& seeds, int i);
+	virtual void GenerateWidgetFromSeeds(const std::vector<int*>& seeds);
+	virtual void SaveWidgetToSeeds(std::vector<int*>& seeds);
+	virtual void DropSeed(std::vector<int*>& seeds);
+	virtual void UpdateWidgetToSeeds(
+		std::vector<int*>& seeds,
+		int* newImagePos,
+		int* oldImagePos = nullptr);
+	virtual void ClearAllSeeds(std::vector<int*>& seed);
+
 	/**
 	 * Supposed to only used in callback
 	 */

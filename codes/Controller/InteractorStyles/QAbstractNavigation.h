@@ -23,8 +23,9 @@ class QAbstractNavigation : public QAbstractInteractorStyle
 {
 	Q_OBJECT;
 	QSETUP_UI_HEAD(QAbstractNavigation);
-public:
+public slots:
 	/**
+	 * @slot
 	 * @brief	function to set the focal point.
 	 * @param	ijk	int[3] array to set the focal point
 	 * @param	i, j, k	to set the focal point
@@ -32,12 +33,12 @@ public:
 	virtual void SetCurrentFocalPointWithImageCoordinate(int* ijk);
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 	/**
+	 * @slot
 	 * @brief	function to update the spinbox slice
 	 * @param	extent	extent[6] to update the spinbox extent
 	 * quite a unnormal way to do it, but now it is the only way to update the extent spinbox
 	 */
 	virtual void SetExtentRange(int* extent);
-public slots:
 	/**
 	 * @slot
 	 * @brief	function to update the current focal point with the spinBox. 
@@ -83,12 +84,12 @@ protected:
 	*/
 	virtual void uniqueCall() {};
 	
-
+	///< for using in whether to update the spinbox. 
+	int m_oldExtent[6] = { -1 };
 private:
 	///< the pointer of the navigation ui.
 	Ui::QAbstractNavigation* ui = nullptr;
-	///< for using in whether to update the spinbox. 
-	int m_oldExtent[6] = { -1 };
+
 };
 
 #endif // !__QABSTRACT_NAVIGATION_H__

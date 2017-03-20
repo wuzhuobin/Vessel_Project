@@ -23,31 +23,21 @@ public:
 
 	virtual void SetCustomEnabled(bool flag) override;
 
+	virtual void Update2DViewers();
 
 protected:
 
 	InteractorStyleSurfaceCenterLineCurvedNavigation();
 	virtual ~InteractorStyleSurfaceCenterLineCurvedNavigation() override;
 
-	//virtual void CreateCenterLine() override;
 	virtual void InitializeHandleWidgets();
-	//virtual void InitializeReslicer();
-	virtual void Update2DViewers();
-	//virtual void FindMaximumRadius();
 
 	virtual void OnKeyPress() override;
 
 
 	vtkSmartPointer<vtkKdTreePointLocator> m_pointLocator = nullptr;
-	//vtkSmartPointer<vtkSeedWidget> m_seedWidget = nullptr;
 	vtkSmartPointer<vtkHandleWidget> m_handleWidgets[NUM_OF_HANDLES] = {nullptr};
-	//vtkSmartPointer<vtkPolyData> m_triangulatedCenterLine = nullptr;
-	//vtkSmartPointer<vtkImageActor> m_imageActor = nullptr;
 
-	//vtkSmartPointer<vtkTextActor> m_measurementText = nullptr;
-	//vtkSmartPointer<vtkPolyData> m_centerLine = nullptr;
-
-	friend class InteractorStyleSurfaceCenterLineCurvedNavigationCallback;
 
 private:
 

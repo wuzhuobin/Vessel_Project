@@ -27,7 +27,7 @@ Copyright (C) 2016
 
 #include <vtkWorldPointPicker.h>
 
-vtkStandardNewMacro(AbstractInteractorStyleImage);
+//vtkStandardNewMacro(AbstractInteractorStyleImage);
 std::list<AbstractInteractorStyleImage*> AbstractInteractorStyleImage::m_imageStyles;
 
 AbstractInteractorStyleImage::AbstractInteractorStyleImage() : vtkInteractorStyleTrackballCamera()

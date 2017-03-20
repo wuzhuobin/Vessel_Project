@@ -19,22 +19,22 @@
 
 namespace Ui { class QAbstractInteractorStyle; }
 
-#ifndef QSETUP_UI_HEAD(STYLE_NAME)
+#ifndef QSETUP_UI_HEAD
 #define QSETUP_UI_HEAD(STYLE_NAME) \
 	public:\
 		Ui::##STYLE_NAME* getUi();\
+		virtual bool getInitializationFlag();\
 	protected:\
 	private:\
-		virtual bool getInitializationFlag();\
-		virtual void setInitializationFlag(bool flag); \
+		virtual void setInitializationFlag(bool flag);\
 		static QList<Ui::##STYLE_NAME*> m_uis; \
 		void setupUi();\
 		int uiType = NO_UI;\
 		static int numOfMyself;\
 		static bool initializationFlag;
-#endif // !QSETUP_UI_HEAD(STYLE_NAME)
+#endif // !QSETUP_UI_HEAD
 
-#ifndef QSETUP_UI_SRC(STYLE_NAME)
+#ifndef QSETUP_UI_SRC
 #define QSETUP_UI_SRC(STYLE_NAME) \
 	int STYLE_NAME::numOfMyself = 0;\
 	bool STYLE_NAME::initializationFlag = false;\
@@ -43,7 +43,7 @@ namespace Ui { class QAbstractInteractorStyle; }
 		return initializationFlag; \
 	} \
 	void STYLE_NAME::setInitializationFlag(bool flag){ \
-		initializationFlag = flag; \
+		this->initializationFlag = flag; \
 	}\
 	void STYLE_NAME::setupUi()\
 	{\
@@ -72,9 +72,9 @@ namespace Ui { class QAbstractInteractorStyle; }
 	Ui::##STYLE_NAME* STYLE_NAME::getUi(){\
 		return ui;\
 	}
-#endif // !QSETUP_UI_SRC(STYLE_NAME)
+#endif // !QSETUP_UI_SRC
 
-#ifndef QNEW_UI()
+#ifndef QNEW_UI
 #define QNEW_UI()\
 	this->uiType = uiType;\
 	this->setupUi();\
@@ -83,9 +83,9 @@ namespace Ui { class QAbstractInteractorStyle; }
 		uniqueInitialization(); \
 	} \
 	initialization();
-#endif // !QNEW_UI()
+#endif // !QNEW_UI
 
-#ifndef QDELETE_UI()
+#ifndef QDELETE_UI
 #define QDELETE_UI() \
 	if (numOfMyself == 1) { \
 		uniqueDestroy(); \
@@ -113,7 +113,7 @@ namespace Ui { class QAbstractInteractorStyle; }
 			}\
 			break;\
 	}
-#endif // !QDELETE_UI()
+#endif // !QDELETE_UI
 
 /**
  * @class	QAbstractInteractorStyle 
@@ -138,6 +138,20 @@ public:
 		///< every instance has a ui instance
 		MULTIPLE_UI = 0X02 
 	};
+	/**
+	* @brief	function be invoked once requirement.
+	* @see	#uniqueEnable()
+	* @see	#uniqueDisable()
+	* @see	#uniqueCall()
+	* @param	flag	if true, #uniqueEnable() and #uniqueCall() will be called
+	*					otherwise, #uniqueDisable() and #uniqueCall() will be called
+	*
+	* The #uniqueInvoke() method can provide a template which can enable, disable
+	* or call anyway, only once in all its instances.
+	* so some connection or initialization for UNIQUE_UI which should only run once
+	* should place in it in case for multiple connections or initialization.
+	*/
+	virtual void uniqueInvoke(bool flag);
 protected:
 	/**
 	 * @brief	Constructor.
@@ -168,20 +182,6 @@ protected:
 	* @brief	function be invokded in destructor.
 	*/
 	void destroy() {};
-	/**
-	 * @brief	function be invoked once requirement. 
-	 * @see	#uniqueEnable()
-	 * @see	#uniqueDisable()
-	 * @see	#uniqueCall()
-	 * @param	flag	if true, #uniqueEnable() and #uniqueCall() will be called
-	 *					otherwise, #uniqueDisable() and #uniqueCall() will be called
-	 * 
-	 * The #uniqueInvoke() method can provide a template which can enable, disable 
-	 * or call anyway, only once in all its instances.
-	 * so some connection or initialization for UNIQUE_UI which should only run once
-	 * should place in it in case for multiple connections or initialization.
-	 */
-	virtual void uniqueInvoke(bool flag);
 	/**
 	 * @brief	abstract funtion to enable once.
 	 * @see	#uniqueInvoke()

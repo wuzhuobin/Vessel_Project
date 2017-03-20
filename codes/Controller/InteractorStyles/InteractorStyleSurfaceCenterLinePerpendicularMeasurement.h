@@ -36,7 +36,6 @@ protected:
 
 	vtkSmartPointer<PerpendicularMeasurementLineWidget> m_lineWidget2 = nullptr;
 	vtkSmartPointer<vtkTextActor> m_measurementText = nullptr;
-	//vtkSmartPointer<vtkDistanceWidget> m_distanceWidget = nullptr;
 
 
 private:

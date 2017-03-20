@@ -42,6 +42,10 @@ public:
 	 */
 	virtual void InitializeHeader(std::string file);
 	/**
+	 * @brief re-locate the annotation text 
+	 */
+	virtual void ResizeHeaderAndOrientationText();
+	/**
 	 * Get the current focal point in image coordinate(extent)
 	 * @param	coordinate, focal point's coordinate
 	 */
@@ -158,8 +162,7 @@ protected:
 	ImageViewer();
 	~ImageViewer();
 
-	// Text Method
-	virtual void ResizeHeaderAndOrientationText();
+
 	// Cursor method
 	virtual void InitializeCursorBoundary();
 
@@ -199,7 +202,7 @@ protected:
 	// >0.0 means a non - perfect image which in general results in faster rendering)
 	double OcclusionRatio = 0.0;
 
-	friend class vtkResizeHeaderAndOrientationTextCallback;
+	//friend class vtkResizeHeaderAndOrientationTextCallback;
 
 private:
 	ImageViewer(const ImageViewer&);  // Not implemented.

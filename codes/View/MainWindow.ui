@@ -153,8 +153,6 @@
     <addaction name="actionNew_segmentation"/>
     <addaction name="actionImport_segmentation"/>
     <addaction name="actionExport_segmentation"/>
-    <addaction name="actionExport_T2"/>
-    <addaction name="actionExport_MRA"/>
     <addaction name="actionExport_Report"/>
     <addaction name="actionExit"/>
    </widget>
