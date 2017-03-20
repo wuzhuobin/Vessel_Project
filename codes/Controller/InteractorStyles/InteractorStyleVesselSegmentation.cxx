@@ -96,7 +96,7 @@
 //		return;
 //	}
 //	AbstractNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
-//	STYLE_DOWN_CAST_CONSTITERATOR(InteractorStyleVesselSegmentation, ReadFromPolydata());
+//	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(InteractorStyleVesselSegmentation, ReadFromPolydata());
 //	//ReadFromPolydata();
 //}
 //

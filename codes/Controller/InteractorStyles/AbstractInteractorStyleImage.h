@@ -23,15 +23,16 @@ Copyright (C) 2016
 
 #include <vtkInteractorStyleTrackballCamera.h>
 
-
-
-//#ifndef VIEWER_CONSTITERATOR(METHOD)
-//#define VIEWER_CONSTITERATOR(METHOD) \
-//for(std::list<vtkImageViewer2*>::const_iterator cit = \
-//	m_synchronalViewers.cbegin(); cit != m_synchronalViewers.cend(); ++cit){\
-//	(*cit)->##METHOD; \
-//}
-//#endif // !VIEWER_CONSTITERATOR(METHOD)
+#ifndef SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(STYLE_NAME, METHOD)
+#define SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(STYLE_NAME, METHOD) \
+for(std::list<AbstractInteractorStyleImage*>::const_iterator cit = \
+	m_imageStyles.cbegin(); cit != m_imageStyles.cend(); ++cit){\
+	STYLE_NAME* _style = STYLE_NAME::SafeDownCast(*cit); \
+	if (_style != nullptr && _style->GetCustomEnabled()) { \
+		_style->##METHOD; \
+	} \
+}
+#endif // !SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(STYLE_NAME, METHOD)
 
 class vtkImageViewer2;
 
@@ -52,20 +53,20 @@ protected:
 
 	virtual void SynchronalZooming();
 	
-	void OnMouseWheelForward();
-	void OnMouseWheelBackward();
-	void OnLeftButtonDown();
-	void OnLeftButtonUp();
-	void OnLeftDoubleClick();
-	void OnRightButtonDown();
-	void OnRightButtonUp();
-	void OnRightDoubleClick();
-	void OnMiddleButtonDown();
-	void OnMiddleButtonUp();
-	void OnMiddleDoubleClick();
-	void OnMouseMove();
-	void OnChar();
-	void OnKeyPress();
+	virtual void OnMouseWheelForward();
+	virtual void OnMouseWheelBackward();
+	virtual void OnLeftButtonDown();
+	virtual void OnLeftButtonUp();
+	virtual void OnLeftDoubleClick();
+	virtual void OnRightButtonDown();
+	virtual void OnRightButtonUp();
+	virtual void OnRightDoubleClick();
+	virtual void OnMiddleButtonDown();
+	virtual void OnMiddleButtonUp();
+	virtual void OnMiddleDoubleClick();
+	virtual void OnMouseMove();
+	virtual void OnChar();
+	virtual void OnKeyPress();
 
 
 	virtual int GetWindow();
@@ -78,6 +79,7 @@ protected:
 	virtual double* GetSpacing();
 	virtual int* GetExtent();
 
+	static std::list<AbstractInteractorStyleImage*> m_imageStyles;
 
 private:
 	const static int RESET_PIXEL_DISTANCE = 5;

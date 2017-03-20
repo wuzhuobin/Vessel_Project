@@ -14,7 +14,7 @@
 #include <vtkGeometryFilter.h>
 #include <vtkButtonWidget.h>
 #include <vtkTexturedButtonRepresentation2D.h>
-//#include <vtkFreeTypeUtilities.h>
+#include <vtkFreeTypeUtilities.h>
 #include <vtkTextProperty.h>
 #include <vtkImageData.h>
 #include <vtkCallbackCommand.h>
@@ -39,9 +39,9 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(bool flag)
 			vtkSmartPointer<vtkTextProperty>::New();
 		textProperty->SetColor(1.0, 1.0, 1.0); 
 		textProperty->SetFontSize(15);
-/*		vtkSmartPointer<vtkFreeTypeUtilities> freeType = vtkSmartPointer<vtkFreeTypeUtilities>::New();
+		vtkSmartPointer<vtkFreeTypeUtilities> freeType = vtkSmartPointer<vtkFreeTypeUtilities>::New();
 		freeType->RenderString(textProperty, "Re-generate", reClipButton);
-		freeType->RenderString(textProperty, "Change Source", ChangeSourceButton)*/;
+		freeType->RenderString(textProperty, "Change Source", ChangeSourceButton);
 
 		vtkSmartPointer<vtkCallbackCommand> reClipCallback =
 			vtkSmartPointer<vtkCallbackCommand>::New();

@@ -28,7 +28,7 @@ Copyright (C) 2016
 
 
 vtkStandardNewMacro(AbstractInteractorStyleSurface);
-//std::list<SurfaceViewer*> AbstractInteractorStyleSurface::m_synchronalViewers;
+std::list<AbstractInteractorStyleSurface*> AbstractInteractorStyleSurface::m_surfaceStyles;
 
 SurfaceViewer * AbstractInteractorStyleSurface::GetSurfaceViewer()
 {
@@ -37,10 +37,12 @@ SurfaceViewer * AbstractInteractorStyleSurface::GetSurfaceViewer()
 
 AbstractInteractorStyleSurface::AbstractInteractorStyleSurface() : vtkInteractorStyleTrackballCamera()
 {
+	m_surfaceStyles.push_back(this);
 }
 
 AbstractInteractorStyleSurface::~AbstractInteractorStyleSurface()
 {
+	m_surfaceStyles.remove(this);
 }
 
 double * AbstractInteractorStyleSurface::GetOrigin()

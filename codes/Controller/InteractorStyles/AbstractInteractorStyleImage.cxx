@@ -28,14 +28,16 @@ Copyright (C) 2016
 #include <vtkWorldPointPicker.h>
 
 vtkStandardNewMacro(AbstractInteractorStyleImage);
+std::list<AbstractInteractorStyleImage*> AbstractInteractorStyleImage::m_imageStyles;
 
 AbstractInteractorStyleImage::AbstractInteractorStyleImage() : vtkInteractorStyleTrackballCamera()
 {
-
+	m_imageStyles.push_back(this);
 }
 
 AbstractInteractorStyleImage::~AbstractInteractorStyleImage()
 {
+	m_imageStyles.remove(this);
 }
 
 vtkImageViewer2 * AbstractInteractorStyleImage::GetVtkImageViewer2()
@@ -45,7 +47,7 @@ vtkImageViewer2 * AbstractInteractorStyleImage::GetVtkImageViewer2()
 
 void AbstractInteractorStyleImage::SetCurrentSlice(int slice)
 {
-	STYLE_DOWN_CAST_CONSTITERATOR(AbstractInteractorStyleImage, GetVtkImageViewer2()->SetSlice(slice));
+	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(AbstractInteractorStyleImage, GetVtkImageViewer2()->SetSlice(slice));
 
 }
 
@@ -60,14 +62,14 @@ void AbstractInteractorStyleImage::SynchronalZooming()
 	if (!m_synchronalZoomingFlag)
 		return;
 	double scale = GetVtkImageViewer2()->GetRenderer()->GetActiveCamera()->GetParallelScale();
-	STYLE_DOWN_CAST_CONSTITERATOR(AbstractInteractorStyleImage, GetVtkImageViewer2()->GetRenderer()->GetActiveCamera()->SetParallelScale(scale));
-	STYLE_DOWN_CAST_CONSTITERATOR(AbstractInteractorStyleImage, GetVtkImageViewer2()->Render());
+	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(AbstractInteractorStyleImage, GetVtkImageViewer2()->GetRenderer()->GetActiveCamera()->SetParallelScale(scale));
+	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(AbstractInteractorStyleImage, GetVtkImageViewer2()->Render());
 
 }
 
 int AbstractInteractorStyleImage::GetWindow()
 {
-	return GetVtkImageViewer2()->GetColorLevel();
+	return GetVtkImageViewer2()->GetColorWindow();
 }
 
 int AbstractInteractorStyleImage::GetLevel()

@@ -42,7 +42,7 @@ Core::Core(QObject * parent)
 		imageViewers[i] = ImageViewer::New();
 		imageViewers[i]->SetRenderWindow(mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetRenderWindow());
 		imageViewers[i]->SetupInteractor(mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetInteractor());
-		imageViewers[i]->EnableDepthPeelingOn();
+		//imageViewers[i]->EnableDepthPeelingOn();
 
 		// Never use below method to set the interactorsyle
 		//imageInteractorStyle[i]->SetInteractor(imageInteractor[i]);
@@ -136,14 +136,26 @@ Core::Core(QObject * parent)
 		&ioManager, SLOT(slotInitializeOverlay()));
 
 	// change view mode
-	connect(mainWindow.getUi()->actionCurved_view, SIGNAL(triggered()),
-		this, SLOT(slotCurvedMultiPlanarView()));
-	connect(mainWindow.getUi()->actionAll_axial_view, SIGNAL(triggered()),
-		this, SLOT(slotAllAxialView()));
-	connect(mainWindow.getUi()->actionMulti_planar_view, SIGNAL(triggered()),
-		this, SLOT(slotMultiPlanarView()));
+	connect(mainWindow.getUi()->actionCurved_view, SIGNAL(toggled(bool)),
+		this, SLOT(slotCurvedView(bool)));
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		QPushButton* buttons[3] = {
+			mainWindow.getViewerWidget(i)->getUi()->pushButtonSigitalView,
+			mainWindow.getViewerWidget(i)->getUi()->pushButtonCoronalView,
+			mainWindow.getViewerWidget(i)->getUi()->pushButtonAxialView };
+		connect(mainWindow.getUi()->actionMulti_planar_view, SIGNAL(triggered()),
+			buttons[i%3], SLOT(click()));
+		connect(mainWindow.getUi()->actionAll_axial_view, SIGNAL(triggered()),
+			buttons[2], SLOT(click()));
+	}
+	//connect(mainWindow.getUi()->actionAll_axial_view, SIGNAL(triggered()),
+	//	this, SLOT(slotAllAxialView()));
+	//connect(mainWindow.getUi()->actionMulti_planar_view, SIGNAL(triggered()),
+	//	this, SLOT(slotMultiPlanarView()));
 	// change image
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		connect(mainWindow.getSelectImgMenu(i), SIGNAL(triggered(QAction*)),
+			this, SLOT(slotChangeImage(QAction*)));
 		connect(mainWindow.getSelectImgMenu(i), SIGNAL(triggered(QAction*)),
 			this, SLOT(slotChangeImage(QAction*)));
 	}
@@ -237,11 +249,12 @@ void Core::slotIOManagerToImageManager()
 	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
 		mainWindow.setSelectImgMenuVisible(i, imageManager.getImage(i));
 	}
-	mainWindow.initialization();
-	// initialization
+	// reset display extent first, otherwise the slice spin box cannot update right
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageViewers[i]->ResetDisplayExtent();
 	}
+	// initialization, and trigger the navigation interactorstyle
+	mainWindow.initialization();
 	const int* extent = imageViewers[DEFAULT_IMAGE]->GetDisplayExtent();
 	imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->SetCurrentFocalPointWithImageCoordinate(
 		(extent[1] - extent[0])*0.5,
@@ -488,10 +501,23 @@ void Core::slotAllAxialView()
 {
 	slotChangeView(ALL_AXIAL_VIEW);
 }
-
-void Core::slotCurvedMultiPlanarView()
+#include <qmessagebox.h>
+#include <vtkPolyData.h>
+void Core::slotCurvedView(bool flag)
 {
-	slotChangeView(CURVED_VIEW);
+	if (!surfaceViewer->GetCenterline()||surfaceViewer->GetCenterline()->GetNumberOfPoints() < 2) {
+		QMessageBox::critical(&mainWindow, QString("No centerline"),
+			QString("Please Generate centerline first !"));
+		return;
+	}
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		if (!imageManager.getCurvedIADEOverlay()) {
+			dataProcessor.initializeCurved();
+		}
+		currentCurved[i] = flag;
+		slotUpdateImageViewersToCurrent(i);
+
+	}
 }
 
 void Core::slotChangeView(unsigned int viewMode)
@@ -503,7 +529,7 @@ void Core::slotChangeView(unsigned int viewMode)
 	case MULTIPLANAR_VIEW:
 		// MULTIPLANAR_VIEW
 		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-			currentCurved[i] = false;
+			//currentCurved[i] = false;
 			currentSliceOrientation[i] = i % 3;
 			slotUpdateImageViewersToCurrent(i);
 
@@ -513,24 +539,24 @@ void Core::slotChangeView(unsigned int viewMode)
 		 // ALL_AXIAL_VIEW
 
 		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-			currentCurved[i] = false;
+			//currentCurved[i] = false;
 			currentSliceOrientation[i] = ImageViewer::SLICE_ORIENTATION_XY;
 			slotUpdateImageViewersToCurrent(i);
 		}
 
 
 			break;
-	case CURVED_VIEW:
-		// CURVED_VIEW
-		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-			if (!imageManager.getCurvedIADEOverlay()) {
-				dataProcessor.initializeCurved();
-			}
-			currentCurved[i] = true;
-			slotUpdateImageViewersToCurrent(i);
+	//case CURVED_VIEW:
+	//	// CURVED_VIEW
+	//	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+	//		if (!imageManager.getCurvedIADEOverlay()) {
+	//			dataProcessor.initializeCurved();
+	//		}
+	//		currentCurved[i] = true;
+	//		slotUpdateImageViewersToCurrent(i);
 
-		}
-		break;
+	//	}
+	//	break;
 	default:
 		break;
 	}

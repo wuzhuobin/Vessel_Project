@@ -95,7 +95,8 @@ void CenterlineSurfaceViewer::InstallPipeline()
 	SurfaceViewer::InstallPipeline();
 	if (this->CenterlineActor && this->CleanPolyData)
 	{
-		this->CenterlineActor->GetMapper()->SetInputConnection(this->TubeFilter->GetOutputPort());
+		// for now not use tube filter
+		this->CenterlineActor->GetMapper()->SetInputConnection(this->SplineFilter->GetOutputPort());
 	}
 	if (this->Renderer && this->CenterlineActor) {
 		this->Renderer->AddActor(this->CenterlineActor);

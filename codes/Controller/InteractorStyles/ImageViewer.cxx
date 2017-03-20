@@ -156,18 +156,25 @@ ImageViewer::~ImageViewer()
 void ImageViewer::SetDisplayExtent(int displayExtent1, int displayExtent2, int displayExtent3,
 	int displayExtent4, int displayExtent5, int displayExtent6)
 {
-	this->DisplayExtent[0] = displayExtent1;
-	this->DisplayExtent[1] = displayExtent2;
-	this->DisplayExtent[2] = displayExtent3;
-	this->DisplayExtent[3] = displayExtent4;
-	this->DisplayExtent[4] = displayExtent5;
-	this->DisplayExtent[5] = displayExtent6;
+	this->DisplayExtent[0] = max(displayExtent1, GetInput()->GetExtent()[0]);
+	this->DisplayExtent[1] = min(displayExtent2, GetInput()->GetExtent()[1]);
+	this->DisplayExtent[2] = max(displayExtent3, GetInput()->GetExtent()[2]);
+	this->DisplayExtent[3] = min(displayExtent4, GetInput()->GetExtent()[3]);
+	this->DisplayExtent[4] = max(displayExtent5, GetInput()->GetExtent()[4]);
+	this->DisplayExtent[5] = min(displayExtent6, GetInput()->GetExtent()[5]);
 	UpdateDisplayExtent();
 }
 
 void ImageViewer::SetDisplayExtent(int * displayExtent)
 {
 	memcpy(DisplayExtent, displayExtent, sizeof(DisplayExtent));
+	SetDisplayExtent(
+		displayExtent[0],
+		displayExtent[1],
+		displayExtent[2],
+		displayExtent[3],
+		displayExtent[4],
+		displayExtent[5] );
 	UpdateDisplayExtent();
 }
 
@@ -495,9 +502,9 @@ void ImageViewer::SetFocalPointWithWorldCoordinate(double x, double y, double z)
 {
 	const double* spacing = GetInput()->GetSpacing();
 	const double* origin = GetInput()->GetOrigin();
-	int i = (x - origin[0])/spacing[0];
-	int j = (y - origin[1])/spacing[1];
-	int k = (z - origin[2])/spacing[2];
+	int i = static_cast<int>((x - origin[0])/spacing[0] + 0.5);
+	int j = static_cast<int>((y - origin[1])/spacing[1] + 0.5);
+	int k = static_cast<int>((z - origin[2])/spacing[2] + 0.5);
 	SetFocalPointWithImageCoordinate(i, j, k);
 
 }
@@ -534,7 +541,7 @@ void ImageViewer::GetFocalPointWithImageCoordinate(int * coordinate)
 	const double* origin = GetInput()->GetOrigin();
 	const double* point = Cursor3D->GetFocalPoint();
 	for (int i = 0; i < 3; ++i) {
-		coordinate[i] = (point[i] - origin[i]) / spacing[i];
+		coordinate[i] = static_cast<int>((point[i] - origin[i]) / spacing[i] + 0.5);
 	}
 }
 

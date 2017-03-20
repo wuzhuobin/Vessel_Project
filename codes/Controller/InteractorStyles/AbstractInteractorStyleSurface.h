@@ -23,14 +23,17 @@ Copyright (C) 2016
 
 #include <vtkInteractorStyleTrackballCamera.h>
 
+#ifndef SAFE_DOWN_CAST_SURFACE_CONSTITERATOR(STYLE_NAME, METHOD)
+#define SAFE_DOWN_CAST_SURFACE_CONSTITERATOR(STYLE_NAME, METHOD) \
+for(std::list<AbstractInteractorStyleSurface*>::const_iterator cit = \
+	m_surfaceStyles.cbegin(); cit != m_surfaceStyles.cend(); ++cit){\
+	STYLE_NAME* _style = STYLE_NAME::SafeDownCast(*cit); \
+	if (_style != nullptr && _style->GetCustomEnabled()) { \
+		_style->##METHOD; \
+	} \
+}
+#endif // !SAFE_DOWN_CAST_SURFACE_CONSTITERATOR(STYLE_NAME, METHOD)
 
-//#ifndef SURFACE_VIEWER_CONSTITERATOR(METHOD)
-//#define SURFACE_VIEWER_CONSTITERATOR(METHOD) \
-//for(std::list<SurfaceViewer*>::const_iterator cit = \
-//	m_synchronalViewers.cbegin(); cit != m_synchronalViewers.cend(); ++cit){\
-//	(*cit)->##METHOD; \
-//}
-//#endif // !SURFACE_VIEWER_CONSTITERATOR(METHOD)
 
 class SurfaceViewer;
 
@@ -47,25 +50,26 @@ protected:
 	AbstractInteractorStyleSurface();
 	virtual ~AbstractInteractorStyleSurface();
 
-	void OnMouseWheelForward();
-	void OnMouseWheelBackward();
-	void OnLeftButtonDown();
-	void OnLeftButtonUp();
-	void OnLeftDoubleClick();
-	void OnRightButtonDown();
-	void OnRightButtonUp();
-	void OnRightDoubleClick();
-	void OnMiddleButtonDown();
-	void OnMiddleButtonUp();
-	void OnMiddleDoubleClick();
-	void OnMouseMove();
-	void OnChar();
-	void OnKeyPress();
+	virtual void OnMouseWheelForward();
+	virtual void OnMouseWheelBackward();
+	virtual void OnLeftButtonDown();
+	virtual void OnLeftButtonUp();
+	virtual void OnLeftDoubleClick();
+	virtual void OnRightButtonDown();
+	virtual void OnRightButtonUp();
+	virtual void OnRightDoubleClick();
+	virtual void OnMiddleButtonDown();
+	virtual void OnMiddleButtonUp();
+	virtual void OnMiddleDoubleClick();
+	virtual void OnMouseMove();
+	virtual void OnChar();
+	virtual void OnKeyPress();
 
 	virtual double* GetOrigin();
 	virtual double* GetSpacing();
 	virtual int* GetExtent();
 
+	static std::list<AbstractInteractorStyleSurface*> m_surfaceStyles;
 
 private:
 	const static int RESET_PIXEL_DISTANCE = 5;

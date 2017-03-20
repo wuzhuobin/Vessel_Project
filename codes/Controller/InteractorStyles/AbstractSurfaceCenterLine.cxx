@@ -14,7 +14,7 @@ void AbstractSurfaceCenterLine::SetCustomEnabled(bool flag)
 	AbstractInteractorStyleSurface::SetCustomEnabled(flag);
 	if (m_customFlag) {
 
-		if (GetCenterlineSurfaceViewer()->GetCenterline() ||
+		if (!GetCenterlineSurfaceViewer()->GetCenterline() ||
 			GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
 			CreateCenterLine();
 			

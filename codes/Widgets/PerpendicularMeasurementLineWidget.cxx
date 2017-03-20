@@ -30,10 +30,11 @@ void PerpendicularMeasurementLineWidget::SetEnabled(int enabling)
 {
 	vtkLineWidget2::SetEnabled(enabling);
 	if (enabling) {
-		this->DistanceWidget->SetWidgetStateToManipulate();
+		this->DistanceWidget->CreateDefaultRepresentation();
 		this->DistanceWidget->SetInteractor(this->Interactor);
+		this->DistanceWidget->GetRepresentation()->SetRenderer(this->CurrentRenderer);
+		this->DistanceWidget->SetWidgetStateToManipulate();
 	}
-	//this->DistanceWidget->SetEnabled(enabling);
 }
 
 void PerpendicularMeasurementLineWidget::CreateDefaultRepresentation()
@@ -79,9 +80,9 @@ PerpendicularMeasurementLineWidget::PerpendicularMeasurementLineWidget()
 {
 	// Define widget events
 	// remove unnecessary event by a do nothing callback lambda function
-	this->CallbackMapper->SetCallbackMethod(vtkCommand::LeftButtonReleaseEvent,
-		vtkWidgetEvent::EndSelect,
-		this, PerpendicularMeasurementLineWidget::EndSelectAction);
+	//this->CallbackMapper->SetCallbackMethod(vtkCommand::LeftButtonReleaseEvent,
+	//	vtkWidgetEvent::EndSelect,
+	//	this, PerpendicularMeasurementLineWidget::EndSelectAction);
 	this->CallbackMapper->SetCallbackMethod(vtkCommand::MiddleButtonPressEvent,
 		vtkWidgetEvent::Translate,
 		this, [](vtkAbstractWidget*) {});
@@ -110,43 +111,43 @@ PerpendicularMeasurementLineWidget::~PerpendicularMeasurementLineWidget()
 	DistanceWidget->Delete();
 }
 
-void PerpendicularMeasurementLineWidget::EndSelectAction(vtkAbstractWidget * w)
-{
-	PerpendicularMeasurementLineWidget *self =
-		reinterpret_cast<PerpendicularMeasurementLineWidget*>(w);
-	if (self->WidgetState == vtkLineWidget2::Active && self->TriangulatedLine != nullptr)
-	{
-		double pos1[3], pos2[3];
-		self->GetLineRepresentation()->GetPoint1WorldPosition(pos1);
-		self->GetLineRepresentation()->GetPoint2WorldPosition(pos2);
-
-		vtkSmartPointer<vtkDijkstraGraphGeodesicPath> geodesicPath =
-			vtkSmartPointer<vtkDijkstraGraphGeodesicPath>::New();
-		geodesicPath->SetInputData(self->TriangulatedLine);
-		geodesicPath->SetStartVertex(self->PointLocater->FindClosestPoint(pos1));
-		geodesicPath->SetEndVertex(self->PointLocater->FindClosestPoint(pos2));
-		geodesicPath->Update();
-
-		double perpendicularDistance = VTK_DOUBLE_MIN;
-		double perpendicularPoint1[3], perpendicularPoint2[3];
-		for (vtkIdType id = 0; id < geodesicPath->GetOutput()->GetNumberOfPoints(); ++id) {
-			double t;
-			double closest[3];
-			double dist0 = vtkLine::DistanceToLine(geodesicPath->GetOutput()->GetPoint(id), pos1, pos2, t, closest);
-			if (dist0 > perpendicularDistance) {
-				perpendicularDistance = dist0;
-				memcpy(perpendicularPoint1, geodesicPath->GetOutput()->GetPoint(id), sizeof(perpendicularPoint1));
-				memcpy(perpendicularPoint2, closest, sizeof(perpendicularPoint2));
-			}
-		}
-		cout << "farthest distance: " << sqrt(perpendicularDistance)<< endl;
-		self->DistanceWidget->EnabledOn();
-		self->DistanceWidget->GetDistanceRepresentation()->SetPoint1WorldPosition(perpendicularPoint1);
-		self->DistanceWidget->GetDistanceRepresentation()->SetPoint2WorldPosition(perpendicularPoint2);
-	}
-	vtkLineWidget2::EndSelectAction(w);
-
-}
+//void PerpendicularMeasurementLineWidget::EndSelectAction(vtkAbstractWidget * w)
+//{
+//	vtkLineWidget2::EndSelectAction(w);
+//	PerpendicularMeasurementLineWidget *self =
+//		reinterpret_cast<PerpendicularMeasurementLineWidget*>(w);
+//	if (self->WidgetState == vtkLineWidget2::Active && self->TriangulatedLine != nullptr)
+//	{
+//		double pos1[3], pos2[3];
+//		self->GetLineRepresentation()->GetPoint1WorldPosition(pos1);
+//		self->GetLineRepresentation()->GetPoint2WorldPosition(pos2);
+//
+//		vtkSmartPointer<vtkDijkstraGraphGeodesicPath> geodesicPath =
+//			vtkSmartPointer<vtkDijkstraGraphGeodesicPath>::New();
+//		geodesicPath->SetInputData(self->TriangulatedLine);
+//		geodesicPath->SetStartVertex(self->PointLocater->FindClosestPoint(pos1));
+//		geodesicPath->SetEndVertex(self->PointLocater->FindClosestPoint(pos2));
+//		geodesicPath->Update();
+//
+//		double perpendicularDistance = VTK_DOUBLE_MIN;
+//		double perpendicularPoint1[3], perpendicularPoint2[3];
+//		for (vtkIdType id = 0; id < geodesicPath->GetOutput()->GetNumberOfPoints(); ++id) {
+//			double t;
+//			double closest[3];
+//			double dist0 = vtkLine::DistanceToLine(geodesicPath->GetOutput()->GetPoint(id), pos1, pos2, t, closest);
+//			if (dist0 > perpendicularDistance) {
+//				perpendicularDistance = dist0;
+//				memcpy(perpendicularPoint1, geodesicPath->GetOutput()->GetPoint(id), sizeof(perpendicularPoint1));
+//				memcpy(perpendicularPoint2, closest, sizeof(perpendicularPoint2));
+//			}
+//		}
+//		cout << "farthest distance: " << sqrt(perpendicularDistance)<< endl;
+//		self->DistanceWidget->EnabledOn();
+//		self->DistanceWidget->GetDistanceRepresentation()->SetPoint1WorldPosition(perpendicularPoint1);
+//		self->DistanceWidget->GetDistanceRepresentation()->SetPoint2WorldPosition(perpendicularPoint2);
+//	}
+//
+//}
 
 void PerpendicularMeasurementLineWidget::MoveAction(vtkAbstractWidget * w)
 {
@@ -207,5 +208,34 @@ void PerpendicularMeasurementLineWidget::MoveAction(vtkAbstractWidget * w)
 		self->InvokeEvent(vtkCommand::InteractionEvent, NULL);
 		self->EventCallbackCommand->SetAbortFlag(1);
 		self->Render();
+
+		double pos1[3], pos2[3];
+		self->GetLineRepresentation()->GetPoint1WorldPosition(pos1);
+		self->GetLineRepresentation()->GetPoint2WorldPosition(pos2);
+
+		vtkSmartPointer<vtkDijkstraGraphGeodesicPath> geodesicPath =
+			vtkSmartPointer<vtkDijkstraGraphGeodesicPath>::New();
+		geodesicPath->SetInputData(self->TriangulatedLine);
+		geodesicPath->SetStartVertex(self->PointLocater->FindClosestPoint(pos1));
+		geodesicPath->SetEndVertex(self->PointLocater->FindClosestPoint(pos2));
+		geodesicPath->StopWhenEndReachedOn();
+		geodesicPath->Update();
+
+		double perpendicularDistance = VTK_DOUBLE_MIN;
+		double perpendicularPoint1[3], perpendicularPoint2[3];
+		for (vtkIdType id = 0; id < geodesicPath->GetOutput()->GetNumberOfPoints(); ++id) {
+			double t;
+			double closest[3];
+			double dist0 = vtkLine::DistanceToLine(geodesicPath->GetOutput()->GetPoint(id), pos1, pos2, t, closest);
+			if (dist0 > perpendicularDistance) {
+				perpendicularDistance = dist0;
+				memcpy(perpendicularPoint1, geodesicPath->GetOutput()->GetPoint(id), sizeof(perpendicularPoint1));
+				memcpy(perpendicularPoint2, closest, sizeof(perpendicularPoint2));
+			}
+		}
+		cout << "farthest distance: " << sqrt(perpendicularDistance) << endl;
+		self->DistanceWidget->EnabledOn();
+		self->DistanceWidget->GetDistanceRepresentation()->SetPoint1WorldPosition(perpendicularPoint1);
+		self->DistanceWidget->GetDistanceRepresentation()->SetPoint2WorldPosition(perpendicularPoint2);
 	}
 }

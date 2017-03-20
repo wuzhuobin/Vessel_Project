@@ -15,6 +15,7 @@ public:
 
 
 	virtual void ExtractSegmentation(QList<int*>& seed);
+	virtual void ExtractVOI(QList<int*> &seed);
 	//virtual void SetCustomEnabled(bool flag);
 	//virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 
@@ -50,6 +51,8 @@ public:
 		int* oldImagePos = nullptr);
 	virtual void SetExtractRadius(int radius);
 	virtual void ExtractSegmentation();
+	virtual void ExtractVOI();
+	virtual void ResetVOI();
 
 protected:
 	QInteractorStyleTubularVOI(int uiType = UNIQUE_UI, QWidget* parent = Q_NULLPTR);

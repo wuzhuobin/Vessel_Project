@@ -111,7 +111,7 @@ void InteractorStylePaintBrush::OnLeftButtonUp()
 		//Clear Layer
 		m_brush->SetDrawColor(0, 0, 0, 0);
 		this->FillBox3D();
-		STYLE_DOWN_CAST_CONSTITERATOR(InteractorStylePaintBrush, Render());
+		SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(InteractorStylePaintBrush, Render());
 		m_isDraw = true;
 	}
 	m_leftFunctioning = false;
@@ -779,7 +779,7 @@ void InteractorStylePaintBrush::WriteToOverlay()
 	extent[GetSliceOrientation() * 2 + 1] = GetSlice();
 
 	//GetImageViewer()->GetOverlay()->SetPixels(extent, m_brush->GetOutput());
-	STYLE_DOWN_CAST_CONSTITERATOR(InteractorStylePaintBrush, GetImageViewer()->Render());
+	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(InteractorStylePaintBrush, GetImageViewer()->Render());
 }
 
 

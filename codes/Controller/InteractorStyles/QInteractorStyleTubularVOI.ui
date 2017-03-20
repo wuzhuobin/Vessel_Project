@@ -243,10 +243,10 @@
            <number>1</number>
           </property>
           <property name="maximum">
-           <number>50</number>
+           <number>99</number>
           </property>
           <property name="singleStep">
-           <number>5</number>
+           <number>1</number>
           </property>
           <property name="value">
            <number>10</number>
@@ -277,10 +277,10 @@
            <string/>
           </property>
           <property name="maximum">
-           <number>50</number>
+           <number>99</number>
           </property>
           <property name="singleStep">
-           <number>5</number>
+           <number>1</number>
           </property>
           <property name="value">
            <number>10</number>
@@ -305,7 +305,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="pushBtnExtractVOI">
+         <widget class="QPushButton" name="pushButtonExtractSegmentation">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -320,26 +320,31 @@
        </layout>
       </item>
       <item>
-       <widget class="QLabel" name="labelReconstructionStatus">
-        <property name="styleSheet">
-         <string notr="true">QWidget {
-	color: rgb(255, 0, 0);
-}</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="pushButtonExtractVOI">
+          <property name="text">
+           <string>Extract VOI</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonResetVOI">
+          <property name="text">
+           <string>Reset VOI</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
-     <zorder>labelReconstructionStatus</zorder>
      <zorder>line</zorder>
      <zorder>listWidgetSeedList</zorder>
      <zorder>label_60</zorder>
      <zorder>line_2</zorder>
      <zorder>label_6</zorder>
-     <zorder>layoutWidget</zorder>
-     <zorder>layoutWidget_2</zorder>
+     <zorder>pushButtonResetVOI</zorder>
+     <zorder>pushButtonExtractVOI</zorder>
     </widget>
    </item>
    <item>
@@ -358,5 +363,38 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>hSliderExtractRadius</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxExtractRadius</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>139</x>
+     <y>349</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>246</x>
+     <y>351</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxExtractRadius</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>hSliderExtractRadius</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>237</x>
+     <y>344</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>161</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

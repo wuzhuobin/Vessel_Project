@@ -133,7 +133,7 @@ void InteractorStyleSeedsPlacer::SetCurrentFocalPointWithImageCoordinate(int i, 
 			_style->m_seedWidget->Render();
 		}
 	}
-	//STYLE_DOWN_CAST_CONSTITERATOR(InteractorStyleSeedsPlacer, GenerateWidgetFromSeeds());
+	//DYNAMIC_CAST_CONSTITERATOR(InteractorStyleSeedsPlacer, GenerateWidgetFromSeeds());
 	//MY_VIEWER_CONSTITERATOR(Render());
 }
 

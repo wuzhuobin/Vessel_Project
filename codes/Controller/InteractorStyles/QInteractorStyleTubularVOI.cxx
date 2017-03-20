@@ -71,6 +71,21 @@ void QInteractorStyleTubularVOI::ExtractSegmentation(QList<int*>& seed)
 	maskFilter->SetInput1Data(GetImageViewer()->GetOverlay());
 	maskFilter->SetMaskInputData(polylineToTubularVolume->GetOutput());
 	maskFilter->Update();
+
+	GetImageViewer()->GetOverlay()->ShallowCopy(maskFilter->GetOutput());
+	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());
+
+}
+
+void QInteractorStyleTubularVOI::ExtractVOI(QList<int*>& seed)
+{
+	vtkSmartPointer<vtkPolyData> splinePoints =
+		vtkSmartPointer<vtkPolyData>::New();
+	splinePoints->SetPoints(vtkSmartPointer<vtkPoints>::New());
+	for (QList<int*>::const_iterator cit = seed.cbegin(); cit != seed.cend(); ++cit) {
+		splinePoints->GetPoints()->InsertNextPoint((*cit)[0], (*cit)[1], (*cit)[2]);
+	}
+
 	int extent[6] = {
 		static_cast<int>(splinePoints->GetBounds()[0] - m_extractRadius / GetSpacing()[0] * 2),
 		static_cast<int>(splinePoints->GetBounds()[1] + m_extractRadius / GetSpacing()[0] * 2),
@@ -79,11 +94,10 @@ void QInteractorStyleTubularVOI::ExtractSegmentation(QList<int*>& seed)
 		static_cast<int>(splinePoints->GetBounds()[4] - m_extractRadius / GetSpacing()[2] * 2),
 		static_cast<int>(splinePoints->GetBounds()[5] + m_extractRadius / GetSpacing()[2] * 2)
 	};
-	GetImageViewer()->GetOverlay()->ShallowCopy(maskFilter->GetOutput());
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->SetDisplayExtent(extent));
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, SetExtentRange(extent));
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());
 
+	GetImageViewer()->SetDisplayExtent(extent);
+	SetExtentRange(extent);
+	GetImageViewer()->Render();
 }
 
 void QInteractorStyleTubularVOI::UpdateWidgetToSeeds(QList<int*>& seeds, int * newImagePos, int * oldImagePos)
@@ -171,6 +185,18 @@ void QInteractorStyleTubularVOI::ExtractSegmentation()
 	ExtractSegmentation(m_tubularSeeds);
 }
 
+void QInteractorStyleTubularVOI::ExtractVOI()
+{
+	ExtractVOI(m_tubularSeeds);
+}
+
+void QInteractorStyleTubularVOI::ResetVOI()
+{
+	GetImageViewer()->ResetDisplayExtent();
+	SetExtentRange(GetImageViewer()->GetDisplayExtent());
+	GetImageViewer()->Render();
+}
+
 QInteractorStyleTubularVOI::QInteractorStyleTubularVOI(int uiType, QWidget * parent)
 {
 	QNEW_UI();
@@ -191,7 +217,7 @@ void QInteractorStyleTubularVOI::uniqueInitialization()
 		this, SLOT(DropSeed()));
 	connect(ui->spinBoxExtractRadius, SIGNAL(valueChanged(int)),
 		this, SLOT(SetExtractRadius(int)));
-	connect(ui->pushBtnExtractVOI, SIGNAL(clicked()),
+	connect(ui->pushButtonExtractSegmentation, SIGNAL(clicked()),
 		this, SLOT(ExtractSegmentation()));
 }
 
@@ -201,6 +227,10 @@ void QInteractorStyleTubularVOI::initialization()
 		this, SLOT(ClearAllSeeds()));
 	connect(ui->deleteAllSeedsPushButton, SIGNAL(clicked()),
 		this, SLOT(ClearAllSeeds()));
+	connect(ui->pushButtonExtractVOI, SIGNAL(clicked()),
+		this, SLOT(ExtractVOI()));
+	connect(ui->pushButtonResetVOI, SIGNAL(clicked()),
+		this, SLOT(ResetVOI()));
 }
 
 void QInteractorStyleTubularVOI::uniqueEnable()

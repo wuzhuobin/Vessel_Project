@@ -1,7 +1,7 @@
 ﻿#ifndef __QINTERACTOR_STYLE_WINDOW_LEVEL_H__
 #define __QINTERACTOR_STYLE_WINDOW_LEVEL_H__
 /**
-* @file	QInteractorStyleWindowLevel.h
+* @file	QInteractorStyleWindowLevelThreshold.h
 * @brief	whatever
 * @authour	wuzhuobin
 * @date	20/12/2016
@@ -12,11 +12,11 @@
 * <pre>company:	CUHK. <pre/>
 */
 #include "QAbstractNavigation.h"
-#include "InteractorStyleWindowLevel.h"
+#include "InteractorStyleWindowLevelThreshold.h"
 
-namespace Ui {class QInteractorStyleWindowLevel;}
+namespace Ui {class QInteractorStyleWindowLevelThreshold;}
 /**
-* @class	QInteractorStyleWindowLevel
+* @class	QInteractorStyleWindowLevelThreshold
 * @brief	window level.
 * using cursor to change window level.
 */
@@ -24,15 +24,15 @@ class QSpinBox;
 class QSlider;
 class QPushButton;
 class QLabel;
-class QInteractorStyleWindowLevel : public QAbstractNavigation,
-	public InteractorStyleWindowLevel
+class QInteractorStyleWindowLevelThreshold : public QAbstractNavigation,
+	public InteractorStyleWindowLevelThreshold
 {
 	Q_OBJECT;
-	QSETUP_UI_HEAD(QInteractorStyleWindowLevel);
+	QSETUP_UI_HEAD(QInteractorStyleWindowLevelThreshold);
 
 public:
-	vtkTypeMacro(QInteractorStyleWindowLevel, InteractorStyleWindowLevel)
-	static QInteractorStyleWindowLevel* New();
+	vtkTypeMacro(QInteractorStyleWindowLevelThreshold, InteractorStyleWindowLevelThreshold)
+	static QInteractorStyleWindowLevelThreshold* New();
 	/**
 	* @brief	Enabled/Disable this InteractorStyle.
 	* @param	flag	true, enable. false, disable.
@@ -59,6 +59,9 @@ public:
 	*/
 	virtual void SetLevel(int level);
 
+	virtual void ThresholdTargetViewerToOverlay();
+	virtual void SetOutputLabel(int label)override;
+
 
 
 protected:
@@ -68,11 +71,11 @@ protected:
 	* @param	uiType	NO_UI
 	* @param	parent	QWidget's parent
 	*/
-	QInteractorStyleWindowLevel(int uiType = UNIQUE_UI, QWidget * parent = Q_NULLPTR);
+	QInteractorStyleWindowLevelThreshold(int uiType = UNIQUE_UI, QWidget * parent = Q_NULLPTR);
 	/**
 	 * @brief	Destructor. 
 	 */
-	virtual ~QInteractorStyleWindowLevel();
+	virtual ~QInteractorStyleWindowLevelThreshold();
 	virtual void uniqueInvoke(bool flag);
 	/**
 	* @override
@@ -83,22 +86,31 @@ protected:
 	* For updating the spinbox's boundaries.
 	*/
 	virtual void uniqueCall();
+	virtual void uniqueEnable() override;
 	virtual void SetWindowByViewer(double window);
 	virtual void SetLevelByViewer(double level);
+
+	void UpdateTargetViewer();
+
+
 	protected slots:
 	virtual void ResetWindowLevel() override;
 
 
+
 private:
 	void initialization();
+	void uniqueInitialization();
 	///< the pointer of the navigation ui.
-	Ui::QInteractorStyleWindowLevel *ui = nullptr;
+	Ui::QInteractorStyleWindowLevelThreshold *ui = nullptr;
 	QLabel* m_label = nullptr;
 	QSpinBox* m_spinBoxWindowLevel = nullptr;
 	QSpinBox* m_spinBoxWindowWidth = nullptr;
 	QSlider* m_sliderWindowLevel = nullptr;
 	QSlider* m_sliderWindowWidth = nullptr;
 	QPushButton* m_pushButtonReset = nullptr;
+	QStringList m_listOfModalityNames;
+
 };
 
 

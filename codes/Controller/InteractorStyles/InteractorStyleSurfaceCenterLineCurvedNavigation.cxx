@@ -222,7 +222,7 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::Update2DViewers()
 	//int k = (worldPos[2] - GetOrigin()[2]) / GetSpacing()[2] + 0.5;
 	int k = m_pointLocator->FindClosestPoint(worldPos);
 
-	STYLE_DOWN_CAST_CONSTITERATOR(AbstractNavigation, SetCurrentFocalPointWithImageCoordinate(i, j, k));
+	DYNAMIC_CAST_CONSTITERATOR(AbstractNavigation, SetCurrentFocalPointWithImageCoordinate(i, j, k));
 
 }
 

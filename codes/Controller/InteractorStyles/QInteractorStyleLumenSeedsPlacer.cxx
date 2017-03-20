@@ -45,9 +45,9 @@ void QInteractorStyleLumenSeedsPlacer::UpdateTargetViewer()
 	//QStringList listOfModalityName;
 	ui->comboBoxTargeImage->clear();
 	m_listOfModalityNames.clear();
-	for (list<AbstractInteractorStyle*>::const_iterator cit = m_abstractInteractorStyles.cbegin();
-		cit != m_abstractInteractorStyles.cend(); ++cit) {
-		QInteractorStyleLumenSeedsPlacer* _style = dynamic_cast<QInteractorStyleLumenSeedsPlacer*>(*cit);
+	for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
+		cit != m_imageStyles.cend(); ++cit) {
+		QInteractorStyleLumenSeedsPlacer* _style = QInteractorStyleLumenSeedsPlacer::SafeDownCast(*cit);
 		if (_style && _style->GetCustomEnabled()) {
 			m_listOfModalityNames.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
 		}
@@ -112,7 +112,7 @@ void QInteractorStyleLumenSeedsPlacer::ClearAllSeeds(QList<int*>& seed)
 		}
 	}
 	GetListWidget()->clear();
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, ClearAllSeedWidget());
+	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, ClearAllSeedWidget());
 }
 
 void QInteractorStyleLumenSeedsPlacer::DeleteFocalSeed(QList<int*>& seeds)
@@ -124,18 +124,19 @@ void QInteractorStyleLumenSeedsPlacer::DeleteFocalSeed(QList<int*>& seeds)
 		delete[] seeds[i];
 		seeds.removeAt(i);
 	}
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, ClearAllSeedWidget());
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GenerateWidgetFromSeeds());
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, m_seedWidget->Render());
+	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, ClearAllSeedWidget());
+	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GenerateWidgetFromSeeds());
+	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, m_seedWidget->Render());
 }
 
 void QInteractorStyleLumenSeedsPlacer::ExtractLumen(QList<int*>& seeds)
 {
 	typedef itk::Index<3> IndexType;
 	ImageViewer* inputViewer;
-	for (list<AbstractInteractorStyle*>::const_iterator cit = m_abstractInteractorStyles.cbegin();
-		cit != m_abstractInteractorStyles.cend(); ++cit) {
-		QInteractorStyleLumenSeedsPlacer* _style = dynamic_cast<QInteractorStyleLumenSeedsPlacer*>(*cit);
+
+	for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
+		cit != m_imageStyles.cend(); ++cit) {
+		QInteractorStyleLumenSeedsPlacer* _style = QInteractorStyleLumenSeedsPlacer::SafeDownCast(*cit);
 		
 		if (_style && _style->GetCustomEnabled() && 
 			QString::fromStdString(_style->GetImageViewer()->GetWindowName()) == 
@@ -186,7 +187,7 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumen(QList<int*>& seeds)
 	GetImageViewer()->GetOverlay()->Modified();
 	GetImageViewer()->GetOverlay()->InvokeEvent(vtkCommand::UpdateDataEvent);
 	//MY_VIEWER_CONSTITERATOR(Render());
-	STYLE_DOWN_CAST_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());
+	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());
 
 	//ExtractLumenPolyData();
 }

@@ -24,6 +24,13 @@ QInteractorStyleWindowLevel::~QInteractorStyleWindowLevel()
 	QDELETE_UI();
 }
 
+void QInteractorStyleWindowLevel::uniqueInvoke(bool flag)
+{
+	QAbstractNavigation::uniqueInvoke(flag);
+	SetWindowByViewer(GetWindow());
+	SetLevelByViewer(GetLevel());
+}
+
 void QInteractorStyleWindowLevel::uniqueCall()
 {
 	QAbstractNavigation::uniqueCall();

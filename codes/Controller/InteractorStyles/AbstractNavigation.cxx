@@ -62,7 +62,7 @@ void AbstractNavigation::SetCurrentFocalPointWithImageCoordinate(int i, int j, i
 	int ijk[3];
 	GetImageViewer()->GetFocalPointWithImageCoordinate(ijk);
 	if (i != ijk[0] || j != ijk[1] || k != ijk[2]) {
-		STYLE_DOWN_CAST_CONSTITERATOR(AbstractNavigation,
+		SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(AbstractNavigation,
 			SetCurrentFocalPointWithImageCoordinateByViewer(i, j, k));
 	}
 	

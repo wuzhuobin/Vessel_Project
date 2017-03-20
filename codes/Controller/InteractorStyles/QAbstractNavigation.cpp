@@ -2,6 +2,10 @@
 #include "QAbstractNavigation.h"
 #include "ui_QAbstractNavigation.h"
 
+// although it is not right, but anyway
+#include "AbstractNavigation.h"
+#include "ImageViewer.h"
+
 QSETUP_UI_SRC(QAbstractNavigation);
 
 QAbstractNavigation::QAbstractNavigation(int uiType, QWidget * parent)
@@ -27,6 +31,11 @@ void QAbstractNavigation::uniqueEnable()
 		this, SLOT(slotChangeSlice()),
 		static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
 
+	// although it is not right, but anyway
+	AbstractNavigation* _style = dynamic_cast<AbstractNavigation*>(this);
+	if (_style) {
+		SetExtentRange(_style->GetImageViewer()->GetDisplayExtent());
+	}
 }
 
 void QAbstractNavigation::uniqueDisable()

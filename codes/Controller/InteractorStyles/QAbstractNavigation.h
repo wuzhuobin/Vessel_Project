@@ -31,6 +31,11 @@ public:
 	 */
 	virtual void SetCurrentFocalPointWithImageCoordinate(int* ijk);
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
+	/**
+	 * @brief	function to update the spinbox slice
+	 * @param	extent	extent[6] to update the spinbox extent
+	 * quite a unnormal way to do it, but now it is the only way to update the extent spinbox
+	 */
 	virtual void SetExtentRange(int* extent);
 public slots:
 	/**

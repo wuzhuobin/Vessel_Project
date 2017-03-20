@@ -315,7 +315,7 @@ void InteractorStylePolygonDraw::FillPolygon(
 	//m_imageViewer->GetOverlay()->SetPixels(fillPoints, (unsigned char)label);
 	GetImageViewer()->GetOverlay()->Modified();
 
-	STYLE_DOWN_CAST_CONSTITERATOR(InteractorStylePolygonDraw, GetImageViewer()->Render());
+	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(InteractorStylePolygonDraw, GetImageViewer()->Render());
 
 
 }
@@ -379,7 +379,7 @@ void InteractorStylePolygonDraw::FillPolygon(
 		return;
 	//m_imageViewer->GetOverlay()->SetPixels(fillPoints, (unsigned char)label);
 	GetImageViewer()->GetOverlay()->Modified();
-	STYLE_DOWN_CAST_CONSTITERATOR(InteractorStylePolygonDraw, GetImageViewer()->Render());
+	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(InteractorStylePolygonDraw, GetImageViewer()->Render());
 
 
 }

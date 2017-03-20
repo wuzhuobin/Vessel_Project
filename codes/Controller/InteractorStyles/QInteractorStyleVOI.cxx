@@ -132,8 +132,8 @@ void QInteractorStyleVOI::initialization()
 {
 	m_uniqueROIId = numOfMyself - 1;
 
-	connect(ui->resetROIPushButton, SIGNAL(clicked()),
+	connect(ui->pushButtonResetVOI, SIGNAL(clicked()),
 		this, SLOT(ResetVOI()));
-	connect(ui->segmentationPushButton, SIGNAL(clicked()),
+	connect(ui->pushButtonExtractVOI, SIGNAL(clicked()),
 		this, SLOT(ExtractVOI()));
 }

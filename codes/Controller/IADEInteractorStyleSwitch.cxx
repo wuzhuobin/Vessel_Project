@@ -28,7 +28,7 @@ IADEInteractorStyleSwitch::IADEInteractorStyleSwitch()
 	// of the ui
 	Navigation = QInteractorStyleNavigation::New();
 	allStyles.push_back(Navigation);
-	WindowLevel = QInteractorStyleWindowLevel::New();
+	WindowLevel = QInteractorStyleWindowLevelThreshold::New();
 	allStyles.push_back(WindowLevel);
 	//PolygonDraw = QInteractorStyleVesselSegmentation::New();
 	LumenSeedsPlacer = QInteractorStyleLumenSeedsPlacer::New();

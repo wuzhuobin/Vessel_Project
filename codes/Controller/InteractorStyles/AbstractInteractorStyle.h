@@ -26,8 +26,8 @@ class vtkCallbackCommand;
  * saving human labor to type this iterate again!
  */
 
-//#ifndef STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
-//#define STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD) \
+//#ifndef DYNAMIC_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
+//#define DYNAMIC_CAST_CONSTITERATOR(STYLE_NAME, METHOD) \
 //for(std::list<AbstractInteractorStyle*>::const_iterator cit = \
 //	m_abstractInteractorStyles.cbegin(); cit != m_abstractInteractorStyles.cend(); ++cit){\
 //	STYLE_NAME* _style = STYLE_NAME::SafeDownCast(*cit); \
@@ -35,10 +35,10 @@ class vtkCallbackCommand;
 //		_style->##METHOD; \
 //	} \
 //}
-//#endif // !STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
+//#endif // !DYNAMIC_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
 
-#ifndef STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
-#define STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD) \
+#ifndef DYNAMIC_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
+#define DYNAMIC_CAST_CONSTITERATOR(STYLE_NAME, METHOD) \
 for(std::list<AbstractInteractorStyle*>::const_iterator cit = \
 	m_abstractInteractorStyles.cbegin(); cit != m_abstractInteractorStyles.cend(); ++cit){\
 	STYLE_NAME* _style = dynamic_cast<##STYLE_NAME*>(*cit); \
@@ -46,7 +46,7 @@ for(std::list<AbstractInteractorStyle*>::const_iterator cit = \
 		_style->##METHOD; \
 	} \
 }
-#endif // !STYLE_DOWN_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
+#endif // !DYNAMIC_CAST_CONSTITERATOR(STYLE_NAME, METHOD)
 
 
 

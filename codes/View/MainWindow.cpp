@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent)
 	QActionGroup* actionGroupView = new QActionGroup(this);
 	actionGroupView->addAction(ui->actionAll_axial_view);
 	actionGroupView->addAction(ui->actionMulti_planar_view);
-	actionGroupView->addAction(ui->actionCurved_view);
+	//actionGroupView->addAction(ui->actionCurved_view);
 	actionGroupView->setExclusive(true);
 
 

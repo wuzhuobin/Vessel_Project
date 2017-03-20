@@ -26,8 +26,7 @@ public:
 	const enum VIEW_MODE
 	{
 		MULTIPLANAR_VIEW = 0,
-		ALL_AXIAL_VIEW = 1, 
-		CURVED_VIEW = 2
+		ALL_AXIAL_VIEW = 1
 	};
 
 	Core(QObject* parent = nullptr);
@@ -72,7 +71,7 @@ private slots:
 	void slotUpdateImageViewersToCurrent(int viewer);
 	void slotMultiPlanarView();
 	void slotAllAxialView();
-	void slotCurvedMultiPlanarView();
+	void slotCurvedView(bool flag);
 	void slotChangeView(unsigned int viewMode);
 
 	void slotUpdateSurfaceView();
