@@ -24,7 +24,7 @@ Copyright (C) 2016
 #include <vector>
 
 class vtkSeedWidget;
-class vtkSeedRepresentation;
+//class vtkSeedRepresentation;
 
 class InteractorStyleSeedsPlacer : public AbstractNavigation
 {
@@ -76,9 +76,9 @@ protected:
 	static std::vector<int*> m_seeds;
 
 	friend class SeedsPlacerWidget;
-	vtkSmartPointer<vtkSeedRepresentation> m_seedRep = nullptr;
+	//vtkSmartPointer<vtkSeedRepresentation> m_seedRep = nullptr;
 	vtkSmartPointer<vtkSeedWidget> m_seedWidget = nullptr;
-	vtkSmartPointer<vtkCallbackCommand> m_callbackCommandSave = nullptr;
+	//vtkSmartPointer<vtkCallbackCommand> m_callbackCommandSave = nullptr;
 
 };
 

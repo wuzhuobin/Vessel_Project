@@ -562,10 +562,15 @@ void Core::slotUpdateSurfaceView()
 {
 	// temporary fix for real time updated.
 	vtkSmartPointer<vtkImageData> image = vtkSmartPointer<vtkImageData>::New();
-	image->ShallowCopy(imageManager.getOverlay()->getData());
+	if (currentCurved[DEFAULT_IMAGE]) {
+		image->ShallowCopy(imageManager.getCurvedIADEOverlay()->getData());
+	}
+	else {
+		image->ShallowCopy(imageManager.getIADEOverlay()->getData());
+	}
 	//surfaceViewer->SetInputData(imageManager.getOverlay()->getData());
 	surfaceViewer->SetInputData(image);
-	surfaceViewer->SetLookupTable(imageManager.getOverlay()->getLookupTable());
+	surfaceViewer->SetLookupTable(imageManager.getIADEOverlay()->getLookupTable());
 	surfaceViewer->SetCenterline(imageManager.getIADEOverlay()->getCenterLine());
 	surfaceViewer->GetRenderer()->ResetCameraClippingRange();
 	surfaceViewer->GetRenderer()->ResetCamera();

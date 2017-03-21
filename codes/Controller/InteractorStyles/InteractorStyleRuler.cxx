@@ -8,7 +8,7 @@
 #include <vtkProperty.h>
 #include <InteractorStyleSwitch.h>
 #include <vtkDistanceWidget.h>
-#include <vtkDistanceRepresentation3D.h>
+#include <vtkDistanceRepresentation2D.h>
 #include <vtkPointSetToLabelHierarchy.h>
 #include <vtkStringArray.h>
 #include <vtkLabelPlacementMapper.h>
@@ -18,6 +18,8 @@
 #include <vtkRenderer.h>
 #include <vtkImageViewer2.h>
 #include <vtkProperty.h>
+#include <vtkPointHandleRepresentation3D.h>
+#include <vtkImageActorPointPlacer.h>
 //#include <vtkPointHandleRepresentation2D.h>
 //#include <vtkDistanceRepresentation2D.h>
 
@@ -30,42 +32,52 @@ void InteractorStyleRuler::SetCustomEnabled(bool flag)
 	InteractorStyleNavigation::SetCustomEnabled(flag);
 	if (flag)
 	{
-		//this->m_distanceWidgetEnabledFlag = true;
-		if (!m_distanceRepresentation3D) {
-			m_distanceRepresentation3D = vtkDistanceRepresentation3D::New();
-			m_distanceRepresentation3D->GetLineProperty()->SetOpacity(1);
-		}
-		m_distanceRepresentation3D->SetLabelFormat("%-#11.2f mm");
+		vtkImageActorPointPlacer* imageActorPointPlacer =
+			vtkImageActorPointPlacer::New();
+		imageActorPointPlacer->SetImageActor(GetVtkImageViewer2()->GetImageActor());
+
+		vtkPointHandleRepresentation3D* pointHandleRepresentation3D = 
+			vtkPointHandleRepresentation3D::New();
+		pointHandleRepresentation3D->SetPointPlacer(imageActorPointPlacer);
+		imageActorPointPlacer->Delete();
+
+		vtkDistanceRepresentation2D* distanceRepresentation2D = 
+			vtkDistanceRepresentation2D::New();
+		distanceRepresentation2D->SetLabelFormat("%-#11.2f mm");
+		distanceRepresentation2D->SetHandleRepresentation(pointHandleRepresentation3D);
+		pointHandleRepresentation3D->Delete();
+
 		if (!m_distanceWidget) {
 			m_distanceWidget = vtkDistanceWidget::New();
 		}
-		m_distanceWidget->SetRepresentation(m_distanceRepresentation3D);
+		m_distanceWidget->SetRepresentation(distanceRepresentation2D);
+		distanceRepresentation2D->Delete();
 		m_distanceWidget->SetInteractor(this->Interactor);
 
 		//m_distanceWidget->SetRepresentation(m_distanceRepresentation3D);
 
 		//m_pointHandleRepresentation2D = vtkPointHandleRepresentation2D::New();
 
-		//m_distanceRepresentation2D->SetHandleRepresentation(m_pointHandleRepresentation2D);
-		//m_distanceWidget->SetRepresentation(m_distanceRepresentation2D);
+		//distanceRepresentation2D->SetHandleRepresentation(m_pointHandleRepresentation2D);
+		//m_distanceWidget->SetRepresentation(distanceRepresentation2D);
 		//m_distanceWidget->GetDistanceRepresentation()->InstantiateHandleRepresentation();
 		m_distanceWidget->EnabledOn();
 
-		UpdateMaximumWallThicknessLabel();
+		//UpdateMaximumWallThicknessLabel();
 
 	}
 	else
 	{
-		if (m_distanceWidget != NULL) {
-			m_distanceWidget->SetInteractor(NULL);
+		if (m_distanceWidget != nullptr) {
+			m_distanceWidget->SetInteractor(nullptr);
 			m_distanceWidget->EnabledOff();
 			m_distanceWidget->Delete();
-			m_distanceWidget = NULL;
+			m_distanceWidget = nullptr;
 		}
-		if (m_distanceRepresentation3D) {
-			m_distanceRepresentation3D->Delete();
-			m_distanceRepresentation3D = nullptr;
-		}
+		//if (distanceRepresentation2D) {
+		//	distanceRepresentation2D->Delete();
+		//	distanceRepresentation2D = nullptrptr;
+		//}
 		//if (GetVtkImageViewer2()->GetRenderer()->HasViewProp(this->m_lineActor)) {
 		//	GetVtkImageViewer2()->GetRenderer()->RemoveActor(this->m_lineActor);
 
@@ -77,37 +89,37 @@ void InteractorStyleRuler::SetCustomEnabled(bool flag)
 	}
 }
 
-void InteractorStyleRuler::EnableMaximumWallThickneesLabel(bool flag)
-{
-	m_MaximumWallThickneesLabelFlag = flag;
-	UpdateMaximumWallThicknessLabel();
-}
+//void InteractorStyleRuler::EnableMaximumWallThickneesLabel(bool flag)
+//{
+//	m_MaximumWallThickneesLabelFlag = flag;
+//	UpdateMaximumWallThicknessLabel();
+//}
 
 void InteractorStyleRuler::SetCurrentFocalPointWithImageCoordinate(int i, int j, int k)
 {
 	InteractorStyleNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
-	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(InteractorStyleRuler, UpdateMaximumWallThicknessLabel());
+	//SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(InteractorStyleRuler, UpdateMaximumWallThicknessLabel());
 }
 
 InteractorStyleRuler::~InteractorStyleRuler()
 {
-	//if (this->m_pointHandleRepresentation2D != NULL) {
+	//if (this->m_pointHandleRepresentation2D != nullptr) {
 	//	this->m_pointHandleRepresentation2D->Delete();
-	//	this->m_pointHandleRepresentation2D = NULL;
+	//	this->m_pointHandleRepresentation2D = nullptr;
 	//}
-	if (this->m_distanceRepresentation3D != NULL) {
-		this->m_distanceRepresentation3D->Delete();
-		this->m_distanceRepresentation3D = NULL;
+	//if (this->distanceRepresentation2D != nullptr) {
+	//	this->distanceRepresentation2D->Delete();
+	//	this->distanceRepresentation2D = nullptr;
 
-	}
-	if (this->m_distanceWidget != NULL) {
+	//}
+	if (this->m_distanceWidget != nullptr) {
 		this->m_distanceWidget->Delete();
-		this->m_distanceWidget = NULL;
+		this->m_distanceWidget = nullptr;
 	}
 }
 
-void InteractorStyleRuler::UpdateMaximumWallThicknessLabel()
-{
+//void InteractorStyleRuler::UpdateMaximumWallThicknessLabel()
+//{
 	//if (GetSliceOrientation() != vtkImageViewer2::SLICE_ORIENTATION_XY ||
 	//	!m_MaximumWallThickneesLabelFlag || m_imageViewer->GetAllBlack()) {
 	//	if (m_imageViewer->GetAnnotationRenderer()->HasViewProp(this->m_lineActor)) {
@@ -206,14 +218,14 @@ void InteractorStyleRuler::UpdateMaximumWallThicknessLabel()
 	//	m_imageViewer->GetAnnotationRenderer()->AddActor2D(this->m_labelActor);
 	//}
 	//m_imageViewer->Render();
-}
+//}
 
 InteractorStyleRuler::InteractorStyleRuler()
 {
 	//m_pointHandleRepresentation2D = vtkPointHandleRepresentation2D::New();
-	//m_distanceRepresentation2D = vtkDistanceRepresentation2D::New();
-	m_distanceRepresentation3D = NULL;
-	m_distanceWidget = NULL;
+	//distanceRepresentation2D = vtkDistanceRepresentation2D::New();
+	//distanceRepresentation2D = nullptr;
+	m_distanceWidget = nullptr;
 
 	// Maximum wall thickness stuff 
 	//this->m_labelActor = vtkSmartPointer<vtkActor2D>::New();

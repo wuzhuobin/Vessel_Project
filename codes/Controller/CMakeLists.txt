@@ -25,6 +25,10 @@ add_subdirectory(
 	SurfaceViewer_test
 )
 
+add_subdirectory(
+	InteractorStylePolygonDraw2_test
+)
+
 SET(
 	CONTROLLER_SRC
 	# ${PROJECT_SOURCE_DIR}/MyImageManager.cpp

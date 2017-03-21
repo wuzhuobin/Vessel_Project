@@ -16,16 +16,14 @@ public:
 	vtkTypeMacro(QInteractorStyleRuler, InteractorStyleRuler);
 	static QInteractorStyleRuler* New();
 public slots:
-	void SetCustomEnabled(bool flag);
-	void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
+	virtual void SetCustomEnabled(bool flag);
+	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 
 
-	void EnableMaximumWallThickneesLabel(bool flag);
 protected:
 	QInteractorStyleRuler(int uiType = UNIQUE_UI, QWidget* parent = Q_NULLPTR);
-	~QInteractorStyleRuler ();
+	virtual ~QInteractorStyleRuler ();
 
-	void initialization();
 
 private:
 

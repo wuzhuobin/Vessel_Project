@@ -26,7 +26,7 @@ vtkStandardNewMacro(InteractorStyleSwitch);
 
 InteractorStyleSwitch::InteractorStyleSwitch()
 {
-	InteractorStyleTesting = vtkInteractorStyleImage::New();
+	InteractorStyleTesting = vtkInteractorStyleTrackballCamera::New();
 
 	allStyles.push_back(InteractorStyleTesting);
 	this->CurrentStyle = 0;

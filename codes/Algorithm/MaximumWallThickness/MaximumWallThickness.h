@@ -6,7 +6,7 @@
 #include <vector>
 class vtkPolyData;
 class vtkImageData;
-
+class vtkContourFilter;
 
 class MaximumWallThickness : public vtkObject
 {

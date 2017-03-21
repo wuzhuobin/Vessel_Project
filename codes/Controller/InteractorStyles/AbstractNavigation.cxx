@@ -84,7 +84,7 @@ void AbstractNavigation::OnKeyPress()
 {
 	std::string key = this->Interactor->GetKeySym();
 	int coordinate[3];
-	if (!GetImageViewer()) {
+	if (GetImageViewer()) {
 		GetImageViewer()->GetFocalPointWithImageCoordinate(coordinate);
 
 		// quite ugly here

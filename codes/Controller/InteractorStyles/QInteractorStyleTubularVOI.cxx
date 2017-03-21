@@ -198,6 +198,7 @@ void QInteractorStyleTubularVOI::ResetVOI()
 }
 
 QInteractorStyleTubularVOI::QInteractorStyleTubularVOI(int uiType, QWidget * parent)
+	:QInteractorStyleLumenSeedsPlacer(NO_UI, this)
 {
 	QNEW_UI();
 }
@@ -223,8 +224,8 @@ void QInteractorStyleTubularVOI::uniqueInitialization()
 
 void QInteractorStyleTubularVOI::initialization()
 {
-	disconnect(QInteractorStyleLumenSeedsPlacer::getUi()->deleteAllSeedsPushButton, SIGNAL(clicked()),
-		this, SLOT(ClearAllSeeds()));
+	//disconnect(QInteractorStyleLumenSeedsPlacer::getUi()->deleteAllSeedsPushButton, SIGNAL(clicked()),
+	//	this, SLOT(ClearAllSeeds()));
 	connect(ui->deleteAllSeedsPushButton, SIGNAL(clicked()),
 		this, SLOT(ClearAllSeeds()));
 	connect(ui->pushButtonExtractVOI, SIGNAL(clicked()),
@@ -233,10 +234,10 @@ void QInteractorStyleTubularVOI::initialization()
 		this, SLOT(ResetVOI()));
 }
 
-void QInteractorStyleTubularVOI::uniqueEnable()
-{
-	QAbstractNavigation::uniqueEnable();
-}
+//void QInteractorStyleTubularVOI::uniqueEnable()
+//{
+//	QAbstractNavigation::uniqueEnable();
+//}
 
 QListWidget * QInteractorStyleTubularVOI::GetListWidget()
 {

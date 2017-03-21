@@ -122,7 +122,7 @@ void QInteractorStyleVBDSmokerSeeds::SaveWidgetToSeeds()
 	//vector<int*>::const_iterator cit1 = m_VBDSmokerSeeds.cbegin();
 	//vector<int*>::const_iterator cit2 = m_VBDSmokerDetour.cbegin();
 
-	for (int i = 0; i < m_seedRep->GetNumberOfSeeds(); ++i/*, ++cit1*/) {
+	for (int i = 0; i < m_seedWidget->GetSeedRepresentation()->GetNumberOfSeeds(); ++i/*, ++cit1*/) {
 		if (m_seedWidget->GetSeed(i)->GetEnabled() && pushButtons[i]->isChecked()) {
 			double worldPos[3];
 			m_seedWidget->GetSeedRepresentation()->GetSeedWorldPosition(i, worldPos);

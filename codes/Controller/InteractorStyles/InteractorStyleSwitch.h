@@ -16,7 +16,7 @@ Copyright (C) 2016
 
 #include <vtkSetGet.h>
 #include <vtkInteractorStyleSwitchBase.h>
-#include <vtkInteractorStyleImage.h>
+#include <vtkInteractorStyleTrackballCamera.h>
 
 #include <list>
 
@@ -70,7 +70,7 @@ public:
 	vtkTypeMacro(InteractorStyleSwitch, vtkInteractorStyleSwitchBase);
 	virtual void PrintSelf(ostream& os, vtkIndent indent);
 
-	vtkGetMacro(InteractorStyleTesting, vtkInteractorStyleImage*);
+	vtkGetMacro(InteractorStyleTesting, vtkInteractorStyleTrackballCamera*);
 	SetInteractorStyleMacro(InteractorStyleTesting);
 	CurrentStyleMacro(InteractorStyleTesting);
 
@@ -96,7 +96,7 @@ protected:
 	void SetAutoAdjustCameraClippingRange(int value);
 
 
-	vtkInteractorStyleImage* InteractorStyleTesting;
+	vtkInteractorStyleTrackballCamera* InteractorStyleTesting;
 	vtkInteractorStyle*	CurrentStyle;
 	std::list<vtkInteractorStyle*> allStyles;
 };

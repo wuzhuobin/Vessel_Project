@@ -118,6 +118,7 @@ target_link_libraries(
 	PolylineToTubularVolume
 	ReorderPointIdOfContourFilter
 	LumenSegmentationFilter
+	MaximumWallThickness
 )
 
 target_include_directories(

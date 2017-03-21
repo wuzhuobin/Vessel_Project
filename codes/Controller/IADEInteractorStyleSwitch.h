@@ -23,7 +23,7 @@ Copyright (C) 2016
 #include "QInteractorStyleLumenSeedsPlacer.h"
 #include "QInteractorStyleVBDSmokerSeeds.h"
 #include "QInteractorStyleTubularVOI.h"
-#include "QInteractorStyleRuler.h"
+#include "QInteractorStyleMaximumWallThickness.h"
 
 class IADEInteractorStyleSwitch : public InteractorStyleSwitch
 {
@@ -56,7 +56,7 @@ public:
 	SetInteractorStyleMacro(TubularVOI);
 	CurrentStyleMacro(TubularVOI);
 
-	vtkGetMacro(Ruler, QInteractorStyleRuler*);
+	vtkGetMacro(Ruler, QInteractorStyleMaximumWallThickness*);
 	SetInteractorStyleMacro(Ruler);
 	CurrentStyleMacro(Ruler);
 
@@ -74,13 +74,13 @@ protected:
 	QInteractorStylePaintBrush*	PaintBrush;
 	QInteractorStyleVOI* VOI;
 	QInteractorStyleTubularVOI* TubularVOI;
-	QInteractorStyleRuler* Ruler;
+	QInteractorStyleMaximumWallThickness* Ruler;
 
 
 	// IADE specified 
 	QInteractorStyleVBDSmokerSeeds* VBDSmoker;
 
-	//QInteractorStyleRuler* Ruler;
+	//QInteractorStyleMaximumWallThickness* Ruler;
 };
 
 

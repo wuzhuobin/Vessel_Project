@@ -10,6 +10,7 @@
 #include <vtkImageData.h>
 #include <vtkImageActor.h>
 
+#include <vtkImageCroppingRegionsWidget.h>
 
 vtkStandardNewMacro(QInteractorStyleVOI);
 QSETUP_UI_SRC(QInteractorStyleVOI);

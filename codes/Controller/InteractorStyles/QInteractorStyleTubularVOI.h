@@ -42,7 +42,7 @@ protected:
 	void uniqueInitialization();
 	void initialization();
 
-	virtual void uniqueEnable() override;
+	//virtual void uniqueEnable() override;
 
 	static QList<int*> m_tubularSeeds;
 	virtual QListWidget* GetListWidget();

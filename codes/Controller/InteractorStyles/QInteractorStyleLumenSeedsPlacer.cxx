@@ -269,7 +269,7 @@ void QInteractorStyleLumenSeedsPlacer::DeleteFocalSeed()
 
 void QInteractorStyleLumenSeedsPlacer::SaveWidgetToSeeds(QList<int*>& seeds)
 {
-	for (int i = m_seedRep->GetNumberOfSeeds() - 1; i >= 0; --i) {
+	for (int i = m_seedWidget->GetSeedRepresentation()->GetNumberOfSeeds() - 1; i >= 0; --i) {
 		//double* worldPos = new double[3]; // #MemLeakHere
 		double worldPos[3];
 		m_seedWidget->GetSeedRepresentation()->GetSeedWorldPosition(i, worldPos);
@@ -373,8 +373,10 @@ void QInteractorStyleLumenSeedsPlacer::uniqueInitialization()
 
 void QInteractorStyleLumenSeedsPlacer::initialization()
 {
-	connect(ui->deleteAllSeedsPushButton, SIGNAL(clicked()),
-		this, SLOT(ClearAllSeeds()));
+	if (ui) {
+		connect(ui->deleteAllSeedsPushButton, SIGNAL(clicked()),
+			this, SLOT(ClearAllSeeds()));
+	}
 }
 
 void QInteractorStyleLumenSeedsPlacer::uniqueEnable()
