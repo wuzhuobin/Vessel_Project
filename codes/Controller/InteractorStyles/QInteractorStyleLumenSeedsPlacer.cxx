@@ -14,6 +14,8 @@
 #include <vtkSeedRepresentation.h>
 #include <vtkCommand.h>
 #include <vtkRenderWindow.h>
+#include <vtkImageBlend.h>
+
 
 #include "LumenExtractionFilter.h"
 #include "ImageViewer.h"
@@ -166,26 +168,32 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumen(QList<int*>& seeds)
 	lumenExtractionFilter->SetInputConnection(extractVOI->GetOutputPort());
 	lumenExtractionFilter->Update();
 
+	vtkSmartPointer<vtkImageBlend> blend =
+		vtkSmartPointer<vtkImageBlend>::New();
+	blend->AddInputData(inputViewer->GetOverlay());
+	blend->AddInputConnection(lumenExtractionFilter->GetOutputPort());
+	blend->SetOpacity(0, 0);
+	blend->SetOpacity(1, 1);
+	blend->Update();
+	inputViewer->GetOverlay()->ShallowCopy(blend->GetOutput());
 
+	//for (int i = GetImageViewer()->GetDisplayExtent()[0];
+	//	i <= GetImageViewer()->GetDisplayExtent()[1]; ++i) {
+	//	for (int j = GetImageViewer()->GetDisplayExtent()[2];
+	//		j <= GetImageViewer()->GetDisplayExtent()[3]; ++j) {
+	//		for (int k = GetImageViewer()->GetDisplayExtent()[4];
+	//			k <= GetImageViewer()->GetDisplayExtent()[5]; ++k) {
+	//			unsigned char* pixelLayer = static_cast<unsigned char*>
+	//				(GetImageViewer()->GetOverlay()->GetScalarPointer(i, j, k));
+	//			unsigned char* pixel = static_cast<unsigned char*>
+	//				(lumenExtractionFilter->GetOutput()->GetScalarPointer(i, j, k));
+	//			*pixelLayer = *pixel;
+	//		}
+	//	}
+	//}
 
-
-	for (int i = GetImageViewer()->GetDisplayExtent()[0];
-		i <= GetImageViewer()->GetDisplayExtent()[1]; ++i) {
-		for (int j = GetImageViewer()->GetDisplayExtent()[2];
-			j <= GetImageViewer()->GetDisplayExtent()[3]; ++j) {
-			for (int k = GetImageViewer()->GetDisplayExtent()[4];
-				k <= GetImageViewer()->GetDisplayExtent()[5]; ++k) {
-				unsigned char* pixelLayer = static_cast<unsigned char*>
-					(GetImageViewer()->GetOverlay()->GetScalarPointer(i, j, k));
-				unsigned char* pixel = static_cast<unsigned char*>
-					(lumenExtractionFilter->GetOutput()->GetScalarPointer(i, j, k));
-				*pixelLayer = *pixel;
-			}
-		}
-	}
-
-	GetImageViewer()->GetOverlay()->Modified();
-	GetImageViewer()->GetOverlay()->InvokeEvent(vtkCommand::UpdateDataEvent);
+	//GetImageViewer()->GetOverlay()->Modified();
+	//GetImageViewer()->GetOverlay()->InvokeEvent(vtkCommand::UpdateDataEvent);
 	//MY_VIEWER_CONSTITERATOR(Render());
 	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());
 
@@ -360,10 +368,7 @@ void QInteractorStyleLumenSeedsPlacer::uniqueInitialization()
 		this, SLOT(SetNumberOfIteractions(int)));
 	connect(ui->initialNeighbodhoodSpinBox, SIGNAL(valueChanged(int)),
 		this, SLOT(SetInitialNeighborhoodRadius(int)));
-	//connect(ui->spinBoxExtractRadius, SIGNAL(valueChanged(int)),
-	//	this, SLOT(SetExtractRadius(int)));
-	//connect(ui->pushBtnExtractSegmentation, SIGNAL(clicked()),
-	//	this, SLOT(ExtractSegmentation()));
+
 }
 
 void QInteractorStyleLumenSeedsPlacer::initialization()

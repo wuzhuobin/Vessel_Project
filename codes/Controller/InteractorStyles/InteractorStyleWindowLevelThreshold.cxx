@@ -8,6 +8,8 @@
 #include <vtkImageMapToWindowLevelColors.h>
 #include <vtkImageData.h>
 #include <vtkObjectFactory.h>
+#include <vtkImageBlend.h>
+#include <vtkExtractVOI.h>
 
 vtkStandardNewMacro(InteractorStyleWindowLevelThreshold);
 
@@ -22,10 +24,19 @@ void InteractorStyleWindowLevelThreshold::SetOutputLabel(int label)
 
 void InteractorStyleWindowLevelThreshold::ThresholdToOverlay()
 {
+	vtkSmartPointer<vtkExtractVOI> extractVOI =
+		vtkSmartPointer<vtkExtractVOI>::New();
+	extractVOI->SetInputData(GetImageViewer()->GetInput());
+	extractVOI->SetVOI(GetImageViewer()->GetDisplayExtent());
+	extractVOI->Update();
+
+
+
 	vtkSmartPointer<vtkImageThreshold> threshold =
 		vtkSmartPointer<vtkImageThreshold>::New();
 	threshold->SetNumberOfThreads(16);
-	threshold->SetInputData(GetImageViewer()->GetInput());
+	threshold->SetInputConnection(extractVOI->GetOutputPort());
+	//threshold->SetInputData(GetImageViewer()->GetInput());
 	threshold->SetOutputScalarType(GetImageViewer()->GetOverlay()->GetScalarType());
 	threshold->ThresholdByUpper(GetLevel()- GetWindow() * 0.5);
 	threshold->ReplaceOutOn();
@@ -33,7 +44,15 @@ void InteractorStyleWindowLevelThreshold::ThresholdToOverlay()
 	threshold->ReplaceInOn();
 	threshold->SetInValue(m_label);
 	threshold->Update();
-	GetImageViewer()->GetOverlay()->ShallowCopy(threshold->GetOutput());
+
+	vtkSmartPointer<vtkImageBlend> imageBlend =
+		vtkSmartPointer<vtkImageBlend>::New();
+	imageBlend->AddInputData(GetImageViewer()->GetOverlay());
+	imageBlend->AddInputConnection(threshold->GetOutputPort());
+	imageBlend->SetOpacity(1, 1);
+	imageBlend->Update();
+
+	GetImageViewer()->GetOverlay()->ShallowCopy(imageBlend->GetOutput());
 	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(InteractorStyleWindowLevelThreshold, GetImageViewer()->Render());
 }
 
