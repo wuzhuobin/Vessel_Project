@@ -260,8 +260,8 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::UpdateRadiusLabel()
 	double* worldPos = m_handleWidgets[0]->GetHandleRepresentation()->GetWorldPosition();
 	vtkIdType id = m_centerlinePointLocator->FindClosestPoint(worldPos);
 	double* value = static_cast<double*>(
-		GetCenterlineSurfaceViewer()->GetInput()->
-		GetPointData()->GetArray("Radius")->GetVoidPointer(id));
+		GetCenterlineSurfaceViewer()->GetCenterline()->
+		GetPointData()->GetArray(RADIUS)->GetVoidPointer(id));
 
 	vtkSmartPointer<vtkCoordinate> coordinate =
 		vtkSmartPointer<vtkCoordinate>::New();

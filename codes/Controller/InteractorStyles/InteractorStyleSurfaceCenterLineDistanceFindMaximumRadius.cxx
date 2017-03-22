@@ -193,7 +193,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::FindMaximumRadiu
 	for (vtkIdType id = 0; id < pathPointId->GetNumberOfIds(); ++id) {
 		vtkIdType _pointId = pathPointId->GetId(id);
 		double* value = static_cast<double*>(
-			m_triangulatedCenterLine->GetPointData()->GetArray("Radius")->GetVoidPointer(_pointId));
+			m_triangulatedCenterLine->GetPointData()->GetArray(RADIUS)->GetVoidPointer(_pointId));
 		if (*value > maxRadius) {
 			maxRadius = *value;
 			maxRadiusId = _pointId;
