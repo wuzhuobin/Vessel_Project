@@ -56,7 +56,7 @@ void InteractorStyleSwitch3D::InternalUpdate(bool flag)
 {
 
 	// using enable update to call #EnabledOn() and #EnabledOff()
-	AbstractInteractorStyle* _style = dynamic_cast<AbstractInteractorStyle*>(this->CurrentStyle);
+	AbstractInteractorStyleSurface* _style = AbstractInteractorStyleSurface::SafeDownCast(this->CurrentStyle);
 	if (_style) {
 		_style->SetCustomEnabled(flag);
 	}

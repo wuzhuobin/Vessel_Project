@@ -277,6 +277,7 @@ void Core::slotOverlayToImageManager()
 
 void Core::slotUpdateMeasurements()
 {
+	//IADEOverlay* overlay = qobject_cast<IADEOverlay*>(sender());
 	IADEOverlay* overlay = dynamic_cast<IADEOverlay*>(sender());
 	if (overlay && overlay->Measurements2D.contains(overlay->getCurrentSlice())) {
 		mainWindow.getMeasurementWidget()->slotUpdate2DMeasurements(overlay->Measurements2D[overlay->getCurrentSlice()].data());
@@ -562,12 +563,13 @@ void Core::slotUpdateSurfaceView()
 {
 	// temporary fix for real time updated.
 	vtkSmartPointer<vtkImageData> image = vtkSmartPointer<vtkImageData>::New();
-	if (currentCurved[DEFAULT_IMAGE]) {
-		image->DeepCopy(imageManager.getCurvedIADEOverlay()->getData());
-	}
-	else {
-		image->DeepCopy(imageManager.getIADEOverlay()->getData());
-	}
+	//if (currentCurved[DEFAULT_IMAGE]) {
+	//	image->ShallowCopy(imageManager.getCurvedIADEOverlay()->getData());
+	//}
+	//else {
+	//	image->ShallowCopy(imageManager.getIADEOverlay()->getData());
+	//}
+	image->ShallowCopy(imageManager.getIADEOverlay()->getData());
 	//surfaceViewer->SetInputData(imageManager.getOverlay()->getData());
 	surfaceViewer->SetInputData(image);
 	surfaceViewer->SetLookupTable(imageManager.getIADEOverlay()->getLookupTable());

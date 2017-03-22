@@ -8,6 +8,7 @@ class vtkHandleWidget;
 class vtkKdTreePointLocator;
 class vtkPolyData;
 class vtkImageActor;
+class vtkTextActor;
 class InteractorStyleSurfaceCenterLineCurvedNavigationCallback;
 
 class InteractorStyleSurfaceCenterLineCurvedNavigation :
@@ -25,6 +26,8 @@ public:
 
 	virtual void Update2DViewers();
 
+	virtual void UpdateRadiusLabel();
+
 protected:
 
 	InteractorStyleSurfaceCenterLineCurvedNavigation();
@@ -37,6 +40,7 @@ protected:
 
 	vtkSmartPointer<vtkKdTreePointLocator> m_pointLocator = nullptr;
 	vtkSmartPointer<vtkHandleWidget> m_handleWidgets[NUM_OF_HANDLES] = {nullptr};
+	vtkSmartPointer<vtkTextActor> m_measurementText = nullptr;
 
 
 private:

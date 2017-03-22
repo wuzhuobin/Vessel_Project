@@ -34,11 +34,11 @@ vtkStandardNewMacro(InteractorStyleWindowLevel);
 
 void InteractorStyleWindowLevel::SetWindow(double window)
 {
-	for (std::list<AbstractInteractorStyle*>::const_iterator cit =
-		m_abstractInteractorStyles.cbegin();
-		cit != m_abstractInteractorStyles.cend(); ++cit) {
+	for (std::list<AbstractInteractorStyleImage*>::const_iterator cit =
+		m_imageStyles.cbegin();
+		cit != m_imageStyles.cend(); ++cit) {
 		InteractorStyleWindowLevel* windowLevel =
-			dynamic_cast<InteractorStyleWindowLevel*>(*cit);
+			InteractorStyleWindowLevel::SafeDownCast(*cit);
 		if (windowLevel != nullptr && windowLevel->m_customFlag &&
 			GetImageViewer()->GetInput() == windowLevel->GetImageViewer()->GetInput()) {
 			windowLevel->SetWindowByViewer(window);
@@ -48,11 +48,11 @@ void InteractorStyleWindowLevel::SetWindow(double window)
 
 void InteractorStyleWindowLevel::SetLevel(double level)
 {
-	for (std::list<AbstractInteractorStyle*>::const_iterator cit =
-		m_abstractInteractorStyles.cbegin();
-		cit != m_abstractInteractorStyles.cend(); ++cit) {
+	for (std::list<AbstractInteractorStyleImage*>::const_iterator cit =
+		m_imageStyles.cbegin();
+		cit != m_imageStyles.cend(); ++cit) {
 		InteractorStyleWindowLevel* windowLevel =
-			dynamic_cast<InteractorStyleWindowLevel*>(*cit);
+			InteractorStyleWindowLevel::SafeDownCast(*cit);
 		if (windowLevel != nullptr && windowLevel->m_customFlag &&
 			GetImageViewer()->GetInput() == windowLevel->GetImageViewer()->GetInput()) {
 			windowLevel->SetLevelByViewer(level);

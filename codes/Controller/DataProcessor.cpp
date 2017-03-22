@@ -332,7 +332,7 @@ void DataProcessor::initializeCurved()
 		// close to any label image which needs to do marching cube
 		// otherwise, the generated surface will be messed up or splited by the point
 		// (0, 0, 0)
-		//curvedMPRImageFilter->GetOutput()->SetOrigin(0, 0, 0);
+		curvedMPRImageFilter->GetOutput()->SetOrigin(0, 0, 0);
 
 		imageManager->setCurvedImage(i, curvedMPRImageFilter->GetOutput());
 
@@ -357,7 +357,7 @@ void DataProcessor::initializeCurved()
 	// close to any label image which needs to do marching cube
 	// otherwise, the generated surface will be messed up or splited by the point
 	// (0, 0, 0) 
-	//curvedMPRImageFilter->GetOutput()->SetOrigin(0, 0, 0);
+	curvedMPRImageFilter->GetOutput()->SetOrigin(0, 0, 0);
 
 	imageManager->setCurvedOverlay(curvedMPRImageFilter->GetOutput());
 

@@ -19,6 +19,7 @@
 #include <vtkTextProperty.h>
 #include <vtkRenderer.h>
 #include <vtkCommand.h>
+#include <vtkCoordinate.h>
 
 #include <vtkDijkstraGraphInternals.h>
 class vtkDijkstraGraphGeodesicPathDistance : public vtkDijkstraGraphGeodesicPath {
@@ -68,10 +69,13 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled
 	else {
 		for (int i = 0; i < NUM_OF_HANDLES; ++i) {
 			// removing widgets
-			m_handleWidgets[i]->SetInteractor(nullptr);
-			m_handleWidgets[i]->EnabledOff();
-			m_handleWidgets[i]->RemoveAllObservers();
-			m_handleWidgets[i] = nullptr;
+			if (m_handleWidgets) {
+				m_handleWidgets[i]->SetInteractor(nullptr);
+				m_handleWidgets[i]->EnabledOff();
+				m_handleWidgets[i]->RemoveAllObservers();
+				m_handleWidgets[i] = nullptr;
+			}
+
 		}
 		m_pointLocator = nullptr;
 		GetSurfaceViewer()->GetRenderer()->RemoveActor(m_measurementText);
@@ -84,9 +88,10 @@ InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InteractorStyleSurfac
 {
 	m_measurementText =
 		vtkSmartPointer<vtkTextActor>::New();
-	m_measurementText->SetPosition2(10, 40);
-	m_measurementText->GetTextProperty()->SetFontSize(24);
-	m_measurementText->GetTextProperty()->SetColor(1.0, 0.0, 0.0);
+	//m_measurementText->SetPosition(5, 10);
+	//m_measurementText->SetPosition2(10, 40);
+	m_measurementText->GetTextProperty()->SetFontSize(15);
+	m_measurementText->GetTextProperty()->SetColor(1.0, 1.0, 1.0);
 }
 
 InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::~InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius()
@@ -106,7 +111,8 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializeHandle
 	//cleanPolyData->PointMergingOn();
 	////cleanPolyData->PointMergingOff();
 	//cleanPolyData->Update();
-	if (GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
+	if (!GetCenterlineSurfaceViewer()->GetCenterline() || 
+		GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
 		vtkErrorMacro( << "no centerline ");
 		return;
 	}
@@ -158,6 +164,8 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::InitializeHandle
 	//writer->Write();
 }
 
+
+
 void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::FindMaximumRadius()
 {
 	vtkIdType seed1 = m_pointLocator->FindClosestPoint(
@@ -202,10 +210,18 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::FindMaximumRadiu
 	cout << "minimum radius " << minRadiusId << " is " << minRadius << endl;
 	GeodesicPathDistance = dijkstra->GetGeodesicPathDistance(seed2);
 	cout << GeodesicPathDistance << endl;
+
+	vtkSmartPointer<vtkCoordinate> coordinate =
+		vtkSmartPointer<vtkCoordinate>::New();
+	coordinate->SetCoordinateSystemToWorld();
+	coordinate->SetValue(m_handleWidgets[0]->GetHandleRepresentation()->GetWorldPosition());
+	int* displayCoordinate = coordinate->GetComputedDisplayValue(GetSurfaceViewer()->GetRenderer());
+
 	char buff[100];
 	sprintf_s(buff, "Maximum radius: %.2f mm\n Minimum radius: %.2f mm\n Center line length: %.2f mm", maxRadius, minRadius, GeodesicPathDistance);
 	m_measurementText->SetInput(buff);
-	this->GetSurfaceViewer()->Render();
+	m_measurementText->SetDisplayPosition(displayCoordinate[0], displayCoordinate[1]);
+	//this->GetSurfaceViewer()->Render();
 }
 
 void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::OnKeyPress()

@@ -114,14 +114,16 @@ void QInteractorStyleWindowLevelThreshold::SetCustomEnabled(bool flag)
 {
 	InteractorStyleWindowLevelThreshold::SetCustomEnabled(flag);
 	uniqueInvoke(flag);
-	double* range = GetImageViewer()->GetInput()->GetScalarRange();
-	m_label->setText(GetImageViewer()->GetWindowName());
-	m_spinBoxWindowLevel->setRange(range[0], range[1]);
-	m_sliderWindowLevel->setRange(range[0], range[1]);
-	m_spinBoxWindowWidth->setRange(range[0], range[1]);
-	m_sliderWindowWidth->setRange(range[0], range[1]);
-	m_spinBoxWindowWidth->setValue(GetWindow());
-	m_spinBoxWindowLevel->setValue(GetLevel());
+	if (flag) {
+		double* range = GetImageViewer()->GetInput()->GetScalarRange();
+		m_label->setText(GetImageViewer()->GetWindowName());
+		m_spinBoxWindowLevel->setRange(range[0], range[1]);
+		m_sliderWindowLevel->setRange(range[0], range[1]);
+		m_spinBoxWindowWidth->setRange(range[0], range[1]);
+		m_sliderWindowWidth->setRange(range[0], range[1]);
+		//m_spinBoxWindowWidth->setValue(GetWindow());
+		//m_spinBoxWindowLevel->setValue(GetLevel());
+	}
 }
 
 void QInteractorStyleWindowLevelThreshold::SetCurrentFocalPointWithImageCoordinate(int i, int j, int k)

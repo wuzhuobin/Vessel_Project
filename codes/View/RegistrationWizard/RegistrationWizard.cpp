@@ -319,7 +319,7 @@ void ImagePage::onUpdateProgressBar(int value)
 
 void ImagePage::setImages()
 {
-	QPushButton* setButton = dynamic_cast<QPushButton*>(sender());
+	QPushButton* setButton = qobject_cast<QPushButton*>(sender());
 	if (setButton == nullptr) 
 		return;
 
@@ -339,7 +339,7 @@ void ImagePage::setImages()
 
 void ImagePage::removeImages()
 {
-	QPushButton* setButton = dynamic_cast<QPushButton*>(sender());
+	QPushButton* setButton = qobject_cast<QPushButton*>(sender());
 	if (setButton == nullptr)
 		return;
 
@@ -434,7 +434,7 @@ void ConclusionPage::initializePage()
 					cit != dictionary.End(); ++cit) {
 
 					MetaDataObjectBase::Pointer entry = cit->second;
-					MetaDataString::Pointer entryValue = dynamic_cast<MetaDataString*>(
+					MetaDataString::Pointer entryValue = static_cast<MetaDataString*>(
 						entry.GetPointer());
 
 					if (entryValue) {

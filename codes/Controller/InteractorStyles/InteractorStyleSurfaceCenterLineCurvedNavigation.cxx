@@ -15,14 +15,21 @@
 #include <vtkPointData.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkIdList.h>
-//#include <vtkTextActor.h>
-//#include <vtkTextProperty.h>
+#include <vtkTextActor.h>
+#include <vtkTextProperty.h>
 #include <vtkRenderer.h>
 #include <vtkCommand.h>
 #include <vtkSplineFilter.h>
+#include <vtkCoordinate.h>
+#include <vtkImageViewer2.h>
+#include <vtkImageData.h>
+#include <vtkDijkstraGraphInternals.h>
+
+#include <algorithm>
+
 #include "AbstractNavigation.h"
 
-#include <vtkDijkstraGraphInternals.h>
+
 class vtkDijkstraGraphGeodesicPathDistance : public vtkDijkstraGraphGeodesicPath {
 
 public:
@@ -54,6 +61,7 @@ public:
 		if (event == vtkCommand::InteractionEvent)
 		{
 			style->Update2DViewers();
+			style->UpdateRadiusLabel();
 		}
 	}
 };
@@ -65,19 +73,21 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::SetCustomEnabled(bool fla
 	InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(flag);
 	if (m_customFlag) {
 		InitializeHandleWidgets();
-		//m_surfaceViewer->GetRenderer()->AddActor(m_measurementText);
+		GetSurfaceViewer()->GetRenderer()->AddActor(m_measurementText);
 		//InitializeReslicer();
 	}
 	else {
 		for (int i = 0; i < NUM_OF_HANDLES; ++i) {
 			// removing widgets
-			m_handleWidgets[i]->SetInteractor(nullptr);
-			m_handleWidgets[i]->EnabledOff();
-			m_handleWidgets[i]->RemoveAllObservers();
-			m_handleWidgets[i] = nullptr;
+			if (m_handleWidgets[i]) {
+				m_handleWidgets[i]->SetInteractor(nullptr);
+				m_handleWidgets[i]->EnabledOff();
+				m_handleWidgets[i]->RemoveAllObservers();
+				m_handleWidgets[i] = nullptr;
+			}
 		}
 		m_pointLocator = nullptr;
-		//m_surfaceViewer->GetRenderer()->RemoveActor(m_measurementText);
+		GetSurfaceViewer()->GetRenderer()->RemoveActor(m_measurementText);
 		//m_imageActor = nullptr;
 	}
 	
@@ -86,26 +96,22 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::SetCustomEnabled(bool fla
 
 InteractorStyleSurfaceCenterLineCurvedNavigation::InteractorStyleSurfaceCenterLineCurvedNavigation()
 {
-	//m_measurementText =
-	//	vtkSmartPointer<vtkTextActor>::New();
-	//m_measurementText->SetPosition2(10, 40);
-	//m_measurementText->GetTextProperty()->SetFontSize(24);
-	//m_measurementText->GetTextProperty()->SetColor(1.0, 0.0, 0.0);
+	m_measurementText =
+		vtkSmartPointer<vtkTextActor>::New();
+	m_measurementText->GetTextProperty()->SetFontSize(15);
+	m_measurementText->GetTextProperty()->SetColor(1.0, 1.0, 1.0);
+
 }
 
 InteractorStyleSurfaceCenterLineCurvedNavigation::~InteractorStyleSurfaceCenterLineCurvedNavigation()
 {
 }
 
-//void InteractorStyleSurfaceCenterLineCurvedNavigation::CreateCenterLine()
-//{
-//	InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine();
-//}
-//#include <vtkPolyDataWriter.h>
 void InteractorStyleSurfaceCenterLineCurvedNavigation::InitializeHandleWidgets()
 {
 
-	if (GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
+	if (!GetCenterlineSurfaceViewer()->GetCenterline() || 
+		GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
 		vtkErrorMacro(<< "no centerline ");
 		return;
 	}
@@ -214,16 +220,58 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::InitializeHandleWidgets()
 void InteractorStyleSurfaceCenterLineCurvedNavigation::Update2DViewers()
 {
 	const double* worldPos = m_handleWidgets[0]->GetHandleRepresentation()->GetWorldPosition();
-
-	int i = (GetExtent()[1] - GetExtent()[0])*0.5;
-	int j = (GetExtent()[3] - GetExtent()[2])*0.5;
-
 	
-	//int k = (worldPos[2] - GetOrigin()[2]) / GetSpacing()[2] + 0.5;
-	int k = m_pointLocator->FindClosestPoint(worldPos);
+	int* extent;
+	int i;
+	int j;
+	int k;
 
+
+	for (std::list<AbstractInteractorStyle*>::const_iterator cit = m_abstractInteractorStyles.cbegin();
+		cit != m_abstractInteractorStyles.cend(); ++cit) {
+		AbstractNavigation* style = dynamic_cast<AbstractNavigation*>(*cit);
+		if (style) {
+			extent = style->GetVtkImageViewer2()->GetInput()->GetExtent();
+			break;
+		}
+	}
+	if (std::equal(extent, extent + 5, GetExtent())) {
+		i = static_cast<int>((worldPos[0] - GetOrigin()[0]) / GetSpacing()[0] + 0.5);
+		j = static_cast<int>((worldPos[1] - GetOrigin()[1]) / GetSpacing()[1] + 0.5);
+		k = static_cast<int>((worldPos[2] - GetOrigin()[2]) / GetSpacing()[2] + 0.5);
+	}
+	else {
+		i = static_cast<int>((GetExtent()[1] - GetExtent()[0])*0.5 + 0.5);
+		j = static_cast<int>((GetExtent()[3] - GetExtent()[2])*0.5 + 0.5);
+		k = m_pointLocator->FindClosestPoint(worldPos);
+	}
+	
 	DYNAMIC_CAST_CONSTITERATOR(AbstractNavigation, SetCurrentFocalPointWithImageCoordinate(i, j, k));
 
+
+}
+
+void InteractorStyleSurfaceCenterLineCurvedNavigation::UpdateRadiusLabel()
+{
+	//int size[2] = { 50, 100 };
+	double* worldPos = m_handleWidgets[0]->GetHandleRepresentation()->GetWorldPosition();
+	vtkIdType id = m_pointLocator->FindClosestPoint(worldPos);
+	double* value = static_cast<double*>(
+		GetCenterlineSurfaceViewer()->GetSplineFilter()->GetOutput()->
+		GetPointData()->GetArray("Radius")->GetVoidPointer(id));
+
+	vtkSmartPointer<vtkCoordinate> coordinate =
+		vtkSmartPointer<vtkCoordinate>::New();
+	coordinate->SetCoordinateSystemToWorld();
+	coordinate->SetValue(worldPos);
+
+	int* displayCoordinate = coordinate->GetComputedDisplayValue(GetSurfaceViewer()->GetRenderer());
+	char buff[100];
+	sprintf_s(buff, "Radius: %.2f mm", *value);
+	m_measurementText->SetInput(buff);
+	m_measurementText->SetDisplayPosition(displayCoordinate[0], displayCoordinate[1]);
+	//m_measurementText->SetWidth(size[0]);
+	//m_measurementText->SetHeight(size[1]);
 }
 
 //void InteractorStyleSurfaceCenterLineCurvedNavigation::FindMaximumRadius()

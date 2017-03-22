@@ -27,9 +27,11 @@ void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::SetCustomEnabled(
 		GetSurfaceViewer()->GetRenderer()->AddActor(m_measurementText);
 	}
 	else {
-		m_lineWidget2->SetInteractor(nullptr);
-		m_lineWidget2->EnabledOff();
-		m_lineWidget2 = nullptr;
+		if (m_lineWidget2) {
+			m_lineWidget2->SetInteractor(nullptr);
+			m_lineWidget2->EnabledOff();
+			m_lineWidget2 = nullptr;
+		}
 
 		//m_distanceWidget->SetInteractor(nullptr);
 		//m_distanceWidget->EnabledOff();
@@ -64,7 +66,8 @@ InteractorStyleSurfaceCenterLinePerpendicularMeasurement::~InteractorStyleSurfac
 
 void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::InitializeLinePerpendicularMeasurementWidget()
 {
-	if (GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
+	if (!GetCenterlineSurfaceViewer()->GetCenterline() ||
+		GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
 		vtkErrorMacro(<< "no centerline ");
 		return;
 	}

@@ -170,9 +170,9 @@ void InteractorStyleSeedsPlacer::SetCurrentFocalPointWithImageCoordinate(int i, 
 	int oldIJK[3];
 	GetImageViewer()->GetFocalPointWithImageCoordinate(oldIJK);
 	AbstractNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
-	for (list<AbstractInteractorStyle*>::const_iterator cit =
-		m_abstractInteractorStyles.cbegin(); cit != m_abstractInteractorStyles.cend(); ++cit) {
-		InteractorStyleSeedsPlacer* _style = dynamic_cast<InteractorStyleSeedsPlacer*>(*cit);
+	for (list<AbstractInteractorStyleImage*>::const_iterator cit =
+		m_imageStyles.cbegin(); cit != m_imageStyles.cend(); ++cit) {
+		InteractorStyleSeedsPlacer* _style = InteractorStyleSeedsPlacer::SafeDownCast(*cit);
 		if (_style != nullptr &&
 			_style->m_customFlag &&
 			_style->GetSlice() != oldIJK[_style->GetSliceOrientation()]) {
@@ -207,9 +207,9 @@ void InteractorStyleSeedsPlacer::OnLeftButtonUp()
 	
 	//SaveWidgetToSeeds();
 	// update other viewers' seed widgets
-	for (list<AbstractInteractorStyle*>::const_iterator cit =
-		m_abstractInteractorStyles.cbegin(); cit != m_abstractInteractorStyles.cend(); ++cit) {
-		InteractorStyleSeedsPlacer* _style = dynamic_cast<InteractorStyleSeedsPlacer*>(*cit);
+	for (list<AbstractInteractorStyleImage*>::const_iterator cit =
+		m_imageStyles.cbegin(); cit != m_imageStyles.cend(); ++cit) {
+		InteractorStyleSeedsPlacer* _style = InteractorStyleSeedsPlacer::SafeDownCast(*cit);
 		if (_style != nullptr && _style->m_customFlag && _style != this ) {
 			_style->GenerateWidgetFromSeeds();
 		}

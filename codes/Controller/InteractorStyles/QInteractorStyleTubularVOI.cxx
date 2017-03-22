@@ -11,6 +11,7 @@
 #include <vtkParametricSpline.h>
 #include <vtkParametricFunctionSource.h>
 #include <vtkImageMask.h>
+#include <vtkImageBlend.h>
 
 vtkStandardNewMacro(QInteractorStyleTubularVOI);
 QSETUP_UI_SRC(QInteractorStyleTubularVOI);
@@ -72,7 +73,15 @@ void QInteractorStyleTubularVOI::ExtractSegmentation(QList<int*>& seed)
 	maskFilter->SetMaskInputData(polylineToTubularVolume->GetOutput());
 	maskFilter->Update();
 
-	GetImageViewer()->GetOverlay()->ShallowCopy(maskFilter->GetOutput());
+	vtkSmartPointer<vtkImageBlend> imageBlend =
+		vtkSmartPointer<vtkImageBlend>::New();
+	imageBlend->AddInputData(GetImageViewer()->GetOverlay());
+	imageBlend->AddInputConnection(maskFilter->GetOutputPort());
+	imageBlend->SetOpacity(0, 0);
+	imageBlend->SetOpacity(1, 1);
+	imageBlend->Update();
+
+	GetImageViewer()->GetOverlay()->ShallowCopy(imageBlend->GetOutput());
 	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(QInteractorStyleLumenSeedsPlacer, GetImageViewer()->Render());
 
 }
