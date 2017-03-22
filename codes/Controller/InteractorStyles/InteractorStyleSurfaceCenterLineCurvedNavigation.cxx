@@ -86,7 +86,8 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::SetCustomEnabled(bool fla
 				m_handleWidgets[i] = nullptr;
 			}
 		}
-		m_pointLocator = nullptr;
+		m_splinePointLocator = nullptr;
+		m_centerlinePointLocator= nullptr;
 		GetSurfaceViewer()->GetRenderer()->RemoveActor(m_measurementText);
 		//m_imageActor = nullptr;
 	}
@@ -115,8 +116,10 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::InitializeHandleWidgets()
 		vtkErrorMacro(<< "no centerline ");
 		return;
 	}
-	m_pointLocator = vtkSmartPointer<vtkKdTreePointLocator>::New();
-	m_pointLocator->SetDataSet(GetCenterlineSurfaceViewer()->GetSplineFilter()->GetOutput());
+	m_splinePointLocator = vtkSmartPointer<vtkKdTreePointLocator>::New();
+	m_splinePointLocator->SetDataSet(GetCenterlineSurfaceViewer()->GetSplineFilter()->GetOutput());
+	m_centerlinePointLocator= vtkSmartPointer<vtkKdTreePointLocator>::New();
+	m_centerlinePointLocator->SetDataSet(GetCenterlineSurfaceViewer()->GetCenterline());
 
 	vtkSmartPointer<vtkPolygonalSurfacePointPlacer> pointPlacer =
 		vtkSmartPointer<vtkPolygonalSurfacePointPlacer>::New();
@@ -243,7 +246,7 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::Update2DViewers()
 	else {
 		i = static_cast<int>((GetExtent()[1] - GetExtent()[0])*0.5 + 0.5);
 		j = static_cast<int>((GetExtent()[3] - GetExtent()[2])*0.5 + 0.5);
-		k = m_pointLocator->FindClosestPoint(worldPos);
+		k = m_splinePointLocator->FindClosestPoint(worldPos);
 	}
 	
 	DYNAMIC_CAST_CONSTITERATOR(AbstractNavigation, SetCurrentFocalPointWithImageCoordinate(i, j, k));
@@ -255,9 +258,9 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::UpdateRadiusLabel()
 {
 	//int size[2] = { 50, 100 };
 	double* worldPos = m_handleWidgets[0]->GetHandleRepresentation()->GetWorldPosition();
-	vtkIdType id = m_pointLocator->FindClosestPoint(worldPos);
+	vtkIdType id = m_centerlinePointLocator->FindClosestPoint(worldPos);
 	double* value = static_cast<double*>(
-		GetCenterlineSurfaceViewer()->GetSplineFilter()->GetOutput()->
+		GetCenterlineSurfaceViewer()->GetInput()->
 		GetPointData()->GetArray("Radius")->GetVoidPointer(id));
 
 	vtkSmartPointer<vtkCoordinate> coordinate =
@@ -276,9 +279,9 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::UpdateRadiusLabel()
 
 //void InteractorStyleSurfaceCenterLineCurvedNavigation::FindMaximumRadius()
 //{
-//	vtkIdType seed1 = m_pointLocator->FindClosestPoint(
+//	vtkIdType seed1 = m_splinePointLocator->FindClosestPoint(
 //		m_handleWidgets[0]->GetHandleRepresentation()->GetWorldPosition());
-//	vtkIdType seed2 = m_pointLocator->FindClosestPoint(
+//	vtkIdType seed2 = m_splinePointLocator->FindClosestPoint(
 //		m_handleWidgets[1]->GetHandleRepresentation()->GetWorldPosition());
 //	vtkSmartPointer<vtkDijkstraGraphGeodesicPathDistance> dijkstra =
 //		vtkSmartPointer<vtkDijkstraGraphGeodesicPathDistance>::New();

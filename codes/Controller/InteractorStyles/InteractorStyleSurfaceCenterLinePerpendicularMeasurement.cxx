@@ -10,9 +10,11 @@
 #include <vtkTextActor.h>
 #include <vtkTextProperty.h>
 #include <vtkRenderer.h>
-#include <vtkTextActor.h>
-#include <vtkTextProperty.h>
+//#include <vtkTextActor.h>
+//#include <vtkTextProperty.h>
 #include <vtkLineRepresentation.h>
+#include <vtkDistanceWidget.h>
+#include <vtkDistanceRepresentation.h>
 #include <vtkPointHandleRepresentation3D.h>
 
 
@@ -24,7 +26,6 @@ void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::SetCustomEnabled(
 	InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(flag);
 	if (m_customFlag) {
 		InitializeLinePerpendicularMeasurementWidget();
-		GetSurfaceViewer()->GetRenderer()->AddActor(m_measurementText);
 	}
 	else {
 		if (m_lineWidget2) {
@@ -32,12 +33,6 @@ void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::SetCustomEnabled(
 			m_lineWidget2->EnabledOff();
 			m_lineWidget2 = nullptr;
 		}
-
-		//m_distanceWidget->SetInteractor(nullptr);
-		//m_distanceWidget->EnabledOff();
-		//m_distanceWidget = nullptr;
-
-		GetSurfaceViewer()->GetRenderer()->RemoveActor(m_measurementText);
 	}
 	
 
@@ -48,16 +43,11 @@ void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::FindMaxiMumPerpen
 	double pos1[3], pos2[3];
 	this->m_lineWidget2->GetLineRepresentation()->GetPoint1WorldPosition(pos1);
 	this->m_lineWidget2->GetLineRepresentation()->GetPoint2WorldPosition(pos2);
-	//for(vtkIdType id = 0; i < m_centerLine->GetNumberOfPoints())
 }
 
 InteractorStyleSurfaceCenterLinePerpendicularMeasurement::InteractorStyleSurfaceCenterLinePerpendicularMeasurement()
 {
-	m_measurementText =
-		vtkSmartPointer<vtkTextActor>::New();
-	m_measurementText->SetPosition2(10, 40);
-	m_measurementText->GetTextProperty()->SetFontSize(24);
-	m_measurementText->GetTextProperty()->SetColor(1.0, 0.0, 0.0);
+
 }
 
 InteractorStyleSurfaceCenterLinePerpendicularMeasurement::~InteractorStyleSurfaceCenterLinePerpendicularMeasurement()
@@ -86,6 +76,8 @@ void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::InitializeLinePer
 		GetCenterlineSurfaceViewer()->GetCenterline()->GetPoint(0));
 	m_lineWidget2->GetLineRepresentation()->SetPoint2WorldPosition(
 		GetCenterlineSurfaceViewer()->GetCenterline()->GetPoint(1));
+	m_lineWidget2->GetLineRepresentation()->SetDistanceAnnotationFormat("%-#11.2f mm");
+	m_lineWidget2->GetDistanceWidget()->GetDistanceRepresentation()->SetLabelFormat("%-#11.2f mm");
 	m_lineWidget2->SetLine(GetCenterlineSurfaceViewer()->GetCenterline());
 	m_lineWidget2->EnabledOn();
 
@@ -93,10 +85,7 @@ void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::InitializeLinePer
 
 void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::InitializeDistanceWidget()
 {
-	//m_distanceWidget = vtkSmartPointer<vtkDistanceWidget>::New();
-	//m_distanceWidget->SetInteractor(this->Interactor);
-	//m_distanceWidget->CreateDefaultRepresentation();
-	//m_distanceWidget->ProcessEventsOff();
+
 }
 
 void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::OnKeyPress()

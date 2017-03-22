@@ -38,7 +38,8 @@ protected:
 	virtual void OnKeyPress() override;
 
 
-	vtkSmartPointer<vtkKdTreePointLocator> m_pointLocator = nullptr;
+	vtkSmartPointer<vtkKdTreePointLocator> m_splinePointLocator = nullptr;
+	vtkSmartPointer<vtkKdTreePointLocator> m_centerlinePointLocator = nullptr;
 	vtkSmartPointer<vtkHandleWidget> m_handleWidgets[NUM_OF_HANDLES] = {nullptr};
 	vtkSmartPointer<vtkTextActor> m_measurementText = nullptr;
 

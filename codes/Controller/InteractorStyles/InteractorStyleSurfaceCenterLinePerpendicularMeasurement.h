@@ -6,14 +6,11 @@
 class vtkLineWidget2;
 class vtkTextActor;
 class PerpendicularMeasurementLineWidget;
-//class vtkDistanceWidget;
 
 class InteractorStyleSurfaceCenterLinePerpendicularMeasurement :
 	public InteractorStyleSurfaceCenterLineSimpleClipping
 {
 public:
-
-	//const static unsigned int NUM_OF_HANDLES = 2;
 
 	vtkTypeMacro(InteractorStyleSurfaceCenterLinePerpendicularMeasurement,
 		InteractorStyleSurfaceCenterLineSimpleClipping);
@@ -35,7 +32,6 @@ protected:
 	virtual void OnKeyPress() override;
 
 	vtkSmartPointer<PerpendicularMeasurementLineWidget> m_lineWidget2 = nullptr;
-	vtkSmartPointer<vtkTextActor> m_measurementText = nullptr;
 
 
 private:
