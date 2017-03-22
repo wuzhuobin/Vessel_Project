@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 {
 	vtkSmartPointer<vtkNIFTIImageReader> niftiReader =
 		vtkSmartPointer<vtkNIFTIImageReader>::New();
-	niftiReader->SetFileName("C:/Users/user/Desktop/singletube.nii");
+	niftiReader->SetFileName("C:/Users/jieji/Desktop/222.nii");
 	niftiReader->Update();
 
 	//vtkSmartPointer<vtkDICOMImageReader> dicomReader =

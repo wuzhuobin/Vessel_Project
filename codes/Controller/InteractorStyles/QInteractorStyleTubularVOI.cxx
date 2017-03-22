@@ -87,16 +87,16 @@ void QInteractorStyleTubularVOI::ExtractVOI(QList<int*>& seed)
 	}
 
 	int extent[6] = {
-		static_cast<int>(splinePoints->GetBounds()[0] - m_extractRadius / GetSpacing()[0] * 2),
-		static_cast<int>(splinePoints->GetBounds()[1] + m_extractRadius / GetSpacing()[0] * 2),
-		static_cast<int>(splinePoints->GetBounds()[2] - m_extractRadius / GetSpacing()[1] * 2),
-		static_cast<int>(splinePoints->GetBounds()[3] + m_extractRadius / GetSpacing()[1] * 2),
-		static_cast<int>(splinePoints->GetBounds()[4] - m_extractRadius / GetSpacing()[2] * 2),
-		static_cast<int>(splinePoints->GetBounds()[5] + m_extractRadius / GetSpacing()[2] * 2)
+		static_cast<int>(splinePoints->GetBounds()[0] - m_extractRadius / GetSpacing()[0] * 1),
+		static_cast<int>(splinePoints->GetBounds()[1] + m_extractRadius / GetSpacing()[0] * 1),
+		static_cast<int>(splinePoints->GetBounds()[2] - m_extractRadius / GetSpacing()[1] * 1),
+		static_cast<int>(splinePoints->GetBounds()[3] + m_extractRadius / GetSpacing()[1] * 1),
+		static_cast<int>(splinePoints->GetBounds()[4] - m_extractRadius / GetSpacing()[2] * 1),
+		static_cast<int>(splinePoints->GetBounds()[5] + m_extractRadius / GetSpacing()[2] * 1)
 	};
 
 	GetImageViewer()->SetDisplayExtent(extent);
-	SetExtentRange(extent);
+	SetExtentRange(GetImageViewer()->GetDisplayExtent());
 	GetImageViewer()->Render();
 }
 
@@ -234,10 +234,11 @@ void QInteractorStyleTubularVOI::initialization()
 		this, SLOT(ResetVOI()));
 }
 
-//void QInteractorStyleTubularVOI::uniqueEnable()
-//{
-//	QAbstractNavigation::uniqueEnable();
-//}
+void QInteractorStyleTubularVOI::uniqueEnable()
+{
+	// dont invoke 	QInteractorStyleLumenSeedsPlacer#UpdateTargetViewer()
+	QAbstractNavigation::uniqueEnable();
+}
 
 QListWidget * QInteractorStyleTubularVOI::GetListWidget()
 {

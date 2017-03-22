@@ -88,8 +88,8 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(bool flag)
 		double bds2[6] = {
 			0,
 			ChangeSourceButton->GetExtent()[1],
-			15 + reClipButton->GetExtent()[3],
-			15 + reClipButton->GetExtent()[3] + ChangeSourceButton->GetExtent()[3],
+			30 + reClipButton->GetExtent()[3],
+			30 + reClipButton->GetExtent()[3] + ChangeSourceButton->GetExtent()[3],
 			0,
 			0 };
 		m_ChangeSourceButtonRep = vtkSmartPointer<vtkTexturedButtonRepresentation2D>::New();

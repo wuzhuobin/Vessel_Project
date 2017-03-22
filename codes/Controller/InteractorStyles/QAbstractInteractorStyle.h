@@ -79,10 +79,12 @@ namespace Ui { class QAbstractInteractorStyle; }
 	this->uiType = uiType;\
 	this->setupUi();\
 	++numOfMyself; \
-	if (numOfMyself == 1) { \
-		uniqueInitialization(); \
-	} \
-	initialization();
+	if(ui){\
+		if (numOfMyself == 1) { \
+			uniqueInitialization(); \
+		} \
+		initialization();\
+	}
 #endif // !QNEW_UI
 
 #ifndef QDELETE_UI

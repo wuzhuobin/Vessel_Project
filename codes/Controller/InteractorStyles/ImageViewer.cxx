@@ -167,7 +167,7 @@ void ImageViewer::SetDisplayExtent(int displayExtent1, int displayExtent2, int d
 
 void ImageViewer::SetDisplayExtent(int * displayExtent)
 {
-	memcpy(DisplayExtent, displayExtent, sizeof(DisplayExtent));
+	//memcpy(DisplayExtent, displayExtent, sizeof(DisplayExtent));
 	SetDisplayExtent(
 		displayExtent[0],
 		displayExtent[1],

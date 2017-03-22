@@ -20,6 +20,7 @@ public:
 		return new vtkvmtkCurvedMPRImageFilterNearestInterpolation();
 	}
 	vtkTypeMacro(vtkvmtkCurvedMPRImageFilterNearestInterpolation, vtkvmtkCurvedMPRImageFilter);
+protected:
 	// Description:
 	// This method is called by the superclass and performs the actual computation of the MPR image
 	virtual int RequestData(
@@ -166,6 +167,7 @@ public:
 		reslice->SetInputData(inputImage);
 #endif
 		reslice->SetInterpolationModeToNearestNeighbor();
+		reslice->SetOutputScalarType(VTK_UNSIGNED_CHAR);
 		//turn off transformation of the input spacin, origin and extent, so we can define what we want
 		reslice->TransformInputSamplingOff();
 		//set the value of the voxels that are out of the input data
@@ -239,7 +241,6 @@ public:
 	}
 
 
-protected:
 	//BTX
 	//template<class T>
 	//void FillSlice(T* outReslicePtr, T* outputImagePtr, int* resliceUpdateExtent, int* outExtent, vtkIdType* outputInc, int slice) {
@@ -267,7 +268,6 @@ DataProcessor::DataProcessor(QObject * parent)
 DataProcessor::~DataProcessor()
 {
 }
-
 
 void DataProcessor::initializeCurved() 
 {
@@ -325,8 +325,17 @@ void DataProcessor::initializeCurved()
 		curvedMPRImageFilter->SetInplaneOutputSize(outputSize, outputSize);
 		curvedMPRImageFilter->SetReslicingBackgroundLevel(0.0);
 		curvedMPRImageFilter->Update();
+		// since marching cubes begins from the world coordinate(0, 0, 0) point, 
+		// the original orgin of the curved image is set to the first point of the 
+		// centerline, which is middle of the first slice
+		// so if the image need to do marching cube, the world point (0, 0, 0) should not 
+		// close to any label image which needs to do marching cube
+		// otherwise, the generated surface will be messed up or splited by the point
+		// (0, 0, 0)
+		//curvedMPRImageFilter->GetOutput()->SetOrigin(0, 0, 0);
 
 		imageManager->setCurvedImage(i, curvedMPRImageFilter->GetOutput());
+
 	}
 
 	inputImage = imageManager->getOverlay()->getData();
@@ -341,7 +350,14 @@ void DataProcessor::initializeCurved()
 	curvedMPRImageFilter->SetInplaneOutputSize(outputSize, outputSize);
 	curvedMPRImageFilter->SetReslicingBackgroundLevel(0.0);
 	curvedMPRImageFilter->Update();
-	curvedMPRImageFilter->GetOutput()->Print(cout);
+	// since marching cubes begins from the world coordinate(0, 0, 0) point, 
+	// the original orgin of the curved image is set to the first point of the 
+	// centerline, which is middle of the first slice
+	// so if the image need to do marching cube, the world point (0, 0, 0) should not 
+	// close to any label image which needs to do marching cube
+	// otherwise, the generated surface will be messed up or splited by the point
+	// (0, 0, 0) 
+	//curvedMPRImageFilter->GetOutput()->SetOrigin(0, 0, 0);
 
 	imageManager->setCurvedOverlay(curvedMPRImageFilter->GetOutput());
 

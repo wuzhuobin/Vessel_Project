@@ -373,10 +373,8 @@ void QInteractorStyleLumenSeedsPlacer::uniqueInitialization()
 
 void QInteractorStyleLumenSeedsPlacer::initialization()
 {
-	if (ui) {
-		connect(ui->deleteAllSeedsPushButton, SIGNAL(clicked()),
-			this, SLOT(ClearAllSeeds()));
-	}
+	connect(ui->deleteAllSeedsPushButton, SIGNAL(clicked()),
+		this, SLOT(ClearAllSeeds()));
 }
 
 void QInteractorStyleLumenSeedsPlacer::uniqueEnable()
