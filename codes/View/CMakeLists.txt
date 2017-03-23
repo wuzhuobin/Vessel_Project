@@ -23,6 +23,7 @@ set(
 	MeasurementWidget.h
 )
 
+
 set(
 	VIEW_SRC
 	MainWindow.cpp
