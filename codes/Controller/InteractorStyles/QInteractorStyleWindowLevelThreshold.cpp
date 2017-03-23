@@ -54,7 +54,8 @@ void QInteractorStyleWindowLevelThreshold::UpdateTargetViewer()
 	for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
 		cit != m_imageStyles.cend(); ++cit) {
 		QInteractorStyleWindowLevelThreshold* _style = QInteractorStyleWindowLevelThreshold::SafeDownCast(*cit);
-		if (_style && _style->GetCustomEnabled()) {
+		// because not all have been CustomEnabled this time
+		if (_style /*&& _style->GetCustomEnabled()*/) {
 			m_listOfModalityNames.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
 		}
 	}
@@ -121,8 +122,8 @@ void QInteractorStyleWindowLevelThreshold::SetCustomEnabled(bool flag)
 		m_sliderWindowLevel->setRange(range[0], range[1]);
 		m_spinBoxWindowWidth->setRange(range[0], range[1]);
 		m_sliderWindowWidth->setRange(range[0], range[1]);
-		//m_spinBoxWindowWidth->setValue(GetWindow());
-		//m_spinBoxWindowLevel->setValue(GetLevel());
+		m_spinBoxWindowWidth->setValue(GetWindow());
+		m_spinBoxWindowLevel->setValue(GetLevel());
 	}
 }
 

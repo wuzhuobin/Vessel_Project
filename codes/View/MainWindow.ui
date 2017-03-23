@@ -254,7 +254,6 @@
     </property>
     <addaction name="actionTraceball_camera"/>
     <addaction name="actionCenter_line"/>
-    <addaction name="actionWay_point_centerline"/>
     <addaction name="actionFind_maximum_radius"/>
     <addaction name="actionPerpendicular_measurement"/>
     <addaction name="actionCurved_navigation"/>
@@ -298,13 +297,11 @@
    <addaction name="acitonVOI_selection"/>
    <addaction name="actionTubular_VOI"/>
    <addaction name="actionSeeds_placer"/>
-   <addaction name="actionVBD_Smoker"/>
-   <addaction name="actionContour"/>
    <addaction name="actionPaint_brush"/>
+   <addaction name="actionVBD_Smoker"/>
    <addaction name="separator"/>
    <addaction name="actionMulti_planar_view"/>
    <addaction name="actionAll_axial_view"/>
-   <addaction name="actionCurved_view"/>
   </widget>
   <widget class="QDockWidget" name="moduleWidgetDockWidget">
    <property name="sizePolicy">
@@ -638,6 +635,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/dl_axial copy.png</normaloff>:/icons/dl_axial copy.png</iconset>
+   </property>
    <property name="text">
     <string>All axial view</string>
    </property>
@@ -862,6 +863,9 @@
    </property>
   </action>
   <action name="actionPerpendicular_measurement">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Perpendicular measurement</string>
    </property>

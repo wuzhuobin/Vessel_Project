@@ -79,12 +79,14 @@ void SurfaceViewer::Render(void)
 
 void SurfaceViewer::SetInputData(vtkImageData * in)
 {
-	this->SurfaceActor->VisibilityOn();
-	this->ImageResample->SetInputData(in);
-	double spacing = std::fmin(std::fmin(in->GetSpacing()[0], in->GetSpacing()[1]), in->GetSpacing()[2]);
-	this->ImageResample->SetOutputSpacing(spacing, spacing, spacing);
-	UpdateDisplayExtent();
-	InvokeEvent(vtkCommand::UpdateDataEvent);
+	if (GetInput() != in) {
+		this->SurfaceActor->VisibilityOn();
+		this->ImageResample->SetInputData(in);
+		double spacing = std::fmin(std::fmin(in->GetSpacing()[0], in->GetSpacing()[1]), in->GetSpacing()[2]);
+		this->ImageResample->SetOutputSpacing(spacing, spacing, spacing);
+		UpdateDisplayExtent();
+		InvokeEvent(vtkCommand::UpdateDataEvent);
+	}
 }
 
 vtkImageData * SurfaceViewer::GetInput()

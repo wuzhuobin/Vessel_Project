@@ -11,7 +11,7 @@
 #include "IADEInteractorStyleSwitch3D.h"
 #include "CenterlineSurfaceViewer.h"
 #include "ImageViewer.h"
-#include "DataProcessor.h"
+//#include "DataProcessor.h"
 
 
 class Core: public QObject
@@ -19,7 +19,7 @@ class Core: public QObject
 	Q_OBJECT
 public:
 
-	const static unsigned short NUM_OF_IMAGES = 4;
+	const static unsigned short NUM_OF_IMAGES = 2;
 	const static unsigned short DEFAULT_IMAGE = 0;
 	//const enum VIEW_MODE
 	//{
@@ -52,13 +52,13 @@ private slots:
 	void slotFindMaximumRadius();
 	void slotPerpendicularMeasurement();
 	void slotCurvedNavigation();
-	void slotWaypoint();
+	//void slotWaypoint();
 
 	// IADE specified
 	void slotVBDSmoker();
 
 	// Curved image update
-	void slotInitializeCurvedImage();
+	//void slotInitializeCurvedImage();
 
 	void slotChangeImage(QAction* action);
 	void slotChangeImage(int viewer, int image);
@@ -70,7 +70,7 @@ private slots:
 	void slotUpdateImageViewersToCurrent(int viewer);
 	//void slotMultiPlanarView();
 	//void slotAllAxialView();
-	void slotCurvedView(bool flag);
+	//void slotCurvedView(bool flag);
 	//void slotChangeView(unsigned int viewMode);
 
 	void slotUpdateSurfaceView();
@@ -84,7 +84,7 @@ private:
 	MainWindow mainWindow;
 	IADEIOManager ioManager;
 	IADEImageManager imageManager;
-	DataProcessor dataProcessor;
+	//DataProcessor dataProcessor;
 
 
 	int currentImage[MainWindow::NUM_OF_2D_VIEWERS] = {DEFAULT_IMAGE};

@@ -69,7 +69,7 @@ void InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::SetCustomEnabled
 	else {
 		for (int i = 0; i < NUM_OF_HANDLES; ++i) {
 			// removing widgets
-			if (m_handleWidgets) {
+			if (m_handleWidgets[i]) {
 				m_handleWidgets[i]->SetInteractor(nullptr);
 				m_handleWidgets[i]->EnabledOff();
 				m_handleWidgets[i]->RemoveAllObservers();

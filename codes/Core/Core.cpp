@@ -23,19 +23,18 @@ Core::Core(QObject * parent)
 	:
 	imageManager(NUM_OF_IMAGES, parent),
 	ioManager(parent),
-	dataProcessor(parent),
 	QObject(parent)
 {
 	ioManager.enableRegistration(true);
 
-	imageManager.setModalityName(0, "Image 0");
-	imageManager.setModalityName(1, "Image 1");
-	imageManager.setModalityName(2, "Image 2");
-	imageManager.setModalityName(3, "Image 3");
-	mainWindow.addModalityNames("Image 0");
-	mainWindow.addModalityNames("Image 1");
-	mainWindow.addModalityNames("Image 2");
-	mainWindow.addModalityNames("Image 3");
+	imageManager.setModalityName(0, "MRA");
+	imageManager.setModalityName(1, "T2");
+	//imageManager.setModalityName(2, "Image 2");
+	//imageManager.setModalityName(3, "Image 3");
+	mainWindow.addModalityNames("MRA");
+	mainWindow.addModalityNames("T2");
+	//mainWindow.addModalityNames("Image 2");
+	//mainWindow.addModalityNames("Image 3");
 
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		
@@ -68,9 +67,9 @@ Core::Core(QObject * parent)
 	surfaceInteractorStyle->SetSurfaceViewer(surfaceViewer);
 	mainWindow.getViewerWidget(MainWindow::NUM_OF_VIEWERS - MainWindow::NUM_OF_3D_VIEWERS)->getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle);
 
-	dataProcessor.imageInteractorStyle = imageInteractorStyle;
-	dataProcessor.surfaceInteractorStyle = surfaceInteractorStyle;
-	dataProcessor.imageManager = &imageManager;
+	//dataProcessor.imageInteractorStyle = imageInteractorStyle;
+	//dataProcessor.surfaceInteractorStyle = surfaceInteractorStyle;
+	//dataProcessor.imageManager = &imageManager;
 
 	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
@@ -128,8 +127,8 @@ Core::Core(QObject * parent)
 		&ioManager, SLOT(slotInitializeOverlay()));
 
 	// change view mode
-	connect(mainWindow.getUi()->actionCurved_view, SIGNAL(toggled(bool)),
-		this, SLOT(slotCurvedView(bool)));
+	//connect(mainWindow.getUi()->actionCurved_view, SIGNAL(toggled(bool)),
+	//	this, SLOT(slotCurvedView(bool)));
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		QPushButton* buttons[3] = {
 			mainWindow.getViewerWidget(i)->getUi()->pushButtonSigitalView,
@@ -184,16 +183,16 @@ Core::Core(QObject * parent)
 		this, SLOT(slotPerpendicularMeasurement()));
 	connect(mainWindow.getUi()->actionCurved_navigation, SIGNAL(triggered()),
 		this, SLOT(slotCurvedNavigation()));
-	connect(mainWindow.getUi()->actionWay_point_centerline, SIGNAL(triggered()),
-		this, SLOT(slotWaypoint()));
+	//connect(mainWindow.getUi()->actionWay_point_centerline, SIGNAL(triggered()),
+	//	this, SLOT(slotWaypoint()));
 
 	// update btn
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
 		this, SLOT(slotUpdateSurfaceView()));
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
 		mainWindow.getUi()->actionTraceball_camera, SLOT(trigger()));
-	connect(mainWindow.getUi()->actionUpdate_curved_images, SIGNAL(triggered()),
-		this, SLOT(slotInitializeCurvedImage()));
+	//connect(mainWindow.getUi()->actionUpdate_curved_images, SIGNAL(triggered()),
+	//	this, SLOT(slotInitializeCurvedImage()));
 
 	// Opacity
 	connect(mainWindow.getModuleWidget()->getUi()->opacitySpinBox, SIGNAL(valueChanged(int)),
@@ -385,10 +384,10 @@ void Core::slotCurvedNavigation()
 	surfaceInteractorStyle->SetInteractorStyleTo3DCurvedNavigation();
 }
 
-void Core::slotWaypoint()
-{
-	surfaceInteractorStyle->SetInteractorStyleTo3DWaypoint();
-}
+//void Core::slotWaypoint()
+//{
+//	surfaceInteractorStyle->SetInteractorStyleTo3DWaypoint();
+//}
 
 void Core::slotVBDSmoker()
 {
@@ -398,10 +397,10 @@ void Core::slotVBDSmoker()
 	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
 }
 
-void Core::slotInitializeCurvedImage()
-{
-	dataProcessor.initializeCurved();
-}
+//void Core::slotInitializeCurvedImage()
+//{
+//	dataProcessor.initializeCurved();
+//}
 
 void Core::slotChangeImage(QAction * action)
 {
@@ -453,7 +452,7 @@ void Core::slotChangeSliceOrientationToXY(int viewer)
 
 void Core::slotUpdateImageViewersToCurrent(int viewer)
 {
-
+	imageViewers[viewer]->InitializeHeader(imageManager.getModalityName(currentImage[viewer]).toStdString());
 	if (currentCurved[viewer]) {
 		imageViewers[viewer]->SetOverlay(imageManager.getCurvedIADEOverlay()->getData());
 		imageViewers[viewer]->SetInputData(imageManager.getCurvedImage(currentImage[viewer]));
@@ -484,12 +483,10 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 			this, SLOT(slotUpdateMeasurements()), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
 
 	}
-	imageViewers[viewer]->InitializeHeader(imageManager.getModalityName(currentImage[viewer]).toStdString());
 	//imageViewers[viewer]->GetRenderWindow()->SetWindowName(imageManager.getModalityName(currentImage[viewer]).toStdString().c_str());
 	imageViewers[viewer]->SetLookupTable(imageManager.getIADEOverlay()->getLookupTable());
 	imageViewers[viewer]->SetSliceOrientation(currentSliceOrientation[viewer]);
 	imageViewers[viewer]->Render();
-	imageViewers[viewer]->InitializeHeader(imageManager.getModalityName(currentImage[viewer]).toStdString());
 	imageViewers[viewer]->Render();
 
 	mainWindow.getViewerWidget(viewer)->setWindowTitle(imageManager.getModalityName(currentImage[viewer]));
@@ -505,24 +502,24 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 //{
 //	slotChangeView(ALL_AXIAL_VIEW);
 //}
-#include <qmessagebox.h>
-#include <vtkPolyData.h>
-void Core::slotCurvedView(bool flag)
-{
-	if (!surfaceViewer->GetCenterline()||surfaceViewer->GetCenterline()->GetNumberOfPoints() < 2) {
-		QMessageBox::critical(&mainWindow, QString("No centerline"),
-			QString("Please Generate centerline first !"));
-		return;
-	}
-	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-		if (!imageManager.getCurvedIADEOverlay()) {
-			dataProcessor.initializeCurved();
-		}
-		currentCurved[i] = flag;
-		slotUpdateImageViewersToCurrent(i);
-
-	}
-}
+//#include <qmessagebox.h>
+//#include <vtkPolyData.h>
+//void Core::slotCurvedView(bool flag)
+//{
+//	if (!surfaceViewer->GetCenterline()||surfaceViewer->GetCenterline()->GetNumberOfPoints() < 2) {
+//		QMessageBox::critical(&mainWindow, QString("No centerline"),
+//			QString("Please Generate centerline first !"));
+//		return;
+//	}
+//	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+//		if (!imageManager.getCurvedIADEOverlay()) {
+//			dataProcessor.initializeCurved();
+//		}
+//		currentCurved[i] = flag;
+//		slotUpdateImageViewersToCurrent(i);
+//
+//	}
+//}
 
 //void Core::slotChangeView(unsigned int viewMode)
 //{
