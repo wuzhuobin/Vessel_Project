@@ -5,11 +5,14 @@
   <property name="windowModality">
    <enum>Qt::WindowModal</enum>
   </property>
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1212</width>
+    <width>1600</width>
     <height>900</height>
    </rect>
   </property>
@@ -23,725 +26,101 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>PlaqueQuant</string>
-  </property>
-  <property name="windowIcon">
-   <iconset resource="../../resources/MainWindow.qrc">
-    <normaloff>:/icons/plaqueQuant.png</normaloff>:/icons/plaqueQuant.png</iconset>
+   <string/>
   </property>
   <property name="dockOptions">
    <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks|QMainWindow::VerticalTabs</set>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayoutCentralWidget">
     <item>
-     <layout class="QGridLayout" name="viewGridLayout">
-      <property name="spacing">
-       <number>1</number>
-      </property>
-      <item row="6" column="0">
-       <widget class="QFrame" name="image3frame">
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="updateBtn">
+        <property name="enabled">
+         <bool>true</bool>
         </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <property name="spacing">
-          <number>1</number>
-         </property>
-         <property name="leftMargin">
-          <number>1</number>
-         </property>
-         <property name="topMargin">
-          <number>1</number>
-         </property>
-         <property name="rightMargin">
-          <number>1</number>
-         </property>
-         <property name="bottomMargin">
-          <number>1</number>
-         </property>
-         <item>
-          <widget class="QVTKWidget" name="image3View" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>350</width>
-             <height>350</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <property name="spacing">
-            <number>4</number>
-           </property>
-           <item>
-            <widget class="QPushButton" name="LLBtn">
-             <property name="maximumSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Expand this view to the entire window</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
-               <normaloff>:/icons/expandwin.png</normaloff>:/icons/expandwin.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>15</width>
-               <height>15</height>
-              </size>
-             </property>
-             <property name="flat">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="LLBtn2">
-             <property name="maximumSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Restore the four-panel display configuration</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
-               <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>15</width>
-               <height>15</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="LLSelectImgBtn">
-             <property name="maximumSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
-               <normaloff>:/icons/downarrow.png</normaloff>:/icons/downarrow.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>15</width>
-               <height>15</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+        <property name="text">
+         <string>Update</string>
+        </property>
        </widget>
       </item>
-      <item row="6" column="1">
-       <widget class="QFrame" name="image4frame">
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+      <item>
+       <widget class="QPushButton" name="generateCLBtn">
+        <property name="enabled">
+         <bool>true</bool>
         </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <property name="spacing">
-          <number>1</number>
-         </property>
-         <property name="leftMargin">
-          <number>1</number>
-         </property>
-         <property name="topMargin">
-          <number>1</number>
-         </property>
-         <property name="rightMargin">
-          <number>1</number>
-         </property>
-         <property name="bottomMargin">
-          <number>1</number>
-         </property>
-         <item>
-          <widget class="QVTKWidget" name="image4View" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>350</width>
-             <height>350</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_9">
-           <property name="spacing">
-            <number>4</number>
-           </property>
-           <item>
-            <widget class="QPushButton" name="LRBtn">
-             <property name="maximumSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Expand this view to the entire window</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
-               <normaloff>:/icons/expandwin.png</normaloff>:/icons/expandwin.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>15</width>
-               <height>15</height>
-              </size>
-             </property>
-             <property name="flat">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="LRBtn2">
-             <property name="maximumSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Restore the four-panel display configuration</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
-               <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>15</width>
-               <height>15</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_4">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-        </layout>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Generate Centerline</string>
+        </property>
        </widget>
       </item>
-      <item row="8" column="0" colspan="4">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <property name="spacing">
-         <number>6</number>
+      <item>
+       <widget class="QScrollArea" name="sliceScrollArea">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <item>
-         <widget class="QWidget" name="xyzwidget" native="true">
-          <layout class="QHBoxLayout" name="horizontalLayout_7">
-           <property name="spacing">
-            <number>7</number>
-           </property>
-           <property name="leftMargin">
-            <number>6</number>
-           </property>
-           <property name="topMargin">
-            <number>6</number>
-           </property>
-           <property name="rightMargin">
-            <number>3</number>
-           </property>
-           <property name="bottomMargin">
-            <number>3</number>
-           </property>
-           <item>
-            <widget class="QWidget" name="sliceWidget" native="true"/>
-           </item>
-           <item>
-            <widget class="QScrollArea" name="sliceScrollArea">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>450</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
-             </property>
-             <property name="verticalScrollBarPolicy">
-              <enum>Qt::ScrollBarAlwaysOff</enum>
-             </property>
-             <property name="horizontalScrollBarPolicy">
-              <enum>Qt::ScrollBarAlwaysOff</enum>
-             </property>
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents_2">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>450</width>
-                <height>30</height>
-               </rect>
-              </property>
-             </widget>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="updateBtn">
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Update</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="generateCLBtn">
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Generate Centerline</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="3" column="0">
-       <widget class="QFrame" name="image1frame">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="spacing">
-          <number>1</number>
-         </property>
-         <property name="leftMargin">
-          <number>1</number>
-         </property>
-         <property name="topMargin">
-          <number>1</number>
-         </property>
-         <property name="rightMargin">
-          <number>1</number>
-         </property>
-         <property name="bottomMargin">
-          <number>1</number>
-         </property>
-         <item>
-          <widget class="QVTKWidget" name="image1View" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>350</width>
-             <height>350</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <property name="spacing">
-            <number>4</number>
-           </property>
-           <property name="sizeConstraint">
-            <enum>QLayout::SetDefaultConstraint</enum>
-           </property>
-           <item>
-            <widget class="QPushButton" name="ULBtn">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>4</pointsize>
-              </font>
-             </property>
-             <property name="toolTip">
-              <string>Expand this view to the entire window</string>
-             </property>
-             <property name="layoutDirection">
-              <enum>Qt::LeftToRight</enum>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
-               <normaloff>:/icons/expandwin.png</normaloff>:/icons/expandwin.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>15</width>
-               <height>15</height>
-              </size>
-             </property>
-             <property name="checkable">
-              <bool>false</bool>
-             </property>
-             <property name="autoRepeat">
-              <bool>false</bool>
-             </property>
-             <property name="autoExclusive">
-              <bool>false</bool>
-             </property>
-             <property name="autoDefault">
-              <bool>false</bool>
-             </property>
-             <property name="flat">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="ULBtn2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Restore the four-panel display configuration</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
-               <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>15</width>
-               <height>15</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="ULSelectImgBtn">
-             <property name="maximumSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
-               <normaloff>:/icons/downarrow.png</normaloff>:/icons/downarrow.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>15</width>
-               <height>15</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QFrame" name="image2frame">
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+        <property name="widgetResizable">
+         <bool>true</bool>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <property name="spacing">
-          <number>1</number>
+        <widget class="QWidget" name="scrollAreaWidgetContents_2">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>1067</width>
+           <height>795</height>
+          </rect>
          </property>
-         <property name="leftMargin">
-          <number>1</number>
-         </property>
-         <property name="topMargin">
-          <number>1</number>
-         </property>
-         <property name="rightMargin">
-          <number>1</number>
-         </property>
-         <property name="bottomMargin">
-          <number>1</number>
-         </property>
-         <item>
-          <widget class="QVTKWidget" name="image2View" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>350</width>
-             <height>350</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_8">
-           <property name="spacing">
-            <number>4</number>
-           </property>
-           <item>
-            <widget class="QPushButton" name="URBtn">
-             <property name="maximumSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Expand this view to the entire window</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
-               <normaloff>:/icons/expandwin.png</normaloff>:/icons/expandwin.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>15</width>
-               <height>15</height>
-              </size>
-             </property>
-             <property name="flat">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="URBtn2">
-             <property name="maximumSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Restore the four-panel display configuration</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
-               <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>15</width>
-               <height>15</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="URSelectImgBtn">
-             <property name="maximumSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources/MainWindow.qrc">
-               <normaloff>:/icons/downarrow.png</normaloff>:/icons/downarrow.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>15</width>
-               <height>15</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+        </widget>
        </widget>
       </item>
      </layout>
@@ -749,11 +128,14 @@
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1212</width>
+     <width>1600</width>
      <height>23</height>
     </rect>
    </property>
@@ -766,8 +148,12 @@
       <string>Recent Image</string>
      </property>
     </widget>
-    <addaction name="actionOpenImage"/>
+    <addaction name="actionImport_images"/>
     <addaction name="menuRecentImage"/>
+    <addaction name="actionNew_segmentation"/>
+    <addaction name="actionImport_segmentation"/>
+    <addaction name="actionExport_segmentation"/>
+    <addaction name="actionExport_Report"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -775,26 +161,33 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="actionAbout"/>
-    <addaction name="actionInformation"/>
-    <addaction name="actionHelp"/>
    </widget>
    <widget class="QMenu" name="menuInteraction">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="title">
      <string>Interaction</string>
     </property>
     <addaction name="actionNavigation"/>
-    <addaction name="actionWindowLevel"/>
-    <addaction name="actionRuler"/>
-    <addaction name="actionROI"/>
-    <addaction name="actionSeedsPlacer"/>
+    <addaction name="actionWindow_level"/>
+    <addaction name="actionDistance_measure"/>
+    <addaction name="acitonVOI_selection"/>
+    <addaction name="actionSeeds_placer"/>
     <addaction name="actionContour"/>
-    <addaction name="actionBrush"/>
+    <addaction name="actionPaint_brush"/>
    </widget>
    <widget class="QMenu" name="menuView">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="title">
      <string>&amp;View</string>
     </property>
     <widget class="QMenu" name="menuDisplay">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="title">
       <string>Display</string>
      </property>
@@ -803,35 +196,83 @@
      <addaction name="actionImage3"/>
      <addaction name="actionImage4"/>
      <addaction name="actionFourViews"/>
+     <addaction name="actionRestore_docking"/>
     </widget>
     <widget class="QMenu" name="menuOrientation">
      <property name="title">
       <string>View Mode</string>
      </property>
-     <addaction name="actionAllAxialView"/>
-     <addaction name="actionMultiPlanarView"/>
+     <addaction name="actionAll_axial_view"/>
+     <addaction name="actionMulti_planar_view"/>
     </widget>
     <addaction name="menuDisplay"/>
     <addaction name="menuOrientation"/>
    </widget>
    <widget class="QMenu" name="menuSegmentation">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="title">
      <string>Segmentation</string>
     </property>
-    <addaction name="actionSaveSegmentation"/>
-    <addaction name="actionOpenSegmentation"/>
+    <addaction name="actionUpdate_curved_images"/>
+    <addaction name="actionPaint_brush"/>
+    <addaction name="actionSeeds_placer"/>
     <addaction name="actionSaveContour"/>
     <addaction name="actionOpenContour"/>
     <addaction name="actionCenterlineAlgorithm"/>
    </widget>
+   <widget class="QMenu" name="menuImage">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>Image</string>
+    </property>
+    <addaction name="actionTesting"/>
+    <addaction name="actionNavigation"/>
+    <addaction name="actionWindow_level"/>
+    <addaction name="acitonVOI_selection"/>
+    <addaction name="actionTubular_VOI"/>
+    <addaction name="actionPaint_brush"/>
+    <addaction name="actionSeeds_placer"/>
+   </widget>
+   <widget class="QMenu" name="menuDiagnosis">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>Diagnosis</string>
+    </property>
+    <addaction name="actionICDA_diagnosis"/>
+    <addaction name="actionVBD_diagnosis"/>
+    <addaction name="actionVBD_Smoker"/>
+   </widget>
+   <widget class="QMenu" name="menuSurface">
+    <property name="title">
+     <string>Surface</string>
+    </property>
+    <addaction name="actionTraceball_camera"/>
+    <addaction name="actionCenter_line"/>
+    <addaction name="actionWay_point_centerline"/>
+    <addaction name="actionFind_maximum_radius"/>
+    <addaction name="actionPerpendicular_measurement"/>
+    <addaction name="actionCurved_navigation"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuImage"/>
+   <addaction name="menuSurface"/>
+   <addaction name="menuSegmentation"/>
+   <addaction name="menuDiagnosis"/>
+   <addaction name="menuHelp"/>
    <addaction name="menuView"/>
    <addaction name="menuInteraction"/>
-   <addaction name="menuSegmentation"/>
-   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="ActionToolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -848,21 +289,24 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenImage"/>
-   <addaction name="actionSaveSegmentation"/>
+   <addaction name="actionExport_segmentation"/>
    <addaction name="separator"/>
    <addaction name="actionNavigation"/>
-   <addaction name="actionWindowLevel"/>
-   <addaction name="actionRuler"/>
+   <addaction name="actionWindow_level"/>
+   <addaction name="actionDistance_measure"/>
    <addaction name="separator"/>
-   <addaction name="actionROI"/>
-   <addaction name="actionSeedsPlacer"/>
+   <addaction name="acitonVOI_selection"/>
+   <addaction name="actionTubular_VOI"/>
+   <addaction name="actionSeeds_placer"/>
+   <addaction name="actionVBD_Smoker"/>
    <addaction name="actionContour"/>
-   <addaction name="actionBrush"/>
+   <addaction name="actionPaint_brush"/>
    <addaction name="separator"/>
-   <addaction name="actionMultiPlanarView"/>
-   <addaction name="actionAllAxialView"/>
+   <addaction name="actionMulti_planar_view"/>
+   <addaction name="actionAll_axial_view"/>
+   <addaction name="actionCurved_view"/>
   </widget>
-  <widget class="QDockWidget" name="widgetDockWidget">
+  <widget class="QDockWidget" name="moduleWidgetDockWidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
      <horstretch>0</horstretch>
@@ -885,7 +329,7 @@
     <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="windowTitle">
-    <string>Widget</string>
+    <string>ModuleWidget</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
@@ -928,7 +372,7 @@
   </widget>
   <action name="actionOpenImage">
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/OpenImage.png</normaloff>:/icons/OpenImage.png</iconset>
    </property>
    <property name="text">
@@ -943,13 +387,19 @@
     <string>&amp;Exit</string>
    </property>
   </action>
-  <action name="actionSaveSegmentation">
+  <action name="actionExport_segmentation">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Save.png</normaloff>:/icons/Save.png</iconset>
    </property>
    <property name="text">
-    <string>Save Segmentation</string>
+    <string>Export segmentation</string>
+   </property>
+   <property name="toolTip">
+    <string>Export segmentation</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -965,19 +415,22 @@
     <string>Help</string>
    </property>
   </action>
-  <action name="actionRuler">
+  <action name="actionDistance_measure">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Ruler.png</normaloff>:/icons/Ruler.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Ruler</string>
+    <string>Distance measure</string>
+   </property>
+   <property name="toolTip">
+    <string>Distance measure</string>
    </property>
   </action>
-  <action name="actionWindowLevel">
+  <action name="actionWindow_level">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -985,11 +438,14 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/WindowLevel.png</normaloff>:/icons/WindowLevel.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;WindowLevel</string>
+    <string>Window level</string>
+   </property>
+   <property name="toolTip">
+    <string>Window level</string>
    </property>
   </action>
   <action name="actionNavigation">
@@ -997,10 +453,10 @@
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Navigation.png</normaloff>:/icons/Navigation.png</iconset>
    </property>
    <property name="text">
@@ -1015,7 +471,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
    </property>
    <property name="text">
@@ -1063,7 +519,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/contour.png</normaloff>:/icons/contour.png</iconset>
    </property>
    <property name="text">
@@ -1096,7 +552,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/UpperLeftView.png</normaloff>:/icons/UpperLeftView.png</iconset>
    </property>
    <property name="text">
@@ -1114,7 +570,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/UpperRightView.png</normaloff>:/icons/UpperRightView.png</iconset>
    </property>
    <property name="text">
@@ -1126,7 +582,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/LowerLeftView.png</normaloff>:/icons/LowerLeftView.png</iconset>
    </property>
    <property name="text">
@@ -1138,7 +594,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/LowerRightView.png</normaloff>:/icons/LowerRightView.png</iconset>
    </property>
    <property name="text">
@@ -1150,7 +606,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/dl_sagittal.png</normaloff>:/icons/dl_sagittal.png</iconset>
    </property>
    <property name="text">
@@ -1171,44 +627,46 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/dl_coronal.png</normaloff>:/icons/dl_coronal.png</iconset>
    </property>
    <property name="text">
     <string>All Coronal View</string>
    </property>
   </action>
-  <action name="actionAllAxialView">
+  <action name="actionAll_axial_view">
    <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
-     <normaloff>:/icons/dl_axial copy.png</normaloff>:/icons/dl_axial copy.png</iconset>
-   </property>
    <property name="text">
-    <string>All Axial View</string>
+    <string>All axial view</string>
+   </property>
+   <property name="toolTip">
+    <string>All axial view</string>
    </property>
   </action>
   <action name="actionRemoveContour">
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/magicdrawdelete.png</normaloff>:/icons/magicdrawdelete.png</iconset>
    </property>
    <property name="text">
     <string>Remove</string>
    </property>
   </action>
-  <action name="actionROI">
+  <action name="acitonVOI_selection">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/roi.png</normaloff>:/icons/roi.png</iconset>
    </property>
    <property name="text">
-    <string>Select ROI</string>
+    <string>VOI selection</string>
+   </property>
+   <property name="toolTip">
+    <string>VOI selection</string>
    </property>
   </action>
   <action name="actionStatistics">
@@ -1216,33 +674,42 @@
     <string>Statistics</string>
    </property>
   </action>
-  <action name="actionBrush">
+  <action name="actionPaint_brush">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/Draw.png</normaloff>:/icons/Draw.png</iconset>
    </property>
    <property name="text">
-    <string>Paint Brush</string>
+    <string>Paint brush</string>
+   </property>
+   <property name="toolTip">
+    <string>Paint brush</string>
    </property>
   </action>
-  <action name="actionMultiPlanarView">
+  <action name="actionMulti_planar_view">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/LayoutMultiPlanar.png</normaloff>:/icons/LayoutMultiPlanar.png</iconset>
    </property>
    <property name="text">
-    <string>Multi-Planar View</string>
+    <string>Multi-planar view</string>
+   </property>
+   <property name="toolTip">
+    <string>Multi-planar view</string>
    </property>
   </action>
-  <action name="actionOpenSegmentation">
+  <action name="actionImport_segmentation">
    <property name="text">
-    <string>Open Segmentation</string>
+    <string>Import segmentation</string>
+   </property>
+   <property name="toolTip">
+    <string>Import segmentation</string>
    </property>
   </action>
   <action name="actionCenterlineAlgorithm">
@@ -1250,19 +717,19 @@
     <string>Centerline Algorithm</string>
    </property>
   </action>
-  <action name="actionSeedsPlacer">
+  <action name="actionSeeds_placer">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/MainWindow.qrc">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/1476453573_Wand.ico</normaloff>:/icons/1476453573_Wand.ico</iconset>
    </property>
    <property name="text">
-    <string>Seeds Placer</string>
+    <string>Seeds placer</string>
    </property>
    <property name="toolTip">
-    <string>Seeds Placer</string>
+    <string>Seeds placer</string>
    </property>
   </action>
   <action name="actionOpenContour">
@@ -1275,16 +742,197 @@
     <string>Save Contour</string>
    </property>
   </action>
+  <action name="actionImport_images">
+   <property name="text">
+    <string>Import images</string>
+   </property>
+   <property name="toolTip">
+    <string>Import images</string>
+   </property>
+  </action>
+  <action name="actionImport_T2">
+   <property name="text">
+    <string>Import T2</string>
+   </property>
+  </action>
+  <action name="actionImport_MRA">
+   <property name="text">
+    <string>Import MRA</string>
+   </property>
+  </action>
+  <action name="actionExport_T2">
+   <property name="text">
+    <string>Export T2</string>
+   </property>
+  </action>
+  <action name="actionExport_MRA">
+   <property name="text">
+    <string>Export MRA</string>
+   </property>
+  </action>
+  <action name="actionExport_Report">
+   <property name="text">
+    <string>Export Report</string>
+   </property>
+  </action>
+  <action name="actionICDA_diagnosis">
+   <property name="text">
+    <string>ICDA diagnosis</string>
+   </property>
+  </action>
+  <action name="actionSmoker_standard">
+   <property name="text">
+    <string>Smoker standard</string>
+   </property>
+  </action>
+  <action name="actionUbogo_standard">
+   <property name="text">
+    <string>Ubogo standard</string>
+   </property>
+  </action>
+  <action name="actionVBD_diagnosis">
+   <property name="text">
+    <string>VBD diagnosis</string>
+   </property>
+  </action>
+  <action name="actionVBD_Smoker">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>VBD Smoker</string>
+   </property>
+   <property name="toolTip">
+    <string>VBD Smoker</string>
+   </property>
+  </action>
+  <action name="actionNew_segmentation">
+   <property name="text">
+    <string>New segmentation</string>
+   </property>
+   <property name="toolTip">
+    <string>New segmentation</string>
+   </property>
+  </action>
+  <action name="actionTraceball_camera">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Traceball camera</string>
+   </property>
+   <property name="toolTip">
+    <string>Traceball camera</string>
+   </property>
+  </action>
+  <action name="actionCenter_line">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Center line</string>
+   </property>
+   <property name="toolTip">
+    <string>Center line</string>
+   </property>
+  </action>
+  <action name="actionTesting">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Testing</string>
+   </property>
+   <property name="toolTip">
+    <string>Testing</string>
+   </property>
+  </action>
+  <action name="actionFind_maximum_radius">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Find maximum radius</string>
+   </property>
+   <property name="toolTip">
+    <string>Find maximum radius</string>
+   </property>
+  </action>
+  <action name="actionPerpendicular_measurement">
+   <property name="text">
+    <string>Perpendicular measurement</string>
+   </property>
+   <property name="toolTip">
+    <string>Perpendicular measurement</string>
+   </property>
+  </action>
+  <action name="actionCurved_view">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Curved view</string>
+   </property>
+   <property name="toolTip">
+    <string>Curved view</string>
+   </property>
+  </action>
+  <action name="actionCurved_navigation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Curved navigation</string>
+   </property>
+   <property name="toolTip">
+    <string>Curved navigation</string>
+   </property>
+  </action>
+  <action name="actionUpdate_curved_images">
+   <property name="text">
+    <string>Update curved images</string>
+   </property>
+   <property name="toolTip">
+    <string>Update curved images</string>
+   </property>
+  </action>
+  <action name="actionRestore_docking">
+   <property name="text">
+    <string>Restore docking</string>
+   </property>
+   <property name="toolTip">
+    <string>Restore docking</string>
+   </property>
+  </action>
+  <action name="actionTubular_VOI">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/aami10-90-512.png</normaloff>:/icons/aami10-90-512.png</iconset>
+   </property>
+   <property name="text">
+    <string>Tubular VOI</string>
+   </property>
+   <property name="toolTip">
+    <string>Tubular VOI</string>
+   </property>
+  </action>
+  <action name="actionWay_point_centerline">
+   <property name="text">
+    <string>Way point centerline</string>
+   </property>
+   <property name="toolTip">
+    <string>Way point centerline</string>
+   </property>
+  </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QVTKWidget</class>
-   <extends>QWidget</extends>
-   <header>QVTKWidget.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
-  <include location="../../resources/MainWindow.qrc"/>
+  <include location="../Main/resources/IADE_Analyzer.qrc"/>
  </resources>
  <connections/>
 </ui>

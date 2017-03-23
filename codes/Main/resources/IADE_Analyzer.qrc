@@ -1,5 +1,6 @@
 <RCC>
-  <qresource>
+  <qresource prefix="/">
+    <file>icons/aami10-90-512.png</file>
     <file>icons/1476453573_Wand.ico</file>
     <file>icons/177503-200.png</file>
     <file>icons/bluebox.png</file>
@@ -44,7 +45,6 @@
     <file>icons/Ruler.png</file>
     <file>icons/Save.png</file>
     <file>icons/thresh_both.png</file>
-    <file>icons/Thumbs.db</file>
     <file>icons/UpperLeftView.png</file>
     <file>icons/UpperRightView.png</file>
     <file>icons/WindowLevel.png</file>

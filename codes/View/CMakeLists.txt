@@ -8,25 +8,38 @@ project(View)
 
 find_package(Qt5Core)
 find_package(Qt5Widgets)
+find_package(Qt5OpenGL)
 
-include_directories(
-	${PROJECT_SOURCE_DIR}
-	${PROJECT_BINARY_DIR}
-	)
+
+add_subdirectory(RegistrationWizard)
+add_subdirectory(ReportGenerator)
 
 set(
 	VIEW_H
 	MainWindow.h
+	LabelWidget.h
+	ModuleWidget.h
+	ViewerWidget.h
+	MeasurementWidget.h
 )
+
 
 set(
 	VIEW_SRC
 	MainWindow.cpp
+	LabelWidget.cpp
+	ModuleWidget.cpp
+	ViewerWidget.cpp
+	MeasurementWidget.cpp
 )
 
 set(
 	VIEW_UI
 	MainWindow.ui
+	LabelWidget.ui
+	ModuleWidget.ui
+	ViewerWidget.ui
+	MeasurementWidget.ui
 )
 #Generate moc and ui file
 qt5_wrap_cpp(
@@ -41,6 +54,7 @@ qt5_wrap_ui(
 
 add_library(
 	View
+	SHARED
 	${VIEW_H}
 	${VIEW_SRC}
 	${VIEW_UI}
@@ -53,8 +67,24 @@ target_link_libraries(
 	View
 	Qt5::Core
 	Qt5::Widgets
-	${LINK_LIBRARIE}
+	Qt5::OpenGL
+	RegistrationWizard
+	ReportGenerator
 	)
+
+target_include_directories(
+	View
+	PUBLIC
+	${PROJECT_SOURCE_DIR}
+	${PROJECT_BINARY_DIR}
+)
+
+set_target_properties(
+    View
+    PROPERTIES
+    WINDOWS_EXPORT_ALL_SYMBOLS 
+    true
+)
 
 #Grouping in MSVC
 SOURCE_GROUP(

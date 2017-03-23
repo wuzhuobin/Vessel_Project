@@ -5,6 +5,14 @@ IF(COMMAND CMAKE_POLICY)
 ENDIF(COMMAND CMAKE_POLICY)
 
 project(IADE_Analyzer)
+
+# MSUT find vtk first
+#VTK
+find_package(VTK REQUIRED)
+if (NOT VTK_FOUND)
+	message(FATAL_ERROR "error: VTK is not found")
+endif()
+include(${VTK_USE_FILE})
 #ITK
 find_package(ITK REQUIRED)
 if (NOT ITK_FOUND)
@@ -12,24 +20,17 @@ if (NOT ITK_FOUND)
 endif()
 include(${ITK_USE_FILE})
 
-#VTK
-find_package(VTK REQUIRED)
-if (NOT VTK_FOUND)
-	message(FATAL_ERROR "error: VTK is not found")
+
+#VMTK
+find_package(VMTK REQUIRED)
+if (NOT VMTK_FOUND)
+	message(FATAL_ERROR "error: VMTK is not found")
 endif()
-include(${VTK_USE_FILE})
+include(${VMTK_USE_FILE})
 
 #QT5
 find_package(Qt5Core)
 find_package(Qt5Widgets)
-
-
-# #VMTK
-# find_package(VMTK REQUIRED)
-# if (NOT VMTK_FOUND)
-# 	message(FATAL_ERROR "error: VMTK is not found")
-# endif()
-# include(${VMTK_USE_FILE})
 
 #QT
 # if(${VTK_VERSION} VERSION_GREATER "6" AND VTK_QT_VERSION VERSION_GREATER "4")
@@ -68,48 +69,56 @@ set(
 	${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
 )
 
-set(
-	MAIN_INCLUDE_DIRECTORIES
-	### Directories for MOC Sources ###
-	${CMAKE_BINARY_DIR}
-	${CMAKE_BINARY_DIR}/codes/View
-	${PROJECT_BINARY_DIR}/codes/Controller
-	${PROJECT_BINARY_DIR}/codes/Main
-	${PROJECT_BINARY_DIR}/codes/Model
+# set(
+	# MAIN_INCLUDE_DIRECTORIES
+	# ### Directories for MOC Sources ###
+	# ${CMAKE_BINARY_DIR}
+	# ${CMAKE_BINARY_DIR}/codes/Main
+	# ${CMAKE_BINARY_DIR}/codes/Core
+	# ${CMAKE_BINARY_DIR}/codes/View
+	# ${CMAKE_BINARY_DIR}/codes/Controller
+	# ${CMAKE_BINARY_DIR}/codes/Model
 
-	### Directories for headers ###
-	${CMAKE_SOURCE_DIR}
-	${CMAKE_SOURCE_DIR}/codes/View
-	${CMAKE_SOURCE_DIR}/codes/Controller
-	${CMAKE_SOURCE_DIR}/codes/Main
-	${CMAKE_SOURCE_DIR}/codes/Model
-	)
+	# ### Directories for headers ###
+	# ${CMAKE_SOURCE_DIR}
+	# ${CMAKE_SOURCE_DIR}/codes/Main
+	# ${CMAKE_SOURCE_DIR}/codes/Core
+	# ${CMAKE_SOURCE_DIR}/codes/View
+	# ${CMAKE_SOURCE_DIR}/codes/Controller
+	# ${CMAKE_SOURCE_DIR}/codes/Model
+	
+	# )
 
-set(
-	MAIN_LINK_LIBRARIES
-	${ITK_LIBRARIES}  
-	${VTK_LIBRARIES}
-	# ${VMTK_LIBRARIES} 
-	Qt5::Core
-	Qt5::Widgets 
-	# Qt5::PrintSupport
-	View
+# set(
+	# MAIN_LINK_LIBRARIES
+	# ${ITK_LIBRARIES}  
+	# ${VTK_LIBRARIES}
+	# # ${VMTK_LIBRARIES} 
+	# Qt5::Core
+	# Qt5::Widgets 
+	# # Qt5::PrintSupport
+	# View
+	# Core
 	# Controller
 	# Model
-)
+# )
 
-include_directories(
-	${MAIN_INCLUDE_DIRS}
-)
+# include_directories(
+	# ${MAIN_INCLUDE_DIRECTORIES}
+# )
 
-# link_directories(
-# 	${MAIN_LINK_DIRECTORIES}
-# 	)
+link_directories(
+	${MAIN_LINK_DIRECTORIES}
+	)
 
 add_subdirectory(codes/Main)
 add_subdirectory(codes/View)
-# add_subdirectory(codes/Contorller)
-# add_subdirectory(codes/Model)
+add_subdirectory(codes/Core)
+add_subdirectory(codes/Controller)
+add_subdirectory(codes/Model)
+#add_subdirectory(codes/LumenExtraction)
+add_subdirectory(codes/Widgets)
+add_subdirectory(codes/Algorithm)
 
 
 

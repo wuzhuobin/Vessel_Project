@@ -1,10 +1,12 @@
+#include "Core.h"
 #include "MainWindow.h"
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
 {
+	//itk::Object::GlobalWarningDisplayOff();
+	//vtkObject::GlobalWarningDisplayOff();
 	QApplication a(argc, argv);
-	MainWindow w;
-	w.show();
+	Core c;
 	return a.exec();
 }
