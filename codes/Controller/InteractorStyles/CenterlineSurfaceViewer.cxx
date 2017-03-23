@@ -20,14 +20,16 @@ void CenterlineSurfaceViewer::PrintSelf(ostream & os, vtkIndent indent)
 
 void CenterlineSurfaceViewer::SetCenterline(vtkPolyData * centerline)
 {
-	this->CenterlineActor->VisibilityOn();
-	this->CleanPolyData->SetInputData(centerline);
-	if (GetInput()) {
-		const double* spacing = GetInput()->GetSpacing();
-		this->SplineFilter->SetLength(fmin(spacing[0], fmin(spacing[1], spacing[2])));
+	if (GetCenterline() != centerline) {
+		this->CenterlineActor->VisibilityOn();
+		this->CleanPolyData->SetInputData(centerline);
+		if (GetInput()) {
+			const double* spacing = GetInput()->GetSpacing();
+			this->SplineFilter->SetLength(fmin(spacing[0], fmin(spacing[1], spacing[2])));
+		}
+		//this->KdTreePointLocator->SetDataSet(centerline);
+		InvokeEvent(vtkCommand::UpdateDataEvent);
 	}
-	//this->KdTreePointLocator->SetDataSet(centerline);
-	InvokeEvent(vtkCommand::UpdateDataEvent);
 }
 
 vtkPolyData * CenterlineSurfaceViewer::GetCenterline()

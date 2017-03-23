@@ -405,23 +405,26 @@ void ImageViewer::Render()
 void ImageViewer::SetInputData(vtkImageData *in)
 {
 	// when there is a new input, Update the member DisplayExtent 
-	this->ImageActor->VisibilityOn();
-	vtkImageViewer2::SetInputData(in);
-	//Color Map
-	double* range = in->GetScalarRange();
-	this->SetColorWindow(range[1] - range[0]);
-	this->SetColorLevel((range[1] + range[0])*0.5);
-
-	this->InvokeEvent(vtkCommand::UpdateDataEvent);
+	if (in != GetInput()) {
+		this->ImageActor->VisibilityOn();
+		vtkImageViewer2::SetInputData(in);
+		//Color Map
+		double* range = in->GetScalarRange();
+		this->SetColorWindow(range[1] - range[0]);
+		this->SetColorLevel((range[1] + range[0])*0.5);
+		this->InvokeEvent(vtkCommand::UpdateDataEvent);
+	}
 }
 
 void ImageViewer::SetOverlay(vtkImageData *in)
 {
-	this->OverlayActor->VisibilityOn();
-	OverlayWindowLevel->SetInputData(in);
-	// in case when LookupTable has not been set
-	//this->UpdateDisplayExtent();
-	this->InvokeEvent(vtkCommand::UpdateDataEvent);
+	if (in != GetOverlay()) {
+		this->OverlayActor->VisibilityOn();
+		OverlayWindowLevel->SetInputData(in);
+		// in case when LookupTable has not been set
+		//this->UpdateDisplayExtent();
+		this->InvokeEvent(vtkCommand::UpdateDataEvent);
+	}
 }
 //----------------------------------------------------------------------------
 vtkImageData* ImageViewer::GetOverlay()
@@ -431,8 +434,11 @@ vtkImageData* ImageViewer::GetOverlay()
 
 void ImageViewer::SetSliceOrientation(int orientation)
 {
-	vtkImageViewer2::SetSliceOrientation(orientation);
-	this->InvokeEvent(vtkCommand::UpdateDataEvent);
+	if (GetSliceOrientation() != orientation) {
+		vtkImageViewer2::SetSliceOrientation(orientation);
+		this->InvokeEvent(vtkCommand::UpdateDataEvent);
+	}
+
 }
 //----------------------------------------------------------------------------
 

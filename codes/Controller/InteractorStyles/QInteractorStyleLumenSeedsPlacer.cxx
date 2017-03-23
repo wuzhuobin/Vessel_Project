@@ -50,17 +50,17 @@ void QInteractorStyleLumenSeedsPlacer::UpdateTargetViewer()
 	for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
 		cit != m_imageStyles.cend(); ++cit) {
 		QInteractorStyleLumenSeedsPlacer* _style = QInteractorStyleLumenSeedsPlacer::SafeDownCast(*cit);
-		if (_style && _style->GetCustomEnabled()) {
+		// because not all have been CustomEnabled this timet 
+		if (_style /*&& _style->GetCustomEnabled()*/) {
 			m_listOfModalityNames.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
 		}
 	}
 	m_listOfModalityNames.removeDuplicates();
-	//if (m_listOfModalityNames != listOfModalityName)
-	//{
-		for (int i = 0; i < m_listOfModalityNames.size(); ++i) {
-			ui->comboBoxTargeImage->addItem(m_listOfModalityNames[i]);
-		}
-	//}
+
+	for (int i = 0; i < m_listOfModalityNames.size(); ++i) {
+		ui->comboBoxTargeImage->addItem(m_listOfModalityNames[i]);
+	}
+
 }
 
 void QInteractorStyleLumenSeedsPlacer::UpdateWidgetToSeeds(int * newImagePos, int* oldImagePos)
