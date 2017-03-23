@@ -64,28 +64,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="generateCLBtn">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Generate Centerline</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QScrollArea" name="sliceScrollArea">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -116,7 +94,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>1067</width>
+           <width>1195</width>
            <height>795</height>
           </rect>
          </property>
@@ -162,21 +140,6 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
-   <widget class="QMenu" name="menuInteraction">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="title">
-     <string>Interaction</string>
-    </property>
-    <addaction name="actionNavigation"/>
-    <addaction name="actionWindow_level"/>
-    <addaction name="actionDistance_measure"/>
-    <addaction name="acitonVOI_selection"/>
-    <addaction name="actionSeeds_placer"/>
-    <addaction name="actionContour"/>
-    <addaction name="actionPaint_brush"/>
-   </widget>
    <widget class="QMenu" name="menuView">
     <property name="enabled">
      <bool>true</bool>
@@ -208,20 +171,6 @@
     <addaction name="menuDisplay"/>
     <addaction name="menuOrientation"/>
    </widget>
-   <widget class="QMenu" name="menuSegmentation">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="title">
-     <string>Segmentation</string>
-    </property>
-    <addaction name="actionUpdate_curved_images"/>
-    <addaction name="actionPaint_brush"/>
-    <addaction name="actionSeeds_placer"/>
-    <addaction name="actionSaveContour"/>
-    <addaction name="actionOpenContour"/>
-    <addaction name="actionCenterlineAlgorithm"/>
-   </widget>
    <widget class="QMenu" name="menuImage">
     <property name="enabled">
      <bool>true</bool>
@@ -229,7 +178,6 @@
     <property name="title">
      <string>Image</string>
     </property>
-    <addaction name="actionTesting"/>
     <addaction name="actionNavigation"/>
     <addaction name="actionWindow_level"/>
     <addaction name="acitonVOI_selection"/>
@@ -244,9 +192,14 @@
     <property name="title">
      <string>Diagnosis</string>
     </property>
+    <widget class="QMenu" name="menuVBD_diagnosis">
+     <property name="title">
+      <string>VBD diagnosis</string>
+     </property>
+     <addaction name="actionVBD_Smoker"/>
+    </widget>
     <addaction name="actionICDA_diagnosis"/>
-    <addaction name="actionVBD_diagnosis"/>
-    <addaction name="actionVBD_Smoker"/>
+    <addaction name="menuVBD_diagnosis"/>
    </widget>
    <widget class="QMenu" name="menuSurface">
     <property name="title">
@@ -261,11 +214,9 @@
    <addaction name="menuFile"/>
    <addaction name="menuImage"/>
    <addaction name="menuSurface"/>
-   <addaction name="menuSegmentation"/>
    <addaction name="menuDiagnosis"/>
-   <addaction name="menuHelp"/>
    <addaction name="menuView"/>
-   <addaction name="menuInteraction"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="ActionToolBar">
@@ -287,7 +238,6 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionOpenImage"/>
    <addaction name="actionExport_segmentation"/>
    <addaction name="separator"/>
    <addaction name="actionNavigation"/>
@@ -296,8 +246,10 @@
    <addaction name="separator"/>
    <addaction name="acitonVOI_selection"/>
    <addaction name="actionTubular_VOI"/>
-   <addaction name="actionSeeds_placer"/>
+   <addaction name="separator"/>
    <addaction name="actionPaint_brush"/>
+   <addaction name="actionSeeds_placer"/>
+   <addaction name="separator"/>
    <addaction name="actionVBD_Smoker"/>
    <addaction name="separator"/>
    <addaction name="actionMulti_planar_view"/>
@@ -791,14 +743,13 @@
     <string>Ubogo standard</string>
    </property>
   </action>
-  <action name="actionVBD_diagnosis">
-   <property name="text">
-    <string>VBD diagnosis</string>
-   </property>
-  </action>
   <action name="actionVBD_Smoker">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/cigarette-with-smoke.png</normaloff>:/icons/cigarette-with-smoke.png</iconset>
    </property>
    <property name="text">
     <string>VBD Smoker</string>
@@ -808,6 +759,10 @@
    </property>
   </action>
   <action name="actionNew_segmentation">
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/OpenImage.png</normaloff>:/icons/OpenImage.png</iconset>
+   </property>
    <property name="text">
     <string>New segmentation</string>
    </property>

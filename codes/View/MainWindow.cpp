@@ -94,6 +94,7 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroupSurface->addAction(ui->actionTraceball_camera);
 	actionGroupSurface->addAction(ui->actionCenter_line);
 	actionGroupSurface->addAction(ui->actionFind_maximum_radius);
+	actionGroupSurface->addAction(ui->actionPerpendicular_measurement);
 	actionGroupSurface->addAction(ui->actionCurved_navigation);
 	actionGroupSurface->setExclusive(true);
 
