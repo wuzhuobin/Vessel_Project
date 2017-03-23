@@ -95,6 +95,7 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroupSurface->addAction(ui->actionCenter_line);
 	actionGroupSurface->addAction(ui->actionFind_maximum_radius);
 	actionGroupSurface->addAction(ui->actionCurved_navigation);
+	actionGroupSurface->addAction(ui->actionPerpendicular_measurement);
 	actionGroupSurface->setExclusive(true);
 
 

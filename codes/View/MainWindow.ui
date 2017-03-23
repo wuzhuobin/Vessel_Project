@@ -862,6 +862,9 @@
    </property>
   </action>
   <action name="actionPerpendicular_measurement">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Perpendicular measurement</string>
    </property>
