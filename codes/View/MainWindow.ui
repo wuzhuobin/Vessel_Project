@@ -254,6 +254,7 @@
     </property>
     <addaction name="actionTraceball_camera"/>
     <addaction name="actionCenter_line"/>
+    <addaction name="actionWay_point_centerline"/>
     <addaction name="actionFind_maximum_radius"/>
     <addaction name="actionPerpendicular_measurement"/>
     <addaction name="actionCurved_navigation"/>
@@ -919,6 +920,14 @@
    </property>
    <property name="toolTip">
     <string>Tubular VOI</string>
+   </property>
+  </action>
+  <action name="actionWay_point_centerline">
+   <property name="text">
+    <string>Way point centerline</string>
+   </property>
+   <property name="toolTip">
+    <string>Way point centerline</string>
    </property>
   </action>
  </widget>

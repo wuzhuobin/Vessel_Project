@@ -52,6 +52,7 @@ private slots:
 	void slotFindMaximumRadius();
 	void slotPerpendicularMeasurement();
 	void slotCurvedNavigation();
+	void slotWaypoint();
 
 	// IADE specified
 	void slotVBDSmoker();

@@ -32,7 +32,7 @@ public slots:
 	virtual void UpdateWidgetToSeeds(
 		int* newImagePos,
 		int* oldImagePos = nullptr);
-
+	virtual void ExtractLumenByTargetViewer();
 	virtual void ExtractLumen();
 	void SetMultipier(double value);
 	void SetNumberOfIteractions(int value);

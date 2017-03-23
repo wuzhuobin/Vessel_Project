@@ -68,6 +68,20 @@ void QInteractorStyleLumenSeedsPlacer::UpdateWidgetToSeeds(int * newImagePos, in
 	QInteractorStyleLumenSeedsPlacer::UpdateWidgetToSeeds(m_lumenSeeds, newImagePos, oldImagePos);
 }
 
+void QInteractorStyleLumenSeedsPlacer::ExtractLumenByTargetViewer()
+{
+	for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
+		cit != m_imageStyles.cend(); ++cit) {
+		QInteractorStyleLumenSeedsPlacer* _style = QInteractorStyleLumenSeedsPlacer::SafeDownCast(*cit);
+
+		if (_style && _style->GetCustomEnabled() &&
+			QString::fromStdString(_style->GetImageViewer()->GetWindowName()) ==
+			ui->comboBoxTargeImage->currentText()) {
+			_style->ExtractLumen();
+		}
+	}
+}
+
 void QInteractorStyleLumenSeedsPlacer::UpdateWidgetToSeeds(QList<int*>& seeds, int * newImagePos, int * oldImagePos)
 {
 	// if oldImagePos is nullptr or oldImagePos is not a valid number, 
@@ -134,24 +148,24 @@ void QInteractorStyleLumenSeedsPlacer::DeleteFocalSeed(QList<int*>& seeds)
 void QInteractorStyleLumenSeedsPlacer::ExtractLumen(QList<int*>& seeds)
 {
 	typedef itk::Index<3> IndexType;
-	ImageViewer* inputViewer;
+	//ImageViewer* inputViewer;
 
-	for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
-		cit != m_imageStyles.cend(); ++cit) {
-		QInteractorStyleLumenSeedsPlacer* _style = QInteractorStyleLumenSeedsPlacer::SafeDownCast(*cit);
-		
-		if (_style && _style->GetCustomEnabled() && 
-			QString::fromStdString(_style->GetImageViewer()->GetWindowName()) == 
-			ui->comboBoxTargeImage->currentText()) {
-			inputViewer = GetImageViewer();
-		}
-	}
+	//for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
+	//	cit != m_imageStyles.cend(); ++cit) {
+	//	QInteractorStyleLumenSeedsPlacer* _style = QInteractorStyleLumenSeedsPlacer::SafeDownCast(*cit);
+	//	
+	//	if (_style && _style->GetCustomEnabled() && 
+	//		QString::fromStdString(_style->GetImageViewer()->GetWindowName()) == 
+	//		ui->comboBoxTargeImage->currentText()) {
+	//		inputViewer = GetImageViewer();
+	//	}
+	//}
 
 
 	vtkSmartPointer<vtkExtractVOI> extractVOI =
 		vtkSmartPointer<vtkExtractVOI>::New();
-	extractVOI->SetInputData(inputViewer->GetInput());
-	extractVOI->SetVOI(inputViewer->GetDisplayExtent());
+	extractVOI->SetInputData(GetImageViewer()->GetInput());
+	extractVOI->SetVOI(GetImageViewer()->GetDisplayExtent());
 	extractVOI->Update();
 
 	vtkSmartPointer<LumenExtractionFilter> lumenExtractionFilter =
@@ -170,12 +184,12 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumen(QList<int*>& seeds)
 
 	vtkSmartPointer<vtkImageBlend> blend =
 		vtkSmartPointer<vtkImageBlend>::New();
-	blend->AddInputData(inputViewer->GetOverlay());
+	blend->AddInputData(GetImageViewer()->GetOverlay());
 	blend->AddInputConnection(lumenExtractionFilter->GetOutputPort());
 	blend->SetOpacity(0, 0);
 	blend->SetOpacity(1, 1);
 	blend->Update();
-	inputViewer->GetOverlay()->ShallowCopy(blend->GetOutput());
+	GetImageViewer()->GetOverlay()->ShallowCopy(blend->GetOutput());
 
 	//for (int i = GetImageViewer()->GetDisplayExtent()[0];
 	//	i <= GetImageViewer()->GetDisplayExtent()[1]; ++i) {
@@ -361,7 +375,7 @@ void QInteractorStyleLumenSeedsPlacer::uniqueInitialization()
 	// InteractorStyleLumenSeedsPalcer, others' are nullptr and won't be 
 	// connected
 	connect(ui->pushBtnExtractLumen, SIGNAL(clicked()),
-		this, SLOT(ExtractLumen()));
+		this, SLOT(ExtractLumenByTargetViewer()));
 	connect(ui->doubleSpinBoxMultiplier, SIGNAL(valueChanged(double)),
 		this, SLOT(SetMultipier(double)));
 	connect(ui->numberOfIterationsSpinBox, SIGNAL(valueChanged(int)),

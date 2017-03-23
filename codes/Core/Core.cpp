@@ -184,6 +184,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotPerpendicularMeasurement()));
 	connect(mainWindow.getUi()->actionCurved_navigation, SIGNAL(triggered()),
 		this, SLOT(slotCurvedNavigation()));
+	connect(mainWindow.getUi()->actionWay_point_centerline, SIGNAL(triggered()),
+		this, SLOT(slotWaypoint()));
 
 	// update btn
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
@@ -383,6 +385,11 @@ void Core::slotCurvedNavigation()
 	surfaceInteractorStyle->SetInteractorStyleTo3DCurvedNavigation();
 }
 
+void Core::slotWaypoint()
+{
+	surfaceInteractorStyle->SetInteractorStyleTo3DWaypoint();
+}
+
 void Core::slotVBDSmoker()
 {
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
@@ -563,13 +570,13 @@ void Core::slotUpdateSurfaceView()
 {
 	// temporary fix for real time updated.
 	vtkSmartPointer<vtkImageData> image = vtkSmartPointer<vtkImageData>::New();
-	//if (currentCurved[DEFAULT_IMAGE]) {
-	//	image->ShallowCopy(imageManager.getCurvedIADEOverlay()->getData());
-	//}
-	//else {
-	//	image->ShallowCopy(imageManager.getIADEOverlay()->getData());
-	//}
-	image->ShallowCopy(imageManager.getIADEOverlay()->getData());
+	if (currentCurved[DEFAULT_IMAGE]) {
+		image->ShallowCopy(imageManager.getCurvedIADEOverlay()->getData());
+	}
+	else {
+		image->ShallowCopy(imageManager.getIADEOverlay()->getData());
+	}
+	//image->ShallowCopy(imageManager.getIADEOverlay()->getData());
 	//surfaceViewer->SetInputData(imageManager.getOverlay()->getData());
 	surfaceViewer->SetInputData(image);
 	surfaceViewer->SetLookupTable(imageManager.getIADEOverlay()->getLookupTable());

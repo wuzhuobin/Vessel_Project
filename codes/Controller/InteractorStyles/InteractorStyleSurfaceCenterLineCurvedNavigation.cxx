@@ -229,15 +229,25 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::Update2DViewers()
 	int j;
 	int k;
 
+	//for (std::list<AbstractInteractorStyle*>::const_iterator cit = m_abstractInteractorStyles.cbegin();
+	//	cit != m_abstractInteractorStyles.cend(); ++cit) {
+	//	AbstractNavigation* style = dynamic_cast<AbstractNavigation*>(*cit);
+	//	if (style) {
+	//		extent = style->GetVtkImageViewer2()->GetInput()->GetExtent();
+	//		break;
+	//	}
+	//}
+	
+	// the same as above
+	std::list<AbstractInteractorStyle*>::const_iterator cit = std::find_if(
+		m_abstractInteractorStyles.cbegin(), 
+		m_abstractInteractorStyles.cend(),
+		[](AbstractInteractorStyle* style)->bool {
+		return dynamic_cast<AbstractNavigation*>(style); });
 
-	for (std::list<AbstractInteractorStyle*>::const_iterator cit = m_abstractInteractorStyles.cbegin();
-		cit != m_abstractInteractorStyles.cend(); ++cit) {
-		AbstractNavigation* style = dynamic_cast<AbstractNavigation*>(*cit);
-		if (style) {
-			extent = style->GetVtkImageViewer2()->GetInput()->GetExtent();
-			break;
-		}
-	}
+	extent = static_cast<AbstractNavigation*>(*cit)->GetVtkImageViewer2()->GetInput()->GetExtent();
+
+
 	if (std::equal(extent, extent + 5, GetExtent())) {
 		i = static_cast<int>((worldPos[0] - GetOrigin()[0]) / GetSpacing()[0] + 0.5);
 		j = static_cast<int>((worldPos[1] - GetOrigin()[1]) / GetSpacing()[1] + 0.5);

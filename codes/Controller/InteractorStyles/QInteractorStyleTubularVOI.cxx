@@ -24,47 +24,12 @@ void QInteractorStyleTubularVOI::GenerateWidgetFromSeeds()
 
 void QInteractorStyleTubularVOI::ExtractSegmentation(QList<int*>& seed)
 {
-	vtkSmartPointer<vtkPolyData> splinePoints =
-		vtkSmartPointer<vtkPolyData>::New();
-	splinePoints->SetPoints(vtkSmartPointer<vtkPoints>::New());
-	for (QList<int*>::const_iterator cit = seed.cbegin(); cit != seed.cend(); ++cit) {
-		splinePoints->GetPoints()->InsertNextPoint((*cit)[0], (*cit)[1], (*cit)[2]);
-		//double worldPos[3];
-		//for (int pos = 0; pos < 3; ++pos) {
-		//	worldPos[pos] = ((*cit)[pos] * GetSpacing()[pos]) + GetOrigin()[pos];
-		//}
-		//splinePoints->GetPoints()->InsertNextPoint(worldPos);
-	}
-
-	vtkSmartPointer<vtkTransform> translation =
-		vtkSmartPointer<vtkTransform>::New();
-	// because default is premultiply 
-	// T* (S * Points)
-	translation->Translate(GetOrigin());
-	translation->Scale(GetSpacing());
-	translation->Update();
-
-	vtkSmartPointer<vtkTransformPolyDataFilter> transformFilter =
-		vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-	transformFilter->SetInputData(splinePoints);
-	transformFilter->SetTransform(translation);
-	transformFilter->Update();
-
-
-	vtkSmartPointer<vtkParametricSpline> spline =
-		vtkSmartPointer<vtkParametricSpline>::New();
-	//spline->SetPoints(splinePoints->GetPoints());
-	spline->SetPoints(transformFilter->GetOutput()->GetPoints());
-
-	vtkSmartPointer<vtkParametricFunctionSource> functionSource =
-		vtkSmartPointer<vtkParametricFunctionSource>::New();
-	functionSource->SetParametricFunction(spline);
-	functionSource->Update();
+	UpdateSpline(seed);
 
 	vtkSmartPointer<vtkPolylineToTubularVolume> polylineToTubularVolume =
 		vtkSmartPointer<vtkPolylineToTubularVolume>::New();
 	polylineToTubularVolume->SetInputData(GetImageViewer()->GetOverlay());
-	polylineToTubularVolume->SetPolyline(functionSource->GetOutput());
+	polylineToTubularVolume->SetPolyline(m_spline);
 	polylineToTubularVolume->SetTubeRadius(m_extractRadius);
 	polylineToTubularVolume->Update();
 
@@ -143,6 +108,56 @@ void QInteractorStyleTubularVOI::UpdateWidgetToSeeds(QList<int*>& seeds, int * n
 			QString::number(seeds.back()[2]) + "]";
 		GetListWidget()->addItem(listItem);
 	}
+}
+
+vtkPolyData* QInteractorStyleTubularVOI::UpdateSpline(QList<int*>& seed)
+{
+	m_spline = vtkSmartPointer<vtkPolyData>::New();
+
+	vtkSmartPointer<vtkPolyData> splinePoints =
+		vtkSmartPointer<vtkPolyData>::New();
+	splinePoints->SetPoints(vtkSmartPointer<vtkPoints>::New());
+	for (QList<int*>::const_iterator cit = seed.cbegin(); cit != seed.cend(); ++cit) {
+		splinePoints->GetPoints()->InsertNextPoint((*cit)[0], (*cit)[1], (*cit)[2]);
+		//double worldPos[3];
+		//for (int pos = 0; pos < 3; ++pos) {
+		//	worldPos[pos] = ((*cit)[pos] * GetSpacing()[pos]) + GetOrigin()[pos];
+		//}
+		//splinePoints->GetPoints()->InsertNextPoint(worldPos);
+	}
+
+	vtkSmartPointer<vtkTransform> translation =
+		vtkSmartPointer<vtkTransform>::New();
+	// because default is premultiply 
+	// T* (S * Points)
+	translation->Translate(GetOrigin());
+	translation->Scale(GetSpacing());
+	translation->Update();
+
+	vtkSmartPointer<vtkTransformPolyDataFilter> transformFilter =
+		vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+	transformFilter->SetInputData(splinePoints);
+	transformFilter->SetTransform(translation);
+	transformFilter->Update();
+
+
+	vtkSmartPointer<vtkParametricSpline> spline =
+		vtkSmartPointer<vtkParametricSpline>::New();
+	//spline->SetPoints(splinePoints->GetPoints());
+	spline->SetPoints(transformFilter->GetOutput()->GetPoints());
+
+	vtkSmartPointer<vtkParametricFunctionSource> functionSource =
+		vtkSmartPointer<vtkParametricFunctionSource>::New();
+	functionSource->SetParametricFunction(spline);
+	functionSource->Update();
+	m_spline->ShallowCopy(functionSource->GetOutput());
+	return m_spline;
+}
+
+vtkPolyData* QInteractorStyleTubularVOI::UpdateSpline()
+{
+	return UpdateSpline(m_tubularSeeds);
+	
 }
 
 void QInteractorStyleTubularVOI::SaveWidgetToSeeds()

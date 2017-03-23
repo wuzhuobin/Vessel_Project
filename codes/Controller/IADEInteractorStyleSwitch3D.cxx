@@ -33,6 +33,9 @@ IADEInteractorStyleSwitch3D::IADEInteractorStyleSwitch3D()
 	this->CurvedNavigation = InteractorStyleSurfaceCenterLineCurvedNavigation::New();
 	allStyles.push_back(this->CurvedNavigation);
 
+	this->Waypoint = InteractorStyleSurfaceCenterlineWaypoint::New();
+	allStyles.push_back(this->Waypoint);
+
 	this->CurrentStyle = 0;
 
 }

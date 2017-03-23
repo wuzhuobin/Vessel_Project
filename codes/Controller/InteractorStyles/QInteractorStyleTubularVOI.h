@@ -3,6 +3,8 @@
 
 #include "QInteractorStyleLumenSeedsPlacer.h"
 
+class vtkPolyData;
+
 namespace Ui { class QInteractorStyleTubularVOI; }
 class QInteractorStyleTubularVOI : public QInteractorStyleLumenSeedsPlacer
 {
@@ -23,6 +25,7 @@ public slots:
 	virtual void UpdateWidgetToSeeds(
 		int* newImagePos,
 		int* oldImagePos = nullptr);
+	virtual vtkPolyData* UpdateSpline();
 	virtual void SetExtractRadius(int radius);
 	virtual void ExtractSegmentation();
 	virtual void ExtractVOI();
@@ -38,6 +41,7 @@ protected:
 		QList<int*>& seeds,
 		int* newImagePos,
 		int* oldImagePos = nullptr);
+	virtual vtkPolyData* UpdateSpline(QList<int*> &seed);
 
 	void uniqueInitialization();
 	void initialization();
@@ -46,6 +50,8 @@ protected:
 
 	static QList<int*> m_tubularSeeds;
 	virtual QListWidget* GetListWidget();
+
+	vtkSmartPointer<vtkPolyData> m_spline = nullptr;
 
 	int m_extractRadius = 10;
 private:

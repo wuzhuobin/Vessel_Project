@@ -152,7 +152,9 @@ void QInteractorStyleWindowLevelThreshold::ThresholdTargetViewerToOverlay()
 	for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
 		cit != m_imageStyles.cend(); ++cit) {
 		QInteractorStyleWindowLevelThreshold* _style = QInteractorStyleWindowLevelThreshold::SafeDownCast(*cit);
-		if (_style && _style->GetCustomEnabled()) {
+		if (_style && _style->GetCustomEnabled() && 
+			QString::fromStdString(_style->GetImageViewer()->GetWindowName()) ==
+			ui->comboBoxTargeImage->currentText()) {
 			_style->ThresholdToOverlay();
 			break;
 		}

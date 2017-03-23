@@ -107,11 +107,14 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(bool flag)
 		m_ChangeSourceButtonWidget->EnabledOn();
 	}
 	else {
-		m_reClipButtonWidget->EnabledOff();
+		if (m_reClipButtonWidget) {
+			m_reClipButtonWidget->EnabledOff();
+		}
 		m_reClipButtonWidget = nullptr;
 		m_reClipButtonRep = nullptr;
-
-		m_ChangeSourceButtonWidget->EnabledOff();
+		if (m_ChangeSourceButtonWidget) {
+			m_ChangeSourceButtonWidget->EnabledOff();
+		}
 		m_ChangeSourceButtonWidget = nullptr;
 		m_ChangeSourceButtonRep = nullptr;
 	}
