@@ -2,9 +2,11 @@
 
 #include "ui_MainWindow.h"
 #include "ui_ViewerWidget.h"
+#include "ui_ModuleWidget.h"
 #include "ModuleWidget.h"
 #include "ViewerWidget.h"
 #include "MeasurementWidget.h"
+#include "LabelWidget.h"
 
 #include <qdebug.h>
 #include <qsettings.h>
@@ -24,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 	this->moduleWiget = new ModuleWidget(this);
 	ui->moduleWidgetDockWidget->setWidget(this->moduleWiget);
+
+	this->labelWidget = new LabelWidget(this);
+	this->moduleWiget->getUi()->verticalLayoutModule->addWidget(this->labelWidget);
 
 	this->measurementWidget = new MeasurementWidget(this);
 	ui->measurementDockWidget->setWidget(measurementWidget);
@@ -241,11 +246,6 @@ void MainWindow::enableInteractor(bool flag)
 
 }
 
-//void MainWindow::setModuleWidget(QWidget * moduleWidget)
-//{
-//	ui->moduleWidgetDockWidget->setWidget(moduleWidget);
-//}
-
 void MainWindow::addModalityNames(QString name)
 {
 	modalityNames << name;
@@ -293,6 +293,11 @@ ViewerWidget * MainWindow::getViewerWidget(unsigned int num)
 MeasurementWidget * MainWindow::getMeasurementWidget()
 {
 	return this->measurementWidget;
+}
+
+LabelWidget * MainWindow::getLabelWidget()
+{
+	return this->labelWidget;
 }
 
 QMenu * MainWindow::getSelectImgMenu(unsigned int i)

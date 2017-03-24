@@ -18,13 +18,8 @@ ModuleWidget::ModuleWidget(QWidget *parent) :
 
 	ui = new Ui::ModuleWidget;
     ui->setupUi(this);
-	//ui->styleStackedWidget->setCurrentIndex(0);
-	//ui->styleStackedWidget->setHidden(true);
+
 	ui->styleStackedWidget->setDisabled(true);
-	//connect(ui->opacitySpinBox, SIGNAL(valueChanged(int)), 
-	//	this, SLOT(slotChangeOpacity(int)));
-	//connect(ui->labelComboBox, SIGNAL(currentIndexChanged(int)), 
-	//	this, SLOT(slotUpdateOpacity()));
 }
 
 ModuleWidget::~ModuleWidget()
@@ -53,18 +48,18 @@ void ModuleWidget::setWidget(QWidget * style)
 	}
 }
 
-void ModuleWidget::slotChangeOpacity(int opacity)
-{
-	int layer = ui->labelComboBox->currentIndex() + 1;
-	emit signalChangeOpacity(layer, ui->opacitySpinBox->value());
-	//m_mainWnd->m_core->slotChangeOpacity(layer, opacity);
-}
-
-void ModuleWidget::slotUpdateOpacity(int opacity)
-{
-	//int layer = ui->labelComboBox->currentIndex() + 1;
-	//double rgba[4];
-	//m_mainWnd->m_core->GetLookupTable()->GetIndexedColor(layer, rgba);
-	ui->opacitySpinBox->setValue(opacity * 100+0.5);
-
-}
+//void ModuleWidget::slotChangeOpacity(int opacity)
+//{
+//	int layer = ui->labelComboBox->currentIndex() + 1;
+//	emit signalChangeOpacity(layer, ui->opacitySpinBox->value());
+//	//m_mainWnd->m_core->slotChangeOpacity(layer, opacity);
+//}
+//
+//void ModuleWidget::slotUpdateOpacity(int opacity)
+//{
+//	//int layer = ui->labelComboBox->currentIndex() + 1;
+//	//double rgba[4];
+//	//m_mainWnd->m_core->GetLookupTable()->GetIndexedColor(layer, rgba);
+//	ui->opacitySpinBox->setValue(opacity * 100+0.5);
+//
+//}

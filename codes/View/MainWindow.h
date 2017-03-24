@@ -32,6 +32,7 @@ class QSettings;
 class ModuleWidget;
 class ViewerWidget;
 class MeasurementWidget;
+class LabelWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -60,6 +61,7 @@ public:
 	ModuleWidget* getModuleWidget();
 	ViewerWidget* getViewerWidget(unsigned int num);
 	MeasurementWidget* getMeasurementWidget();
+	LabelWidget* getLabelWidget();
 	QMenu* getSelectImgMenu(unsigned int i);
 
 signals:
@@ -103,7 +105,7 @@ private:
 
 	MeasurementWidget* measurementWidget = nullptr;
 
-	//QMainWindow* centralWidget = nullptr;
+	LabelWidget* labelWidget = nullptr;
 
 	QMenu* selectImgMenus[NUM_OF_VIEWERS] = { nullptr };
 

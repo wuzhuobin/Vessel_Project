@@ -68,17 +68,22 @@ public:
 	Overlay(OverlayImageData::itkImageType::Pointer data, QObject* parent = nullptr);
 	Overlay(OverlayImageData* data, QObject* parent = nullptr);
 	~Overlay();
+	virtual void updatedOverlay();
 
 	OverlayImageData* getData() const;
 	vtkLookupTable* getLookupTable() const;
-	virtual void updatedOverlay();
+	double getOpacity(int color);
+	
+public slots:
 
-	int getOpacity(int color);
-	void setOpacity(int color, int opacity);
+	void slotRequestOpacity(int color);
+	void slotSetOpacity(int color, double opacity);
 signals:
 	void signalUpdatedOverlay();
-
+	void signalGetRequestedOpacity(double opacity);
 protected:
+	
+	
 	vtkSmartPointer<OverlayImageData> m_data;
 	vtkSmartPointer<vtkLookupTable> m_lookupTable;
 	vtkSmartPointer<OverlayUpdatedObserver> m_updatedObserver;

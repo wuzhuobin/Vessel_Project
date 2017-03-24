@@ -8,6 +8,7 @@
 #include "ModuleWidget.h"
 #include "ui_QAbstractNavigation.h"
 #include "MeasurementWidget.h"
+#include "LabelWidget.h"
 
 
 #include <qdebug.h>
@@ -196,10 +197,10 @@ Core::Core(QObject * parent)
 		this, SLOT(slotInitializeCurvedImage()));
 
 	// Opacity
-	connect(mainWindow.getModuleWidget()->getUi()->opacitySpinBox, SIGNAL(valueChanged(int)),
-		this, SLOT(slotChangeOpacity(int)));
-	connect(mainWindow.getModuleWidget()->getUi()->labelComboBox, SIGNAL(currentIndexChanged(int)),
-		this, SLOT(slotUpdateOpacity(int)));
+	//connect(mainWindow.getModuleWidget()->getUi()->opacitySpinBox, SIGNAL(valueChanged(int)),
+	//	this, SLOT(slotChangeOpacity(int)));
+	//connect(mainWindow.getModuleWidget()->getUi()->labelComboBox, SIGNAL(currentIndexChanged(int)),
+	//	this, SLOT(slotUpdateOpacity(int)));
 
 	// Measurement 
 	//connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
@@ -265,6 +266,18 @@ void Core::slotIOManagerToImageManager()
 void Core::slotOverlayToImageManager()
 {
 	imageManager.setOverlay(ioManager.getOverlay());
+
+	// Opacity
+
+	connect(mainWindow.getLabelWidget(), SIGNAL(signalOpacityRequested(int)),
+		imageManager.getOverlay(), SLOT(slotRequestOpacity(int)));
+	connect(imageManager.getOverlay(), SIGNAL(signalGetRequestedOpacity(double)),
+		mainWindow.getLabelWidget(), SLOT(slotSetOpacity(double)));
+	connect(mainWindow.getLabelWidget(), SIGNAL(signalOpacityChanged(int, double)),
+		imageManager.getOverlay(), SLOT(slotSetOpacity(int, double)));
+	connect(mainWindow.getLabelWidget(), SIGNAL(signalOpacityChanged(int, double)),
+		this, SLOT(slotRenderALlViewers()));
+	
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		slotUpdateImageViewersToCurrent(i);
 	}
@@ -585,7 +598,7 @@ void Core::slotUpdateSurfaceView()
 	surfaceViewer->Render();
 }
 
-void Core::RenderALlViewers()
+void Core::slotRenderALlViewers()
 {
 	imageViewers[0]->Render();
 	imageViewers[1]->Render();
@@ -593,26 +606,26 @@ void Core::RenderALlViewers()
 	surfaceViewer->Render();
 }
 
-void Core::slotChangeOpacity(int opacity)
-{
-	int color = mainWindow.getModuleWidget()->getUi()->labelComboBox->currentIndex() + 1;
-	if (imageManager.getOverlay()->getOpacity(color) == opacity) {
-		return;
-	}
-	imageManager.getOverlay()->setOpacity(color, opacity);
-	RenderALlViewers();
-}
-
-void Core::slotUpdateOpacity(int opacity)
-{
-	int color = mainWindow.getModuleWidget()->getUi()->labelComboBox->currentIndex() + 1;
-	if (imageManager.getOverlay()->getOpacity(color) == opacity) {
-		return;
-	}
-	;
-	mainWindow.getModuleWidget()->getUi()->opacitySpinBox->setValue(imageManager.getOverlay()->getOpacity(color));
-
-}
+//void Core::slotChangeOpacity(int opacity)
+//{
+//	int color = mainWindow.getModuleWidget()->getUi()->labelComboBox->currentIndex();
+//	if (imageManager.getOverlay()->getOpacity(color) == opacity) {
+//		return;
+//	}
+//	imageManager.getOverlay()->setOpacity(color, opacity);
+//	slotRenderALlViewers();
+//}
+//
+//void Core::slotUpdateOpacity(int opacity)
+//{
+//	int color = mainWindow.getModuleWidget()->getUi()->labelComboBox->currentIndex();
+//	if (imageManager.getOverlay()->getOpacity(color) == opacity) {
+//		return;
+//	}
+//	;
+//	mainWindow.getModuleWidget()->getUi()->opacitySpinBox->setValue(imageManager.getOverlay()->getOpacity(color));
+//
+//}
 
 
 //void Core::slotTest(bool flag)

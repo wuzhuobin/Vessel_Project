@@ -10,6 +10,18 @@ public:
 	LabelWidget(QWidget* parent = nullptr);
 	~LabelWidget();
 
+
+public slots:
+	void slotSetOpacity(double opacity);
+
+signals:
+	void signalOpacityChanged(int color, double opacity);
+	void signalOpacityRequested(int color);
+
+protected slots:
+	void slotOpacityChange(int opacity);
+	void slotCurrentIndexUpdate(int color);
+
 private:
 	Ui::LabelWidget* ui = nullptr;
 };

@@ -76,8 +76,9 @@ private slots:
 	void slotUpdateSurfaceView();
 
 	// label opacity
-	void slotChangeOpacity(int opacity);
-	void slotUpdateOpacity(int opacity);
+	//void slotChangeOpacity(int opacity);
+	//void slotUpdateOpacity(int opacity);
+	void slotRenderALlViewers();
 
 
 private:
@@ -100,7 +101,6 @@ private:
 	CenterlineSurfaceViewer* surfaceViewer;
 	IADEInteractorStyleSwitch3D* surfaceInteractorStyle;
 
-	void RenderALlViewers();
 
 	unsigned int m_viewMode = -1;
 };
