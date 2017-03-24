@@ -453,6 +453,7 @@ void Core::slotChangeSliceOrientationToXY(int viewer)
 void Core::slotUpdateImageViewersToCurrent(int viewer)
 {
 	imageViewers[viewer]->InitializeHeader(imageManager.getModalityName(currentImage[viewer]).toStdString());
+	imageViewers[viewer]->SetLookupTable(imageManager.getIADEOverlay()->getLookupTable());
 	if (currentCurved[viewer]) {
 		imageViewers[viewer]->SetOverlay(imageManager.getCurvedIADEOverlay()->getData());
 		imageViewers[viewer]->SetInputData(imageManager.getCurvedImage(currentImage[viewer]));
@@ -483,10 +484,7 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 			this, SLOT(slotUpdateMeasurements()), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
 
 	}
-	//imageViewers[viewer]->GetRenderWindow()->SetWindowName(imageManager.getModalityName(currentImage[viewer]).toStdString().c_str());
-	imageViewers[viewer]->SetLookupTable(imageManager.getIADEOverlay()->getLookupTable());
 	imageViewers[viewer]->SetSliceOrientation(currentSliceOrientation[viewer]);
-	imageViewers[viewer]->Render();
 	imageViewers[viewer]->Render();
 
 	mainWindow.getViewerWidget(viewer)->setWindowTitle(imageManager.getModalityName(currentImage[viewer]));

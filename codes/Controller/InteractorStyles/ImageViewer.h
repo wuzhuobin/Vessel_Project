@@ -5,7 +5,7 @@
 
 class vtkLookupTable;
 class vtkTextActor;
-class vtkImageMapToWindowLevelColors;
+class vtkImageMapToColors;
 class vtkImageActor;
 class vtkCursor3D;
 class vtkPolyDataMapper;
@@ -105,7 +105,7 @@ public:
 	// Get the internal render window, renderer, image actor, and
 	// image map instances.
 	vtkGetObjectMacro(OverlayActor, vtkImageActor);
-	vtkGetObjectMacro(OverlayWindowLevel, vtkImageMapToWindowLevelColors);
+	vtkGetObjectMacro(OverlayImageMapToColors, vtkImageMapToColors);
 
 	/**
 	 * Get/Set method of LookupTable
@@ -180,7 +180,7 @@ protected:
 	vtkTextActor* IntTextActor = nullptr;
 
 	// Overlay
-	vtkImageMapToWindowLevelColors* OverlayWindowLevel = nullptr;
+	vtkImageMapToColors* OverlayImageMapToColors = nullptr;
 	vtkImageActor* OverlayActor = nullptr;
 
 	//Cursor
