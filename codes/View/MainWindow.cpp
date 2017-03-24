@@ -225,10 +225,12 @@ void MainWindow::imageImport(QString path)
 
 void MainWindow::initialization()
 {
-	this->setEnabled(true);
-
+	ui->menuImage->setEnabled(true);
+	ui->menuImage->setEnabled(true);
+	ui->menuSurface->setEnabled(true);
+	//ui->menuView->setEnabled(true);
+	ui->menuDiagnosis->setEnabled(true);
 	ui->centralwidget->setEnabled(true);
-
 	ui->ActionToolBar->setEnabled(true);
 
 	ui->actionMulti_planar_view->trigger();

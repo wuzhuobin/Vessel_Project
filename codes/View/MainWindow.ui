@@ -13,7 +13,7 @@
     <x>0</x>
     <y>0</y>
     <width>1600</width>
-    <height>900</height>
+    <height>883</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -33,7 +33,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -50,7 +50,7 @@
       <item>
        <widget class="QPushButton" name="updateBtn">
         <property name="enabled">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="minimumSize">
          <size>
@@ -95,7 +95,7 @@
            <x>0</x>
            <y>0</y>
            <width>1195</width>
-           <height>795</height>
+           <height>778</height>
           </rect>
          </property>
         </widget>
@@ -173,7 +173,7 @@
    </widget>
    <widget class="QMenu" name="menuImage">
     <property name="enabled">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="title">
      <string>Image</string>
@@ -187,7 +187,7 @@
    </widget>
    <widget class="QMenu" name="menuDiagnosis">
     <property name="enabled">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="title">
      <string>Diagnosis</string>
@@ -202,6 +202,9 @@
     <addaction name="menuVBD_diagnosis"/>
    </widget>
    <widget class="QMenu" name="menuSurface">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Surface</string>
     </property>
@@ -221,7 +224,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="ActionToolBar">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="windowTitle">
     <string>toolBar</string>
@@ -403,6 +406,9 @@
    </property>
    <property name="checked">
     <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="../Main/resources/IADE_Analyzer.qrc">
