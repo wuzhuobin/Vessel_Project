@@ -16,7 +16,7 @@ PURPOSE.  See the above copyright notice for more information.
 
 #include <vtkInformation.h>
 #include <vtkCamera.h>
-#include <vtkImageProperty.h>
+//#include <vtkImageProperty.h>
 #include <vtkProperty.h>
 #include <vtkRenderWindow.h>
 #include <vtkCachedStreamingDemandDrivenPipeline.h>
@@ -28,7 +28,7 @@ PURPOSE.  See the above copyright notice for more information.
 #include <vtkCommand.h>
 
 #include <vtkTextActor.h>
-#include <vtkImageMapToWindowLevelColors.h>
+#include <vtkImageMapToColors.h>
 #include <vtkLogLookupTable.h>
 #include <vtkImageActor.h>
 #include <vtkCursor3D.h>
@@ -73,7 +73,7 @@ ImageViewer::ImageViewer()
 	this->ImageActor->VisibilityOff();
 	this->OverlayActor = vtkImageActor::New();
 	this->OverlayActor->VisibilityOff();
-	this->OverlayWindowLevel = vtkImageMapToWindowLevelColors::New();
+	this->OverlayImageMapToColors = vtkImageMapToColors::New();
 
 	// OrientationTextActor 
 	this->IntTextActor = vtkTextActor::New();
@@ -113,9 +113,9 @@ ImageViewer::ImageViewer()
 //----------------------------------------------------------------------------
 ImageViewer::~ImageViewer()
 {
-	if (this->OverlayWindowLevel) {
-		this->OverlayWindowLevel->Delete();
-		this->OverlayWindowLevel = NULL;
+	if (this->OverlayImageMapToColors) {
+		this->OverlayImageMapToColors->Delete();
+		this->OverlayImageMapToColors = NULL;
 	}
 	if (this->OverlayActor) {
 		this->OverlayActor->Delete();
@@ -299,10 +299,10 @@ void ImageViewer::InstallPipeline()
 		this->Renderer->AddViewProp(this->OverlayActor);
 	}
 	// Setup connection with window level mapper
-	if (this->OverlayActor && this->OverlayWindowLevel)
+	if (this->OverlayActor && this->OverlayImageMapToColors)
 	{
 		this->OverlayActor->GetMapper()->SetInputConnection(
-			this->OverlayWindowLevel->GetOutputPort());
+			this->OverlayImageMapToColors->GetOutputPort());
 	}
 	// add cursor 
 	if (this->CursorMapper && this->Cursor3D) {
@@ -420,7 +420,7 @@ void ImageViewer::SetOverlay(vtkImageData *in)
 {
 	if (in != GetOverlay()) {
 		this->OverlayActor->VisibilityOn();
-		OverlayWindowLevel->SetInputData(in);
+		OverlayImageMapToColors->SetInputData(in);
 		// in case when LookupTable has not been set
 		//this->UpdateDisplayExtent();
 		this->InvokeEvent(vtkCommand::UpdateDataEvent);
@@ -429,7 +429,7 @@ void ImageViewer::SetOverlay(vtkImageData *in)
 //----------------------------------------------------------------------------
 vtkImageData* ImageViewer::GetOverlay()
 {
-	return vtkImageData::SafeDownCast(this->OverlayWindowLevel->GetInput());
+	return vtkImageData::SafeDownCast(this->OverlayImageMapToColors->GetInput());
 }
 
 void ImageViewer::SetSliceOrientation(int orientation)
@@ -456,7 +456,7 @@ void ImageViewer::PrintSelf(ostream& os, vtkIndent indent)
 	os << indent << "ImageActorContour:\n";
 	this->OverlayActor->PrintSelf(os, indent.GetNextIndent());
 	os << indent << "WindowLevel:\n" << endl;
-	this->WindowLevel->PrintSelf(os, indent.GetNextIndent());
+	this->OverlayImageMapToColors->PrintSelf(os, indent.GetNextIndent());
 	os << indent << "Slice: " << this->Slice << endl;
 	os << indent << "SliceOrientation: " << this->SliceOrientation << endl;
 	os << indent << "InteractorStyle: " << endl;
@@ -496,12 +496,13 @@ void ImageViewer::InitializeCursorBoundary()
 void ImageViewer::SetLookupTable(vtkLookupTable * LookupTable)
 {
 	this->LookupTable = LookupTable;
-	this->OverlayActor->GetProperty()->SetInterpolationTypeToNearest();
-	this->OverlayActor->GetProperty()->SetLookupTable(LookupTable);
+	//this->OverlayActor->GetProperty()->SetInterpolationTypeToNearest();
+	//this->OverlayActor->GetProperty()->SetLookupTable(LookupTable);
 
 	int num = LookupTable->GetNumberOfTableValues();
-	OverlayWindowLevel->SetWindow(num - 1);
-	OverlayWindowLevel->SetLevel((num - 1) * 0.5);
+	OverlayImageMapToColors->SetLookupTable(this->LookupTable);
+	//OverlayImageMapToColors->SetWindow(num - 1);
+	//OverlayImageMapToColors->SetLevel((num - 1) * 0.5);
 }
 
 void ImageViewer::SetFocalPointWithWorldCoordinate(double x, double y, double z)
