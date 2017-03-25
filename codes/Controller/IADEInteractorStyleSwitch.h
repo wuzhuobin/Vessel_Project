@@ -17,7 +17,7 @@ Copyright (C) 2016
 #include "InteractorStyleSwitch.h"
 
 #include "QInteractorStyleNavigation.h"
-#include "QInteractorStyleWindowLevelThreshold.h"
+#include "QInteractorStyleWindowLevel.h"
 #include "QInteractorStylePaintBrush.h"
 #include "QInteractorStyleVOI.h"
 #include "QInteractorStyleLumenSeedsPlacer.h"
@@ -32,7 +32,7 @@ public:
 	vtkTypeMacro(IADEInteractorStyleSwitch, InteractorStyleSwitch);
 
 
-	vtkGetMacro(WindowLevel, QInteractorStyleWindowLevelThreshold*);
+	vtkGetMacro(WindowLevel, QInteractorStyleWindowLevel*);
 	SetInteractorStyleMacro(WindowLevel);
 	CurrentStyleMacro(WindowLevel);
 
@@ -68,7 +68,7 @@ protected:
 	IADEInteractorStyleSwitch();
 
 	QInteractorStyleNavigation*	Navigation;
-	QInteractorStyleWindowLevelThreshold* WindowLevel;
+	QInteractorStyleWindowLevel* WindowLevel;
 	//QInteractorStyleVesselSegmentation* PolygonDraw;
 	QInteractorStyleLumenSeedsPlacer* LumenSeedsPlacer;
 	QInteractorStylePaintBrush*	PaintBrush;

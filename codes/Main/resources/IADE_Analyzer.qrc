@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/IADE_Analyzer ICON.png</file>
     <file>icons/cigarette-with-smoke.png</file>
     <file>icons/aami10-90-512.png</file>
     <file>icons/1476453573_Wand.ico</file>

@@ -288,6 +288,15 @@ void QInteractorStyleVBDSmokerSeeds::slotPonsCentralSectionLocationCurrentSlice(
 	ui->spinBoxPonsCentralSectionLocation->setValue(ijk[2]);
 }
 
+void QInteractorStyleVBDSmokerSeeds::slotUpdateBasilarArteryMinimumDiameter()
+{
+	if (ui->doubleSpinBoxBasilarArteryMinimumDiameter->value() >= 4.5) {
+		ui->lineEditExpansion->setText("yes");
+	}
+	else {
+		ui->lineEditExpansion->setText("no");
+	}
+}
 
 QInteractorStyleVBDSmokerSeeds::QInteractorStyleVBDSmokerSeeds(int uiType, QWidget * parent)
 {
@@ -390,6 +399,8 @@ void QInteractorStyleVBDSmokerSeeds::uniqueInitialization()
 		this, SLOT(slotUpdateBasilarArteryBifurcationLocation()));
 	connect(ui->spinBoxPonsCentralSectionLocation, SIGNAL(valueChanged(int)),
 		this, SLOT(slotUpdatePonsCentralSectionLocation()));
+	connect(ui->doubleSpinBoxBasilarArteryMinimumDiameter, SIGNAL(valueChanged(double)),
+		this, SLOT(slotUpdateBasilarArteryMinimumDiameter()));
 }
 
 void QInteractorStyleVBDSmokerSeeds::initialization()

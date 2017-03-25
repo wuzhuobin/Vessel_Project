@@ -24,11 +24,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 	this->moduleWiget = new ModuleWidget(this);
 	ui->moduleWidgetDockWidget->setWidget(this->moduleWiget);
-
-	this->measurementWidget = new MeasurementWidget(this);
-	ui->measurementDockWidget->setWidget(measurementWidget);
-
-	this->tabifyDockWidget(ui->measurementDockWidget, ui->moduleWidgetDockWidget);
+		//this->measurementWidget = new MeasurementWidget(this);
+	//ui->measurementDockWidget->setWidget(measurementWidget);
+	ui->measurementDockWidget->setVisible(false);
+	//this->tabifyDockWidget(ui->measurementDockWidget, ui->moduleWidgetDockWidget);
 
 	QMainWindow* centralWidget = new QMainWindow(this);
 	centralWidget->setDockNestingEnabled(true);
@@ -226,13 +225,13 @@ void MainWindow::imageImport(QString path)
 void MainWindow::initialization()
 {
 	ui->menuImage->setEnabled(true);
-	ui->menuImage->setEnabled(true);
 	ui->menuSurface->setEnabled(true);
-	//ui->menuView->setEnabled(true);
+	ui->menuView->setEnabled(true);
 	ui->menuDiagnosis->setEnabled(true);
 	ui->centralwidget->setEnabled(true);
 	ui->ActionToolBar->setEnabled(true);
-
+	ui->updateBtn->setEnabled(true);
+	ui->menuOrientation->setEnabled(true);
 	ui->actionMulti_planar_view->trigger();
 	ui->actionNavigation->trigger();
 
@@ -292,10 +291,10 @@ ViewerWidget * MainWindow::getViewerWidget(unsigned int num)
 	return this->viewerWidgets[num];
 }
 
-MeasurementWidget * MainWindow::getMeasurementWidget()
-{
-	return this->measurementWidget;
-}
+//MeasurementWidget * MainWindow::getMeasurementWidget()
+//{
+//	return this->measurementWidget;
+//}
 
 QMenu * MainWindow::getSelectImgMenu(unsigned int i)
 {

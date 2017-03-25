@@ -28,6 +28,10 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+    <normaloff>:/icons/IADE_Analyzer ICON.png</normaloff>:/icons/IADE_Analyzer ICON.png</iconset>
+  </property>
   <property name="dockOptions">
    <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks|QMainWindow::VerticalTabs</set>
   </property>
@@ -140,37 +144,6 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
-   <widget class="QMenu" name="menuView">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="title">
-     <string>&amp;View</string>
-    </property>
-    <widget class="QMenu" name="menuDisplay">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="title">
-      <string>Display</string>
-     </property>
-     <addaction name="actionImage1"/>
-     <addaction name="actionImage2"/>
-     <addaction name="actionImage3"/>
-     <addaction name="actionImage4"/>
-     <addaction name="actionFourViews"/>
-     <addaction name="actionRestore_docking"/>
-    </widget>
-    <widget class="QMenu" name="menuOrientation">
-     <property name="title">
-      <string>View Mode</string>
-     </property>
-     <addaction name="actionAll_axial_view"/>
-     <addaction name="actionMulti_planar_view"/>
-    </widget>
-    <addaction name="menuDisplay"/>
-    <addaction name="menuOrientation"/>
-   </widget>
    <widget class="QMenu" name="menuImage">
     <property name="enabled">
      <bool>false</bool>
@@ -213,6 +186,22 @@
     <addaction name="actionFind_maximum_radius"/>
     <addaction name="actionPerpendicular_measurement"/>
     <addaction name="actionCurved_navigation"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <widget class="QMenu" name="menuOrientation">
+     <property name="title">
+      <string>View Mode</string>
+     </property>
+     <addaction name="actionAll_axial_view"/>
+     <addaction name="actionMulti_planar_view"/>
+    </widget>
+    <addaction name="menuOrientation"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuImage"/>

@@ -51,8 +51,8 @@ vtkPolyData * IADEOverlay::getCenterLine()
 
 void IADEOverlay::updatedOverlay()
 {
-	updateMeasurement3D();
-	updateMeasurement2D(currentSlice);
+	//updateMeasurement3D();
+	//updateMeasurement2D(currentSlice);
 	Overlay::updatedOverlay();
 }
 

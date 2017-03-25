@@ -24,13 +24,6 @@ QInteractorStyleWindowLevel::~QInteractorStyleWindowLevel()
 	QDELETE_UI();
 }
 
-void QInteractorStyleWindowLevel::uniqueInvoke(bool flag)
-{
-	QAbstractNavigation::uniqueInvoke(flag);
-	SetWindowByViewer(GetWindow());
-	SetLevelByViewer(GetLevel());
-}
-
 void QInteractorStyleWindowLevel::SetWindowByViewer(double window)
 {
 	InteractorStyleWindowLevel::SetWindowByViewer(window);
@@ -65,18 +58,6 @@ void QInteractorStyleWindowLevel::initialization()
 	ui->gridLayout->addWidget(m_pushButtonReset, numOfMyself, 5);
 
 
-	//QSpinBox* spinBoxWindowLevel[] = {
-	//	ui->spinBoxWindowLevel0,
-	//	ui->spinBoxWindowLevel1,
-	//	ui->spinBoxWindowLevel2
-	//};
-	//QSpinBox* spinBoxWindowWidth[] = {
-	//	ui->spinBoxWindowWidth0,
-	//	ui->spinBoxWindowWidth1,
-	//	ui->spinBoxWindowWidth2
-	//};
-	//m_spinBoxWindowLevel = spinBoxWindowLevel[numOfMyself - 1];
-	//m_spinBoxWindowWidth = spinBoxWindowWidth[numOfMyself - 1];
 	connect(m_pushButtonReset, SIGNAL(clicked()),
 		this, SLOT(ResetWindowLevel()), Qt::UniqueConnection);
 	connect(m_spinBoxWindowLevel, SIGNAL(valueChanged(int)),
@@ -97,12 +78,16 @@ void QInteractorStyleWindowLevel::SetCustomEnabled(bool flag)
 {
 	InteractorStyleWindowLevel::SetCustomEnabled(flag);
 	uniqueInvoke(flag);
-	double* range = GetImageViewer()->GetInput()->GetScalarRange();
-	m_label->setText(GetImageViewer()->GetWindowName());
-	m_spinBoxWindowLevel->setRange(range[0], range[1]);
-	m_sliderWindowLevel->setRange(range[0], range[1]);
-	m_spinBoxWindowWidth->setRange(range[0], range[1]);
-	m_sliderWindowWidth->setRange(range[0], range[1]);
+	if (flag) {
+		double* range = GetImageViewer()->GetInput()->GetScalarRange();
+		m_label->setText(GetImageViewer()->GetWindowName());
+		m_spinBoxWindowLevel->setRange(range[0], range[1]);
+		m_sliderWindowLevel->setRange(range[0], range[1]);
+		m_spinBoxWindowWidth->setRange(range[0], range[1]);
+		m_sliderWindowWidth->setRange(range[0], range[1]);
+		m_spinBoxWindowWidth->setValue(GetWindow());
+		m_spinBoxWindowLevel->setValue(GetLevel());
+	}
 }
 
 void QInteractorStyleWindowLevel::SetCurrentFocalPointWithImageCoordinate(int i, int j, int k)

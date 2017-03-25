@@ -35,7 +35,7 @@ private slots:
 
 	void slotIOManagerToImageManager();
 	void slotOverlayToImageManager();
-	void slotUpdateMeasurements();
+	//void slotUpdateMeasurements();
 	// Image interactorstyle
 	void slotNavigation();
 	void slotWindowLevel();

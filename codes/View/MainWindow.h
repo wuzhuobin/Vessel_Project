@@ -101,7 +101,7 @@ private:
 
 	ModuleWidget* moduleWiget = nullptr;
 
-	MeasurementWidget* measurementWidget = nullptr;
+	//MeasurementWidget* measurementWidget = nullptr;
 
 	//QMainWindow* centralWidget = nullptr;
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>295</width>
+    <width>299</width>
     <height>671</height>
    </rect>
   </property>
@@ -62,29 +62,6 @@
        <number>7</number>
       </property>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_26">
-        <property name="spacing">
-         <number>7</number>
-        </property>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_17">
-          <item>
-           <widget class="QLabel" name="label_40">
-            <property name="font">
-             <font>
-              <family>Arial</family>
-             </font>
-            </property>
-            <property name="text">
-             <string>Step 1/5</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </item>
-      <item>
        <widget class="QLabel" name="label_11">
         <property name="text">
          <string>To be continued</string>
@@ -100,13 +77,13 @@
    <item>
     <widget class="QGroupBox" name="groupBox_4">
      <property name="title">
-      <string>Axial Reconstruction</string>
+      <string>Tubular  VOI</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QLabel" name="label_60">
         <property name="text">
-         <string>Way Point List</string>
+         <string>Waypoint List</string>
         </property>
        </widget>
       </item>
@@ -153,23 +130,13 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_33">
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <item>
          <widget class="QPushButton" name="dropSeedPushButton">
           <property name="text">
-           <string>Drop Seed</string>
+           <string>Drop waypoint</string>
           </property>
          </widget>
         </item>
@@ -194,7 +161,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Delete Seed</string>
+           <string>Delete waypoint</string>
           </property>
          </widget>
         </item>
@@ -343,8 +310,6 @@
      <zorder>label_60</zorder>
      <zorder>line_2</zorder>
      <zorder>label_6</zorder>
-     <zorder>pushButtonResetVOI</zorder>
-     <zorder>pushButtonExtractVOI</zorder>
     </widget>
    </item>
    <item>

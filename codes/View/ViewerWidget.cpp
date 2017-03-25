@@ -9,11 +9,19 @@ ViewerWidget::ViewerWidget(QWidget * parent)
 	setWidget(new QWidget(this));
 	ui = new Ui::ViewerWidget;
 	ui->setupUi(widget());
-	setFeatures(DockWidgetFloatable | DockWidgetMovable);
-	setAllowedAreas(Qt::AllDockWidgetAreas);
+	//setFeatures(DockWidgetFloatable | DockWidgetMovable);
+	setFeatures(NoDockWidgetFeatures);
+	setAllowedAreas(Qt::NoDockWidgetArea);
+	//setAllowedAreas(Qt::AllDockWidgetAreas);
 
 	connect(ui->pushButtonMaximum, SIGNAL(toggled(bool)),
 		this, SLOT(showMaximized(bool)));
+
+	ui->pushButtonAxialView->setVisible(false);
+	ui->pushButtonSigitalView->setVisible(false);
+	ui->pushButtonCoronalView->setVisible(false);
+	ui->verticalScrollBar->setVisible(false);
+	ui->pushButtonMaximum->setVisible(false);
 	//connect(ui->pushButtonRestore, SIGNAL(toggled(bool)),
 	//	this, SLOT(showNormal(bool)));
 }

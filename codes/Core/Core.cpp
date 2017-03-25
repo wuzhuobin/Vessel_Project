@@ -276,15 +276,15 @@ void Core::slotOverlayToImageManager()
 	//ioManager.clearOverlay();
 }
 
-void Core::slotUpdateMeasurements()
-{
-	//IADEOverlay* overlay = qobject_cast<IADEOverlay*>(sender());
-	IADEOverlay* overlay = dynamic_cast<IADEOverlay*>(sender());
-	if (overlay && overlay->Measurements2D.contains(overlay->getCurrentSlice())) {
-		mainWindow.getMeasurementWidget()->slotUpdate2DMeasurements(overlay->Measurements2D[overlay->getCurrentSlice()].data());
-		mainWindow.getMeasurementWidget()->slotUpdate3DMeasurements(overlay->Measurements3D);
-	}
-}
+//void Core::slotUpdateMeasurements()
+//{
+//	//IADEOverlay* overlay = qobject_cast<IADEOverlay*>(sender());
+//	IADEOverlay* overlay = dynamic_cast<IADEOverlay*>(sender());
+//	if (overlay && overlay->Measurements2D.contains(overlay->getCurrentSlice())) {
+//		mainWindow.getMeasurementWidget()->slotUpdate2DMeasurements(overlay->Measurements2D[overlay->getCurrentSlice()].data());
+//		mainWindow.getMeasurementWidget()->slotUpdate3DMeasurements(overlay->Measurements3D);
+//	}
+//}
 
 
 void Core::slotNavigation()
@@ -459,14 +459,14 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 		imageViewers[viewer]->SetInputData(imageManager.getCurvedImage(currentImage[viewer]));
 		// Measurement 
 		// tmp fix
-		disconnect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-			imageManager.getIADEOverlay(), SLOT(setCurrentSlice(int)));
-		disconnect(imageManager.getIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
-			this, SLOT(slotUpdateMeasurements()));
-		connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-			imageManager.getCurvedIADEOverlay(), SLOT(setCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
-		connect(imageManager.getCurvedIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
-			this, SLOT(slotUpdateMeasurements()), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+		//disconnect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
+		//	imageManager.getIADEOverlay(), SLOT(setCurrentSlice(int)));
+		//disconnect(imageManager.getIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
+		//	this, SLOT(slotUpdateMeasurements()));
+		//connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
+		//	imageManager.getCurvedIADEOverlay(), SLOT(setCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+		//connect(imageManager.getCurvedIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
+		//	this, SLOT(slotUpdateMeasurements()), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
 	}
 	else
 	{
@@ -474,14 +474,14 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 		imageViewers[viewer]->SetInputData(imageManager.getImage(currentImage[viewer]));
 		// Measurement 
 		// tmp fix
-		disconnect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-			imageManager.getCurvedIADEOverlay(), SLOT(setCurrentSlice(int)));
-		disconnect(imageManager.getCurvedIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
-			this, SLOT(slotUpdateMeasurements()));
-		connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-			imageManager.getIADEOverlay(), SLOT(setCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
-		connect(imageManager.getIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
-			this, SLOT(slotUpdateMeasurements()), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+		//disconnect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
+		//	imageManager.getCurvedIADEOverlay(), SLOT(setCurrentSlice(int)));
+		//disconnect(imageManager.getCurvedIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
+		//	this, SLOT(slotUpdateMeasurements()));
+		//connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
+		//	imageManager.getIADEOverlay(), SLOT(setCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+		//connect(imageManager.getIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
+		//	this, SLOT(slotUpdateMeasurements()), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
 
 	}
 	imageViewers[viewer]->SetSliceOrientation(currentSliceOrientation[viewer]);

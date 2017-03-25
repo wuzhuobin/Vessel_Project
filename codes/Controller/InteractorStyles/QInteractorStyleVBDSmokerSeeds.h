@@ -31,6 +31,7 @@ public slots:
 
 	void slotBasilarArteryBifurcationLocationCurrentSlice();
 	void slotPonsCentralSectionLocationCurrentSlice();
+	void slotUpdateBasilarArteryMinimumDiameter();
 	void SetCustomEnabled(bool flag);
 	void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
 

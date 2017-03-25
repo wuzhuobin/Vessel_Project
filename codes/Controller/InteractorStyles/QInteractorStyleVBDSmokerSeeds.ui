@@ -343,10 +343,6 @@ location</string>
     </spacer>
    </item>
   </layout>
-  <zorder>label_39</zorder>
-  <zorder>frame_10</zorder>
-  <zorder>groupBox_4</zorder>
-  <zorder>verticalSpacer</zorder>
  </widget>
  <resources/>
  <connections/>
