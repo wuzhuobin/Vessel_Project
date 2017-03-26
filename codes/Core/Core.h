@@ -39,12 +39,14 @@ private slots:
 	// Image interactorstyle
 	void slotNavigation();
 	void slotWindowLevel();
+	void slotWindowlevelThreshold();
 	void slotPaintBrush();
 	void slotTesting();
 	void slotSeedsPlacer();
 	void slotVOI();
 	void slotTubularVOI();
 	void slotRuler();
+	void slotMaximumWallThickness();
 
 	// Surface interactorStyle
 	void slotTrackballCamera();

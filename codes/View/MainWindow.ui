@@ -232,9 +232,12 @@
     <addaction name="actionTesting"/>
     <addaction name="actionNavigation"/>
     <addaction name="actionWindow_level"/>
+    <addaction name="actionWindow_level_threshold"/>
     <addaction name="acitonVOI_selection"/>
     <addaction name="actionTubular_VOI"/>
     <addaction name="actionPaint_brush"/>
+    <addaction name="actionMaximum_wall_thickness"/>
+    <addaction name="actionDistance_measure"/>
     <addaction name="actionSeeds_placer"/>
    </widget>
    <widget class="QMenu" name="menuDiagnosis">
@@ -244,9 +247,14 @@
     <property name="title">
      <string>Diagnosis</string>
     </property>
+    <widget class="QMenu" name="menuVBD_diagnosis">
+     <property name="title">
+      <string>VBD diagnosis</string>
+     </property>
+     <addaction name="actionVBD_Smoker"/>
+    </widget>
     <addaction name="actionICDA_diagnosis"/>
-    <addaction name="actionVBD_diagnosis"/>
-    <addaction name="actionVBD_Smoker"/>
+    <addaction name="menuVBD_diagnosis"/>
    </widget>
    <widget class="QMenu" name="menuSurface">
     <property name="title">
@@ -790,14 +798,13 @@
     <string>Ubogo standard</string>
    </property>
   </action>
-  <action name="actionVBD_diagnosis">
-   <property name="text">
-    <string>VBD diagnosis</string>
-   </property>
-  </action>
   <action name="actionVBD_Smoker">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/cigarette-with-smoke.png</normaloff>:/icons/cigarette-with-smoke.png</iconset>
    </property>
    <property name="text">
     <string>VBD Smoker</string>
@@ -931,6 +938,36 @@
    </property>
    <property name="toolTip">
     <string>Way point centerline</string>
+   </property>
+  </action>
+  <action name="actionMaximum_wall_thickness">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/Ruler.png</normaloff>:/icons/Ruler.png</iconset>
+   </property>
+   <property name="text">
+    <string>Maximum wall thickness</string>
+   </property>
+   <property name="toolTip">
+    <string>Maximum wall thickness</string>
+   </property>
+  </action>
+  <action name="actionWindow_level_threshold">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/WindowLevel.png</normaloff>:/icons/WindowLevel.png</iconset>
+   </property>
+   <property name="text">
+    <string>Window level threshold</string>
+   </property>
+   <property name="toolTip">
+    <string>Window level threshold</string>
    </property>
   </action>
  </widget>

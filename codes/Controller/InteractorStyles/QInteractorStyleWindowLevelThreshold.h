@@ -1,5 +1,5 @@
-﻿#ifndef __QINTERACTOR_STYLE_WINDOW_LEVEL_H__
-#define __QINTERACTOR_STYLE_WINDOW_LEVEL_H__
+﻿#ifndef __QINTERACTOR_STYLE_WINDOW_LEVEL_THRESHOLD_H__
+#define __QINTERACTOR_STYLE_WINDOW_LEVEL_THRESHOLD_H__
 /**
 * @file	QInteractorStyleWindowLevelThreshold.h
 * @brief	whatever
@@ -103,4 +103,4 @@ private:
 };
 
 
-#endif // !__QINTERACTOR_STYLE_WINDOW_LEVEL_H__
+#endif // !__QINTERACTOR_STYLE_WINDOW_LEVEL_THRESHOLD_H__

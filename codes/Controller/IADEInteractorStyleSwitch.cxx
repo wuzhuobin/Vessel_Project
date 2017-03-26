@@ -28,8 +28,10 @@ IADEInteractorStyleSwitch::IADEInteractorStyleSwitch()
 	// of the ui
 	Navigation = QInteractorStyleNavigation::New();
 	allStyles.push_back(Navigation);
-	WindowLevel = QInteractorStyleWindowLevelThreshold::New();
+	WindowLevel = QInteractorStyleWindowLevel::New();
 	allStyles.push_back(WindowLevel);
+	WindowLevelThreshold = QInteractorStyleWindowLevelThreshold::New();
+	allStyles.push_back(WindowLevelThreshold);
 	//PolygonDraw = QInteractorStyleVesselSegmentation::New();
 	LumenSeedsPlacer = QInteractorStyleLumenSeedsPlacer::New();
 	allStyles.push_back(LumenSeedsPlacer);
@@ -39,9 +41,10 @@ IADEInteractorStyleSwitch::IADEInteractorStyleSwitch()
 	allStyles.push_back(VOI);
 	TubularVOI = QInteractorStyleTubularVOI::New();
 	allStyles.push_back(TubularVOI);
-	Ruler = QInteractorStyleMaximumWallThickness::New();
+	Ruler = QInteractorStyleRuler::New();
 	allStyles.push_back(Ruler);
-
+	MaximumWallThickness = QInteractorStyleMaximumWallThickness::New();
+	allStyles.push_back(MaximumWallThickness);
 	// IADE specified
 	VBDSmoker = QInteractorStyleVBDSmokerSeeds::New();
 	allStyles.push_back(VBDSmoker);

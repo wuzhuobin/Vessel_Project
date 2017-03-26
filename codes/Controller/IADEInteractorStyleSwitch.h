@@ -17,6 +17,7 @@ Copyright (C) 2016
 #include "InteractorStyleSwitch.h"
 
 #include "QInteractorStyleNavigation.h"
+#include "QInteractorStyleWindowLevel.h"
 #include "QInteractorStyleWindowLevelThreshold.h"
 #include "QInteractorStylePaintBrush.h"
 #include "QInteractorStyleVOI.h"
@@ -24,6 +25,7 @@ Copyright (C) 2016
 #include "QInteractorStyleVBDSmokerSeeds.h"
 #include "QInteractorStyleTubularVOI.h"
 #include "QInteractorStyleMaximumWallThickness.h"
+#include "QInteractorStyleRuler.h"
 
 class IADEInteractorStyleSwitch : public InteractorStyleSwitch
 {
@@ -31,10 +33,13 @@ public:
 	static IADEInteractorStyleSwitch* New();
 	vtkTypeMacro(IADEInteractorStyleSwitch, InteractorStyleSwitch);
 
-
-	vtkGetMacro(WindowLevel, QInteractorStyleWindowLevelThreshold*);
+	vtkGetMacro(WindowLevel, QInteractorStyleWindowLevel*);
 	SetInteractorStyleMacro(WindowLevel);
 	CurrentStyleMacro(WindowLevel);
+
+	vtkGetMacro(WindowLevelThreshold, QInteractorStyleWindowLevelThreshold*);
+	SetInteractorStyleMacro(WindowLevelThreshold);
+	CurrentStyleMacro(WindowLevelThreshold);
 
 	vtkGetMacro(Navigation, QInteractorStyleNavigation*);
 	SetInteractorStyleMacro(Navigation);
@@ -56,9 +61,13 @@ public:
 	SetInteractorStyleMacro(TubularVOI);
 	CurrentStyleMacro(TubularVOI);
 
-	vtkGetMacro(Ruler, QInteractorStyleMaximumWallThickness*);
+	vtkGetMacro(Ruler, QInteractorStyleRuler*);
 	SetInteractorStyleMacro(Ruler);
 	CurrentStyleMacro(Ruler);
+
+	vtkGetMacro(MaximumWallThickness, QInteractorStyleMaximumWallThickness*);
+	SetInteractorStyleMacro(MaximumWallThickness);
+	CurrentStyleMacro(MaximumWallThickness);
 
 	vtkGetMacro(VBDSmoker, QInteractorStyleVBDSmokerSeeds*);
 	SetInteractorStyleMacro(VBDSmoker);
@@ -68,19 +77,20 @@ protected:
 	IADEInteractorStyleSwitch();
 
 	QInteractorStyleNavigation*	Navigation;
-	QInteractorStyleWindowLevelThreshold* WindowLevel;
+	QInteractorStyleWindowLevel* WindowLevel;
+	QInteractorStyleWindowLevelThreshold* WindowLevelThreshold;
 	//QInteractorStyleVesselSegmentation* PolygonDraw;
 	QInteractorStyleLumenSeedsPlacer* LumenSeedsPlacer;
 	QInteractorStylePaintBrush*	PaintBrush;
 	QInteractorStyleVOI* VOI;
 	QInteractorStyleTubularVOI* TubularVOI;
-	QInteractorStyleMaximumWallThickness* Ruler;
-
+	QInteractorStyleRuler* Ruler;
+	QInteractorStyleMaximumWallThickness* MaximumWallThickness;
 
 	// IADE specified 
 	QInteractorStyleVBDSmokerSeeds* VBDSmoker;
 
-	//QInteractorStyleMaximumWallThickness* Ruler;
+	//QInteractorStyleRuler* Ruler;
 };
 
 
