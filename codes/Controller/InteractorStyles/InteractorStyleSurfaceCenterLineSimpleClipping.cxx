@@ -32,100 +32,15 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::SetCustomEnabled(bool flag)
 {
 	AbstractSurfaceCenterLine::SetCustomEnabled(flag);
 	if (flag) {
-		vtkSmartPointer<vtkImageData> reClipButton =
-			vtkSmartPointer<vtkImageData>::New();
-		vtkSmartPointer<vtkImageData> ChangeSourceButton =
-			vtkSmartPointer<vtkImageData>::New();
-
-		vtkSmartPointer<vtkTextProperty> textProperty = 
-			vtkSmartPointer<vtkTextProperty>::New();
-		textProperty->SetColor(1.0, 1.0, 1.0); 
-		textProperty->SetFontSize(25);
-
-		vtkSmartPointer<vtkFreeTypeStringToImage> freeTypeString =
-			vtkSmartPointer<vtkFreeTypeStringToImage>::New();
-		freeTypeString->RenderString(textProperty, "Re-generate", 30, reClipButton);
-		freeTypeString->RenderString(textProperty, "Change Source", 30, ChangeSourceButton);
-
-		//vtkSmartPointer<vtkFreeTypeUtilities> freeType = vtkSmartPointer<vtkFreeTypeUtilities>::New();
-		////freeType->RenderString(textProperty, "Re-generate", reClipButton);
-		////freeType->RenderString(textProperty, "Change Source", ChangeSourceButton);
-
-		vtkSmartPointer<vtkCallbackCommand> reClipCallback =
-			vtkSmartPointer<vtkCallbackCommand>::New();
-		reClipCallback->SetClientData(this);
-		reClipCallback->SetCallback([](vtkObject*, unsigned long, void* clientData, void* calldata) {
-			InteractorStyleSurfaceCenterLineSimpleClipping* self =
-				reinterpret_cast<InteractorStyleSurfaceCenterLineSimpleClipping*>(clientData);
-			self->CreateCenterLine(true);
-		});
-
-
-
-		double bds1[6] = { 
-			0, 
-			reClipButton->GetExtent()[1], 
-			15, 
-			15 + reClipButton->GetExtent()[3], 
-			0, 
-			0 };
-
-		m_reClipButtonRep = vtkSmartPointer<vtkTexturedButtonRepresentation2D>::New();
-		m_reClipButtonRep->GetProperty()->SetOpacity(1);
-		m_reClipButtonRep->SetNumberOfStates(1);
-		m_reClipButtonRep->SetButtonTexture(0, reClipButton);
-		m_reClipButtonRep->SetPlaceFactor(1);
-		m_reClipButtonRep->PlaceWidget(bds1);
-
-		m_reClipButtonWidget = vtkSmartPointer<vtkButtonWidget>::New();
-		m_reClipButtonWidget->SetRepresentation(m_reClipButtonRep);
 		m_reClipButtonWidget->SetInteractor(this->Interactor);
-		m_reClipButtonWidget->AddObserver(vtkCommand::StateChangedEvent, reClipCallback);
-		m_reClipButtonWidget->EnabledOn();
-
-
-		vtkSmartPointer<vtkCallbackCommand> changeSourceCallback =
-			vtkSmartPointer<vtkCallbackCommand>::New();
-		changeSourceCallback->SetClientData(this);
-		changeSourceCallback->SetCallback([](vtkObject*, unsigned long, void* clientData, void* calldata) {
-			InteractorStyleSurfaceCenterLineSimpleClipping* self =
-				reinterpret_cast<InteractorStyleSurfaceCenterLineSimpleClipping*>(clientData);
-			self->CreateCenterLine(false);
-		});
-
-		double bds2[6] = {
-			0,
-			ChangeSourceButton->GetExtent()[1],
-			30 + reClipButton->GetExtent()[3],
-			30 + reClipButton->GetExtent()[3] + ChangeSourceButton->GetExtent()[3],
-			0,
-			0 };
-		m_ChangeSourceButtonRep = vtkSmartPointer<vtkTexturedButtonRepresentation2D>::New();
-		m_ChangeSourceButtonRep->GetProperty()->SetOpacity(1);
-		m_ChangeSourceButtonRep->SetNumberOfStates(1);
-		m_ChangeSourceButtonRep->SetButtonTexture(0, ChangeSourceButton);
-		m_ChangeSourceButtonRep->SetPlaceFactor(1);
-		m_ChangeSourceButtonRep->PlaceWidget(bds2);
-
-
-		m_ChangeSourceButtonWidget = vtkSmartPointer<vtkButtonWidget>::New();
-		m_ChangeSourceButtonWidget->SetRepresentation(m_ChangeSourceButtonRep);
 		m_ChangeSourceButtonWidget->SetInteractor(this->Interactor);
-		m_ChangeSourceButtonWidget->AddObserver(vtkCommand::StateChangedEvent, changeSourceCallback);
-		m_ChangeSourceButtonWidget->EnabledOn();
 	}
 	else {
-		if (m_reClipButtonWidget) {
-			m_reClipButtonWidget->EnabledOff();
-		}
-		m_reClipButtonWidget = nullptr;
-		m_reClipButtonRep = nullptr;
-		if (m_ChangeSourceButtonWidget) {
-			m_ChangeSourceButtonWidget->EnabledOff();
-		}
-		m_ChangeSourceButtonWidget = nullptr;
-		m_ChangeSourceButtonRep = nullptr;
+		//m_reClipButtonWidget->SetInteractor(this->Interactor);
+		//m_ChangeSourceButtonWidget->SetInteractor(this->Interactor);
 	}
+	m_reClipButtonWidget->SetEnabled(flag);
+	m_ChangeSourceButtonWidget->SetEnabled(flag);
 }
 
 void InteractorStyleSurfaceCenterLineSimpleClipping::SetCenterlineOrientation(int Orientation)
@@ -161,7 +76,89 @@ int InteractorStyleSurfaceCenterLineSimpleClipping::GetLumenDistance()
 InteractorStyleSurfaceCenterLineSimpleClipping::InteractorStyleSurfaceCenterLineSimpleClipping()
 {
 	m_ClipAndCapSurface = vtkSmartPointer<vtkPolyData>::New();
-	m_capCenterIds = vtkSmartPointer<vtkIdList>::New();
+
+	vtkSmartPointer<vtkImageData> reClipButton =
+		vtkSmartPointer<vtkImageData>::New();
+	vtkSmartPointer<vtkImageData> ChangeSourceButton =
+		vtkSmartPointer<vtkImageData>::New();
+
+	vtkSmartPointer<vtkTextProperty> textProperty =
+		vtkSmartPointer<vtkTextProperty>::New();
+	textProperty->SetColor(1.0, 1.0, 1.0);
+	textProperty->SetFontSize(25);
+
+	vtkSmartPointer<vtkFreeTypeStringToImage> freeTypeString =
+		vtkSmartPointer<vtkFreeTypeStringToImage>::New();
+	freeTypeString->RenderString(textProperty, "Re-generate", 30, reClipButton);
+	freeTypeString->RenderString(textProperty, "Change Source", 30, ChangeSourceButton);
+
+	//vtkSmartPointer<vtkFreeTypeUtilities> freeType = vtkSmartPointer<vtkFreeTypeUtilities>::New();
+	////freeType->RenderString(textProperty, "Re-generate", reClipButton);
+	////freeType->RenderString(textProperty, "Change Source", ChangeSourceButton);
+
+	vtkSmartPointer<vtkCallbackCommand> reClipCallback =
+		vtkSmartPointer<vtkCallbackCommand>::New();
+	reClipCallback->SetClientData(this);
+	reClipCallback->SetCallback([](vtkObject*, unsigned long, void* clientData, void* calldata) {
+		InteractorStyleSurfaceCenterLineSimpleClipping* self =
+			reinterpret_cast<InteractorStyleSurfaceCenterLineSimpleClipping*>(clientData);
+		self->CreateCenterLine(true);
+	});
+
+
+
+	double bds1[6] = {
+		0,
+		reClipButton->GetExtent()[1],
+		15,
+		15 + reClipButton->GetExtent()[3],
+		0,
+		0 };
+
+	m_reClipButtonRep = vtkSmartPointer<vtkTexturedButtonRepresentation2D>::New();
+	m_reClipButtonRep->GetProperty()->SetOpacity(1);
+	m_reClipButtonRep->SetNumberOfStates(1);
+	m_reClipButtonRep->SetButtonTexture(0, reClipButton);
+	m_reClipButtonRep->SetPlaceFactor(1);
+	m_reClipButtonRep->PlaceWidget(bds1);
+
+	m_reClipButtonWidget = vtkSmartPointer<vtkButtonWidget>::New();
+	m_reClipButtonWidget->SetRepresentation(m_reClipButtonRep);
+	m_reClipButtonWidget->AddObserver(vtkCommand::StateChangedEvent, reClipCallback);
+
+
+
+	vtkSmartPointer<vtkCallbackCommand> changeSourceCallback =
+		vtkSmartPointer<vtkCallbackCommand>::New();
+	changeSourceCallback->SetClientData(this);
+	changeSourceCallback->SetCallback([](vtkObject*, unsigned long, void* clientData, void* calldata) {
+		InteractorStyleSurfaceCenterLineSimpleClipping* self =
+			reinterpret_cast<InteractorStyleSurfaceCenterLineSimpleClipping*>(clientData);
+		self->CreateCenterLine(false);
+	});
+
+	double bds2[6] = {
+		0,
+		ChangeSourceButton->GetExtent()[1],
+		30 + reClipButton->GetExtent()[3],
+		30 + reClipButton->GetExtent()[3] + ChangeSourceButton->GetExtent()[3],
+		0,
+		0 };
+	m_ChangeSourceButtonRep = vtkSmartPointer<vtkTexturedButtonRepresentation2D>::New();
+	m_ChangeSourceButtonRep->GetProperty()->SetOpacity(1);
+	m_ChangeSourceButtonRep->SetNumberOfStates(1);
+	m_ChangeSourceButtonRep->SetButtonTexture(0, ChangeSourceButton);
+	m_ChangeSourceButtonRep->SetPlaceFactor(1);
+	m_ChangeSourceButtonRep->PlaceWidget(bds2);
+
+
+	m_ChangeSourceButtonWidget = vtkSmartPointer<vtkButtonWidget>::New();
+	m_ChangeSourceButtonWidget->SetRepresentation(m_ChangeSourceButtonRep);
+	m_ChangeSourceButtonWidget->AddObserver(vtkCommand::StateChangedEvent, changeSourceCallback);
+
+
+
+	//m_capCenterIds = vtkSmartPointer<vtkIdList>::New();
 }
 
 InteractorStyleSurfaceCenterLineSimpleClipping::~InteractorStyleSurfaceCenterLineSimpleClipping()
@@ -241,6 +238,13 @@ bool InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(bool reCli
 
 void InteractorStyleSurfaceCenterLineSimpleClipping::ClipAndCap()
 {
+	if (m_centerLineOrientation != CENTER_LINE_ORIENTATION_XY) {
+		m_centerLineOrientation++;
+	}
+	else
+	{
+		m_centerLineOrientation = CENTER_LINE_ORIENTATION_YZ;
+	}
 	double bounds[6];
 	memcpy(bounds, GetSurfaceViewer()->GetSurfaceActor()->GetBounds(), sizeof(bounds));
 	bounds[m_centerLineOrientation * 2] = bounds[m_centerLineOrientation * 2]
@@ -291,13 +295,6 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress()
 		//VisualizeCenterLine(m_centerLine);
 	}
 	else if (key == "Tab") {
-		if (m_centerLineOrientation != CENTER_LINE_ORIENTATION_XY) {
-			m_centerLineOrientation++;
-		}
-		else
-		{
-			m_centerLineOrientation = CENTER_LINE_ORIENTATION_YZ;
-		}
 		CreateCenterLine(true);
 		//VisualizeCenterLine(m_centerLine);
 	}

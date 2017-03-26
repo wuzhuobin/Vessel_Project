@@ -13,14 +13,15 @@ void AbstractSurfaceCenterLine::SetCustomEnabled(bool flag)
 {
 	AbstractInteractorStyleSurface::SetCustomEnabled(flag);
 	if (m_customFlag) {
-
+		// only create centerline when there is no centerline, if there is a 
+		// centerline, it won't create
 		if (!GetCenterlineSurfaceViewer()->GetCenterline() ||
 			GetCenterlineSurfaceViewer()->GetCenterline()->GetNumberOfPoints() < 1) {
 			CreateCenterLine();
 			
 		}
-
 	}
+	GetCenterlineSurfaceViewer()->GetCenterlineActor()->SetVisibility(m_customFlag);
 
 
 }

@@ -76,8 +76,6 @@ protected:
 	 */
 	virtual ~QInteractorStyleWindowLevel();
 
-	virtual void uniqueInvoke(bool flag);
-
 private:
 	void initialization();
 	///< the pointer of the navigation ui.

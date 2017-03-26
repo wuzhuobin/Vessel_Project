@@ -220,6 +220,16 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::InitializeHandleWidgets()
 //	m_surfaceViewer->GetRenderer()->AddActor(m_imageActor);
 //}
 
+bool InteractorStyleSurfaceCenterLineCurvedNavigation::CreateCenterLine(bool reClipSurface)
+{
+	bool flag = InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(reClipSurface);
+	if (flag) {
+		CustomEnabledOff();
+		CustomEnabledOn();
+	}
+	return flag;
+}
+
 void InteractorStyleSurfaceCenterLineCurvedNavigation::Update2DViewers()
 {
 	const double* worldPos = m_handleWidgets[0]->GetHandleRepresentation()->GetWorldPosition();
@@ -286,72 +296,3 @@ void InteractorStyleSurfaceCenterLineCurvedNavigation::UpdateRadiusLabel()
 	//m_measurementText->SetWidth(size[0]);
 	//m_measurementText->SetHeight(size[1]);
 }
-
-//void InteractorStyleSurfaceCenterLineCurvedNavigation::FindMaximumRadius()
-//{
-//	vtkIdType seed1 = m_splinePointLocator->FindClosestPoint(
-//		m_handleWidgets[0]->GetHandleRepresentation()->GetWorldPosition());
-//	vtkIdType seed2 = m_splinePointLocator->FindClosestPoint(
-//		m_handleWidgets[1]->GetHandleRepresentation()->GetWorldPosition());
-//	vtkSmartPointer<vtkDijkstraGraphGeodesicPathDistance> dijkstra =
-//		vtkSmartPointer<vtkDijkstraGraphGeodesicPathDistance>::New();
-//	dijkstra->SetInputData(m_triangulatedCenterLine);
-//	dijkstra->SetStartVertex(seed1);
-//	//dijkstra->SetRepelVertices(repelVertices);
-//	//dijkstra->RepelPathFromVerticesOn();
-//	dijkstra->SetEndVertex(seed2);
-//	dijkstra->StopWhenEndReachedOn();
-//	dijkstra->Update();
-//	vtkIdList* pathPointId = dijkstra->GetIdList();
-//	//vtkSmartPointer<vtkDoubleArray> radius =
-//	//	vtkSmartPointer<vtkDoubleArray>::New();
-//	//radius->SetNumberOfValues(pathPointId->GetNumberOfIds());
-//	double maxRadius = VTK_DOUBLE_MIN;
-//	double minRadius = VTK_DOUBLE_MAX;
-//	double GeodesicPathDistance = 0;
-//	vtkIdType maxRadiusId = 0;
-//	vtkIdType minRadiusId = 0;
-//	for (vtkIdType id = 0; id < pathPointId->GetNumberOfIds(); ++id) {
-//		vtkIdType _pointId = pathPointId->GetId(id);
-//		double* value = static_cast<double*>(
-//			m_triangulatedCenterLine->GetPointData()->GetArray("Radius")->GetVoidPointer(_pointId));
-//		if (*value > maxRadius) {
-//			maxRadius = *value;
-//			maxRadiusId = _pointId;
-//		}
-//		if (*value < minRadius) {
-//			minRadius = *value;
-//			minRadiusId = _pointId;
-//		}
-//		//cout << "point id = " << id << endl;
-//		//double* point = m_centerLine->GetPoint(pathPointId->GetId(id));
-//		//cout << point[0] << ' ' << point[1] << ' ' << point[2] << endl;
-//	}
-//	cout << "maximum radius " << maxRadiusId << " is " << maxRadius << endl;
-//	cout << "minimum radius " << minRadiusId << " is " << minRadius << endl;
-//	GeodesicPathDistance = dijkstra->GetGeodesicPathDistance(seed2);
-//	cout << GeodesicPathDistance << endl;
-//	char buff[100];
-//	sprintf(buff, "Maximum radius: %.2f mm\n Minimum radius: %.2f mm\n Center line length: %.2f mm", maxRadius, minRadius, GeodesicPathDistance);
-//	m_measurementText->SetInput(buff);
-//	this->m_surfaceViewer->Render();
-//}
-
-void InteractorStyleSurfaceCenterLineCurvedNavigation::OnKeyPress()
-{
-	std::string key = this->Interactor->GetKeySym();
-	cout << key << endl;
-	if (key == "Tab") {
-		InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress();
-		InitializeHandleWidgets();
-	}
-	else if (key == "space") {
-		InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress();
-		InitializeHandleWidgets();
-	}
-	else {
-		InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress();
-	}
-}
-
-
