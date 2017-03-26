@@ -45,6 +45,16 @@ void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::FindMaxiMumPerpen
 	this->m_lineWidget2->GetLineRepresentation()->GetPoint2WorldPosition(pos2);
 }
 
+bool InteractorStyleSurfaceCenterLinePerpendicularMeasurement::CreateCenterLine(bool reClipSurface)
+{
+	bool flag = InteractorStyleSurfaceCenterLineSimpleClipping::CreateCenterLine(reClipSurface);
+	if (flag) {
+		CustomEnabledOff();
+		CustomEnabledOn();
+	}
+	return flag;
+}
+
 InteractorStyleSurfaceCenterLinePerpendicularMeasurement::InteractorStyleSurfaceCenterLinePerpendicularMeasurement()
 {
 
@@ -83,25 +93,13 @@ void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::InitializeLinePer
 
 }
 
-void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::InitializeDistanceWidget()
-{
-
-}
-
 void InteractorStyleSurfaceCenterLinePerpendicularMeasurement::OnKeyPress()
 {
 	std::string key = this->Interactor->GetKeySym();
 	cout << key << endl;
 	if (key == "Return") {
+		InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress(); 
 		FindMaxiMumPerpendicularDistance();
-	}
-	else if (key == "Tab") {
-		InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress();
-		InitializeLinePerpendicularMeasurementWidget();
-	}
-	else if (key == "space") {
-		InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress();
-		InitializeLinePerpendicularMeasurementWidget();
 	}
 	else {
 		InteractorStyleSurfaceCenterLineSimpleClipping::OnKeyPress();

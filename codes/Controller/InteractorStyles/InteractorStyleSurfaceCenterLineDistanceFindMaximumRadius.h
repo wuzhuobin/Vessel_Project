@@ -22,6 +22,16 @@ public:
 	static InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius* New();
 
 	virtual void SetCustomEnabled(bool flag) override;
+	/**
+	* @override
+	* @brief	Create ceterline or re-create ceterline depending on reClipSurface flag
+	* @param	reclipSurface if true, re-clip, otherwise change source id
+	* @return	true, creat succeed, false, create failed.
+	* create or re-create, called by 2 buttons' callback and #CreateCenterline(), by
+	* invoking #CustomEnabledOff(), #CustomEnabledOn() to re-initialize widget's functions.
+	*/
+	virtual bool CreateCenterLine(bool reClipSurface) override;
+
 	virtual void FindMaximumRadius();
 
 
@@ -35,7 +45,7 @@ protected:
 	virtual void OnKeyPress() override;
 
 
-	vtkSmartPointer<vtkKdTreePointLocator> m_trianglePointLocator = nullptr;
+	vtkSmartPointer<vtkKdTreePointLocator> m_pointLocator = nullptr;
 	vtkSmartPointer<vtkHandleWidget> m_handleWidgets[NUM_OF_HANDLES] = {nullptr};
 	vtkSmartPointer<vtkPolyData> m_triangulatedCenterLine = nullptr;
 	vtkSmartPointer<vtkTextActor> m_measurementText = nullptr;

@@ -12,6 +12,8 @@ ViewerWidget::ViewerWidget(QWidget * parent)
 	//setFeatures(DockWidgetFloatable | DockWidgetMovable);
 	setFeatures(NoDockWidgetFeatures);
 	setAllowedAreas(Qt::NoDockWidgetArea);
+	setWindowFlags(Qt::MSWindowsFixedSizeDialogHint);
+
 	//setAllowedAreas(Qt::AllDockWidgetAreas);
 
 	connect(ui->pushButtonMaximum, SIGNAL(toggled(bool)),

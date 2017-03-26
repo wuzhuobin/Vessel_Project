@@ -205,6 +205,10 @@ Core::Core(QObject * parent)
 	//	mainWindow.getMeasurementWidget(), SLOT(slotUpdate2DMeasurements()));
 
 	mainWindow.show();
+	for (int i = MainWindow::NUM_OF_VIEWERS - 1; i > -1; --i) {
+		//mainWindow.getViewerWidget(i)->setMaximumSize(mainWindow.getViewerWidget(i)->size());
+		mainWindow.getViewerWidget(i)->setMinimumSize(mainWindow.getViewerWidget(i)->size());
+	}
 }
 
 Core::~Core()

@@ -23,6 +23,15 @@ public:
 	static InteractorStyleSurfaceCenterLineCurvedNavigation* New();
 
 	virtual void SetCustomEnabled(bool flag) override;
+	/**
+	* @override
+	* @brief	Create ceterline or re-create ceterline depending on reClipSurface flag
+	* @param	reclipSurface if true, re-clip, otherwise change source id
+	* @return	true, creat succeed, false, create failed.
+	* create or re-create, called by 2 buttons' callback and #CreateCenterline(), by
+	* invoking #CustomEnabledOff(), #CustomEnabledOn() to re-initialize widget's functions.
+	*/
+	virtual bool CreateCenterLine(bool reClipSurface) override;
 
 	virtual void Update2DViewers();
 
@@ -34,9 +43,6 @@ protected:
 	virtual ~InteractorStyleSurfaceCenterLineCurvedNavigation() override;
 
 	virtual void InitializeHandleWidgets();
-
-	virtual void OnKeyPress() override;
-
 
 	vtkSmartPointer<vtkKdTreePointLocator> m_splinePointLocator = nullptr;
 	vtkSmartPointer<vtkKdTreePointLocator> m_centerlinePointLocator = nullptr;

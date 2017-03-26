@@ -26,7 +26,7 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string>IADE_Analyzer</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
