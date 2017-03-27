@@ -28,7 +28,7 @@ void QInteractorStyleWindowLevel::SetWindowByViewer(double window)
 {
 	InteractorStyleWindowLevel::SetWindowByViewer(window);
 	//if (int(m_window + 0.5) != window) {
-		m_spinBoxWindowWidth->setValue(window);
+		m_spinBoxWindowWidth->setValue(window + 0.5);
 	//}
 }
 
@@ -36,7 +36,7 @@ void QInteractorStyleWindowLevel::SetLevelByViewer(double level)
 {
 	InteractorStyleWindowLevel::SetLevelByViewer(level);
 	//if (int(m_level + 0.5) != level) {
-		m_spinBoxWindowLevel->setValue(level);
+		m_spinBoxWindowLevel->setValue(level + 0.5);
 	//}
 }
 

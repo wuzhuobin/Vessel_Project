@@ -25,7 +25,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Window width</string>
+        <string>Lower threshold:</string>
        </property>
       </widget>
      </item>
@@ -38,7 +38,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Window level</string>
+        <string>Upper threshold:</string>
        </property>
       </widget>
      </item>
@@ -184,10 +184,6 @@
     </spacer>
    </item>
   </layout>
-  <zorder>layoutWidget</zorder>
-  <zorder>label_62</zorder>
-  <zorder>pushButtonThreshold</zorder>
-  <zorder>frame_4</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

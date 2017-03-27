@@ -85,12 +85,14 @@ MainWindow::MainWindow(QWidget *parent)
 	QActionGroup* actionGroupImage = new QActionGroup(this);
 	actionGroupImage->addAction(ui->actionNavigation);
 	actionGroupImage->addAction(ui->actionWindow_level);
+	actionGroupImage->addAction(ui->actionWindow_level_threshold);
 	actionGroupImage->addAction(ui->acitonVOI_selection);
 	actionGroupImage->addAction(ui->actionPaint_brush);
 	actionGroupImage->addAction(ui->actionSeeds_placer);
 	actionGroupImage->addAction(ui->actionVBD_Smoker);
 	actionGroupImage->addAction(ui->actionTubular_VOI);
 	actionGroupImage->addAction(ui->actionDistance_measure);
+	actionGroupImage->addAction(ui->actionMaximum_wall_thickness);
 	actionGroupImage->addAction(ui->actionTesting);
 	actionGroupImage->setExclusive(true);
 

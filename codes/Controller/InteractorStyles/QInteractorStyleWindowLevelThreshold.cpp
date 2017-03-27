@@ -1,4 +1,5 @@
 ﻿#include "QInteractorStyleWindowLevelThreshold.h"
+#include "QInteractorStyleWindowLevelThreshold.h"
 #include "ui_QInteractorStyleWindowLevelThreshold.h"
 #include "ui_QAbstractNavigation.h"
 #include "ImageViewer.h"
@@ -30,20 +31,12 @@ void QInteractorStyleWindowLevelThreshold::uniqueEnable()
 	UpdateTargetViewer();
 }
 
-void QInteractorStyleWindowLevelThreshold::SetWindowByViewer(double window)
+void QInteractorStyleWindowLevelThreshold::SetThresholdByViewer(int lower, int upper)
 {
-	InteractorStyleWindowLevelThreshold::SetWindowByViewer(window);
-	//if (int(m_window + 0.5) != window) {
-		m_spinBoxWindowWidth->setValue(window);
-	//}
-}
+	InteractorStyleWindowLevelThreshold::SetThresholdByViewer(lower, upper);
 
-void QInteractorStyleWindowLevelThreshold::SetLevelByViewer(double level)
-{
-	InteractorStyleWindowLevelThreshold::SetLevelByViewer(level);
-	//if (int(m_level + 0.5) != level) {
-		m_spinBoxWindowLevel->setValue(level);
-	//}
+	m_spinBoxLowerThreshold->setValue(lower);
+	m_spinBoxUpperThreshold->setValue(upper);
 }
 
 void QInteractorStyleWindowLevelThreshold::UpdateTargetViewer()
@@ -71,34 +64,34 @@ void QInteractorStyleWindowLevelThreshold::UpdateTargetViewer()
 void QInteractorStyleWindowLevelThreshold::initialization()
 {
 	m_label = new QLabel(this);
-	m_spinBoxWindowLevel = new QSpinBox(this);
-	m_spinBoxWindowWidth = new QSpinBox(this);
+	m_spinBoxUpperThreshold = new QSpinBox(this);
+	m_spinBoxLowerThreshold = new QSpinBox(this);
 	m_sliderWindowLevel = new QSlider(Qt::Horizontal, this);
 	m_sliderWindowWidth = new QSlider(Qt::Horizontal, this);
 	m_pushButtonReset = new QPushButton("Reset", this);
 
 
 	ui->gridLayout->addWidget(m_label, numOfMyself, 0);
-	ui->gridLayout->addWidget(m_spinBoxWindowWidth, numOfMyself, 1);
+	ui->gridLayout->addWidget(m_spinBoxLowerThreshold, numOfMyself, 1);
 	ui->gridLayout->addWidget(m_sliderWindowWidth, numOfMyself, 2);
-	ui->gridLayout->addWidget(m_spinBoxWindowLevel, numOfMyself, 3);
+	ui->gridLayout->addWidget(m_spinBoxUpperThreshold, numOfMyself, 3);
 	ui->gridLayout->addWidget(m_sliderWindowLevel, numOfMyself, 4);
 	ui->gridLayout->addWidget(m_pushButtonReset, numOfMyself, 5);
 
 	connect(m_pushButtonReset, SIGNAL(clicked()),
 		this, SLOT(ResetWindowLevel()), Qt::UniqueConnection);
-	connect(m_spinBoxWindowLevel, SIGNAL(valueChanged(int)),
-		this, SLOT(SetLevel(int)), Qt::UniqueConnection);
-	connect(m_spinBoxWindowWidth, SIGNAL(valueChanged(int)),
-		this, SLOT(SetWindow(int)), Qt::UniqueConnection);
-	connect(m_spinBoxWindowLevel, SIGNAL(valueChanged(int)),
+	connect(m_spinBoxUpperThreshold, SIGNAL(valueChanged(int)),
+		this, SLOT(SetUpperThreshold(int)), Qt::UniqueConnection);
+	connect(m_spinBoxLowerThreshold, SIGNAL(valueChanged(int)),
+		this, SLOT(SetLowerThreshold(int)), Qt::UniqueConnection);
+	connect(m_spinBoxUpperThreshold, SIGNAL(valueChanged(int)),
 		m_sliderWindowLevel, SLOT(setValue(int)), Qt::UniqueConnection);
-	connect(m_spinBoxWindowWidth, SIGNAL(valueChanged(int)),
+	connect(m_spinBoxLowerThreshold, SIGNAL(valueChanged(int)),
 		m_sliderWindowWidth, SLOT(setValue(int)), Qt::UniqueConnection);
 	connect(m_sliderWindowLevel, SIGNAL(valueChanged(int)),
-		m_spinBoxWindowLevel, SLOT(setValue(int)), Qt::UniqueConnection);
+		m_spinBoxUpperThreshold, SLOT(setValue(int)), Qt::UniqueConnection);
 	connect(m_sliderWindowWidth, SIGNAL(valueChanged(int)),
-		m_spinBoxWindowWidth, SLOT(setValue(int)), Qt::UniqueConnection);
+		m_spinBoxLowerThreshold, SLOT(setValue(int)), Qt::UniqueConnection);
 
 	// set brushShape
 	connect(ui->labelComboBox, SIGNAL(currentIndexChanged(int)),
@@ -118,12 +111,12 @@ void QInteractorStyleWindowLevelThreshold::SetCustomEnabled(bool flag)
 	if (flag) {
 		double* range = GetImageViewer()->GetInput()->GetScalarRange();
 		m_label->setText(GetImageViewer()->GetWindowName());
-		m_spinBoxWindowLevel->setRange(range[0], range[1]);
+		m_spinBoxUpperThreshold->setRange(range[0], range[1]);
 		m_sliderWindowLevel->setRange(range[0], range[1]);
-		m_spinBoxWindowWidth->setRange(range[0], range[1]);
+		m_spinBoxLowerThreshold->setRange(range[0], range[1]);
 		m_sliderWindowWidth->setRange(range[0], range[1]);
-		m_spinBoxWindowWidth->setValue(GetWindow());
-		m_spinBoxWindowLevel->setValue(GetLevel());
+		//m_spinBoxLowerThreshold->setValue(GetWindow());
+		//m_spinBoxUpperThreshold->setValue(GetLevel());
 	}
 }
 
@@ -133,17 +126,19 @@ void QInteractorStyleWindowLevelThreshold::SetCurrentFocalPointWithImageCoordina
 	QAbstractNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
 }
 
-void QInteractorStyleWindowLevelThreshold::SetWindow(int window)
+void QInteractorStyleWindowLevelThreshold::SetLowerThreshold(int lower)
 {
-	if (int(GetWindow() + 0.5) != window) {
-		InteractorStyleWindowLevelThreshold::SetWindow(window);
+	if (int(GetLevel() - GetWindow()*0.5 + 0.5) != lower) {
+		//SetLowerThreshold(lower);
+		SetThreshold(lower, m_spinBoxUpperThreshold->value());
 	}
 }
 
-void QInteractorStyleWindowLevelThreshold::SetLevel(int level)
+void QInteractorStyleWindowLevelThreshold::SetUpperThreshold(int upper)
 {
-	if (int(GetLevel() + 0.5) != level) {
-		InteractorStyleWindowLevelThreshold::SetLevel(level);
+	if (int(GetLevel() + GetWindow()*0.5 + 0.5) != upper) {
+		SetThreshold(m_spinBoxLowerThreshold->value(), upper);
+		//SetUpperThreshold(upper);
 	}
 }
 
