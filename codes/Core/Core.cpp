@@ -76,6 +76,7 @@ Core::Core(QObject * parent)
 	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevelThreshold());
+	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetThreshold());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
@@ -94,6 +95,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotNavigation()));
 	connect(mainWindow.getUi()->actionWindow_level, SIGNAL(triggered()),
 		this, SLOT(slotWindowLevel()));
+	connect(mainWindow.getUi()->actionThreshold, SIGNAL(triggered()),
+		this, SLOT(slotThreshold()));
 	connect(mainWindow.getUi()->actionWindow_level_threshold, SIGNAL(triggered()),
 		this, SLOT(slotWindowlevelThreshold()));
 	connect(mainWindow.getUi()->actionPaint_brush, SIGNAL(triggered()),
@@ -321,6 +324,15 @@ void Core::slotWindowLevel()
 		imageInteractorStyle[i]->SetInteractorStyleToWindowLevel();
 	}
 	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
+}
+
+void Core::slotThreshold()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		imageInteractorStyle[i]->SetInteractorStyleToThreshold();
+	}
+	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetThreshold());
+
 }
 
 void Core::slotWindowlevelThreshold()

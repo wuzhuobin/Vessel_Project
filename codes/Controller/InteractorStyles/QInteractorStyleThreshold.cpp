@@ -1,52 +1,52 @@
-﻿#include "QInteractorStyleWindowLevelThreshold.h"
-#include "QInteractorStyleWindowLevelThreshold.h"
-#include "ui_QInteractorStyleWindowLevelThreshold.h"
+﻿#include "QInteractorStyleThreshold.h"
+#include "ui_QInteractorStyleThreshold.h"
 #include "ui_QAbstractNavigation.h"
 #include "ImageViewer.h"
 
 #include <vtkImageData.h>
 #include <vtkObjectFactory.h>
+#include <vtkImageThreshold.h>
 
 #include <qpushbutton.h>
 #include <qslider.h>
 #include <qspinbox.h>
 #include <qlabel.h>
 
-vtkStandardNewMacro(QInteractorStyleWindowLevelThreshold);
-QSETUP_UI_SRC(QInteractorStyleWindowLevelThreshold);
+vtkStandardNewMacro(QInteractorStyleThreshold);
+QSETUP_UI_SRC(QInteractorStyleThreshold);
 using namespace std;
-QInteractorStyleWindowLevelThreshold::QInteractorStyleWindowLevelThreshold(int uiType, QWidget * parent)
+QInteractorStyleThreshold::QInteractorStyleThreshold(int uiType, QWidget * parent)
 {
 	QNEW_UI();
 }
 
-QInteractorStyleWindowLevelThreshold::~QInteractorStyleWindowLevelThreshold()
+QInteractorStyleThreshold::~QInteractorStyleThreshold()
 {
 	QDELETE_UI();
 }
 
-void QInteractorStyleWindowLevelThreshold::uniqueEnable()
+void QInteractorStyleThreshold::uniqueEnable()
 {
 	QAbstractNavigation::uniqueEnable();
 	UpdateTargetViewer();
 }
 
-void QInteractorStyleWindowLevelThreshold::SetThresholdByViewer(int lower, int upper)
+void QInteractorStyleThreshold::SetThresholdByViewer(double lower, double upper)
 {
-	InteractorStyleWindowLevelThreshold::SetThresholdByViewer(lower, upper);
+	InteractorStyleThreshold::SetThresholdByViewer(lower, upper);
 
-	m_spinBoxLowerThreshold->setValue(lower);
-	m_spinBoxUpperThreshold->setValue(upper);
+	m_spinBoxLowerThreshold->setValue(static_cast<int>(lower + 0.5));
+	m_spinBoxUpperThreshold->setValue(static_cast<int>(upper + 0.5));
 }
 
-void QInteractorStyleWindowLevelThreshold::UpdateTargetViewer()
+void QInteractorStyleThreshold::UpdateTargetViewer()
 {
 	//QStringList listOfModalityName;
 	ui->comboBoxTargeImage->clear();
 	m_listOfModalityNames.clear();
 	for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
 		cit != m_imageStyles.cend(); ++cit) {
-		QInteractorStyleWindowLevelThreshold* _style = QInteractorStyleWindowLevelThreshold::SafeDownCast(*cit);
+		QInteractorStyleThreshold* _style = QInteractorStyleThreshold::SafeDownCast(*cit);
 		// because not all have been CustomEnabled this time
 		if (_style /*&& _style->GetCustomEnabled()*/) {
 			m_listOfModalityNames.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
@@ -61,7 +61,7 @@ void QInteractorStyleWindowLevelThreshold::UpdateTargetViewer()
 	//}
 }
 
-void QInteractorStyleWindowLevelThreshold::initialization()
+void QInteractorStyleThreshold::initialization()
 {
 	m_label = new QLabel(this);
 	m_spinBoxUpperThreshold = new QSpinBox(this);
@@ -92,21 +92,23 @@ void QInteractorStyleWindowLevelThreshold::initialization()
 		m_spinBoxUpperThreshold, SLOT(setValue(int)), Qt::UniqueConnection);
 	connect(m_sliderLowerThreshold, SIGNAL(valueChanged(int)),
 		m_spinBoxLowerThreshold, SLOT(setValue(int)), Qt::UniqueConnection);
+	connect(ui->checkBoxPreview, SIGNAL(toggled(bool)),
+		this, SLOT(SetPreview(bool)), Qt::UniqueConnection);
 
 	// set brushShape
 	connect(ui->comboBoxLabel, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(SetOutputLabel(int)));
 }
 
-void QInteractorStyleWindowLevelThreshold::uniqueInitialization()
+void QInteractorStyleThreshold::uniqueInitialization()
 {
 	connect(ui->pushButtonThreshold, SIGNAL(clicked()),
 		this, SLOT(ThresholdTargetViewerToOverlay()));
 }
 
-void QInteractorStyleWindowLevelThreshold::SetCustomEnabled(bool flag)
+void QInteractorStyleThreshold::SetCustomEnabled(bool flag)
 {
-	InteractorStyleWindowLevelThreshold::SetCustomEnabled(flag);
+	InteractorStyleThreshold::SetCustomEnabled(flag);
 	uniqueInvoke(flag);
 	if (flag) {
 		double* range = GetImageViewer()->GetInput()->GetScalarRange();
@@ -115,18 +117,18 @@ void QInteractorStyleWindowLevelThreshold::SetCustomEnabled(bool flag)
 		m_sliderUpperThreshold->setRange(range[0], range[1]);
 		m_spinBoxLowerThreshold->setRange(range[0], range[1]);
 		m_sliderLowerThreshold->setRange(range[0], range[1]);
-		m_spinBoxLowerThreshold->setValue(GetLevel() - 0.5*GetWindow());
-		m_spinBoxUpperThreshold->setValue(GetLevel() + 0.5*GetWindow());
+		m_spinBoxLowerThreshold->setValue(m_threshold->GetLowerThreshold());
+		m_spinBoxUpperThreshold->setValue(m_threshold->GetUpperThreshold());
 	}
 }
 
-void QInteractorStyleWindowLevelThreshold::SetCurrentFocalPointWithImageCoordinate(int i, int j, int k)
+void QInteractorStyleThreshold::SetCurrentFocalPointWithImageCoordinate(int i, int j, int k)
 {
-	InteractorStyleWindowLevelThreshold::SetCurrentFocalPointWithImageCoordinate(i, j, k);
+	InteractorStyleThreshold::SetCurrentFocalPointWithImageCoordinate(i, j, k);
 	QAbstractNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
 }
 
-void QInteractorStyleWindowLevelThreshold::SetLowerThreshold(int lower)
+void QInteractorStyleThreshold::SetLowerThreshold(int lower)
 {
 	if (int(GetLevel() - GetWindow()*0.5 + 0.5) != lower) {
 		//SetLowerThreshold(lower);
@@ -139,9 +141,9 @@ void QInteractorStyleWindowLevelThreshold::SetLowerThreshold(int lower)
 	}
 }
 
-void QInteractorStyleWindowLevelThreshold::SetUpperThreshold(int upper)
+void QInteractorStyleThreshold::SetUpperThreshold(int upper)
 {
-	if (int(GetLevel() + GetWindow()*0.5 + 0.5) != upper) {
+	if (static_cast<int>(m_threshold->GetUpperThreshold() + 0.5) != upper) {
 		if (upper < m_spinBoxLowerThreshold->value()) {
 			SetThreshold(upper, upper);
 		}
@@ -152,12 +154,12 @@ void QInteractorStyleWindowLevelThreshold::SetUpperThreshold(int upper)
 	}
 }
 
-void QInteractorStyleWindowLevelThreshold::ThresholdTargetViewerToOverlay()
+void QInteractorStyleThreshold::ThresholdTargetViewerToOverlay()
 {
 
 	for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
 		cit != m_imageStyles.cend(); ++cit) {
-		QInteractorStyleWindowLevelThreshold* _style = QInteractorStyleWindowLevelThreshold::SafeDownCast(*cit);
+		QInteractorStyleThreshold* _style = QInteractorStyleThreshold::SafeDownCast(*cit);
 		if (_style && _style->GetCustomEnabled() && 
 			QString::fromStdString(_style->GetImageViewer()->GetWindowName()) ==
 			ui->comboBoxTargeImage->currentText()) {
@@ -167,12 +169,18 @@ void QInteractorStyleWindowLevelThreshold::ThresholdTargetViewerToOverlay()
 	}
 }
 
-void QInteractorStyleWindowLevelThreshold::SetOutputLabel(int label)
+void QInteractorStyleThreshold::SetOutputLabel(int label)
 {
-	InteractorStyleWindowLevelThreshold::SetOutputLabel(label);
+	InteractorStyleThreshold::SetOutputLabel(label);
 }
 
-void QInteractorStyleWindowLevelThreshold::ResetWindowLevel()
+void QInteractorStyleThreshold::ResetWindowLevel()
 {
-	InteractorStyleWindowLevelThreshold::ResetWindowLevel();
+	InteractorStyleThreshold::ResetWindowLevel();
+}
+
+void QInteractorStyleThreshold::SetPreview(bool flag)
+{
+	InteractorStyleThreshold::SetPreview(flag);
+
 }

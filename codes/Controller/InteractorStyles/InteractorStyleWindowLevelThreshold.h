@@ -22,7 +22,7 @@ protected:
 	virtual void WindowLevel() override;
 	virtual void ResetWindowLevel();
 
-	unsigned char m_label = 1;
+	unsigned char m_label = 0;
 
 
 };

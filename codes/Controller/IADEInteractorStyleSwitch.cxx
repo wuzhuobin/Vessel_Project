@@ -32,6 +32,8 @@ IADEInteractorStyleSwitch::IADEInteractorStyleSwitch()
 	allStyles.push_back(WindowLevel);
 	WindowLevelThreshold = QInteractorStyleWindowLevelThreshold::New();
 	allStyles.push_back(WindowLevelThreshold);
+	Threshold = QInteractorStyleThreshold::New();
+	allStyles.push_back(Threshold);
 	//PolygonDraw = QInteractorStyleVesselSegmentation::New();
 	LumenSeedsPlacer = QInteractorStyleLumenSeedsPlacer::New();
 	allStyles.push_back(LumenSeedsPlacer);

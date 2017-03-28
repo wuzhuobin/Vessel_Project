@@ -1,7 +1,7 @@
-﻿#ifndef __QINTERACTOR_STYLE_WINDOW_LEVEL_THRESHOLD_H__
-#define __QINTERACTOR_STYLE_WINDOW_LEVEL_THRESHOLD_H__
+﻿#ifndef __QINTERACTOR_STYLE_THRESHOLD_H__
+#define __QINTERACTOR_STYLE_THRESHOLD_H__
 /**
-* @file	QInteractorStyleWindowLevelThreshold.h
+* @file	QInteractorStyleThreshold.h
 * @brief	whatever
 * @authour	wuzhuobin
 * @date	20/12/2016
@@ -12,11 +12,11 @@
 * <pre>company:	CUHK. <pre/>
 */
 #include "QAbstractNavigation.h"
-#include "InteractorStyleWindowLevelThreshold.h"
+#include "InteractorStyleThreshold.h"
 
-namespace Ui {class QInteractorStyleWindowLevelThreshold;}
+namespace Ui {class QInteractorStyleThreshold;}
 /**
-* @class	QInteractorStyleWindowLevelThreshold
+* @class	QInteractorStyleThreshold
 * @brief	window level.
 * using cursor to change window level.
 */
@@ -24,15 +24,15 @@ class QSpinBox;
 class QSlider;
 class QPushButton;
 class QLabel;
-class QInteractorStyleWindowLevelThreshold : public QAbstractNavigation,
-	public InteractorStyleWindowLevelThreshold
+class QInteractorStyleThreshold : public QAbstractNavigation,
+	public InteractorStyleThreshold
 {
 	Q_OBJECT;
-	QSETUP_UI_HEAD(QInteractorStyleWindowLevelThreshold);
+	QSETUP_UI_HEAD(QInteractorStyleThreshold);
 
 public:
-	vtkTypeMacro(QInteractorStyleWindowLevelThreshold, InteractorStyleWindowLevelThreshold)
-	static QInteractorStyleWindowLevelThreshold* New();
+	vtkTypeMacro(QInteractorStyleThreshold, InteractorStyleThreshold)
+	static QInteractorStyleThreshold* New();
 public slots:
 	/**
 	* @brief	Enabled/Disable this InteractorStyle.
@@ -60,10 +60,12 @@ public slots:
 	virtual void SetUpperThreshold(int level);
 
 	virtual void ThresholdTargetViewerToOverlay();
-	virtual void SetOutputLabel(int label)override;
+	virtual void SetOutputLabel(int label) override;
 
-	virtual void SetThresholdByViewer(int lower, int upper);
+	virtual void SetThresholdByViewer(double lower, double upper);
 	virtual void ResetWindowLevel() override;
+	virtual void SetPreview(bool flag) override;
+
 
 protected:
 
@@ -72,11 +74,11 @@ protected:
 	* @param	uiType	NO_UI
 	* @param	parent	QWidget's parent
 	*/
-	QInteractorStyleWindowLevelThreshold(int uiType = UNIQUE_UI, QWidget * parent = Q_NULLPTR);
+	QInteractorStyleThreshold(int uiType = UNIQUE_UI, QWidget * parent = Q_NULLPTR);
 	/**
 	 * @brief	Destructor. 
 	 */
-	virtual ~QInteractorStyleWindowLevelThreshold();
+	virtual ~QInteractorStyleThreshold();
 
 	virtual void uniqueEnable() override;
 
@@ -90,7 +92,7 @@ private:
 	void initialization();
 	void uniqueInitialization();
 	///< the pointer of the navigation ui.
-	Ui::QInteractorStyleWindowLevelThreshold *ui = nullptr;
+	Ui::QInteractorStyleThreshold *ui = nullptr;
 	QLabel* m_label = nullptr;
 	QSpinBox* m_spinBoxUpperThreshold = nullptr;
 	QSpinBox* m_spinBoxLowerThreshold = nullptr;
@@ -102,4 +104,4 @@ private:
 };
 
 
-#endif // !__QINTERACTOR_STYLE_WINDOW_LEVEL_THRESHOLD_H__
+#endif // !__QINTERACTOR_STYLE_THRESHOLD_H__

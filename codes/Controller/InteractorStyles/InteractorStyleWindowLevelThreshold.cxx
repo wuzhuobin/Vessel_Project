@@ -41,6 +41,7 @@ void InteractorStyleWindowLevelThreshold::ThresholdToOverlay()
 	//threshold->SetInputData(GetImageViewer()->GetInput());
 	threshold->SetOutputScalarType(GetImageViewer()->GetOverlay()->GetScalarType());
 	threshold->ThresholdByUpper(GetLevel()- GetWindow() * 0.5);
+	//threshold->ThresholdBetween(GetLevel() - GetWindow()*0.5, GetLevel() + GetWindow()*0.5);
 	threshold->ReplaceOutOn();
 	threshold->SetOutValue(0);
 	threshold->ReplaceInOn();

@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/business-down-bars-graphic.png</file>
     <file>icons/transparentbox.png</file>
     <file>icons/cigarette-with-smoke.png</file>
     <file>icons/aami10-90-512.png</file>

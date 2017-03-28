@@ -39,6 +39,7 @@ private slots:
 	// Image interactorstyle
 	void slotNavigation();
 	void slotWindowLevel();
+	void slotThreshold();
 	void slotWindowlevelThreshold();
 	void slotPaintBrush();
 	void slotTesting();

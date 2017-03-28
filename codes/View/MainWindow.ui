@@ -233,6 +233,7 @@
     <addaction name="actionNavigation"/>
     <addaction name="actionWindow_level"/>
     <addaction name="actionWindow_level_threshold"/>
+    <addaction name="actionThreshold"/>
     <addaction name="acitonVOI_selection"/>
     <addaction name="actionTubular_VOI"/>
     <addaction name="actionPaint_brush"/>
@@ -851,10 +852,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Testing</string>
+    <string>Trackball camera</string>
    </property>
    <property name="toolTip">
-    <string>Testing</string>
+    <string>Trackball camera</string>
    </property>
   </action>
   <action name="actionFind_maximum_radius">
@@ -968,6 +969,21 @@
    </property>
    <property name="toolTip">
     <string>Window level threshold</string>
+   </property>
+  </action>
+  <action name="actionThreshold">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/business-down-bars-graphic.png</normaloff>:/icons/business-down-bars-graphic.png</iconset>
+   </property>
+   <property name="text">
+    <string>Threshold</string>
+   </property>
+   <property name="toolTip">
+    <string>Threshold</string>
    </property>
   </action>
  </widget>
