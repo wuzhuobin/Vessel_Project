@@ -78,6 +78,7 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumenByTargetViewer()
 			QString::fromStdString(_style->GetImageViewer()->GetWindowName()) ==
 			ui->comboBoxTargeImage->currentText()) {
 			_style->ExtractLumen();
+			break;
 		}
 	}
 }

@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 	EncryptionAuthentication ea(0, QString(), QString(),
 		QDateTime(QDate(2017, 06, 10),
 			QTime(24, 0, 0)),
-		"11111111");
+		"39431068");
 
 	// disable reminder of the expire date
 	ea.enableExpiredDateTimeHint(false);
