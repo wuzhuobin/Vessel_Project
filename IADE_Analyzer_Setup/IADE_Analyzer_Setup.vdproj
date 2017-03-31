@@ -171,6 +171,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_405B63FC9D0041119B5462DEEF7425FC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_406D8BCA2E7A4F978A7E050118EB0F7D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -196,6 +202,12 @@
         "Entry"
         {
         "MsmKey" = "8:_5478190300EE4D3E88B6F2FFB52AFA28"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_593E710A50114E478A197E2B9B2E440A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -316,6 +328,12 @@
         "Entry"
         {
         "MsmKey" = "8:_88DA9B4A3778475FB299169ADA7DC402"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8C3CB22DA875444E89A8B36C3A9E13FF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -602,6 +620,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
             }
         }
         "Release"
@@ -1176,6 +1202,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_405B63FC9D0041119B5462DEEF7425FC"
+            {
+            "SourcePath" = "8:..\\codes\\Main\\uninstall.vbs"
+            "TargetName" = "8:uninstall.vbs"
+            "Tag" = "8:"
+            "Folder" = "8:_E6891500ABC547BA8C29C104CAB9BCD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_406D8BCA2E7A4F978A7E050118EB0F7D"
             {
             "SourcePath" = "8:..\\bin\\Release\\vtkImagingStencil-6.3.dll"
@@ -1260,6 +1306,26 @@
             {
             "SourcePath" = "8:..\\bin\\Release\\vtkRenderingVolumeOpenGL2-6.3.dll"
             "TargetName" = "8:vtkRenderingVolumeOpenGL2-6.3.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_E6891500ABC547BA8C29C104CAB9BCD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_593E710A50114E478A197E2B9B2E440A"
+            {
+            "SourcePath" = "8:..\\codes\\Main\\resources\\icons\\win-uninstall.ico"
+            "TargetName" = "8:win-uninstall.ico"
             "Tag" = "8:"
             "Folder" = "8:_E6891500ABC547BA8C29C104CAB9BCD4"
             "Condition" = "8:"
@@ -1660,6 +1726,26 @@
             {
             "SourcePath" = "8:..\\bin\\Release\\vtkInteractionImage-6.3.dll"
             "TargetName" = "8:vtkInteractionImage-6.3.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_E6891500ABC547BA8C29C104CAB9BCD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8C3CB22DA875444E89A8B36C3A9E13FF"
+            {
+            "SourcePath" = "8:..\\codes\\Main\\uninstall.bat"
+            "TargetName" = "8:uninstall.bat"
             "Tag" = "8:"
             "Folder" = "8:_E6891500ABC547BA8C29C104CAB9BCD4"
             "Condition" = "8:"
@@ -2626,7 +2712,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:IADE_Analyzer"
         "ProductCode" = "8:{3265A538-2B52-42B6-AF34-2895102F71F1}"
-        "PackageCode" = "8:{9A790555-8A30-4EEA-8D2C-21293D0AD680}"
+        "PackageCode" = "8:{391DE5D4-4488-446E-B3ED-434824FB6714}"
         "UpgradeCode" = "8:{83C2B648-CA49-4545-90BA-80385A818240}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -2758,6 +2844,20 @@
             "Folder" = "8:_27B5233E6E4A4FEA93DBE7DD8E98ADA0"
             "WorkingFolder" = "8:_E6891500ABC547BA8C29C104CAB9BCD4"
             "Icon" = "8:_0DD6EE0F809840FFB2BF028DAAD029B2"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B93C5E96837148139D96CDF33CFC8409"
+            {
+            "Name" = "8:uninstall"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_405B63FC9D0041119B5462DEEF7425FC"
+            "Folder" = "8:_7DD55AF79DE94C299F6820D94CC3B8B8"
+            "WorkingFolder" = "8:_E6891500ABC547BA8C29C104CAB9BCD4"
+            "Icon" = "8:_593E710A50114E478A197E2B9B2E440A"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E4DE439CB50549CB8FBE04B7A598E112"

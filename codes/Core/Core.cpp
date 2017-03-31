@@ -72,7 +72,7 @@ Core::Core(QObject * parent)
 	//dataProcessor.imageManager = &imageManager;
 
 	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
+	//mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
@@ -304,7 +304,7 @@ void Core::slotWindowLevel()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToWindowLevel();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
+	//mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 }
 
 void Core::slotPaintBrush()
