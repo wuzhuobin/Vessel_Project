@@ -59,6 +59,7 @@ private slots:
 	void slotPerpendicularMeasurement();
 	void slotCurvedNavigation();
 	void slotWaypoint();
+	void slotStenosis();
 
 	// IADE specified
 	void slotVBDSmoker();

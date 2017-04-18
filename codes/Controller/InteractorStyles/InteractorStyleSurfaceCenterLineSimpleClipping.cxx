@@ -245,15 +245,7 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::ClipAndCap()
 	{
 		m_centerLineOrientation = CENTER_LINE_ORIENTATION_YZ;
 	}
-	double bounds[6];
-	memcpy(bounds, GetSurfaceViewer()->GetSurfaceActor()->GetBounds(), sizeof(bounds));
-	bounds[m_centerLineOrientation * 2] = bounds[m_centerLineOrientation * 2]
-		+ GetSpacing()[m_centerLineOrientation] * m_ClipingDistance;
-	bounds[m_centerLineOrientation * 2 + 1] = bounds[m_centerLineOrientation * 2 + 1]
-		- GetSpacing()[m_centerLineOrientation] * m_ClipingDistance;
-	vtkSmartPointer<vtkBox> clipBox =
-		vtkSmartPointer<vtkBox>::New();
-	clipBox->SetBounds(bounds);
+
 
 	vtkSmartPointer<vtkThreshold> Threshold =
 		vtkSmartPointer<vtkThreshold>::New();
@@ -266,6 +258,16 @@ void InteractorStyleSurfaceCenterLineSimpleClipping::ClipAndCap()
 		vtkSmartPointer<vtkGeometryFilter>::New();
 	GeometryFilter->SetInputConnection(Threshold->GetOutputPort());
 	GeometryFilter->Update();
+
+	double bounds[6];
+	memcpy(bounds, GeometryFilter->GetOutput()->GetBounds(), sizeof(bounds));
+	bounds[m_centerLineOrientation * 2] = bounds[m_centerLineOrientation * 2]
+		+ GetSpacing()[m_centerLineOrientation] * m_ClipingDistance;
+	bounds[m_centerLineOrientation * 2 + 1] = bounds[m_centerLineOrientation * 2 + 1]
+		- GetSpacing()[m_centerLineOrientation] * m_ClipingDistance;
+	vtkSmartPointer<vtkBox> clipBox =
+		vtkSmartPointer<vtkBox>::New();
+	clipBox->SetBounds(bounds);
 
 
 	vtkSmartPointer<vtkClipPolyData> clipPolyData =

@@ -204,6 +204,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotCurvedNavigation()));
 	connect(mainWindow.getUi()->actionWay_point_centerline, SIGNAL(triggered()),
 		this, SLOT(slotWaypoint()));
+	connect(mainWindow.getUi()->actionStenosis, SIGNAL(triggered()),
+		this, SLOT(slotStenosis()));
 
 	// update btn
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
@@ -315,6 +317,9 @@ void Core::slotUpdateMeasurements()
 		mainWindow.getMeasurementWidget()->slotUpdate2DMeasurements(overlay->Measurements2D[overlay->getCurrentSlice()].data());
 		mainWindow.getMeasurementWidget()->slotUpdate3DMeasurements(overlay->Measurements3D);
 	}
+	mainWindow.getMeasurementWidget()->slotUpdateStenosis(
+		surfaceInteractorStyle->GetStenosis()->GetStenosisValue()
+	);
 }
 
 
@@ -468,6 +473,11 @@ void Core::slotCurvedNavigation()
 void Core::slotWaypoint()
 {
 	surfaceInteractorStyle->SetInteractorStyleTo3DWaypoint();
+}
+
+void Core::slotStenosis()
+{
+	surfaceInteractorStyle->SetInteractorStyleTo3DStenosis();
 }
 
 void Core::slotVBDSmoker()

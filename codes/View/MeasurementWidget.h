@@ -23,6 +23,7 @@ public slots:
 	void slotUpdate3DMeasurements(double* Measurements3D);
 	void slotUpdate2DMeasurements(double* Measurements2D);
 	void slotUpdate2DMeasurements(int slice);
+	void slotUpdateStenosis(double stenosis);
 	void slotUpdateImformation();
 	void slotReportGetInput();
 

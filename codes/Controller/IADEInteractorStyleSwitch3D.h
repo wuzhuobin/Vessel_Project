@@ -7,6 +7,7 @@
 #include "InteractorStyleSurfaceCenterLinePerpendicularMeasurement.h"
 #include "InteractorStyleSurfaceCenterLineCurvedNavigation.h"
 #include "InteractorStyleSurfaceCenterlineWaypoint.h"
+#include "InteractorStyleSurfaceCenterLineStenosis.h"
 
 class IADEInteractorStyleSwitch3D: public InteractorStyleSwitch3D
 {
@@ -33,6 +34,10 @@ public:
 	SetInteractorStyle3DMacro(Waypoint);
 	CurrentStyle3DMacro(Waypoint);
 
+	vtkGetMacro(Stenosis, InteractorStyleSurfaceCenterLineStenosis*);
+	SetInteractorStyle3DMacro(Stenosis);
+	CurrentStyle3DMacro(Stenosis);
+
 	//virtual void SetCenterLine(vtkPolyData* centerline);
 
 protected:
@@ -43,6 +48,7 @@ protected:
 	InteractorStyleSurfaceCenterLinePerpendicularMeasurement* PerpendicularMeasurement;
 	InteractorStyleSurfaceCenterLineCurvedNavigation* CurvedNavigation;
 	InteractorStyleSurfaceCenterlineWaypoint* Waypoint;
+	InteractorStyleSurfaceCenterLineStenosis* Stenosis;
 
 private:
 

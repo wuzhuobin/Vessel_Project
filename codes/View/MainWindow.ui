@@ -269,6 +269,7 @@
     <addaction name="actionWay_point_centerline"/>
     <addaction name="actionFind_maximum_radius"/>
     <addaction name="actionPerpendicular_measurement"/>
+    <addaction name="actionStenosis"/>
     <addaction name="actionCurved_navigation"/>
    </widget>
    <addaction name="menuFile"/>
@@ -1020,6 +1021,17 @@
    </property>
    <property name="toolTip">
     <string>Vessel segmentation</string>
+   </property>
+  </action>
+  <action name="actionStenosis">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Stenosis</string>
+   </property>
+   <property name="toolTip">
+    <string>Stenosis</string>
    </property>
   </action>
  </widget>

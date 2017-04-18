@@ -36,6 +36,9 @@ IADEInteractorStyleSwitch3D::IADEInteractorStyleSwitch3D()
 	this->Waypoint = InteractorStyleSurfaceCenterlineWaypoint::New();
 	allStyles.push_back(this->Waypoint);
 
+	this->Stenosis = InteractorStyleSurfaceCenterLineStenosis::New();
+	allStyles.push_back(this->Stenosis);
+
 	this->CurrentStyle = 0;
 
 }

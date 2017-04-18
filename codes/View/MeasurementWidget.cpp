@@ -106,6 +106,11 @@ void MeasurementWidget::slotUpdate2DMeasurements(int slice)
 	}
 }
 
+void MeasurementWidget::slotUpdateStenosis(double stenosis)
+{
+	ui->stenosisSpinBox->setValue(stenosis);
+}
+
 void MeasurementWidget::slotUpdateImformation()
 {
 	//QMap<QString, QString>* header = 
