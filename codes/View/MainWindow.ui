@@ -64,28 +64,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="generateCLBtn">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Generate Centerline</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QScrollArea" name="sliceScrollArea">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -116,7 +94,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>1067</width>
+           <width>1195</width>
            <height>795</height>
           </rect>
          </property>
@@ -472,10 +450,10 @@
      <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
    </property>
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
    <property name="toolTip">
-    <string> </string>
+    <string/>
    </property>
   </action>
   <action name="actionInformation">
@@ -556,10 +534,10 @@
      <normaloff>:/icons/UpperRightView.png</normaloff>:/icons/UpperRightView.png</iconset>
    </property>
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
    <property name="toolTip">
-    <string> </string>
+    <string/>
    </property>
    <property name="visible">
     <bool>true</bool>
@@ -577,10 +555,10 @@
      <normaloff>:/icons/LowerRightView.png</normaloff>:/icons/LowerRightView.png</iconset>
    </property>
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
    <property name="toolTip">
-    <string> </string>
+    <string/>
    </property>
   </action>
   <action name="actionImage3">
@@ -592,10 +570,10 @@
      <normaloff>:/icons/UpperLeftView.png</normaloff>:/icons/UpperLeftView.png</iconset>
    </property>
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
    <property name="toolTip">
-    <string> </string>
+    <string/>
    </property>
   </action>
   <action name="actionImage4">
@@ -607,10 +585,10 @@
      <normaloff>:/icons/LowerLeftView.png</normaloff>:/icons/LowerLeftView.png</iconset>
    </property>
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
    <property name="toolTip">
-    <string> </string>
+    <string/>
    </property>
   </action>
   <action name="actionSagittal">

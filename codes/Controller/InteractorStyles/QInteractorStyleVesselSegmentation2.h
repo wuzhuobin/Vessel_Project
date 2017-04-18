@@ -43,6 +43,7 @@ public slots:
 	virtual void CleanAll() override;
 
 	virtual void FillContours() override;
+	//virtual void FillSlices() override;
 
 
 	virtual void AutoVesselWallSegmentation();
@@ -51,12 +52,15 @@ public slots:
 	virtual void AutoLumenSegmentation();
 	virtual void SetLumenSegmentationValue(int value);
 
+
 protected:
 	QInteractorStyleVesselSegmentation2(int uiType = UNIQUE_UI, QWidget * parent = Q_NULLPTR);
 	~QInteractorStyleVesselSegmentation2();
 
 	void uniqueInitialization();
 	void initialization();
+
+	virtual void uniqueEnable() override;
 
 	virtual void OnEnter() override;
 	virtual void OnMouseMove() override;

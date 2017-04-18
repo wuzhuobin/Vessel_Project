@@ -149,11 +149,6 @@ QInteractorStyleVesselSegmentation2::~QInteractorStyleVesselSegmentation2()
 
 void QInteractorStyleVesselSegmentation2::uniqueInitialization()
 {
-	connect(ui->pushButtonAutoVesselWallSegmentation, SIGNAL(clicked()),
-		this, SLOT(AutoVesselWallSegmentation()));
-	connect(ui->spinBoxVesselWallThickness, SIGNAL(valueChanged(int)),
-		this,SLOT(setVesselWallSegmentationRadius(int)));
-
 
 }
 
@@ -218,19 +213,41 @@ void QInteractorStyleVesselSegmentation2::initialization()
 		this, SLOT(SetMagneticInterpolator()));
 	connect(ui->comboBoxLabel, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(SetContourLabel(int)));
-
+	// connect the mode change button
 	connect(ui->radioButtonNormal, SIGNAL(clicked()),
 		this, SLOT(SetSegmentationModeToNormal()));
 	connect(ui->radioButtonLumenSegmentation, SIGNAL(clicked()),
 		this, SLOT(SetSegmentationModeToLumenSegmentation()));
 	connect(ui->radioButtonVesselWallSegmentation, SIGNAL(clicked()),
 		this, SLOT(SetSegmentationModeToVesselSegmentation()));
-
+	// autoLumenSegmentation
 	connect(ui->autoLumenSegmentationSpinBox, SIGNAL(valueChanged(int)),
 		this, SLOT(SetLumenSegmentationValue(int)));
 	connect(ui->pushButtonAutoLumenSegmentation, SIGNAL(clicked()),
 		this, SLOT(AutoLumenSegmentation()));
+	// autoVesselWallSegmentation
+	connect(ui->pushButtonAutoVesselWallSegmentation, SIGNAL(clicked()),
+		this, SLOT(AutoVesselWallSegmentation()));
+	connect(ui->spinBoxVesselWallThickness, SIGNAL(valueChanged(int)),
+		this, SLOT(setVesselWallSegmentationRadius(int)));
 
+	// fill slices
+	connect(ui->spinBoxFillSlicesBegin, SIGNAL(valueChanged(int)),
+		this, SLOT(SetFillSliceBegin(int)));
+	connect(ui->spinBoxFillSliceEnd, SIGNAL(valueChanged(int)),
+		this, SLOT(SetFillSliceEnd(int)));
+	connect(ui->pushButtonFillSlices, SIGNAL(clicked()),
+		this, SLOT(FillSlices()));
+	
+
+}
+
+void QInteractorStyleVesselSegmentation2::uniqueEnable()
+{
+	QInteractorStylePolygonDrawSeries::uniqueEnable();
+	int* extent = GetImageViewer()->GetDisplayExtent();
+	ui->spinBoxFillSlicesBegin->setRange(extent[4], extent[5]);
+	ui->spinBoxFillSliceEnd->setRange(extent[4], extent[5]);
 }
 
 void QInteractorStyleVesselSegmentation2::OnEnter()
@@ -345,6 +362,7 @@ void QInteractorStyleVesselSegmentation2::SetCustomEnabled(bool flag)
 		m_vesselWallContours->SetInteractor(this->Interactor);
 
 		SetSegmentationMode(m_currentMode);
+
 	}
 	else
 	{
@@ -484,8 +502,16 @@ void QInteractorStyleVesselSegmentation2::FillContours()
 
 }
 
+//void QInteractorStyleVesselSegmentation2::FillSlices()
+//{
+//}
+
 void QInteractorStyleVesselSegmentation2::AutoVesselWallSegmentation()
 {
+	if (!m_lumenContours->GetEnabled() ||
+		GetSliceOrientation() != ImageViewer::SLICE_ORIENTATION_XY) {
+		return;
+	}
 	int extent[6];
 	std::copy_n(GetImageViewer()->GetDisplayExtent(), 6, extent);
 

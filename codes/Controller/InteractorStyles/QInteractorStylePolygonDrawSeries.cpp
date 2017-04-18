@@ -328,4 +328,34 @@ void QInteractorStylePolygonDrawSeries::FillContours()
 	}
 }
 
+void QInteractorStylePolygonDrawSeries::SetFillSliceBegin(int slice)
+{
+	this->m_fillSliceBegin = slice;
+}
+
+void QInteractorStylePolygonDrawSeries::SetFillSliceEnd(int slice)
+{
+	this->m_fillSliceEnd = slice;
+}
+
+void QInteractorStylePolygonDrawSeries::FillSlices()
+{
+	if (!m_contourSeries->GetEnabled() ||
+		GetSliceOrientation() != ImageViewer::SLICE_ORIENTATION_XY) {
+		return;
+	}
+	
+	int extent[6];
+	GetImageViewer()->GetDisplayExtent(extent);
+
+	extent[4] = std::max(m_fillSliceBegin, extent[4]);
+	extent[5] = std::min(m_fillSliceEnd, extent[5]);
+
+	for (int i = extent[4]; i <= extent[5]; ++i) {
+		SetCurrentSlice(i);
+		FillContours();
+	}
+
+}
+
 

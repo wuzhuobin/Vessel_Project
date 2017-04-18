@@ -188,16 +188,16 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_9">
         <item>
-         <widget class="QPushButton" name="fillSlicesPushButton_4">
+         <widget class="QPushButton" name="pushButtonFillSlices">
           <property name="text">
            <string>Fill Slices</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_8">
+         <widget class="QLabel" name="label_9">
           <property name="text">
-           <string>To:</string>
+           <string>From:</string>
           </property>
          </widget>
         </item>
@@ -212,9 +212,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_9">
+         <widget class="QLabel" name="label_8">
           <property name="text">
-           <string>From:</string>
+           <string>To:</string>
           </property>
          </widget>
         </item>
@@ -744,11 +744,6 @@
      <zorder>stackedWidgetMode</zorder>
      <zorder>radioButtonMagnetic</zorder>
      <zorder>frame_6</zorder>
-     <zorder>fillSlicesPushButton_4</zorder>
-     <zorder>spinBoxFillSliceEnd</zorder>
-     <zorder>label_9</zorder>
-     <zorder>label_8</zorder>
-     <zorder>spinBoxFillSlicesBegin</zorder>
     </widget>
    </item>
    <item>
@@ -804,7 +799,7 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

@@ -51,7 +51,9 @@ public slots:
 
 	virtual void FillContours() override;
 
-
+	virtual void SetFillSliceBegin(int slice);
+	virtual void SetFillSliceEnd(int slice);
+	virtual void FillSlices();
 
 
 
@@ -81,7 +83,9 @@ protected:
 	static ContourMap m_normalXZ;
 	static ContourMap m_normalXY;
 
-	int m_currentMode = 0;
+	int m_fillSliceBegin = 0;
+	int m_fillSliceEnd = 0;
+
 private:
 	Ui::QInteractorStylePolygonDrawSeries *ui = nullptr;
 };
