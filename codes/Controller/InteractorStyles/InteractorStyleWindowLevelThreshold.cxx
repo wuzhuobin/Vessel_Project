@@ -59,7 +59,7 @@ void InteractorStyleWindowLevelThreshold::ThresholdToOverlay()
 	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(InteractorStyleWindowLevelThreshold, GetImageViewer()->Render());
 }
 
-void InteractorStyleWindowLevelThreshold::SetThreshold(int lower, int upper)
+void InteractorStyleWindowLevelThreshold::SetThreshold(double lower, double upper)
 {
 
 	for (std::list<AbstractInteractorStyleImage*>::const_iterator cit =
@@ -74,7 +74,7 @@ void InteractorStyleWindowLevelThreshold::SetThreshold(int lower, int upper)
 	}
 }
 
-void InteractorStyleWindowLevelThreshold::SetThresholdByViewer(int lower, int upper)
+void InteractorStyleWindowLevelThreshold::SetThresholdByViewer(double lower, double upper)
 {
 	double window = upper - lower;
 	double level = (upper + lower) * 0.5;

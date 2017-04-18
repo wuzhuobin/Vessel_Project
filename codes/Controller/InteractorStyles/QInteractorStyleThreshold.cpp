@@ -6,6 +6,7 @@
 #include <vtkImageData.h>
 #include <vtkObjectFactory.h>
 #include <vtkImageThreshold.h>
+#include <vtkImageCast.h>
 
 #include <qpushbutton.h>
 #include <qslider.h>
@@ -41,22 +42,23 @@ void QInteractorStyleThreshold::SetThresholdByViewer(double lower, double upper)
 
 void QInteractorStyleThreshold::UpdateTargetViewer()
 {
+	QStringList listOfModalityNames;
 	//QStringList listOfModalityName;
 	ui->comboBoxTargeImage->clear();
-	m_listOfModalityNames.clear();
+	listOfModalityNames.clear();
 	for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
 		cit != m_imageStyles.cend(); ++cit) {
 		QInteractorStyleThreshold* _style = QInteractorStyleThreshold::SafeDownCast(*cit);
 		// because not all have been CustomEnabled this time
 		if (_style /*&& _style->GetCustomEnabled()*/) {
-			m_listOfModalityNames.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
+			listOfModalityNames.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
 		}
 	}
-	m_listOfModalityNames.removeDuplicates();
-	//if (m_listOfModalityNames != listOfModalityName)
+	listOfModalityNames.removeDuplicates();
+	//if (listOfModalityNames != listOfModalityName)
 	//{
-	for (int i = 0; i < m_listOfModalityNames.size(); ++i) {
-		ui->comboBoxTargeImage->addItem(m_listOfModalityNames[i]);
+	for (int i = 0; i < listOfModalityNames.size(); ++i) {
+		ui->comboBoxTargeImage->addItem(listOfModalityNames[i]);
 	}
 	//}
 }

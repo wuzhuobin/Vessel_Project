@@ -70,7 +70,6 @@ void InteractorStyleThreshold::SetPreview(bool flag)
 {
 	m_previewFlag = flag;
 	if (flag) {
-		//m_tmpOverlay = GetImageViewer()->GetOverlay();
 		GetImageViewer()->GetOverlayImageMapToColors()->SetInputConnection(m_cast->GetOutputPort());
 	}
 	else {
@@ -93,45 +92,35 @@ void InteractorStyleThreshold::SetCustomEnabled(bool flag)
 {
 	InteractorStyleWindowLevel::SetCustomEnabled(flag);
 	if (flag) {
+		if (!m_threshold) {
+			m_threshold = vtkSmartPointer<vtkImageThreshold>::New();
+			m_threshold->SetInputData(GetImageViewer()->GetInput());
+			m_threshold->SetNumberOfThreads(16);
+			//m_threshold->ThresholdBetween(m_lowerThreshold, m_upperThreshold);
+			m_threshold->SetOutValue(0);
+			m_threshold->ReplaceOutOn();
+			m_threshold->SetInValue(m_label);
+			m_threshold->ReplaceInOn();
+		}
+		if (!m_cast) {
+			m_cast = vtkSmartPointer<vtkImageCast>::New();
+			m_cast->SetInputConnection(m_threshold->GetOutputPort());
+			m_cast->SetOutputScalarType(GetImageViewer()->GetOverlay()->GetScalarType());
+			m_cast->SetNumberOfThreads(16);
+		}
 
-		m_threshold = vtkImageThreshold::New();
-		m_threshold->SetInputData(GetImageViewer()->GetInput());
-		m_threshold->SetNumberOfThreads(16);
-		//m_threshold->ThresholdBetween(m_lowerThreshold, m_upperThreshold);
-		m_threshold->SetOutValue(0);
-		m_threshold->ReplaceOutOn();
-		m_threshold->SetInValue(m_label);
-		m_threshold->ReplaceInOn();
-
-		m_cast = vtkImageCast::New();
-		m_cast->SetInputConnection(m_threshold->GetOutputPort());
-		m_cast->SetOutputScalarType(GetImageViewer()->GetOverlay()->GetScalarType());
-		m_cast->SetNumberOfThreads(16);
 		// replace the original overlay with the threshold output and save it in a pointer
 		m_tmpOverlay = GetImageViewer()->GetOverlay();
 		SetPreview(m_previewFlag);
-		//m_previewImageMapToColors = vtkImageMapToColors::New();
-		//m_previewImageMapToColors->SetInputConnection(m_threshold->GetOutputPort());
-		//m_previewImageMapToColors->SetLookupTable(GetImageViewer()->GetLookupTable());
-
-		//m_previewActor = vtkImageActor::New();
-		//m_previewActor->GetMapper()->SetInputConnection(m_previewImageMapToColors->GetOutputPort());
-
-		//GetImageViewer()->GetRenderer()->AddActor2D(m_previewActor);
 	}
 	else {
-		//m_previewActor->GetMapper()->SetInputConnection(nullptr);
 		GetImageViewer()->GetOverlayImageMapToColors()->SetInputData(m_tmpOverlay);
-		m_threshold->Delete();
-		m_threshold = nullptr;
-		m_cast->Delete();
-		m_cast = nullptr;
-		//m_previewImageMapToColors->Delete();
-		//m_previewImageMapToColors = nullptr;
-
-		//GetImageViewer()->GetRenderer()->RemoveActor2D(m_previewActor);
-		//m_previewActor->Delete();
-		//m_previewActor = nullptr;
+		if(m_threshold){
+			m_threshold = nullptr;
+		}
+		if (m_cast) {
+			m_cast = nullptr;
+		}
 	}
 }
 

@@ -3,10 +3,9 @@
 
 #include "InteractorStyleWindowLevel.h"
 
+#include <vtkSmartPointer.h>
 
-//class vtkImageActor;
 class vtkImageThreshold;
-class vtkImageMapToColors;
 class vtkImageData;
 class vtkImageCast;
 
@@ -35,16 +34,12 @@ protected:
 	virtual void WindowLevel() override;
 	virtual void ResetWindowLevel() override;
 
-	//vtkImageActor* m_previewActor = nullptr;
-	vtkImageThreshold* m_threshold = nullptr;
-	vtkImageCast* m_cast = nullptr;
-	//vtkImageMapToColors* m_previewImageMapToColors = nullptr;
+	vtkSmartPointer<vtkImageThreshold> m_threshold = nullptr;
+	vtkSmartPointer<vtkImageCast> m_cast = nullptr;
 	vtkImageData* m_tmpOverlay = nullptr;
 
 	bool m_previewFlag = false;
 
-	//int m_lowerThreshold = 0;
-	//int m_upperThreshold = 9999;
 	int m_label = 0;
 
 };

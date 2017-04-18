@@ -109,7 +109,7 @@ void QInteractorStyleMaximumWallThickness::EnableMaximumWallThickneesLabel(bool 
 		this->m_lineActor->VisibilityOff();
 		this->m_labelActor->VisibilityOff();
 	}
-
+	GetImageViewer()->Render();
 }
 
 void QInteractorStyleMaximumWallThickness::UpdateMaximumWallThicknessLabel()

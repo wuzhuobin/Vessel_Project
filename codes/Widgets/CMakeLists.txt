@@ -20,6 +20,8 @@ if(NOT Qt5Widgets_FOUND)
 	message(FATAL_ERROR "error: Qt5Widgets is not found")
 endif()
 
+add_subdirectory( ContourWidgetSeries)
+
 SET(WIDGET_SRC
 #	${CMAKE_CURRENT_SOURCE_DIR}/Distance3DWidget.cxx
 #	${CMAKE_CURRENT_SOURCE_DIR}/MyBorderWidget.cxx
@@ -27,8 +29,6 @@ SET(WIDGET_SRC
 #	${CMAKE_CURRENT_SOURCE_DIR}/MyPlaneWidget.cxx
 	${PROJECT_SOURCE_DIR}/vtkROIWidget.cxx
 	${PROJECT_SOURCE_DIR}/PerpendicularMeasurementLineWidget.cxx
-	# ${PROJECT_SOURCE_DIR}/ContourWidgetSeries.cxx
-	# ${PROJECT_SOURCE_DIR}/ContourWidgetSeriesRepresentation.cxx
 	)
 
 SET(WIDGET_INC 
@@ -38,8 +38,6 @@ SET(WIDGET_INC
 #	${CMAKE_CURRENT_SOURCE_DIR}/MyPlaneWidget.h
 	${PROJECT_SOURCE_DIR}/vtkROIWidget.h
 	${PROJECT_SOURCE_DIR}/PerpendicularMeasurementLineWidget.h
-	# ${PROJECT_SOURCE_DIR}/ContourWidgetSeries.h
-	# ${PROJECT_SOURCE_DIR}/ContourWidgetSeriesRepresentation.h	
 	)
 
 QT5_WRAP_CPP(

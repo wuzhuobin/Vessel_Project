@@ -28,6 +28,7 @@ Copyright (C) 2016
 #include <vtkOrientedGlyphContourRepresentation.h>
 #include <vtkIncrementalOctreePointLocator.h>
 #include <vtkObjectFactory.h>
+#include <vtkImageActorPointPlacer.h>
 #include <vtkPolyData.h>
 #include <vtkImageData.h>
 
@@ -66,8 +67,7 @@ void InteractorStylePolygonDraw::OnRightButtonDown()
 
 void InteractorStylePolygonDraw::OnMouseMove()
 {
-
-	if (m_polygonDrawEnabledFlag) {
+	if (GetCustomEnabled()) {
 		NewContour();
 		m_currentContour->EnabledOn();
 	}
@@ -91,8 +91,8 @@ void InteractorStylePolygonDraw::OnKeyPress()
 
 void InteractorStylePolygonDraw::SetCustomEnabled(bool b)
 {
-	m_polygonDrawEnabledFlag = b;
-	if (!m_polygonDrawEnabledFlag) {
+	AbstractNavigation::SetCustomEnabled(b);
+	if (!b) {
 		CleanAllContours();
 		m_currentContour = nullptr;
 	}
@@ -126,6 +126,11 @@ void InteractorStylePolygonDraw::NewContour()
 	m_currentContourRep->GetLinesProperty()->SetColor(0, 255, 0);
 	m_currentContourRep->SetLineInterpolator(m_interpolator);
 	m_currentContourRep->AlwaysOnTopOn();
+
+	vtkSmartPointer<vtkImageActorPointPlacer> pointPlacer =
+		vtkSmartPointer<vtkImageActorPointPlacer>::New();
+	pointPlacer->SetImageActor(GetImageViewer()->GetImageActor());
+	m_currentContourRep->SetPointPlacer(pointPlacer);
 }
 
 
@@ -295,7 +300,10 @@ void InteractorStylePolygonDraw::FillPolygon(
 		for (int x = bounds[0]; x <= bounds[1]; x++) {
 			for (int y = bounds[2]; y <= bounds[3]; y++) {
 				for (int z = bounds[4]; z <= bounds[5]; z++) {
-					double p[3] = { x, y, z };
+					double p[3] = { 
+						static_cast<double>(x), 
+						static_cast<double>(y), 
+						static_cast<double>(z) };
 					if (vtkPolygon::PointInPolygon(p, (*cit)->GetPoints()->GetNumberOfPoints(),
 						static_cast<double*>(
 						(*cit)->GetPoints()->GetData()->GetVoidPointer(0)),
@@ -316,10 +324,7 @@ void InteractorStylePolygonDraw::FillPolygon(
 	GetImageViewer()->GetOverlay()->Modified();
 
 	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(InteractorStylePolygonDraw, GetImageViewer()->Render());
-
-
 }
-
 
 void InteractorStylePolygonDraw::FillPolygon(
 	std::list<vtkSmartPointer<vtkPolygon>>* contourPolygon, unsigned char label, int slice)
@@ -361,7 +366,10 @@ void InteractorStylePolygonDraw::FillPolygon(
 		for (int x = bounds[0]; x <= bounds[1]; x++) {
 			for (int y = bounds[2]; y <= bounds[3]; y++) {
 				for (int z = bounds[4]; z <= bounds[5]; z++) {
-					double p[3] = { x, y, z };
+					double p[3] = { 
+						static_cast<double>(x), 
+						static_cast<double>(y), 
+						static_cast<double>(z) };
 					if (vtkPolygon::PointInPolygon(p, (*cit)->GetPoints()->GetNumberOfPoints(),
 						static_cast<double*>(
 						(*cit)->GetPoints()->GetData()->GetVoidPointer(0)),
@@ -381,7 +389,6 @@ void InteractorStylePolygonDraw::FillPolygon(
 	GetImageViewer()->GetOverlay()->Modified();
 	SAFE_DOWN_CAST_IMAGE_CONSTITERATOR(InteractorStylePolygonDraw, GetImageViewer()->Render());
 
-
 }
 
 //void InteractorStylePolygonDraw::FillPolygon(
@@ -400,7 +407,7 @@ void InteractorStylePolygonDraw::FillPolygon(
 //		if (_polyData == nullptr || _polyData->GetNumberOfPoints() < 3) {
 //			continue;
 //		}
-//		(*cit)->CloseLoop();
+//		(*cit)->CloseAllLoops();
 //
 //		// Check if contour is drawn
 //		if (_polyData->GetNumberOfPoints() == 0)

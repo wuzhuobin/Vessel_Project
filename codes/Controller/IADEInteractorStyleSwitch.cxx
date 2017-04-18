@@ -45,6 +45,12 @@ IADEInteractorStyleSwitch::IADEInteractorStyleSwitch()
 	allStyles.push_back(TubularVOI);
 	Ruler = QInteractorStyleRuler::New();
 	allStyles.push_back(Ruler);
+	PolygonDraw = InteractorStylePolygonDraw::New();
+	allStyles.push_back(PolygonDraw);
+	PolygonDrawSeries = QInteractorStylePolygonDrawSeries::New();
+	allStyles.push_back(PolygonDrawSeries);
+	VesselSegmentation2 = QInteractorStyleVesselSegmentation2::New();
+	allStyles.push_back(VesselSegmentation2);
 	MaximumWallThickness = QInteractorStyleMaximumWallThickness::New();
 	allStyles.push_back(MaximumWallThickness);
 	// IADE specified

@@ -72,6 +72,7 @@ ImageViewer::ImageViewer()
 {
 	this->ImageActor->VisibilityOff();
 	this->OverlayActor = vtkImageActor::New();
+	this->OverlayActor->InterpolateOff();
 	this->OverlayActor->VisibilityOff();
 	this->OverlayImageMapToColors = vtkImageMapToColors::New();
 
@@ -266,6 +267,17 @@ void ImageViewer::ResetDisplayExtent()
 	int *ResetExtent = outInfo->Get(
 		vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
 	SetDisplayExtent(ResetExtent);
+}
+
+void ImageViewer::GetSliceRange(int & min, int & max)
+{
+	min = this->DisplayExtent[this->SliceOrientation * 2];
+	max = this->DisplayExtent[this->SliceOrientation * 2 + 1];
+}
+
+int * ImageViewer::GetSliceRange()
+{
+	return this->DisplayExtent + this->SliceOrientation*2;
 }
 
 void ImageViewer::SetColorLevel(double level)

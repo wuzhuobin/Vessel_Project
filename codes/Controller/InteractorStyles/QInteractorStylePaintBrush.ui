@@ -221,6 +221,15 @@
            </property>
            <item>
             <property name="text">
+             <string>No label</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../Main/resources/IADE_Analyzer.qrc">
+              <normaloff>:/icons/transparentbox.png</normaloff>:/icons/transparentbox.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>Vessel Wall</string>
             </property>
             <property name="icon">

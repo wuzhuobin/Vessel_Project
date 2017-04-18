@@ -7,6 +7,8 @@
 class vtkContourRepList;
 class vtkContourRepresentation;
 class vtkPolyData;
+class vtkContourList;
+class vtkIncrementalOctreePointLocator;
 
 
 class ContourWidgetSeriesRepresentation: public vtkWidgetRepresentation
@@ -27,10 +29,10 @@ public:
 	// display and world coordinates. The seeds are accessed by a seed
 	// number.
 
-	virtual void InitializeContours(unsigned int contourNum, vtkPolyData* polyData);
-	virtual void GetSeedWorldPosition(unsigned int seedNum, double pos[3]);
-	virtual void SetSeedDisplayPosition(unsigned int seedNum, double pos[3]);
-	virtual void GetSeedDisplayPosition(unsigned int seedNum, double pos[3]);
+	//virtual void InitializeContours(unsigned int contourNum, vtkPolyData* polyData);
+	//virtual void GetSeedWorldPosition(unsigned int seedNum, double pos[3]);
+	//virtual void SetSeedDisplayPosition(unsigned int seedNum, double pos[3]);
+	//virtual void GetSeedDisplayPosition(unsigned int seedNum, double pos[3]);
 
 	// Description:
 	// Return the number of seeds (or Contours) that have been created.
@@ -49,7 +51,7 @@ public:
 	// Get the Contour representations used for a particular seed. A side effect of
 	// this method is that it will create a Contour representation in the list of
 	// representations if one has not yet been created.
-	vtkContourRepresentation *GetContourRepresentation(unsigned int num);
+	virtual vtkContourRepresentation *GetContourRepresentation(unsigned int num);
 
 	// Description:
 	// Returns the model ContourRepresentation.
@@ -68,8 +70,9 @@ public:
 	//BTX -- used to communicate about the state of the representation
 	enum
 	{
-		Outside = 0,
-		NearSeed
+		OUTSIDE = 0,
+		NEAR_NODE,
+		NEAR_CONTOUR
 	};
 	//ETX
 
@@ -78,7 +81,7 @@ public:
 	// invoked from vtkSeedWidget.
 	virtual int GetActiveContour();
 	// Returns the id of the seed created, -1 on failure. e is the display position.
-	virtual int CreateContour(double e[2]);
+	virtual int CreateContour(/*double e[2]*/);
 	// Delete last Contour created
 	virtual void RemoveLastContour();
 	// Delete the currently active Contour
@@ -93,9 +96,11 @@ public:
 	virtual void BuildRepresentation();
 	virtual int ComputeInteractionState(int X, int Y, int modify = 0);
 
+	static bool PointOnContour(vtkContourRepresentation* contourRep ,int X, int Y);
+
 protected:
 	ContourWidgetSeriesRepresentation();
-	~ContourWidgetSeriesRepresentation();
+	virtual ~ContourWidgetSeriesRepresentation();
 
 	// The Contour and the rep used to close the Contours
 	vtkContourRepresentation  *ContourRepresentation;
@@ -106,6 +111,12 @@ protected:
 
 	// The active seed (Contour) based on the last ComputeInteractionState()
 	int ActiveContour;
+
+
+	//Description:
+	// Adding a point locator to the representation to speed
+	// up lookup of the active node when dealing with large datasets (100k+)
+	vtkIncrementalOctreePointLocator *Locator;
 
 private:
 	ContourWidgetSeriesRepresentation(const ContourWidgetSeriesRepresentation&);  //Not implemented

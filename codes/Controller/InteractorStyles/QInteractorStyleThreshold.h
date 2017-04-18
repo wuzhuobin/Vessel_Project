@@ -99,7 +99,6 @@ private:
 	QSlider* m_sliderUpperThreshold = nullptr;
 	QSlider* m_sliderLowerThreshold = nullptr;
 	QPushButton* m_pushButtonReset = nullptr;
-	QStringList m_listOfModalityNames;
 
 };
 

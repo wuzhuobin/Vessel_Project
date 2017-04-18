@@ -56,7 +56,7 @@ InteractorStylePaintBrush::InteractorStylePaintBrush()
 	//Default color: Red
 	m_colorRed = 0;
 	m_colorGreen = 0;
-	m_colorBule = 255;
+	m_colorBule = 0;
 	m_opacity = 255;
 	m_brushShape = SQUARE;
 	m_brushSize = 1;
@@ -376,6 +376,7 @@ void InteractorStylePaintBrush::SetPaintBrushLabel(int paintBrushLabel)
 	for (int i = 0; i < 3; ++i) {
 		rgba[i] = _colour[i] * 255;
 	}
+	EnableEraserMode(paintBrushLabel == 0);
 	SetDrawColor(rgba[0], rgba[1], rgba[2]);
 }
 

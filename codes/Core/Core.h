@@ -48,6 +48,9 @@ private slots:
 	void slotTubularVOI();
 	void slotRuler();
 	void slotMaximumWallThickness();
+	void slotPolygonDraw();
+	void slotPolygonDrawSeries();
+	void slotVesselSegmentation();
 
 	// Surface interactorStyle
 	void slotTrackballCamera();

@@ -21,7 +21,7 @@ void QInteractorStylePaintBrush::SetCurrentFocalPointWithImageCoordinate(int i, 
 
 void QInteractorStylePaintBrush::SetPaintBrushLabel(int paintBrushLabel)
 {
-	InteractorStylePaintBrush::SetPaintBrushLabel(paintBrushLabel + 1);
+	InteractorStylePaintBrush::SetPaintBrushLabel(paintBrushLabel);
 }
 
 void QInteractorStylePaintBrush::SetDrawOpacity(int opacity)
@@ -47,8 +47,22 @@ void QInteractorStylePaintBrush::EnableEraserMode(bool flag)
 QInteractorStylePaintBrush::QInteractorStylePaintBrush(int uiType, QWidget * parent)
 {
 	QNEW_UI();
+}
+
+QInteractorStylePaintBrush::~QInteractorStylePaintBrush()
+{
+	QDELETE_UI();
+}
+
+void QInteractorStylePaintBrush::uniqueInitialization()
+{
+	ui->eraserCheckBox->setVisible(false);
+}
+
+void QInteractorStylePaintBrush::initialization()
+{
 	// brush size
-	connect(ui->BrushSizeSpinBox, SIGNAL(valueChanged(int)), 
+	connect(ui->BrushSizeSpinBox, SIGNAL(valueChanged(int)),
 		this, SLOT(SetBrushSize(int)));
 	// brush label
 	connect(ui->labelComboBox, SIGNAL(currentIndexChanged(int)),
@@ -60,17 +74,11 @@ QInteractorStylePaintBrush::QInteractorStylePaintBrush(int uiType, QWidget * par
 	connect(ui->eraserCheckBox, SIGNAL(toggled(bool)),
 		this, SLOT(EnableEraserMode(bool)));
 	// set overlay opacity
-	connect(ui->opacitySpinBox, SIGNAL(valueChanged(int)), 
+	connect(ui->opacitySpinBox, SIGNAL(valueChanged(int)),
 		this, SLOT(SetDrawOpacity(int)));
 	// set brushEraserMode
 	connect(ui->eraserCheckBox, SIGNAL(toggled(bool)),
 		this, SLOT(EnableEraserMode(bool)));
-
-}
-
-QInteractorStylePaintBrush::~QInteractorStylePaintBrush()
-{
-	QDELETE_UI();
 }
 
 //void QInteractorStylePaintBrush::uniqueInvoke(bool flag)

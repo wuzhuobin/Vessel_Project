@@ -42,38 +42,38 @@ protected:
 	QInteractorStyleLumenSeedsPlacer(int uiType = UNIQUE_UI, QWidget* parent = Q_NULLPTR);
 	~QInteractorStyleLumenSeedsPlacer();
 
-	virtual void SetFocalSeed(int i, QList<int*>& seeds);
+	void SetFocalSeed(int i, QList<int*>& seeds);
 
-	virtual void GenerateWidgetFromSeeds(const QList<int*>& seeds);
+	void GenerateWidgetFromSeeds(const QList<int*>& seeds);
 
-	virtual void SaveWidgetToSeeds(QList<int*>& seeds);
-	virtual void DropSeed(QList<int*>& seeds);
+	void SaveWidgetToSeeds(QList<int*>& seeds);
+	void DropSeed(QList<int*>& seeds);
 
-	virtual void UpdateWidgetToSeeds(
+	void UpdateWidgetToSeeds(
 		QList<int*>& seeds,
 		int* newImagePos,
 		int* oldImagePos = nullptr);
-	virtual void ClearAllSeeds(QList<int*>& seeds);
-	virtual void DeleteFocalSeed(QList<int*>& seeds);
+	void ClearAllSeeds(QList<int*>& seeds);
+	void DeleteFocalSeed(QList<int*>& seeds);
 
-	virtual void ExtractLumen(QList<int*>& seeds);
+	void ExtractLumen(QList<int*>& seeds);
 
+
+	virtual void uniqueEnable() override;
 	void uniqueInitialization();
 	void initialization();
 	void UpdateTargetViewer();
 
-	virtual void uniqueEnable() override;
-	
-	virtual void OnKeyPress() override;
-
-	static QList<int*> m_lumenSeeds;
 	virtual QListWidget* GetListWidget();
+
+	///< container for all lumen seeds
+	static QList<int*> m_lumenSeeds;
+
 
 	int m_numberOfIteractions = 3;
 	double m_multiplier = 2.1;
 	int m_initialNeighborhoodRadius = 1;
 
-	QStringList m_listOfModalityNames;
 private:
 	Ui::QInteractorStyleLumenSeedsPlacer* ui = nullptr;
 

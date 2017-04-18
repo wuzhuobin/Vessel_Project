@@ -11,9 +11,9 @@ public:
 
 	virtual void SetOutputLabel(int label);
 	virtual void ThresholdToOverlay();
-	virtual void SetThreshold(int lower, int upper);
+	virtual void SetThreshold(double lower, double upper);
 
-	virtual void SetThresholdByViewer(int lower, int upper);
+	virtual void SetThresholdByViewer(double lower, double upper);
 
 
 protected: 

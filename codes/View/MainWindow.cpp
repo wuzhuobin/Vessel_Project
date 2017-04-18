@@ -94,6 +94,9 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroupImage->addAction(ui->actionTubular_VOI);
 	actionGroupImage->addAction(ui->actionDistance_measure);
 	actionGroupImage->addAction(ui->actionMaximum_wall_thickness);
+	actionGroupImage->addAction(ui->actionPolygon_draw);
+	actionGroupImage->addAction(ui->actionPolygon_draw_series);
+	actionGroupImage->addAction(ui->actionVessel_segmentation);
 	actionGroupImage->addAction(ui->actionTesting);
 	actionGroupImage->setExclusive(true);
 

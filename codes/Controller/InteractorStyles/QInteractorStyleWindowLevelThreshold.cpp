@@ -31,32 +31,32 @@ void QInteractorStyleWindowLevelThreshold::uniqueEnable()
 	UpdateTargetViewer();
 }
 
-void QInteractorStyleWindowLevelThreshold::SetThresholdByViewer(int lower, int upper)
+void QInteractorStyleWindowLevelThreshold::SetThresholdByViewer(double lower, double upper)
 {
 	InteractorStyleWindowLevelThreshold::SetThresholdByViewer(lower, upper);
 
-	m_spinBoxLowerThreshold->setValue(lower);
-	m_spinBoxUpperThreshold->setValue(upper);
+	m_spinBoxLowerThreshold->setValue(static_cast<int>(lower + 0.5));
+	m_spinBoxUpperThreshold->setValue(static_cast<int>(upper + 0.5));
 }
 
 void QInteractorStyleWindowLevelThreshold::UpdateTargetViewer()
 {
-	//QStringList listOfModalityName;
+	QStringList listOfModalityNames;
 	ui->comboBoxTargeImage->clear();
-	m_listOfModalityNames.clear();
+	listOfModalityNames.clear();
 	for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
 		cit != m_imageStyles.cend(); ++cit) {
 		QInteractorStyleWindowLevelThreshold* _style = QInteractorStyleWindowLevelThreshold::SafeDownCast(*cit);
 		// because not all have been CustomEnabled this time
 		if (_style /*&& _style->GetCustomEnabled()*/) {
-			m_listOfModalityNames.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
+			listOfModalityNames.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
 		}
 	}
-	m_listOfModalityNames.removeDuplicates();
-	//if (m_listOfModalityNames != listOfModalityName)
+	listOfModalityNames.removeDuplicates();
+	//if (listOfModalityNames != listOfModalityName)
 	//{
-	for (int i = 0; i < m_listOfModalityNames.size(); ++i) {
-		ui->comboBoxTargeImage->addItem(m_listOfModalityNames[i]);
+	for (int i = 0; i < listOfModalityNames.size(); ++i) {
+		ui->comboBoxTargeImage->addItem(listOfModalityNames[i]);
 	}
 	//}
 }

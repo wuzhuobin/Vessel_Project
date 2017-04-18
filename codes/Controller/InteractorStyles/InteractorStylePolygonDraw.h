@@ -26,6 +26,10 @@ Copyright (C) 2016
 
 class vtkContourWidget;
 class vtkOrientedGlyphContourRepresentation;
+class vtkContourRepresentation;
+class vtkPolygon;
+class vtkContourLineInterpolator;
+
 
 class InteractorStylePolygonDraw : public AbstractNavigation
 {
@@ -87,7 +91,7 @@ protected:
 
 
 
-	bool m_polygonDrawEnabledFlag = false;
+	//bool m_polygonDrawEnabledFlag = false;
 
 
 	// defaule label

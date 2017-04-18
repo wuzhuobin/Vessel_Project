@@ -97,7 +97,7 @@ protected:
 	int m_brushSize;
 	bool m_isDraw;
 	int m_brushShape = SQUARE;
-	bool m_eraserModeFlag = false;
+	bool m_eraserModeFlag = true;
 
 };
 

@@ -90,7 +90,15 @@ private:
 					_widget->seedsPlacer->GetSpacing()[pos] + 0.5;
 			}
 			_widget->seedsPlacer->UpdateWidgetToSeeds(newImagePos, oldImagePos);
-			_widget->seedsPlacer->OnLeftButtonUp();
+
+			// update other viewers' seed widgets
+			for (list<AbstractInteractorStyleImage*>::const_iterator cit =
+				_widget->seedsPlacer->m_imageStyles.cbegin(); cit != _widget->seedsPlacer->m_imageStyles.cend(); ++cit) {
+				InteractorStyleSeedsPlacer* _style = InteractorStyleSeedsPlacer::SafeDownCast(*cit);
+				if (_style != nullptr && _style->m_customFlag && _style != _widget->seedsPlacer) {
+					_style->GenerateWidgetFromSeeds();
+				}
+			}
 		}
 		else if (eid == vtkCommand::PlacePointEvent) {
 			_widget->seedsPlacer->SaveWidgetToSeeds();
@@ -106,11 +114,8 @@ private:
 };
 
 int SeedsPlacerWidget::oldImagePos[3] = { -1 };
-//vtkStandardNewMacro(SeedsPlacerRepresentation);
-//vtkStandardNewMacro(SeedsPlacerWidget);
 vtkStandardNewMacro(InteractorStyleSeedsPlacer);
 
-//int InteractorStyleSeedsPlacer::m_oldSeedsSize = 0;
 vector<int*> InteractorStyleSeedsPlacer::m_seeds;
 
 void InteractorStyleSeedsPlacer::SetCustomEnabled(bool flag)
@@ -165,23 +170,34 @@ void InteractorStyleSeedsPlacer::SetFocalSeed(int i)
 
 void InteractorStyleSeedsPlacer::SetCurrentFocalPointWithImageCoordinate(int i, int j, int k)
 {
+
+	//int oldIJK[3];
+	//GetImageViewer()->GetFocalPointWithImageCoordinate(oldIJK);
+	AbstractNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
+	//for (list<AbstractInteractorStyleImage*>::const_iterator cit =
+	//	m_imageStyles.cbegin(); cit != m_imageStyles.cend(); ++cit) {
+	//	InteractorStyleSeedsPlacer* _style = InteractorStyleSeedsPlacer::SafeDownCast(*cit);
+	//	if (_style != nullptr &&
+	//		_style->m_customFlag &&
+	//		_style->GetSlice() != oldIJK[_style->GetSliceOrientation()]) {
+	//		_style->GenerateWidgetFromSeeds();
+	//		_style->m_seedWidget->Render();
+	//	}
+	//}
+}
+
+void InteractorStyleSeedsPlacer::SetCurrentFocalPointWithImageCoordinateByViewer(int i, int j, int k)
+{
 	// Only Generate seedWidgets when it is needed
 	// if its slice has not changed, it needs not to re-generate
-	int oldIJK[3];
-	GetImageViewer()->GetFocalPointWithImageCoordinate(oldIJK);
-	AbstractNavigation::SetCurrentFocalPointWithImageCoordinate(i, j, k);
-	for (list<AbstractInteractorStyleImage*>::const_iterator cit =
-		m_imageStyles.cbegin(); cit != m_imageStyles.cend(); ++cit) {
-		InteractorStyleSeedsPlacer* _style = InteractorStyleSeedsPlacer::SafeDownCast(*cit);
-		if (_style != nullptr &&
-			_style->m_customFlag &&
-			_style->GetSlice() != oldIJK[_style->GetSliceOrientation()]) {
-			_style->GenerateWidgetFromSeeds();
-			_style->m_seedWidget->Render();
-		}
+	int ijk[3];
+	GetImageViewer()->GetFocalPointWithImageCoordinate(ijk); 
+	AbstractNavigation::SetCurrentFocalPointWithImageCoordinateByViewer(i, j, k);
+	if (GetSlice() != ijk[GetSliceOrientation()]) {
+		GenerateWidgetFromSeeds();
+		m_seedWidget->Render();
 	}
-	//DYNAMIC_CAST_CONSTITERATOR(InteractorStyleSeedsPlacer, GenerateWidgetFromSeeds());
-	//MY_VIEWER_CONSTITERATOR(Render());
+
 }
 
 InteractorStyleSeedsPlacer::InteractorStyleSeedsPlacer()
@@ -189,8 +205,6 @@ InteractorStyleSeedsPlacer::InteractorStyleSeedsPlacer()
 {
 	m_seedWidget = vtkSmartPointer<SeedsPlacerWidget>::New();
 	SeedsPlacerWidget::SafeDownCast(m_seedWidget)->seedsPlacer = this;
-	//m_seedRep = vtkSmartPointer<SeedsPlacerRepresentation>::New();
-	//m_seedWidget->SetRepresentation(m_seedRep);
 }
 
 InteractorStyleSeedsPlacer::~InteractorStyleSeedsPlacer()
@@ -320,7 +334,15 @@ void InteractorStyleSeedsPlacer::DropSeed(vector<int*>& seeds)
 	m_seedWidget->Render();
 
 	SaveWidgetToSeeds(seeds);
-	OnLeftButtonUp();
+
+	// update other viewers' seed widgets
+	for (list<AbstractInteractorStyleImage*>::const_iterator cit =
+		m_imageStyles.cbegin(); cit != m_imageStyles.cend(); ++cit) {
+		InteractorStyleSeedsPlacer* _style = InteractorStyleSeedsPlacer::SafeDownCast(*cit);
+		if (_style != nullptr && _style->m_customFlag && _style != this) {
+			_style->GenerateWidgetFromSeeds();
+		}
+	}
 }
 
 void InteractorStyleSeedsPlacer::ClearAllSeedWidget()
@@ -346,20 +368,3 @@ void InteractorStyleSeedsPlacer::ClearAllSeeds(vector<int*>& seed)
 		}
 	}
 }
-	
-
-
-//vtkImageActorPointPlacer * SeedsPlacerRepresentation::GetImagePointPlacer()
-//{
-//	return vtkImageActorPointPlacer::SafeDownCast(
-//		GetHandleRepresentation()->
-//		GetPointPlacer());
-//}
-//
-//SeedsPlacerRepresentation::SeedsPlacerRepresentation()
-//{
-//	SetHandleRepresentation(
-//		vtkSmartPointer<vtkPointHandleRepresentation3D>::New());
-//	GetHandleRepresentation()->SetPointPlacer(
-//		vtkSmartPointer<vtkImageActorPointPlacer>::New());
-//}

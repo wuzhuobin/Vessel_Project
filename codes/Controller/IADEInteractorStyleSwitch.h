@@ -27,6 +27,9 @@ Copyright (C) 2016
 #include "QInteractorStyleTubularVOI.h"
 #include "QInteractorStyleMaximumWallThickness.h"
 #include "QInteractorStyleRuler.h"
+#include "InteractorStylePolygonDraw.h"
+#include "QInteractorStylePolygonDrawSeries.h"
+#include "QInteractorStyleVesselSegmentation2.h"
 
 class IADEInteractorStyleSwitch : public InteractorStyleSwitch
 {
@@ -74,9 +77,22 @@ public:
 	SetInteractorStyleMacro(MaximumWallThickness);
 	CurrentStyleMacro(MaximumWallThickness);
 
+	vtkGetMacro(PolygonDraw, InteractorStylePolygonDraw*);
+	SetInteractorStyleMacro(PolygonDraw);
+	CurrentStyleMacro(PolygonDraw);
+
+	vtkGetMacro(PolygonDrawSeries, QInteractorStylePolygonDrawSeries*);
+	SetInteractorStyleMacro(PolygonDrawSeries);
+	CurrentStyleMacro(PolygonDrawSeries);
+
+	vtkGetMacro(VesselSegmentation2, QInteractorStyleVesselSegmentation2*);
+	SetInteractorStyleMacro(VesselSegmentation2);
+	CurrentStyleMacro(VesselSegmentation2);
+
 	vtkGetMacro(VBDSmoker, QInteractorStyleVBDSmokerSeeds*);
 	SetInteractorStyleMacro(VBDSmoker);
 	CurrentStyleMacro(VBDSmoker);
+
 
 protected:
 	IADEInteractorStyleSwitch();
@@ -85,13 +101,15 @@ protected:
 	QInteractorStyleWindowLevel* WindowLevel;
 	QInteractorStyleThreshold* Threshold;
 	QInteractorStyleWindowLevelThreshold* WindowLevelThreshold;
-	//QInteractorStyleVesselSegmentation* PolygonDraw;
 	QInteractorStyleLumenSeedsPlacer* LumenSeedsPlacer;
 	QInteractorStylePaintBrush*	PaintBrush;
 	QInteractorStyleVOI* VOI;
 	QInteractorStyleTubularVOI* TubularVOI;
 	QInteractorStyleRuler* Ruler;
 	QInteractorStyleMaximumWallThickness* MaximumWallThickness;
+	InteractorStylePolygonDraw* PolygonDraw;
+	QInteractorStylePolygonDrawSeries* PolygonDrawSeries;
+	QInteractorStyleVesselSegmentation2* VesselSegmentation2;
 
 	// IADE specified 
 	QInteractorStyleVBDSmokerSeeds* VBDSmoker;

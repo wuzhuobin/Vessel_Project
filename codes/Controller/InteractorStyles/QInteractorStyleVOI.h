@@ -11,8 +11,7 @@ namespace Ui { class QInteractorStyleVOI; }
 class vtkRenderWindow;
 class vtkROIWidget;
 
-class QInteractorStyleVOI :	
-/*	public QAbstractNavigation,*/	public QInteractorStyleNavigation
+class QInteractorStyleVOI :	public QInteractorStyleNavigation
 {
 	Q_OBJECT;
 	QSETUP_UI_HEAD(QInteractorStyleVOI);

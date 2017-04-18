@@ -62,7 +62,7 @@ public slots:
 	virtual void ThresholdTargetViewerToOverlay();
 	virtual void SetOutputLabel(int label)override;
 
-	virtual void SetThresholdByViewer(int lower, int upper);
+	virtual void SetThresholdByViewer(double lower, double upper) override;
 	virtual void ResetWindowLevel() override;
 
 protected:
@@ -97,7 +97,6 @@ private:
 	QSlider* m_sliderUpperThreshold = nullptr;
 	QSlider* m_sliderLowerThreshold = nullptr;
 	QPushButton* m_pushButtonReset = nullptr;
-	QStringList m_listOfModalityNames;
 
 };
 

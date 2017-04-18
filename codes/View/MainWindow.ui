@@ -174,7 +174,7 @@
     <addaction name="actionDistance_measure"/>
     <addaction name="acitonVOI_selection"/>
     <addaction name="actionSeeds_placer"/>
-    <addaction name="actionContour"/>
+    <addaction name="actionPolygon_draw"/>
     <addaction name="actionPaint_brush"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -237,6 +237,9 @@
     <addaction name="acitonVOI_selection"/>
     <addaction name="actionTubular_VOI"/>
     <addaction name="actionPaint_brush"/>
+    <addaction name="actionPolygon_draw"/>
+    <addaction name="actionPolygon_draw_series"/>
+    <addaction name="actionVessel_segmentation"/>
     <addaction name="actionMaximum_wall_thickness"/>
     <addaction name="actionDistance_measure"/>
     <addaction name="actionSeeds_placer"/>
@@ -308,7 +311,7 @@
    <addaction name="actionTubular_VOI"/>
    <addaction name="actionSeeds_placer"/>
    <addaction name="actionVBD_Smoker"/>
-   <addaction name="actionContour"/>
+   <addaction name="actionPolygon_draw"/>
    <addaction name="actionPaint_brush"/>
    <addaction name="separator"/>
    <addaction name="actionMulti_planar_view"/>
@@ -520,7 +523,7 @@
     <string>Decrease Opacity</string>
    </property>
   </action>
-  <action name="actionContour">
+  <action name="actionPolygon_draw">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -532,10 +535,10 @@
      <normaloff>:/icons/contour.png</normaloff>:/icons/contour.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Contour</string>
+    <string>Polygon draw</string>
    </property>
    <property name="toolTip">
-    <string>ContourDrawing</string>
+    <string>Polygon draw</string>
    </property>
   </action>
   <action name="actionCloseImage">
@@ -934,6 +937,9 @@
    </property>
   </action>
   <action name="actionWay_point_centerline">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Way point centerline</string>
    </property>
@@ -984,6 +990,36 @@
    </property>
    <property name="toolTip">
     <string>Threshold</string>
+   </property>
+  </action>
+  <action name="actionPolygon_draw_series">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/177503-200.png</normaloff>:/icons/177503-200.png</iconset>
+   </property>
+   <property name="text">
+    <string>Polygon draw series</string>
+   </property>
+   <property name="toolTip">
+    <string>Polygon draw series</string>
+   </property>
+  </action>
+  <action name="actionVessel_segmentation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/177503-200.png</normaloff>:/icons/177503-200.png</iconset>
+   </property>
+   <property name="text">
+    <string>Vessel segmentation</string>
+   </property>
+   <property name="toolTip">
+    <string>Vessel segmentation</string>
    </property>
   </action>
  </widget>

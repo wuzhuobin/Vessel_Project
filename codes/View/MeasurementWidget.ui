@@ -114,12 +114,12 @@
         </attribute>
         <row>
          <property name="text">
-          <string>Lumen Area / mm^2</string>
+          <string>Vessel Wall Area / mm^2</string>
          </property>
         </row>
         <row>
          <property name="text">
-          <string>Vessel Wall Area / mm^2</string>
+          <string>Lumen Area / mm^2</string>
          </property>
         </row>
         <row>

@@ -36,18 +36,18 @@ AbstractNavigation::~AbstractNavigation()
 
 ImageViewer* AbstractNavigation::GetImageViewer()
 {
-	return reinterpret_cast<ImageViewer*>(m_viewer);
+	return ImageViewer::SafeDownCast(m_viewer);
 }
 
 void AbstractNavigation::SetCurrentSlice(int slice)
 {
 	int ijk[3];
-	if (GetImageViewer() != nullptr) {
+	if (GetImageViewer()) {
 		GetImageViewer()->GetFocalPointWithImageCoordinate(ijk);
 		ijk[GetSliceOrientation()] = slice;
 		SetCurrentFocalPointWithImageCoordinate(ijk[0], ijk[1], ijk[2]);
 	}
-	else if(!GetVtkImageViewer2()) {
+	else if(GetVtkImageViewer2()) {
 		AbstractInteractorStyleImage::SetCurrentSlice(slice);
 	}
 }
@@ -83,18 +83,21 @@ void AbstractNavigation::OnMouseWheelBackward()
 void AbstractNavigation::OnKeyPress()
 {
 	std::string key = this->Interactor->GetKeySym();
-	int coordinate[3];
+
+	// quite ugly here
+	if (key == "Prior") {
+		MoveSliceForward();
+	}
+	else if (key == "Next") {
+		MoveSliceBackward();
+	}
+
 	if (GetImageViewer()) {
+		int coordinate[3];
+
 		GetImageViewer()->GetFocalPointWithImageCoordinate(coordinate);
 
-		// quite ugly here
-		if (key == "Prior") {
-			MoveSliceForward();
-		}
-		else if (key == "Next") {
-			MoveSliceBackward();
-		}
-		else if (key == "Up") {
+		if (key == "Up") {
 			switch (GetSliceOrientation())
 			{
 			case vtkImageViewer2::SLICE_ORIENTATION_YZ:

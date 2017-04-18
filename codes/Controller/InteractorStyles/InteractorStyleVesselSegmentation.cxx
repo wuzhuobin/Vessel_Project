@@ -116,7 +116,7 @@
 //	case VESSEL_WALL:
 //		// close loop the last contour
 //		if (m_vesselWallContourWidgets.size() != 0) {
-//			m_vesselWallContourWidgets.back()->CloseLoop();
+//			m_vesselWallContourWidgets.back()->CloseAllLoops();
 //		}
 //		m_vesselWallContourWidgets.push_back(vtkSmartPointer<vtkContourWidget>::New());
 //		m_currentContour = m_vesselWallContourWidgets.back();
@@ -139,7 +139,7 @@
 //	case LUMEN:
 //		// close loop the last contour
 //		if (m_lumenWallContourWidgets.size() != 0) {
-//			m_lumenWallContourWidgets.back()->CloseLoop();
+//			m_lumenWallContourWidgets.back()->CloseAllLoops();
 //		}
 //		m_lumenWallContourWidgets.push_back(vtkSmartPointer<vtkContourWidget>::New());
 //		m_currentContour = m_lumenWallContourWidgets.back();
@@ -208,7 +208,7 @@
 //		_contour->EnabledOn();
 //		// EnableOn() first
 //		_contour->Initialize((*cit));
-//		_contour->CloseLoop();
+//		_contour->CloseAllLoops();
 //
 //
 //	}

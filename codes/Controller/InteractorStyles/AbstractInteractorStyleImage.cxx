@@ -42,7 +42,7 @@ AbstractInteractorStyleImage::~AbstractInteractorStyleImage()
 
 vtkImageViewer2 * AbstractInteractorStyleImage::GetVtkImageViewer2()
 {
-	return reinterpret_cast<vtkImageViewer2*>(this->m_viewer);
+	return vtkImageViewer2::SafeDownCast(this->m_viewer);
 }
 
 void AbstractInteractorStyleImage::SetCurrentSlice(int slice)

@@ -28,7 +28,7 @@ void AbstractSurfaceCenterLine::SetCustomEnabled(bool flag)
 
 CenterlineSurfaceViewer * AbstractSurfaceCenterLine::GetCenterlineSurfaceViewer()
 {
-	return reinterpret_cast<CenterlineSurfaceViewer*>(m_viewer);
+	return CenterlineSurfaceViewer::SafeDownCast(m_viewer);
 }
 
 AbstractSurfaceCenterLine::AbstractSurfaceCenterLine()

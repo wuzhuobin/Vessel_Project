@@ -58,11 +58,11 @@ protected:
 	* @oveerride
 	* do nothing
 	*/
-	virtual void UpdateWidgetToSeeds(
+	void UpdateWidgetToSeeds(
 		std::vector<int*>& seeds,
 		int* newImagePos,
-		int* oldImagePos = nullptr) override;
-	virtual void ClearAllSeeds() override;
+		int* oldImagePos = nullptr);
+	void ClearAllSeeds() override;
 
 
 	virtual void OnLeftButtonDown() override;

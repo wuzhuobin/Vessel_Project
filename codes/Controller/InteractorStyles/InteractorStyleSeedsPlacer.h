@@ -24,7 +24,6 @@ Copyright (C) 2016
 #include <vector>
 
 class vtkSeedWidget;
-//class vtkSeedRepresentation;
 
 class InteractorStyleSeedsPlacer : public AbstractNavigation
 {
@@ -34,6 +33,7 @@ public:
 
 	virtual void SetCustomEnabled(bool flag);
 	virtual void SetCurrentFocalPointWithImageCoordinate(int i, int j, int k);
+	virtual void SetCurrentFocalPointWithImageCoordinateByViewer(int i, int j, int k);
 	virtual void SetFocalSeed(int i);
 	virtual void ClearAllSeedWidget();
 	virtual void GenerateWidgetFromSeeds();
@@ -44,26 +44,20 @@ public:
 		int* oldImagePos = nullptr);
 
 	virtual void ClearAllSeeds();
-	//virtual void DropSeed();
 
 protected:
 	InteractorStyleSeedsPlacer();
 	~InteractorStyleSeedsPlacer();
 
-	virtual void SetFocalSeed(std::vector<int*>& seeds, int i);
-	virtual void GenerateWidgetFromSeeds(const std::vector<int*>& seeds);
-	virtual void SaveWidgetToSeeds(std::vector<int*>& seeds);
-	virtual void DropSeed(std::vector<int*>& seeds);
-	virtual void UpdateWidgetToSeeds(
+	void SetFocalSeed(std::vector<int*>& seeds, int i);
+	void GenerateWidgetFromSeeds(const std::vector<int*>& seeds);
+	void SaveWidgetToSeeds(std::vector<int*>& seeds);
+	void DropSeed(std::vector<int*>& seeds);
+	void UpdateWidgetToSeeds(
 		std::vector<int*>& seeds,
 		int* newImagePos,
 		int* oldImagePos = nullptr);
-	virtual void ClearAllSeeds(std::vector<int*>& seed);
-
-	/**
-	 * Supposed to only used in callback
-	 */
-
+	void ClearAllSeeds(std::vector<int*>& seed);
 
 
 	virtual void OnLeftButtonUp();
@@ -76,9 +70,7 @@ protected:
 	static std::vector<int*> m_seeds;
 
 	friend class SeedsPlacerWidget;
-	//vtkSmartPointer<vtkSeedRepresentation> m_seedRep = nullptr;
 	vtkSmartPointer<vtkSeedWidget> m_seedWidget = nullptr;
-	//vtkSmartPointer<vtkCallbackCommand> m_callbackCommandSave = nullptr;
 
 };
 

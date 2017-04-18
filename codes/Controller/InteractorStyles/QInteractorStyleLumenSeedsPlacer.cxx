@@ -45,20 +45,21 @@ void QInteractorStyleLumenSeedsPlacer::SetCurrentFocalPointWithImageCoordinate(i
 void QInteractorStyleLumenSeedsPlacer::UpdateTargetViewer()
 {
 	//QStringList listOfModalityName;
+	QStringList listOfModalityNames;
 	ui->comboBoxTargeImage->clear();
-	m_listOfModalityNames.clear();
+	listOfModalityNames.clear();
 	for (list<AbstractInteractorStyleImage*>::const_iterator cit = m_imageStyles.cbegin();
 		cit != m_imageStyles.cend(); ++cit) {
 		QInteractorStyleLumenSeedsPlacer* _style = QInteractorStyleLumenSeedsPlacer::SafeDownCast(*cit);
 		// because not all have been CustomEnabled this timet 
 		if (_style /*&& _style->GetCustomEnabled()*/) {
-			m_listOfModalityNames.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
+			listOfModalityNames.append(QString::fromStdString(_style->GetImageViewer()->GetWindowName()));
 		}
 	}
-	m_listOfModalityNames.removeDuplicates();
+	listOfModalityNames.removeDuplicates();
 
-	for (int i = 0; i < m_listOfModalityNames.size(); ++i) {
-		ui->comboBoxTargeImage->addItem(m_listOfModalityNames[i]);
+	for (int i = 0; i < listOfModalityNames.size(); ++i) {
+		ui->comboBoxTargeImage->addItem(listOfModalityNames[i]);
 	}
 
 }
@@ -78,6 +79,7 @@ void QInteractorStyleLumenSeedsPlacer::ExtractLumenByTargetViewer()
 			QString::fromStdString(_style->GetImageViewer()->GetWindowName()) ==
 			ui->comboBoxTargeImage->currentText()) {
 			_style->ExtractLumen();
+			break;
 		}
 	}
 }
@@ -342,18 +344,6 @@ QInteractorStyleLumenSeedsPlacer::~QInteractorStyleLumenSeedsPlacer()
 {
 	QDELETE_UI();
 
-}
-
-void QInteractorStyleLumenSeedsPlacer::OnKeyPress()
-{
-	std::string key = this->Interactor->GetKeySym();
-	cout << __func__ << ' ' << key << endl;
-	if (key == "D") {
-		InteractorStyleSeedsPlacer::OnKeyPress();
-	}
-	else {
-		InteractorStyleSeedsPlacer::OnKeyPress();
-	}
 }
 
 QListWidget * QInteractorStyleLumenSeedsPlacer::GetListWidget()

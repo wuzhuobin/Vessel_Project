@@ -135,7 +135,8 @@ public:
 		int displayExtent4, int displayExtent5, int displayExtent6);
 	virtual void UpdateDisplayExtent();
 	virtual void ResetDisplayExtent();
-
+	virtual void GetSliceRange(int &min, int &max);
+	virtual int* GetSliceRange();
 	/**
 	* set the window level and window width of the image
 	* or the same saying image contrast
@@ -208,6 +209,5 @@ private:
 	ImageViewer(const ImageViewer&);  // Not implemented.
 	void operator=(const ImageViewer&);  // Not implemented.
 	void SetInputConnection(vtkAlgorithmOutput* input) {} // Not implemented.
-
 };
 #endif // !__IMAGE_VIEWER_H__

@@ -84,6 +84,8 @@ Core::Core(QObject * parent)
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetTubularVOI());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetRuler());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetMaximumWallThickness());
+	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPolygonDrawSeries());
+	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVesselSegmentation2());
 	//imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel()->show();
 	//moduleWiget.setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	
@@ -111,6 +113,12 @@ Core::Core(QObject * parent)
 		this, SLOT(slotRuler()));
 	connect(mainWindow.getUi()->actionMaximum_wall_thickness, SIGNAL(triggered()),
 		this, SLOT(slotMaximumWallThickness()));
+	connect(mainWindow.getUi()->actionPolygon_draw, SIGNAL(triggered()),
+		this, SLOT(slotPolygonDraw()));
+	connect(mainWindow.getUi()->actionPolygon_draw_series, SIGNAL(triggered()),
+		this, SLOT(slotPolygonDrawSeries()));
+	connect(mainWindow.getUi()->actionVessel_segmentation, SIGNAL(triggered()),
+		this, SLOT(slotVesselSegmentation()));
 	connect(mainWindow.getUi()->actionVBD_Smoker, SIGNAL(triggered()),
 		this, SLOT(slotVBDSmoker()));
 
@@ -404,6 +412,31 @@ void Core::slotMaximumWallThickness()
 		imageInteractorStyle[i]->SetInteractorStyleToMaximumWallThickness();
 	}
 	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetMaximumWallThickness());
+}
+
+void Core::slotPolygonDraw()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		imageInteractorStyle[i]->SetInteractorStyleToPolygonDraw();
+	}
+	mainWindow.getModuleWidget()->setWidget(nullptr);
+}
+
+void Core::slotPolygonDrawSeries()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		imageInteractorStyle[i]->SetInteractorStyleToPolygonDrawSeries();
+	}
+	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPolygonDrawSeries());
+
+}
+
+void Core::slotVesselSegmentation()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
+		imageInteractorStyle[i]->SetInteractorStyleToVesselSegmentation2();
+	}
+	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVesselSegmentation2());
 }
 
 void Core::slotTrackballCamera()
