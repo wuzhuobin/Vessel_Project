@@ -162,21 +162,6 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
-   <widget class="QMenu" name="menuInteraction">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="title">
-     <string>Interaction</string>
-    </property>
-    <addaction name="actionNavigation"/>
-    <addaction name="actionWindow_level"/>
-    <addaction name="actionDistance_measure"/>
-    <addaction name="acitonVOI_selection"/>
-    <addaction name="actionSeeds_placer"/>
-    <addaction name="actionPolygon_draw"/>
-    <addaction name="actionPaint_brush"/>
-   </widget>
    <widget class="QMenu" name="menuView">
     <property name="enabled">
      <bool>true</bool>
@@ -196,14 +181,14 @@
      <addaction name="actionImage3"/>
      <addaction name="actionImage4"/>
      <addaction name="actionFourViews"/>
-     <addaction name="actionRestore_docking"/>
     </widget>
     <widget class="QMenu" name="menuOrientation">
      <property name="title">
       <string>View Mode</string>
      </property>
-     <addaction name="actionAll_axial_view"/>
      <addaction name="actionMulti_planar_view"/>
+     <addaction name="actionAll_axial_view"/>
+     <addaction name="actionCurved_view"/>
     </widget>
     <addaction name="menuDisplay"/>
     <addaction name="menuOrientation"/>
@@ -277,9 +262,8 @@
    <addaction name="menuSurface"/>
    <addaction name="menuSegmentation"/>
    <addaction name="menuDiagnosis"/>
-   <addaction name="menuHelp"/>
    <addaction name="menuView"/>
-   <addaction name="menuInteraction"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="ActionToolBar">
@@ -488,7 +472,10 @@
      <normaloff>:/icons/LayoutFourViews.png</normaloff>:/icons/LayoutFourViews.png</iconset>
    </property>
    <property name="text">
-    <string>Four Views</string>
+    <string> </string>
+   </property>
+   <property name="toolTip">
+    <string> </string>
    </property>
   </action>
   <action name="actionInformation">
@@ -566,10 +553,13 @@
    </property>
    <property name="icon">
     <iconset resource="../Main/resources/IADE_Analyzer.qrc">
-     <normaloff>:/icons/UpperLeftView.png</normaloff>:/icons/UpperLeftView.png</iconset>
+     <normaloff>:/icons/UpperRightView.png</normaloff>:/icons/UpperRightView.png</iconset>
    </property>
    <property name="text">
-    <string>Upper Left</string>
+    <string> </string>
+   </property>
+   <property name="toolTip">
+    <string> </string>
    </property>
    <property name="visible">
     <bool>true</bool>
@@ -584,10 +574,13 @@
    </property>
    <property name="icon">
     <iconset resource="../Main/resources/IADE_Analyzer.qrc">
-     <normaloff>:/icons/UpperRightView.png</normaloff>:/icons/UpperRightView.png</iconset>
+     <normaloff>:/icons/LowerRightView.png</normaloff>:/icons/LowerRightView.png</iconset>
    </property>
    <property name="text">
-    <string>Upper Right</string>
+    <string> </string>
+   </property>
+   <property name="toolTip">
+    <string> </string>
    </property>
   </action>
   <action name="actionImage3">
@@ -596,10 +589,13 @@
    </property>
    <property name="icon">
     <iconset resource="../Main/resources/IADE_Analyzer.qrc">
-     <normaloff>:/icons/LowerLeftView.png</normaloff>:/icons/LowerLeftView.png</iconset>
+     <normaloff>:/icons/UpperLeftView.png</normaloff>:/icons/UpperLeftView.png</iconset>
    </property>
    <property name="text">
-    <string>Lower Left</string>
+    <string> </string>
+   </property>
+   <property name="toolTip">
+    <string> </string>
    </property>
   </action>
   <action name="actionImage4">
@@ -608,10 +604,13 @@
    </property>
    <property name="icon">
     <iconset resource="../Main/resources/IADE_Analyzer.qrc">
-     <normaloff>:/icons/LowerRightView.png</normaloff>:/icons/LowerRightView.png</iconset>
+     <normaloff>:/icons/LowerLeftView.png</normaloff>:/icons/LowerLeftView.png</iconset>
    </property>
    <property name="text">
-    <string>Lower Right</string>
+    <string> </string>
+   </property>
+   <property name="toolTip">
+    <string> </string>
    </property>
   </action>
   <action name="actionSagittal">
@@ -650,6 +649,10 @@
   <action name="actionAll_axial_view">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/dl_axial copy.png</normaloff>:/icons/dl_axial copy.png</iconset>
    </property>
    <property name="text">
     <string>All axial view</string>
@@ -888,6 +891,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../Main/resources/IADE_Analyzer.qrc">
+     <normaloff>:/icons/curved-arrow.png</normaloff>:/icons/curved-arrow.png</iconset>
+   </property>
    <property name="text">
     <string>Curved view</string>
    </property>
@@ -912,14 +919,6 @@
    </property>
    <property name="toolTip">
     <string>Update curved images</string>
-   </property>
-  </action>
-  <action name="actionRestore_docking">
-   <property name="text">
-    <string>Restore docking</string>
-   </property>
-   <property name="toolTip">
-    <string>Restore docking</string>
    </property>
   </action>
   <action name="actionTubular_VOI">
