@@ -282,16 +282,18 @@ int * ImageViewer::GetSliceRange()
 
 void ImageViewer::SetColorLevel(double level)
 {
-	if (level >= 0) {
-		vtkImageViewer2::SetColorLevel(level);
-	}
+	double* range = GetInput()->GetScalarRange();
+	level = fmax(level, range[0]);
+	level = fmin(level, range[1]);
+	vtkImageViewer2::SetColorLevel(level);
 }
 
 void ImageViewer::SetColorWindow(double window)
 {
-	if (window >= 0) {
-		vtkImageViewer2::SetColorWindow(window);
-	}
+	double* range = GetInput()->GetScalarRange();
+	window = fmax(window, range[0]);
+	window = fmin(window, range[1]);
+	vtkImageViewer2::SetColorWindow(window);
 }
 
 //----------------------------------------------------------------------------

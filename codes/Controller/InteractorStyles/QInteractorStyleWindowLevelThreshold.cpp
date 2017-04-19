@@ -35,8 +35,8 @@ void QInteractorStyleWindowLevelThreshold::SetThresholdByViewer(double lower, do
 {
 	InteractorStyleWindowLevelThreshold::SetThresholdByViewer(lower, upper);
 
-	m_spinBoxLowerThreshold->setValue(static_cast<int>(lower + 0.5));
-	m_spinBoxUpperThreshold->setValue(static_cast<int>(upper + 0.5));
+	m_spinBoxLowerThreshold->setValue(qRound(lower));
+	m_spinBoxUpperThreshold->setValue(qRound(upper));
 }
 
 void QInteractorStyleWindowLevelThreshold::UpdateTargetViewer()
@@ -115,8 +115,8 @@ void QInteractorStyleWindowLevelThreshold::SetCustomEnabled(bool flag)
 		m_sliderUpperThreshold->setRange(range[0], range[1]);
 		m_spinBoxLowerThreshold->setRange(range[0], range[1]);
 		m_sliderLowerThreshold->setRange(range[0], range[1]);
-		m_spinBoxLowerThreshold->setValue(GetLevel() - 0.5*GetWindow());
-		m_spinBoxUpperThreshold->setValue(GetLevel() + 0.5*GetWindow());
+		//m_spinBoxLowerThreshold->setValue(GetLevel() - 0.5*GetWindow());
+		//m_spinBoxUpperThreshold->setValue(GetLevel() + 0.5*GetWindow());
 	}
 }
 
@@ -128,7 +128,7 @@ void QInteractorStyleWindowLevelThreshold::SetCurrentFocalPointWithImageCoordina
 
 void QInteractorStyleWindowLevelThreshold::SetLowerThreshold(int lower)
 {
-	if (int(GetLevel() - GetWindow()*0.5 + 0.5) != lower) {
+	if (qRound(GetLevel() - GetWindow()*0.5) != lower) {
 		//SetLowerThreshold(lower);
 		if (lower > m_spinBoxUpperThreshold->value()) {
 			SetThreshold(lower, lower);
@@ -141,7 +141,7 @@ void QInteractorStyleWindowLevelThreshold::SetLowerThreshold(int lower)
 
 void QInteractorStyleWindowLevelThreshold::SetUpperThreshold(int upper)
 {
-	if (int(GetLevel() + GetWindow()*0.5 + 0.5) != upper) {
+	if (qRound(GetLevel() + GetWindow()*0.5) != upper) {
 		if (upper < m_spinBoxLowerThreshold->value()) {
 			SetThreshold(upper, upper);
 		}

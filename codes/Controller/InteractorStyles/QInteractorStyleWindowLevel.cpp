@@ -27,17 +27,15 @@ QInteractorStyleWindowLevel::~QInteractorStyleWindowLevel()
 void QInteractorStyleWindowLevel::SetWindowByViewer(double window)
 {
 	InteractorStyleWindowLevel::SetWindowByViewer(window);
-	//if (int(m_window + 0.5) != window) {
-		m_spinBoxWindowWidth->setValue(window + 0.5);
-	//}
+	m_spinBoxWindowWidth->setValue(
+		static_cast<int>(qRound(window)));
 }
 
 void QInteractorStyleWindowLevel::SetLevelByViewer(double level)
 {
 	InteractorStyleWindowLevel::SetLevelByViewer(level);
-	//if (int(m_level + 0.5) != level) {
-		m_spinBoxWindowLevel->setValue(level + 0.5);
-	//}
+	m_spinBoxWindowLevel->setValue(
+		static_cast<int>(qRound(level)));
 }
 
 void QInteractorStyleWindowLevel::initialization()
@@ -85,8 +83,8 @@ void QInteractorStyleWindowLevel::SetCustomEnabled(bool flag)
 		m_sliderWindowLevel->setRange(range[0], range[1]);
 		m_spinBoxWindowWidth->setRange(range[0], range[1]);
 		m_sliderWindowWidth->setRange(range[0], range[1]);
-		m_spinBoxWindowWidth->setValue(GetWindow());
-		m_spinBoxWindowLevel->setValue(GetLevel());
+		//m_spinBoxWindowWidth->setValue(GetWindow());
+		//m_spinBoxWindowLevel->setValue(GetLevel());
 	}
 }
 
@@ -98,14 +96,14 @@ void QInteractorStyleWindowLevel::SetCurrentFocalPointWithImageCoordinate(int i,
 
 void QInteractorStyleWindowLevel::SetWindow(int window)
 {
-	if (int(GetWindow() + 0.5) != window) {
+	if (static_cast<int>(GetWindow()) != window) {
 		InteractorStyleWindowLevel::SetWindow(window);
 	}
 }
 
 void QInteractorStyleWindowLevel::SetLevel(int level)
 {
-	if (int(GetLevel() + 0.5) != level) {
+	if (static_cast<int>(GetLevel()) != level) {
 		InteractorStyleWindowLevel::SetLevel(level);
 	}
 }

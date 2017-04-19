@@ -3,9 +3,9 @@
 
 #include <qobject.h>
 
-class IADEInteractorStyleSwitch;
-class IADEInteractorStyleSwitch3D;
-class IADEImageManager;
+class StyleSwitch;
+class StyleSwitch3D;
+class PlaqueQuantImageManager;
 
 class DataProcessor: public QObject
 {
@@ -15,9 +15,9 @@ public:
 	DataProcessor(QObject* parent = nullptr);
 	~DataProcessor();
 
-	IADEInteractorStyleSwitch** imageInteractorStyle = nullptr;
-	IADEInteractorStyleSwitch3D* surfaceInteractorStyle = nullptr;
-	IADEImageManager* imageManager = nullptr;
+	StyleSwitch** imageInteractorStyle = nullptr;
+	StyleSwitch3D* surfaceInteractorStyle = nullptr;
+	PlaqueQuantImageManager* imageManager = nullptr;
 
 	public slots:
 

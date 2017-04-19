@@ -18,25 +18,18 @@ if(NOT Qt5Widgets_FOUND)
 	message(FATAL_ERROR "error: Qt5Widgets is not found")
 endif()
 
-add_subdirectory(
-	InteractorStyles
-)
-add_subdirectory(
-	SurfaceViewer_test
-)
-
-add_subdirectory(
-	InteractorStylePolygonDraw2_test
-)
+add_subdirectory(InteractorStyles)
+add_subdirectory(SurfaceViewer_test)
+# add_subdirectory(ReportGenerator)
+add_subdirectory(InteractorStylePolygonDraw2_test)
 
 SET(
 	CONTROLLER_SRC
 	# ${PROJECT_SOURCE_DIR}/MyImageManager.cpp
 	${PROJECT_SOURCE_DIR}/IOManager.cpp
 	${PROJECT_SOURCE_DIR}/IADEIOManager.cpp
+	${PROJECT_SOURCE_DIR}/PlaqueQuantIOManager.cpp
 	${PROJECT_SOURCE_DIR}/ImageRegistration.cxx
-	${PROJECT_SOURCE_DIR}/IADEInteractorStyleSwitch.cxx
-	${PROJECT_SOURCE_DIR}/IADEInteractorStyleSwitch3D.cxx
 	${PROJECT_SOURCE_DIR}/DataProcessor.cpp
 	# ${PROJECT_SOURCE_DIR}/Overlay.cxx
 	# ${PROJECT_SOURCE_DIR}/RegistrationWizard.cxx
@@ -46,9 +39,10 @@ SET(
 	# ${PROJECT_SOURCE_DIR}/MyImageManager.h
 	${PROJECT_SOURCE_DIR}/IOManager.h
 	${PROJECT_SOURCE_DIR}/IADEIOManager.h
+	${PROJECT_SOURCE_DIR}/PlaqueQuantIOManager.h
 	${PROJECT_SOURCE_DIR}/ImageRegistration.h
-	${PROJECT_SOURCE_DIR}/IADEInteractorStyleSwitch.h
-	${PROJECT_SOURCE_DIR}/IADEInteractorStyleSwitch3D.h
+	${PROJECT_SOURCE_DIR}/StyleSwitch.h
+	${PROJECT_SOURCE_DIR}/StyleSwitch3D.h
 	${PROJECT_SOURCE_DIR}/DataProcessor.h
 	# ${PROJECT_SOURCE_DIR}/Overlay.h
 	# ${PROJECT_SOURCE_DIR}/RegistrationWizard.h
@@ -75,6 +69,7 @@ target_link_libraries(
 	Qt5::Widgets
 	Model
 	InteractorStyles
+	ReportGenerator
 )
 
 target_include_directories(

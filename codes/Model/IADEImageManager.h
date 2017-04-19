@@ -12,24 +12,9 @@ class IADEImageManager: public ImageManager
 public:
 	IADEImageManager(unsigned int numOfImages = 0, QObject* parent = nullptr);
 
-	virtual void setNumOfImages(unsigned int num) override;
-
-	//virtual bool setOverlay(IVtkImageData::itkImageType::Pointer image);
-	//virtual bool setOverlay(OverlayImageData::itkImageType::Pointer image);
-	virtual bool setCurvedOverlay(vtkImageData* image);
-	//virtual bool setCurvedOverlay(IVtkImageData::itkImageType::Pointer image);
-	//virtual bool setCurvedOverlay(OverlayImageData::itkImageType::Pointer image);
-	//bool setCurvedImage(unsigned int i, IVtkImageData::itkImageType::Pointer image);
-	bool setCurvedImage(unsigned int i, vtkImageData* image);
-	IVtkImageData* getCurvedImage(unsigned int i) const;
-	IVtkImageData* getCurvedImage(QString modalityName) const;
 	IADEOverlay* getIADEOverlay() const;
-	IADEOverlay* getCurvedIADEOverlay() const;
 
 protected:
-	QList<vtkSmartPointer<IVtkImageData>> m_curvedImages;
-	QSharedPointer<Overlay> m_curvedOverlay;
-
 
 
 private:

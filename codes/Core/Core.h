@@ -1,14 +1,36 @@
 #ifndef __CORE_H__
 #define __CORE_H__
 
+#define PLAQUEQUANT_VER
+//#define IADE_VER
+
+
+#ifdef PLAQUEQUANT_VER
+#include "PlaqueQuantIOManager.h"
+#include "PlaqueQuantImageManager.h"
+#include "PlaqueQuantOverlay.h"
+#define IO_MANAGER PlaqueQuantIOManager
+#define IMAGE_MANAGER PlaqueQuantImageManager
+#define OVERLAY PlaqueQuantOverlay
+#endif // PLAQUEQUANT_VER
+
+#ifdef IADE_VER
+#include "IADEIOManager.h"
+#include "IADEImageManager.h"
+#include "IADEOverlay.h"
+#define IO_MANAGER IADEIOManagerIO
+#define IMAGE_MANAGER IADEImageManager 
+#define OVERLAY IADEOverlay
+#endif // IADE_VER
+
 #include <qobject.h>
 
 
 #include "MainWindow.h"
-#include "IADEIOManager.h"
-#include "IADEImageManager.h"
-#include "IADEInteractorStyleSwitch.h"
-#include "IADEInteractorStyleSwitch3D.h"
+
+
+#include "StyleSwitch.h"
+#include "StyleSwitch3D.h"
 #include "CenterlineSurfaceViewer.h"
 #include "ImageViewer.h"
 #include "DataProcessor.h"
@@ -21,11 +43,6 @@ public:
 
 	const static unsigned short NUM_OF_IMAGES = 4;
 	const static unsigned short DEFAULT_IMAGE = 0;
-	//const enum VIEW_MODE
-	//{
-	//	MULTIPLANAR_VIEW = 0,
-	//	ALL_AXIAL_VIEW = 1
-	//};
 
 	Core(QObject* parent = nullptr);
 	~Core();
@@ -75,23 +92,17 @@ private slots:
 	void slotChangeSliceOrientationToXZ(int viewer);
 	void slotChangeSliceOrientationToXY(int viewer);
 	void slotUpdateImageViewersToCurrent(int viewer);
-	//void slotMultiPlanarView();
-	//void slotAllAxialView();
 	void slotCurvedView(bool flag);
-	//void slotChangeView(unsigned int viewMode);
 
 	void slotUpdateSurfaceView();
 
-	// label opacity
-	//void slotChangeOpacity(int opacity);
-	//void slotUpdateOpacity(int opacity);
 	void slotRenderALlViewers();
 
 
 private:
 	MainWindow mainWindow;
-	IADEIOManager ioManager;
-	IADEImageManager imageManager;
+	IO_MANAGER ioManager;
+	IMAGE_MANAGER imageManager;
 	DataProcessor dataProcessor;
 
 
@@ -103,10 +114,10 @@ private:
 		ImageViewer::SLICE_ORIENTATION_XY};
 	//int currentMode[MainWindow::NUM_OF_2D_VIEWERS] = { MULTIPLANAR_VIEW };
 	ImageViewer* imageViewers[MainWindow::NUM_OF_2D_VIEWERS];
-	IADEInteractorStyleSwitch* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
+	StyleSwitch* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
 
 	CenterlineSurfaceViewer* surfaceViewer;
-	IADEInteractorStyleSwitch3D* surfaceInteractorStyle;
+	StyleSwitch3D* surfaceInteractorStyle;
 
 
 	unsigned int m_viewMode = -1;

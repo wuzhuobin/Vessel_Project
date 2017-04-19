@@ -11,8 +11,8 @@ Copyright (C) 2016
 */
 
 
-#ifndef __IADE_INTERACTORSTYLE_SWITCH_H__
-#define __IADE_INTERACTORSTYLE_SWITCH_H__
+#ifndef __STYLE_SWITCH_H__
+#define __STYLE_SWITCH_H__
 
 #include "InteractorStyleSwitch.h"
 
@@ -31,11 +31,11 @@ Copyright (C) 2016
 #include "QInteractorStylePolygonDrawSeries.h"
 #include "QInteractorStyleVesselSegmentation2.h"
 
-class IADEInteractorStyleSwitch : public InteractorStyleSwitch
+class StyleSwitch : public InteractorStyleSwitch
 {
 public:
-	static IADEInteractorStyleSwitch* New();
-	vtkTypeMacro(IADEInteractorStyleSwitch, InteractorStyleSwitch);
+	static StyleSwitch* New() { return new StyleSwitch; }
+	vtkTypeMacro(StyleSwitch, InteractorStyleSwitch);
 
 	vtkGetMacro(WindowLevel, QInteractorStyleWindowLevel*);
 	SetInteractorStyleMacro(WindowLevel);
@@ -95,7 +95,40 @@ public:
 
 
 protected:
-	IADEInteractorStyleSwitch();
+	StyleSwitch() {
+		// The first instance of QInteractorStyleNavigation should have control 
+		// of the ui
+		Navigation = QInteractorStyleNavigation::New();
+		allStyles.push_back(Navigation);
+		WindowLevel = QInteractorStyleWindowLevel::New();
+		allStyles.push_back(WindowLevel);
+		WindowLevelThreshold = QInteractorStyleWindowLevelThreshold::New();
+		allStyles.push_back(WindowLevelThreshold);
+		Threshold = QInteractorStyleThreshold::New();
+		allStyles.push_back(Threshold);
+		//PolygonDraw = QInteractorStyleVesselSegmentation::New();
+		LumenSeedsPlacer = QInteractorStyleLumenSeedsPlacer::New();
+		allStyles.push_back(LumenSeedsPlacer);
+		PaintBrush = QInteractorStylePaintBrush::New();
+		allStyles.push_back(PaintBrush);
+		VOI = QInteractorStyleVOI::New();
+		allStyles.push_back(VOI);
+		TubularVOI = QInteractorStyleTubularVOI::New();
+		allStyles.push_back(TubularVOI);
+		Ruler = QInteractorStyleRuler::New();
+		allStyles.push_back(Ruler);
+		PolygonDraw = InteractorStylePolygonDraw::New();
+		allStyles.push_back(PolygonDraw);
+		PolygonDrawSeries = QInteractorStylePolygonDrawSeries::New();
+		allStyles.push_back(PolygonDrawSeries);
+		VesselSegmentation2 = QInteractorStyleVesselSegmentation2::New();
+		allStyles.push_back(VesselSegmentation2);
+		MaximumWallThickness = QInteractorStyleMaximumWallThickness::New();
+		allStyles.push_back(MaximumWallThickness);
+		// IADE specified
+		VBDSmoker = QInteractorStyleVBDSmokerSeeds::New();
+		allStyles.push_back(VBDSmoker);
+	}
 
 	QInteractorStyleNavigation*	Navigation;
 	QInteractorStyleWindowLevel* WindowLevel;

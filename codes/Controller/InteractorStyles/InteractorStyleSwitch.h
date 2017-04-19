@@ -77,7 +77,6 @@ public:
 	void SetInteractor(vtkRenderWindowInteractor *iren);
 
 
-	//SET_CURRENT_STYLE_TO_MACRO_H(InteractorStyleTesting);
 
 	virtual void SetDefaultRenderer(vtkRenderer* renderer);
 	virtual void SetCurrentRenderer(vtkRenderer* renderer);

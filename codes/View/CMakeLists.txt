@@ -13,7 +13,6 @@ find_package(Qt5OpenGL)
 
 add_subdirectory(RegistrationWizard)
 add_subdirectory(ReportGenerator)
-
 set(
 	VIEW_H
 	MainWindow.h

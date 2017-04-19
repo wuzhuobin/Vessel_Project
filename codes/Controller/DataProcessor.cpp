@@ -1,8 +1,8 @@
 #include "DataProcessor.h"
 
-#include "IADEInteractorStyleSwitch3D.h"
-#include "IADEImageManager.h"
-#include "IADEOverlay.h"
+#include "StyleSwitch3D.h"
+#include "PlaqueQuantImageManager.h"
+#include "PlaqueQuantOverlay.h"
 #include "CenterlineSurfaceViewer.h"
 
 #include <vtkSplineFilter.h>

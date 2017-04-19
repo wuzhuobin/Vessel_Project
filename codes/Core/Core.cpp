@@ -28,6 +28,7 @@ Core::Core(QObject * parent)
 	QObject(parent)
 {
 	ioManager.enableRegistration(true);
+	ioManager.enableRegistration(false);
 
 	imageManager.setModalityName(0, "Image 0");
 	imageManager.setModalityName(1, "Image 1");
@@ -38,6 +39,7 @@ Core::Core(QObject * parent)
 	mainWindow.addModalityNames("Image 2");
 	mainWindow.addModalityNames("Image 3");
 
+
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		
 		imageViewers[i] = ImageViewer::New();
@@ -47,11 +49,12 @@ Core::Core(QObject * parent)
 
 		// Never use below method to set the interactorsyle
 		//imageInteractorStyle[i]->SetInteractor(imageInteractor[i]);
-		imageInteractorStyle[i] = IADEInteractorStyleSwitch::New();
+		imageInteractorStyle[i] = StyleSwitch::New();
 		imageInteractorStyle[i]->SetImageViewer(imageViewers[i]);
 		mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(imageInteractorStyle[i]);
 		
 	}
+
 
 	//surfaceInteractor = vtkRenderWindowInteractor::New();
 
@@ -60,18 +63,22 @@ Core::Core(QObject * parent)
 	surfaceViewer->SetupInteractor(mainWindow.getViewerWidget(MainWindow::NUM_OF_VIEWERS - MainWindow::NUM_OF_3D_VIEWERS)->getUi()->qvtkWidget2->GetInteractor());
 	surfaceViewer->EnableDepthPeelingOn();
 
+	mainWindow.getMeasurementWidget()->wind1 = imageViewers[2]->GetRenderWindow();
+	mainWindow.getMeasurementWidget()->wind2 = surfaceViewer->GetRenderWindow();
 	//surfaceViewer->EnableDepthSortingOn();
 
 
 	// Never use below method to set the interactorsyle
 	//surfaceInteractorStyle[i]->SetInteractor(imageInteractor[i]);
-	surfaceInteractorStyle = IADEInteractorStyleSwitch3D::New();
+	surfaceInteractorStyle = StyleSwitch3D::New();
 	surfaceInteractorStyle->SetSurfaceViewer(surfaceViewer);
 	mainWindow.getViewerWidget(MainWindow::NUM_OF_VIEWERS - MainWindow::NUM_OF_3D_VIEWERS)->getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle);
 
+#ifdef PLAQUEQUANT_VER
 	dataProcessor.imageInteractorStyle = imageInteractorStyle;
 	dataProcessor.surfaceInteractorStyle = surfaceInteractorStyle;
 	dataProcessor.imageManager = &imageManager;
+#endif // PLAQUEQUANT_VER
 
 	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
@@ -312,7 +319,7 @@ void Core::slotOverlayToImageManager()
 void Core::slotUpdateMeasurements()
 {
 	//IADEOverlay* overlay = qobject_cast<IADEOverlay*>(sender());
-	IADEOverlay* overlay = dynamic_cast<IADEOverlay*>(sender());
+	OVERLAY* overlay = dynamic_cast<OVERLAY*>(sender());
 	if (overlay && overlay->Measurements2D.contains(overlay->getCurrentSlice())) {
 		mainWindow.getMeasurementWidget()->slotUpdate2DMeasurements(overlay->Measurements2D[overlay->getCurrentSlice()].data());
 		mainWindow.getMeasurementWidget()->slotUpdate3DMeasurements(overlay->Measurements3D);
@@ -545,34 +552,38 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 {
 
 	imageViewers[viewer]->InitializeHeader(imageManager.getModalityName(currentImage[viewer]).toStdString());
-	imageViewers[viewer]->SetLookupTable(imageManager.getIADEOverlay()->getLookupTable());
+	imageViewers[viewer]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
 	if (currentCurved[viewer]) {
-		imageViewers[viewer]->SetOverlay(imageManager.getCurvedIADEOverlay()->getData());
+		imageViewers[viewer]->SetOverlay(imageManager.getOverlay()->getData());
 		imageViewers[viewer]->SetInputData(imageManager.getCurvedImage(currentImage[viewer]));
 		// Measurement 
 		// tmp fix
 		disconnect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-			imageManager.getIADEOverlay(), SLOT(setCurrentSlice(int)));
-		disconnect(imageManager.getIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
+			imageManager.getOverlay(), SLOT(setCurrentSlice(int)));
+		disconnect(imageManager.getOverlay(), SIGNAL(signalUpdatedOverlay()),
 			this, SLOT(slotUpdateMeasurements()));
+#ifdef PLAQUEQUANT_VER
 		connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-			imageManager.getCurvedIADEOverlay(), SLOT(setCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
-		connect(imageManager.getCurvedIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
+			imageManager.getCurvedPlaqueQuantOverlay(), SLOT(setCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+		connect(imageManager.getCurvedPlaqueQuantOverlay(), SIGNAL(signalUpdatedOverlay()),
 			this, SLOT(slotUpdateMeasurements()), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+#endif // PLAQUEQUANT_VER
 	}
 	else
 	{
-		imageViewers[viewer]->SetOverlay(imageManager.getIADEOverlay()->getData());
+		imageViewers[viewer]->SetOverlay(imageManager.getOverlay()->getData());
 		imageViewers[viewer]->SetInputData(imageManager.getImage(currentImage[viewer]));
+#ifdef PLAQUEQUANT_VER
 		// Measurement 
 		// tmp fix
 		disconnect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-			imageManager.getCurvedIADEOverlay(), SLOT(setCurrentSlice(int)));
-		disconnect(imageManager.getCurvedIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
+			imageManager.getCurvedPlaqueQuantOverlay(), SLOT(setCurrentSlice(int)));
+		disconnect(imageManager.getCurvedPlaqueQuantOverlay(), SIGNAL(signalUpdatedOverlay()),
 			this, SLOT(slotUpdateMeasurements()));
+#endif // PLAQUEQUANT_VER		
 		connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-			imageManager.getIADEOverlay(), SLOT(setCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
-		connect(imageManager.getIADEOverlay(), SIGNAL(signalUpdatedOverlay()),
+			imageManager.getOverlay(), SLOT(setCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+		connect(imageManager.getOverlay(), SIGNAL(signalUpdatedOverlay()),
 			this, SLOT(slotUpdateMeasurements()), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
 
 	}
@@ -598,78 +609,43 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 #include <vtkPolyData.h>
 void Core::slotCurvedView(bool flag)
 {
-	if (!surfaceViewer->GetCenterline()||surfaceViewer->GetCenterline()->GetNumberOfPoints() < 2) {
+#ifdef PLAQUEQUANT_VER
+	if (!surfaceViewer->GetCenterline() || surfaceViewer->GetCenterline()->GetNumberOfPoints() < 2) {
 		QMessageBox::critical(&mainWindow, QString("No centerline"),
 			QString("Please Generate centerline first !"));
 		return;
 	}
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-		if (!imageManager.getCurvedIADEOverlay()) {
+		if (!imageManager.getCurvedPlaqueQuantOverlay()) {
 			dataProcessor.initializeCurved();
 		}
 		currentCurved[i] = flag;
 		slotUpdateImageViewersToCurrent(i);
 
 	}
+#endif // PLAQUEQUANT_VER
 }
 
-//void Core::slotChangeView(unsigned int viewMode)
-//{
-//	if (m_viewMode == viewMode)
-//		return;
-//	switch (viewMode)
-//	{
-//	case MULTIPLANAR_VIEW:
-//		// MULTIPLANAR_VIEW
-//		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-//			//currentCurved[i] = false;
-//			currentSliceOrientation[i] = i % 3;
-//			slotUpdateImageViewersToCurrent(i);
-//
-//		}
-//		break;
-//	case ALL_AXIAL_VIEW:
-//		 // ALL_AXIAL_VIEW
-//
-//		for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-//			//currentCurved[i] = false;
-//			currentSliceOrientation[i] = ImageViewer::SLICE_ORIENTATION_XY;
-//			slotUpdateImageViewersToCurrent(i);
-//		}
-//
-//
-//			break;
-//	//case CURVED_VIEW:
-//	//	// CURVED_VIEW
-//	//	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
-//	//		if (!imageManager.getCurvedIADEOverlay()) {
-//	//			dataProcessor.initializeCurved();
-//	//		}
-//	//		currentCurved[i] = true;
-//	//		slotUpdateImageViewersToCurrent(i);
-//
-//	//	}
-//	//	break;
-//	default:
-//		break;
-//	}
-//}
+
 
 void Core::slotUpdateSurfaceView()
 {
 	// temporary fix for real time updated.
 	vtkSmartPointer<vtkImageData> image = vtkSmartPointer<vtkImageData>::New();
 	if (currentCurved[DEFAULT_IMAGE]) {
-		image->ShallowCopy(imageManager.getCurvedIADEOverlay()->getData());
+#ifdef PLAQUEQUANT_VER
+		image->ShallowCopy(imageManager.getCurvedPlaqueQuantOverlay()->getData());
+#endif // PLAQUEQUANT_VER
 	}
 	else {
-		image->ShallowCopy(imageManager.getIADEOverlay()->getData());
+		//image->ShallowCopy(imageManager.getIADEOverlay()->getData());
+		image->ShallowCopy(imageManager.getOverlay()->getData());
 	}
 	//image->ShallowCopy(imageManager.getIADEOverlay()->getData());
 	//surfaceViewer->SetInputData(imageManager.getOverlay()->getData());
 	surfaceViewer->SetInputData(image);
-	surfaceViewer->SetLookupTable(imageManager.getIADEOverlay()->getLookupTable());
-	surfaceViewer->SetCenterline(imageManager.getIADEOverlay()->getCenterLine());
+	surfaceViewer->SetLookupTable(imageManager.getOverlay()->getLookupTable());
+	surfaceViewer->SetCenterline(static_cast<OVERLAY*>(imageManager.getOverlay())->getCenterLine());
 	surfaceViewer->GetRenderer()->ResetCameraClippingRange();
 	surfaceViewer->GetRenderer()->ResetCamera();
 	surfaceViewer->Render();
@@ -683,55 +659,3 @@ void Core::slotRenderALlViewers()
 	surfaceViewer->Render();
 }
 
-//void Core::slotChangeOpacity(int opacity)
-//{
-//	int color = mainWindow.getModuleWidget()->getUi()->labelComboBox->currentIndex();
-//	if (imageManager.getOverlay()->getOpacity(color) == opacity) {
-//		return;
-//	}
-//	imageManager.getOverlay()->setOpacity(color, opacity);
-//	slotRenderALlViewers();
-//}
-//
-//void Core::slotUpdateOpacity(int opacity)
-//{
-//	int color = mainWindow.getModuleWidget()->getUi()->labelComboBox->currentIndex();
-//	if (imageManager.getOverlay()->getOpacity(color) == opacity) {
-//		return;
-//	}
-//	;
-//	mainWindow.getModuleWidget()->getUi()->opacitySpinBox->setValue(imageManager.getOverlay()->getOpacity(color));
-//
-//}
-
-
-//void Core::slotTest(bool flag)
-//{
-//	if (flag == true) {
-//		mainWindow.setRenderWindow(0, imageViewers[0]->GetRenderWindow());
-//
-//	}
-//	else {
-//		mainWindow.setRenderWindow(0, nullptr);
-//
-//	}
-//	imageViewers[0]->Render();
-//}
-
-
-//void Core::slotIOManagerToImageManager(QList<IOManager::ImageType::Pointer>* images,
-//	QList<itk::GDCMImageIO::Pointer>* dicoms) {
-//
-//	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
-//		qDebug() << __LINE__;
-//		qDebug() << __FUNCTION__;
-//		if (images->at(i)) {
-//			imageManager.setImage(i, images->at(i));
-//		}
-//		if (dicoms->at(i)) {
-//			imageManager.setDicomIO(i, dicoms->at(i));
-//		}
-//	}
-//
-//
-//}

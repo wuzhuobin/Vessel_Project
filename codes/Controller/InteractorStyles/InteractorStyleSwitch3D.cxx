@@ -36,7 +36,6 @@ InteractorStyleSwitch3D::InteractorStyleSwitch3D()
 	//this->DistanceWidget = InteractorStyle3DDistanceWidget::New();
 	this->CurrentStyle = 0;
 
-	//this->SetInteractorStyleTo3DDistanceWidget();
 }
 
 InteractorStyleSwitch3D::~InteractorStyleSwitch3D()
@@ -60,20 +59,7 @@ void InteractorStyleSwitch3D::InternalUpdate(bool flag)
 	if (_style) {
 		_style->SetCustomEnabled(flag);
 	}
-	//for (std::list<vtkInteractorStyle*>::const_iterator cit = allStyles.cbegin();
-	//	cit != allStyles.cend(); ++cit) {
 
-	//	AbstractInteractorStyle* _style = dynamic_cast<AbstractInteractorStyle*>(*cit);
-	//	if (_style != NULL) {
-	//		if (this->CurrentStyle == *cit) {
-	//			_style->CustomEnabledOn();
-	//		}
-	//		else {
-	//			_style->CustomEnabledOff();
-	//		}
-	//	}
-
-	//}
 }
 
 void InteractorStyleSwitch3D::SetAutoAdjustCameraClippingRange(int value)

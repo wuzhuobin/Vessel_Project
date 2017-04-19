@@ -15,6 +15,7 @@
 
 
 #include <vtkRenderWindow.h>
+#include <vtkGenericOpenGLRenderWindow.h>
 
 #include "RegistrationWizard.h"
 
@@ -60,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
 		ui->actionImage3, SLOT(setChecked(bool)));
 	connect(viewerWidgets[3]->getUi()->pushButtonRestore, SIGNAL(toggled(bool)),
 		ui->actionImage4, SLOT(setChecked(bool)));
+
 
 	QActionGroup* actionGroupActionImage = new QActionGroup(this);
 	actionGroupActionImage->addAction(ui->actionImage1);
@@ -119,6 +121,8 @@ MainWindow::MainWindow(QWidget *parent)
 		this, SLOT(slotOpenOverlay()));
 	connect(ui->actionExport_segmentation, SIGNAL(triggered()), 
 		this, SLOT(slotSaveOverlay()));
+	connect(ui->actionExport_Report, SIGNAL(triggered()),
+		this, SLOT(slotExportReport()));
 	createRecentImageActions();
 
 }
@@ -158,6 +162,16 @@ void MainWindow::slotSaveOverlay()
 		QString(tr("Export Segmentation")), ".", tr("NIFTI Images (*.nii)"));
 	if (path.isEmpty())	return;
 	emit signalOverlayExportSave(path);
+}
+
+void MainWindow::slotExportReport()
+{
+	QString path = QFileDialog::getSaveFileName((this),
+		QString(tr("Export Report")), ".", tr("Report (*.pdf)"));
+	if (path.isEmpty())	return;
+	emit signalReportExport(path);
+
+	measurementWidget->GenerateReport(path);
 }
 
 void MainWindow::slotImage(bool flag)

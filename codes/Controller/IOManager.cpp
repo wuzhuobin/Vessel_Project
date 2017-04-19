@@ -320,6 +320,10 @@ void IOManager::slotSaveSegmentation(OverlayImageData::itkImageType::Pointer inp
 		writer->Write();
 }
 
+void IOManager::slotGenerateReport(QString path)
+{
+}
+
 //
 //void IOManager::slotSaveSegmentaitonWithDiaglog()
 //{

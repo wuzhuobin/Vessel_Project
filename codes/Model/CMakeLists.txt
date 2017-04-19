@@ -23,18 +23,22 @@ endif()
 SET(
 	MODEL_SRC
 	${PROJECT_SOURCE_DIR}/ImageManager.cpp
-	${PROJECT_SOURCE_DIR}/IADEImageManager.cpp
 	${PROJECT_SOURCE_DIR}/IVtkImageData.cpp
 	${PROJECT_SOURCE_DIR}/Overlay.cpp
 	${PROJECT_SOURCE_DIR}/IADEOverlay.cpp
+	${PROJECT_SOURCE_DIR}/IADEImageManager.cpp
+	${PROJECT_SOURCE_DIR}/PlaqueQuantImageManager.cpp
+	${PROJECT_SOURCE_DIR}/PlaqueQuantOverlay.cpp
 	)
 SET(
 	MODEL_H
 	${PROJECT_SOURCE_DIR}/ImageManager.h
-	${PROJECT_SOURCE_DIR}/IADEImageManager.h
 	${PROJECT_SOURCE_DIR}/IVtkImageData.h
 	${PROJECT_SOURCE_DIR}/Overlay.h
+	${PROJECT_SOURCE_DIR}/IADEImageManager.h
 	${PROJECT_SOURCE_DIR}/IADEOverlay.h
+	${PROJECT_SOURCE_DIR}/PlaqueQuantImageManager.h
+	${PROJECT_SOURCE_DIR}/PlaqueQuantOverlay.h
 	)
 
 qt5_wrap_cpp(
@@ -56,6 +60,7 @@ target_link_libraries(
 	${VTK_LIBRARIES}
 	Qt5::Core
 	Qt5::Widgets
+	MaximumWallThickness
 )
 
 target_include_directories(

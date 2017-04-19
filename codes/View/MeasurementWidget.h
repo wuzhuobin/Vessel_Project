@@ -8,6 +8,7 @@
 namespace Ui { class MeasurementWidget; }
 
 class MainWindow;
+class vtkRenderWindow;
 
 class MeasurementWidget : public QWidget {
 	Q_OBJECT
@@ -16,8 +17,11 @@ public:
 	MeasurementWidget(QWidget * parent = Q_NULLPTR);
 	~MeasurementWidget();
 
-	//void UpdateMeasurementsForObliqueSlice(vtkImageData*);
 	Ui::MeasurementWidget* getUi();
+
+	vtkRenderWindow* wind1 = nullptr;
+	vtkRenderWindow* wind2 = nullptr;;
+
 
 public slots:
 	void slotUpdate3DMeasurements(double* Measurements3D);
@@ -25,12 +29,11 @@ public slots:
 	void slotUpdate2DMeasurements(int slice);
 	void slotUpdateStenosis(double stenosis);
 	void slotUpdateImformation();
-	void slotReportGetInput();
 
 private:
 	Ui::MeasurementWidget* ui = nullptr;
 
-	void GenerateReport();
+	void GenerateReport(QString	path);
 
 	friend class MainWindow;
 	MainWindow* m_mainWnd;

@@ -1,19 +1,19 @@
 ﻿#include "MeasurementWidget.h"
 #include "ui_MeasurementWidget.h"
 
+
+#include <qfileinfo.h>
 #include <QDesktopServices>
-#include <QFileInfo>
+#include "ReportGenerator.h"
 
 #include <vtkWindowToImageFilter.h>
 #include <vtkRenderWindow.h>
 #include <vtkImageResize.h>
 #include <vtkPNGWriter.h>
 #include <vtkSmartPointer.h>
-
 //#include "MeasurementFor2D.h"
 //#include "MeasurementFor3D.h"
 //#include "Overlay.h"
-#include "ReportGenerator.h"
 //#include "MainWindow.h"
 //#include "ui_MainWindow.h"
 //#include "ui_QAbstractNavigation.h"
@@ -22,7 +22,6 @@ MeasurementWidget::MeasurementWidget(QWidget * parent) : QWidget(parent)
 {
 	ui = new Ui::MeasurementWidget;
 	ui->setupUi(this);
-
 	//m_mainWnd = MainWindow::GetMainWindow();
 	//Core* core = m_mainWnd->GetCore();
 	// Set table widget properties
@@ -44,8 +43,7 @@ MeasurementWidget::MeasurementWidget(QWidget * parent) : QWidget(parent)
 	//	this, SLOT(slotUpdate2DMeasurements(int)));
 
 	// generate report
-	connect(ui->generateReportPushButton, SIGNAL(clicked()), this, SLOT(slotReportGetInput()));
-
+	//connect(ui->generateReportPushButton, SIGNAL(clicked()), this, SLOT(slotReportGetInput()));
 }
 
 MeasurementWidget::~MeasurementWidget() {
@@ -85,7 +83,7 @@ void MeasurementWidget::slotUpdate2DMeasurements(double* Measurements2D)
 	//slotUpdate2DMeasurements(m_mainWnd->ui->zSpinBox->value());
 	//m_mainWnd->m_core->GetMyImageManager()->getOverlay()->Measure3D();
 	ui->measurement2DTableWidget->clearContents();
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < 4; ++i) {
 		ui->measurement2DTableWidget->setItem(i, 0,
 			new QTableWidgetItem(QString::number(Measurements2D[i])));
 	}
@@ -142,19 +140,12 @@ void MeasurementWidget::slotUpdateImformation()
 
 }
 
-
-void MeasurementWidget::slotReportGetInput()
-{
-	this->GenerateReport();
-}
-
-
-void MeasurementWidget::GenerateReport()
+void MeasurementWidget::GenerateReport(QString	path)
 {
 
 	//General 
 	//Basic Information to fill
-	QFileInfo fileInfo("./report.pdf");
+	QFileInfo fileInfo(path);
 	QString ReportName = "Plaque Quantification Report";
 	QString PatientName = ui->patientTableWidget->item(0,0)->text();
 	QString PatientID = ui->patientTableWidget->item(1, 0)->text();
@@ -167,8 +158,8 @@ void MeasurementWidget::GenerateReport()
 	//Stenosis Measurement
 	QString StenosisPercent = ui->stenosisSpinBox->text();
 	//2D Measurement
-	QString LumenArea = ui->measurement2DTableWidget->item(0, 0)->text();
-	QString VesselWallArea = ui->measurement2DTableWidget->item(1, 0)->text();
+	QString VesselWallArea = ui->measurement2DTableWidget->item(0, 0)->text();
+	QString LumenArea = ui->measurement2DTableWidget->item(1, 0)->text();
 	QString WallThickness = ui->measurement2DTableWidget->item(2, 0)->text();
 	QString NWI = ui->measurement2DTableWidget->item(3, 0)->text();
 	//3D Measurement
@@ -203,13 +194,13 @@ void MeasurementWidget::GenerateReport()
 	writer->SetInputConnection(imageResizeFilter->GetOutputPort());
 
 	// 2d
-	//windowToImageFilter->SetInput(m_mainWnd->GetRenderWindow(3));
+	windowToImageFilter->SetInput(wind1);
 	writer->SetFileName(_2dResult.toStdString().c_str());
 	writer->Update();
 	writer->Write();
 	//3d
 
-	//windowToImageFilter->SetInput(m_mainWnd->GetRenderWindow(4));
+	windowToImageFilter->SetInput(wind2);
 	writer->SetFileName(_3dResult.toStdString().c_str());
 	writer->Update();
 	writer->Write();

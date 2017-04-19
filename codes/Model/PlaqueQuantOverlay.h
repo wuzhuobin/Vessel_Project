@@ -1,29 +1,32 @@
-#ifndef __IADE_OVERLAY_H__
-#define __IADE_OVERLAY_H__
+#ifndef __PLAQUE_QUANT_OVERLAY_H__
+#define __PLAQUE_QUANT_OVERLAY_H__
 
 #include "Overlay.h"
 #include <qmap.h>
 #include <qsharedpointer.h>
 
 class vtkPolyData;
-class IADEOverlay : public Overlay 
+class PlaqueQuantOverlay : public Overlay 
 {
 	Q_OBJECT;
 
 public:
 
 
-	static const int NUMBER_OF_COLOR = 3;
+	static const int NUMBER_OF_COLOR = 7;
 	const int* m_overlayColor[NUMBER_OF_COLOR];
 	const int zeros[4] = { 0,0,0,0 };
 	const int vesselWall[4] = { 0, 0, 255, 255 };
 	const int lumen[4] = { 255, 0, 0, 255 };
+	const int calcification[4] = { 0,255,0,255 };
+	const int hemorrhage[4] = { 255, 255, 0,255 };
+	const int lrnc[4] = { 0, 255, 255 ,255 };
+	const int lm[4] = { 255, 0, 255 ,255 };
 
 
-
-	IADEOverlay(QObject* parent = nullptr);
-	IADEOverlay(OverlayImageData::itkImageType::Pointer data, QObject* parent = nullptr);
-	IADEOverlay(OverlayImageData* data, QObject* parent = nullptr);
+	PlaqueQuantOverlay(QObject* parent = nullptr);
+	PlaqueQuantOverlay(OverlayImageData::itkImageType::Pointer data, QObject* parent = nullptr);
+	PlaqueQuantOverlay(OverlayImageData* data, QObject* parent = nullptr);
 
 	virtual vtkPolyData* getCenterLine();
 
@@ -38,9 +41,9 @@ public:
 
 	virtual int getCurrentSlice();
 public slots:
-	virtual void updateMeasurement3D() {};
+	virtual void updateMeasurement3D();
 	virtual void setCurrentSlice(int slice);
-	virtual void updateMeasurement2D(int slice) {};
+	virtual void updateMeasurement2D(int slice);
 
 protected:
 	vtkSmartPointer<vtkPolyData> m_centerline = nullptr;
@@ -50,4 +53,4 @@ protected:
 
 
 
-#endif // !__IADE_OVERLAY_H__
+#endif // !__PLAQUE_QUANT_OVERLAY_H__
