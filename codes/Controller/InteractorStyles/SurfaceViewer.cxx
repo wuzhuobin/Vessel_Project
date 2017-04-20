@@ -80,6 +80,11 @@ void SurfaceViewer::Render(void)
 void SurfaceViewer::SetInputData(vtkImageData * in)
 {
 	if (GetInput() != in) {
+		// when input is a different extent, First Render
+		if (GetInput() == nullptr ||
+			!std::equal(in->GetExtent(), in->GetExtent() + 6, GetInput()->GetExtent())) {
+			this->FirstRender = true;
+		}
 		this->SurfaceActor->VisibilityOn();
 		this->ImageResample->SetInputData(in);
 		double spacing = std::fmin(std::fmin(in->GetSpacing()[0], in->GetSpacing()[1]), in->GetSpacing()[2]);

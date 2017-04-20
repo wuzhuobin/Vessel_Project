@@ -29,6 +29,7 @@ Copyright (C) 2016
 class vtkImageCanvasSource2D;
 class vtkBorderWidget;
 class vtkBorderRepresentation;
+class vtkCircleBorderRepresentation;
 class vtkImageActor;
 class vtkRenderer;
 

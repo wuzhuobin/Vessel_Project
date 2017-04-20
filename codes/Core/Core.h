@@ -1,9 +1,12 @@
 #ifndef __CORE_H__
 #define __CORE_H__
 
-#define PLAQUEQUANT_VER
+//#define PLAQUEQUANT_VER
 //#define IADE_VER
-
+#define DEBUG_VER
+#ifdef DEBUG_VER
+#define PLAQUEQUANT_VER
+#endif // DEBUG_VER
 
 #ifdef PLAQUEQUANT_VER
 #include "PlaqueQuantIOManager.h"
@@ -13,6 +16,8 @@
 #define IMAGE_MANAGER PlaqueQuantImageManager
 #define OVERLAY PlaqueQuantOverlay
 #endif // PLAQUEQUANT_VER
+
+
 
 #ifdef IADE_VER
 #include "IADEIOManager.h"

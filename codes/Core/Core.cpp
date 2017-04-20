@@ -221,15 +221,6 @@ Core::Core(QObject * parent)
 	connect(mainWindow.getUi()->actionUpdate_curved_images, SIGNAL(triggered()),
 		this, SLOT(slotInitializeCurvedImage()));
 
-	// Opacity
-	//connect(mainWindow.getModuleWidget()->getUi()->opacitySpinBox, SIGNAL(valueChanged(int)),
-	//	this, SLOT(slotChangeOpacity(int)));
-	//connect(mainWindow.getModuleWidget()->getUi()->labelComboBox, SIGNAL(currentIndexChanged(int)),
-	//	this, SLOT(slotUpdateOpacity(int)));
-
-	// Measurement 
-	//connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-	//	mainWindow.getMeasurementWidget(), SLOT(slotUpdate2DMeasurements()));
 
 	mainWindow.show();
 }
@@ -591,22 +582,11 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 	}
 	imageViewers[viewer]->SetSliceOrientation(currentSliceOrientation[viewer]);
 	imageViewers[viewer]->Render();
-	//imageViewers[viewer]->InitializeHeader(imageManager.getModalityName(currentImage[viewer]).toStdString());
-	//imageViewers[viewer]->Render();
 
-	mainWindow.getViewerWidget(viewer)->setWindowTitle(imageManager.getModalityName(currentImage[viewer]));
+	//mainWindow.getViewerWidget(viewer)->setWindowTitle(imageManager.getModalityName(currentImage[viewer]));
 
 }
 
-//void Core::slotMultiPlanarView()
-//{
-//	slotChangeView(MULTIPLANAR_VIEW);
-//}
-//
-//void Core::slotAllAxialView()
-//{
-//	slotChangeView(ALL_AXIAL_VIEW);
-//}
 #include <qmessagebox.h>
 #include <vtkPolyData.h>
 void Core::slotCurvedView(bool flag)
@@ -640,10 +620,8 @@ void Core::slotUpdateSurfaceView()
 #endif // PLAQUEQUANT_VER
 	}
 	else {
-		//image->ShallowCopy(imageManager.getIADEOverlay()->getData());
 		image->ShallowCopy(imageManager.getOverlay()->getData());
 	}
-	//image->ShallowCopy(imageManager.getIADEOverlay()->getData());
 	//surfaceViewer->SetInputData(imageManager.getOverlay()->getData());
 	surfaceViewer->SetInputData(image);
 	surfaceViewer->SetLookupTable(imageManager.getOverlay()->getLookupTable());

@@ -176,14 +176,9 @@
      <bool>true</bool>
     </property>
     <property name="title">
-     <string>Segmentation</string>
+     <string>Process</string>
     </property>
     <addaction name="actionUpdate_curved_images"/>
-    <addaction name="actionPaint_brush"/>
-    <addaction name="actionSeeds_placer"/>
-    <addaction name="actionSaveContour"/>
-    <addaction name="actionOpenContour"/>
-    <addaction name="actionCenterlineAlgorithm"/>
    </widget>
    <widget class="QMenu" name="menuImage">
     <property name="enabled">

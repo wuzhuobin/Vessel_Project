@@ -420,6 +420,11 @@ void ImageViewer::SetInputData(vtkImageData *in)
 {
 	// when there is a new input, Update the member DisplayExtent 
 	if (in != GetInput()) {
+		// when input is a different extent, First Render
+		if (GetInput() == nullptr || 
+			!std::equal(in->GetExtent(), in->GetExtent() + 6, GetInput()->GetExtent())) {
+			this->FirstRender = true;
+		}
 		this->ImageActor->VisibilityOn();
 		vtkImageViewer2::SetInputData(in);
 		//Color Map

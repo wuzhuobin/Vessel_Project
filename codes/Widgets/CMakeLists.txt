@@ -29,6 +29,7 @@ SET(WIDGET_SRC
 #	${CMAKE_CURRENT_SOURCE_DIR}/MyPlaneWidget.cxx
 	${PROJECT_SOURCE_DIR}/vtkROIWidget.cxx
 	${PROJECT_SOURCE_DIR}/PerpendicularMeasurementLineWidget.cxx
+	${PROJECT_SOURCE_DIR}/vtkCircleBorderRepresentation.cxx
 	)
 
 SET(WIDGET_INC 
@@ -38,6 +39,7 @@ SET(WIDGET_INC
 #	${CMAKE_CURRENT_SOURCE_DIR}/MyPlaneWidget.h
 	${PROJECT_SOURCE_DIR}/vtkROIWidget.h
 	${PROJECT_SOURCE_DIR}/PerpendicularMeasurementLineWidget.h
+	${PROJECT_SOURCE_DIR}/vtkCircleBorderRepresentation.h
 	)
 
 QT5_WRAP_CPP(

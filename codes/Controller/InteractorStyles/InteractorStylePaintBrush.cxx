@@ -37,6 +37,7 @@ Copyright (C) 2016
 #include <vtkCommand.h>
 
 #include "ImageViewer.h"
+#include "vtkCircleBorderRepresentation.h"
 
 #define SEGMENTATION_CIRCLE 1
 #define SEGMENTATION_SQUARE 0
@@ -89,6 +90,16 @@ void InteractorStylePaintBrush::SetDrawOpacity(int opacity)
 void InteractorStylePaintBrush::SetBrushShape(int brushShape)
 {
 	m_brushShape = brushShape;
+	if (m_retangleRep) {
+		m_retangleRep->Delete();
+	}
+	if (m_brushShape == CIRCLE) {
+		m_retangleRep = vtkCircleBorderRepresentation::New();
+	}
+	else {
+		m_retangleRep = vtkBorderRepresentation::New();
+	}
+	m_borderWidget->SetRepresentation(m_retangleRep);
 }
 
 void InteractorStylePaintBrush::SetBrushSize(int size)
@@ -265,11 +276,11 @@ void InteractorStylePaintBrush::SetCustomEnabled(bool b)
 	AbstractNavigation::SetCustomEnabled(b);
 	if (b)
 	{
-		m_retangleRep = vtkBorderRepresentation::New();
 		m_borderWidget = vtkBorderWidget::New();
 		m_borderWidget->SetInteractor(this->GetInteractor());
 		m_borderWidget->SetCurrentRenderer(GetImageViewer()->GetRenderer());
-		m_borderWidget->SetRepresentation(m_retangleRep);
+		SetBrushShape(m_brushShape);
+
 		m_borderWidget->SetManagesCursor(false);
 		m_borderWidget->GetBorderRepresentation()->SetMoving(false);
 		m_borderWidget->GetBorderRepresentation()->SetProportionalResize(true);

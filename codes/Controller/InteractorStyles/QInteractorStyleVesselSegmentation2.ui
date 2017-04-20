@@ -186,6 +186,15 @@
        </layout>
       </item>
       <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Keyboard key:
+Delete: Deleting focusing node. 
+Shift + Delete: Deleting focusing focusing contours.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_9">
         <item>
          <widget class="QPushButton" name="pushButtonFillSlices">
@@ -744,6 +753,7 @@
      <zorder>stackedWidgetMode</zorder>
      <zorder>radioButtonMagnetic</zorder>
      <zorder>frame_6</zorder>
+     <zorder>label_2</zorder>
     </widget>
    </item>
    <item>
@@ -799,7 +809,7 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

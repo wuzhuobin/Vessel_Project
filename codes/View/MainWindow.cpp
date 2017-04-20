@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
 		}
 		this->selectImgMenus[i] = new QMenu(this);
 		this->viewerWidgets[i]->getUi()->pushButtonSelectImage->setMenu(this->selectImgMenus[i]);
+		this->viewerWidgets[i]->setWindowTitle(QString("Viewer ") + QString::number(i));
 	}
 	settings = new QSettings("Setting.ini", QSettings::IniFormat, this);
 
