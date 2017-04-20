@@ -266,10 +266,9 @@
    <addaction name="actionDistance_measure"/>
    <addaction name="separator"/>
    <addaction name="acitonVOI_selection"/>
+   <addaction name="actionVessel_segmentation"/>
    <addaction name="actionTubular_VOI"/>
    <addaction name="actionSeeds_placer"/>
-   <addaction name="actionVBD_Smoker"/>
-   <addaction name="actionPolygon_draw"/>
    <addaction name="actionPaint_brush"/>
    <addaction name="separator"/>
    <addaction name="actionMulti_planar_view"/>

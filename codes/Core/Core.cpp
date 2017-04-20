@@ -221,7 +221,19 @@ Core::Core(QObject * parent)
 	connect(mainWindow.getUi()->actionUpdate_curved_images, SIGNAL(triggered()),
 		this, SLOT(slotInitializeCurvedImage()));
 
-
+	mainWindow.getUi()->actionThreshold->setVisible(false);
+	mainWindow.getUi()->actionTesting->setVisible(false);
+	mainWindow.getUi()->actionWindow_level_threshold->setVisible(false);
+	mainWindow.getUi()->actionPolygon_draw->setVisible(false);
+	mainWindow.getUi()->actionPolygon_draw_series->setVisible(false);
+	mainWindow.getUi()->actionPolygon_draw_series->setVisible(false);
+	mainWindow.getUi()->actionDistance_measure->setVisible(false);
+	mainWindow.getUi()->menuDiagnosis->setVisible(false);
+	mainWindow.getUi()->actionVBD_Smoker->setVisible(false);
+	mainWindow.getUi()->actionPerpendicular_measurement->setVisible(false);
+	mainWindow.getUi()->actionFind_maximum_radius->setVisible(false);
+	mainWindow.getUi()->actionWay_point_centerline->setVisible(false);
+	mainWindow.getUi()->actionCurved_navigation->setVisible(false);
 	mainWindow.show();
 }
 
