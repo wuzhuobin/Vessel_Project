@@ -109,6 +109,7 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroupSurface->addAction(ui->actionFind_maximum_radius);
 	actionGroupSurface->addAction(ui->actionCurved_navigation);
 	actionGroupSurface->addAction(ui->actionPerpendicular_measurement);
+	actionGroupSurface->addAction(ui->actionWay_point_centerline);
 	actionGroupSurface->addAction(ui->actionStenosis);
 	
 	actionGroupSurface->setExclusive(true);
@@ -261,6 +262,7 @@ void MainWindow::initialization()
 	ui->actionMulti_planar_view->trigger();
 	ui->actionNavigation->trigger();
 
+	measurementWidget->slotUpdateImformation();
 }
 
 void MainWindow::enableInteractor(bool flag)

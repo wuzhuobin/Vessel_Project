@@ -28,7 +28,7 @@ Core::Core(QObject * parent)
 	QObject(parent)
 {
 	ioManager.enableRegistration(true);
-	ioManager.enableRegistration(false);
+	//ioManager.enableRegistration(false);
 
 	imageManager.setModalityName(0, "Image 0");
 	imageManager.setModalityName(1, "Image 1");
@@ -63,8 +63,7 @@ Core::Core(QObject * parent)
 	surfaceViewer->SetupInteractor(mainWindow.getViewerWidget(MainWindow::NUM_OF_VIEWERS - MainWindow::NUM_OF_3D_VIEWERS)->getUi()->qvtkWidget2->GetInteractor());
 	surfaceViewer->EnableDepthPeelingOn();
 
-	mainWindow.getMeasurementWidget()->wind1 = imageViewers[2]->GetRenderWindow();
-	mainWindow.getMeasurementWidget()->wind2 = surfaceViewer->GetRenderWindow();
+
 	//surfaceViewer->EnableDepthSortingOn();
 
 
@@ -275,6 +274,9 @@ void Core::slotIOManagerToImageManager()
 		imageViewers[i]->ResetDisplayExtent();
 	}
 	// initialization, and trigger the navigation interactorstyle
+	mainWindow.getMeasurementWidget()->wind1 = imageViewers[2]->GetRenderWindow();
+	mainWindow.getMeasurementWidget()->wind2 = surfaceViewer->GetRenderWindow();
+	mainWindow.getMeasurementWidget()->info = imageManager.getDicomIO(0);
 	mainWindow.initialization();
 	const int* extent = imageViewers[DEFAULT_IMAGE]->GetDisplayExtent();
 	imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->SetCurrentFocalPointWithImageCoordinate(
@@ -554,7 +556,8 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 	imageViewers[viewer]->InitializeHeader(imageManager.getModalityName(currentImage[viewer]).toStdString());
 	imageViewers[viewer]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
 	if (currentCurved[viewer]) {
-		imageViewers[viewer]->SetOverlay(imageManager.getOverlay()->getData());
+#ifdef PLAQUEQUANT_VER
+		imageViewers[viewer]->SetOverlay(imageManager.getCurvedPlaqueQuantOverlay()->getData());
 		imageViewers[viewer]->SetInputData(imageManager.getCurvedImage(currentImage[viewer]));
 		// Measurement 
 		// tmp fix
@@ -562,7 +565,6 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 			imageManager.getOverlay(), SLOT(setCurrentSlice(int)));
 		disconnect(imageManager.getOverlay(), SIGNAL(signalUpdatedOverlay()),
 			this, SLOT(slotUpdateMeasurements()));
-#ifdef PLAQUEQUANT_VER
 		connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
 			imageManager.getCurvedPlaqueQuantOverlay(), SLOT(setCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
 		connect(imageManager.getCurvedPlaqueQuantOverlay(), SIGNAL(signalUpdatedOverlay()),

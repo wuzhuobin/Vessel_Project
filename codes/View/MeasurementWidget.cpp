@@ -11,6 +11,8 @@
 #include <vtkImageResize.h>
 #include <vtkPNGWriter.h>
 #include <vtkSmartPointer.h>
+
+#include <itkGDCMImageIO.h>
 //#include "MeasurementFor2D.h"
 //#include "MeasurementFor3D.h"
 //#include "Overlay.h"
@@ -111,32 +113,35 @@ void MeasurementWidget::slotUpdateStenosis(double stenosis)
 
 void MeasurementWidget::slotUpdateImformation()
 {
-	//QMap<QString, QString>* header = 
-	////	m_mainWnd->GetCore()->GetMyImageManager()->getListOfDICOMHeader()[Core::DEFAULT_IMAGE];
 
-	//if (header == NULL) {
-	//	return;
-	//}
-	//QString patientName = header->value("0010|0010");
-	//QString patientID = header->value("0010|0020");
-	//QString patientDOB = header->value("0010|0030");
-	//QString patientGender = header->value("0010|0040");
-	//QString scanDate = header->value("0008|0020");
-	//if (!patientName.isEmpty()) {
-	//	ui->patientTableWidget->setItem(0, 0, new QTableWidgetItem(patientName));
-	//}
-	//if (!patientID.isEmpty()) {
-	//	ui->patientTableWidget->setItem(1, 0, new QTableWidgetItem(patientID));
-	//}
-	//if (!patientDOB.isEmpty()) {
-	//	ui->patientTableWidget->setItem(2, 0, new QTableWidgetItem(patientDOB));
-	//}
-	//if (!patientGender.isEmpty()) {
-	//	ui->patientTableWidget->setItem(3, 0, new QTableWidgetItem(patientGender));
-	//}
-	//if (!scanDate.isEmpty()) {
-	//	ui->MRITableWidget->setItem(0, 0, new QTableWidgetItem(scanDate));
-	//}
+	if (info.IsNull()) {
+		return;
+	}
+	std::string patientID;
+	std::string patientDOB;
+	std::string patientGender;
+	std::string scanDate;
+	std::string patientName;
+	info->GetValueFromTag("0010|0010", patientName);
+	info->GetValueFromTag("0010|0020", patientID);
+	info->GetValueFromTag("0010|0030", patientDOB);
+	info->GetValueFromTag("0010|0040", patientGender);
+	info->GetValueFromTag("0008|0020", scanDate);
+	if (!patientName.empty()) {
+		ui->patientTableWidget->setItem(0, 0, new QTableWidgetItem(QString::fromStdString(patientName)));
+	}
+	if (!patientID.empty()) {
+		ui->patientTableWidget->setItem(1, 0, new QTableWidgetItem(QString::fromStdString(patientID)));
+	}
+	if (!patientDOB.empty()) {
+		ui->patientTableWidget->setItem(2, 0, new QTableWidgetItem(QString::fromStdString(patientDOB)));
+	}
+	if (!patientGender.empty()) {
+		ui->patientTableWidget->setItem(3, 0, new QTableWidgetItem(QString::fromStdString(patientGender)));
+	}
+	if (!scanDate.empty()) {
+		ui->MRITableWidget->setItem(0, 0, new QTableWidgetItem(QString::fromStdString(scanDate)));
+	}
 
 }
 

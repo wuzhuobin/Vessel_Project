@@ -4,6 +4,7 @@
 #include <QWidget>
 
 //#include "ui_measurementwidget.h"
+#include <itkGDCMImageIO.h>
 
 namespace Ui { class MeasurementWidget; }
 
@@ -18,7 +19,7 @@ public:
 	~MeasurementWidget();
 
 	Ui::MeasurementWidget* getUi();
-
+	itk::GDCMImageIO::Pointer info = nullptr;
 	vtkRenderWindow* wind1 = nullptr;
 	vtkRenderWindow* wind2 = nullptr;;
 

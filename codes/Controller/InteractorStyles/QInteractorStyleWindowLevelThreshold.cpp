@@ -115,8 +115,8 @@ void QInteractorStyleWindowLevelThreshold::SetCustomEnabled(bool flag)
 		m_sliderUpperThreshold->setRange(range[0], range[1]);
 		m_spinBoxLowerThreshold->setRange(range[0], range[1]);
 		m_sliderLowerThreshold->setRange(range[0], range[1]);
-		//m_spinBoxLowerThreshold->setValue(GetLevel() - 0.5*GetWindow());
-		//m_spinBoxUpperThreshold->setValue(GetLevel() + 0.5*GetWindow());
+		m_spinBoxLowerThreshold->setValue(GetLevel() - 0.5*GetWindow());
+		m_spinBoxUpperThreshold->setValue(GetLevel() + 0.5*GetWindow());
 	}
 }
 

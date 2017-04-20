@@ -83,8 +83,8 @@ void QInteractorStyleWindowLevel::SetCustomEnabled(bool flag)
 		m_sliderWindowLevel->setRange(range[0], range[1]);
 		m_spinBoxWindowWidth->setRange(range[0], range[1]);
 		m_sliderWindowWidth->setRange(range[0], range[1]);
-		//m_spinBoxWindowWidth->setValue(GetWindow());
-		//m_spinBoxWindowLevel->setValue(GetLevel());
+		m_spinBoxWindowWidth->setValue(GetWindow());
+		m_spinBoxWindowLevel->setValue(GetLevel());
 	}
 }
 
