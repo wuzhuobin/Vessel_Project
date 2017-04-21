@@ -53,7 +53,6 @@ qt5_wrap_ui(
 
 add_library(
 	View
-	SHARED
 	${VIEW_H}
 	${VIEW_SRC}
 	${VIEW_UI}
@@ -76,13 +75,6 @@ target_include_directories(
 	PUBLIC
 	${PROJECT_SOURCE_DIR}
 	${PROJECT_BINARY_DIR}
-)
-
-set_target_properties(
-    View
-    PROPERTIES
-    WINDOWS_EXPORT_ALL_SYMBOLS 
-    true
 )
 
 #Grouping in MSVC
