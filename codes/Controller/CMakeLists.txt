@@ -55,7 +55,6 @@ qt5_wrap_cpp(
 
 add_library(
 	Controller
-	SHARED
 	${CONTROLLER_SRC}
 	${CONTROLLER_H}
 	${CONTROLLER_MOC}
@@ -77,13 +76,6 @@ target_include_directories(
 	PUBLIC
 	${PROJECT_SOURCE_DIR}
 	${PROJECT_BINARY_DIR}
-)
-
-set_target_properties(
-    Controller
-    PROPERTIES
-    WINDOWS_EXPORT_ALL_SYMBOLS 
-    true
 )
 
 source_group(
