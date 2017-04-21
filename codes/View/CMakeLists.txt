@@ -59,13 +59,11 @@ add_library(
 	${VIEW_MOC}
 	${VIEW_UI_H}
 )
+qt5_use_modules(View Core Widgets OpenGL PrintSupport)
 
 #link libraries
 target_link_libraries(
 	View
-	Qt5::Core
-	Qt5::Widgets
-	Qt5::OpenGL
 	RegistrationWizard
 	ReportGenerator
 	)
