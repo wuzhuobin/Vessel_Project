@@ -228,7 +228,6 @@ Core::Core(QObject * parent)
 	mainWindow.getUi()->actionPolygon_draw_series->setVisible(false);
 	mainWindow.getUi()->actionPolygon_draw_series->setVisible(false);
 	mainWindow.getUi()->actionDistance_measure->setVisible(false);
-	mainWindow.getUi()->menuDiagnosis->setVisible(false);
 	mainWindow.getUi()->actionVBD_Smoker->setVisible(false);
 	mainWindow.getUi()->actionPerpendicular_measurement->setVisible(false);
 	mainWindow.getUi()->actionFind_maximum_radius->setVisible(false);
@@ -499,10 +498,19 @@ void Core::slotVBDSmoker()
 	}
 	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
 }
-
+#include <qmessagebox.h>
+#include <vtkPolyData.h>
 void Core::slotInitializeCurvedImage()
 {
+#ifdef PLAQUEQUANT_VER
+	if (!surfaceViewer->GetCenterline() || surfaceViewer->GetCenterline()->GetNumberOfPoints() < 2) {
+		QMessageBox::critical(&mainWindow, QString("No centerline"),
+			QString("Please Generate centerline first !"));
+		return;
+	}
 	dataProcessor.initializeCurved();
+#endif // PLAQUEQUANT_VER
+
 }
 
 void Core::slotChangeImage(QAction * action)
@@ -599,8 +607,7 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 
 }
 
-#include <qmessagebox.h>
-#include <vtkPolyData.h>
+
 void Core::slotCurvedView(bool flag)
 {
 #ifdef PLAQUEQUANT_VER
@@ -641,6 +648,10 @@ void Core::slotUpdateSurfaceView()
 	surfaceViewer->GetRenderer()->ResetCameraClippingRange();
 	surfaceViewer->GetRenderer()->ResetCamera();
 	surfaceViewer->Render();
+
+	mainWindow.getUi()->menuSurface->setEnabled(true);
+	mainWindow.getUi()->menuSegmentation->setEnabled(true);
+
 }
 
 void Core::slotRenderALlViewers()
