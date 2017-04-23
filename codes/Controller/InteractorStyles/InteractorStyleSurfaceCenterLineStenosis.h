@@ -47,7 +47,7 @@ protected:
 
 
 	vtkSmartPointer<vtkKdTreePointLocator> m_pointLocator = nullptr;
-	vtkSmartPointer<vtkHandleWidget> m_handleWidgets[NUM_OF_HANDLES] = {nullptr};
+	vtkSmartPointer<vtkHandleWidget> m_handleWidgets[NUM_OF_HANDLES];
 	vtkSmartPointer<vtkPolyData> m_triangulatedCenterLine = nullptr;
 	vtkSmartPointer<vtkTextActor> m_measurementText = nullptr;
 

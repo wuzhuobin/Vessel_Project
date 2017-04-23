@@ -55,7 +55,7 @@ void vtkROIBorderWidget::SetCursor(int cState)
 			this->RequestCursorShape(VTK_CURSOR_DEFAULT);
 		}
 		else
-		{
+		{	
 			this->RequestCursorShape(VTK_CURSOR_DEFAULT);
 		}
 	}
@@ -361,7 +361,7 @@ void vtkROIWidget::SetBorderWidgetsInteractor(int index, vtkRenderWindowInteract
 	this->m_borderWidgets[index]->SetDefaultRenderer(iren->GetRenderWindow()->GetRenderers()->GetFirstRenderer());
 	this->m_borderRep[index]->SetRenderer(iren->GetRenderWindow()->GetRenderers()->GetFirstRenderer());
 
-	this->m_borderWidgets[index]->SetOrientation(index);
+	//this->m_borderWidgets[index]->SetOrientation(index);
 
 	// Observer for updating borderwidgets
 	iren->AddObserver(vtkCommand::MouseWheelBackwardEvent, this->m_callback);
@@ -418,13 +418,15 @@ void vtkROIWidget::UpdateBorderWidgets()
 			continue;
 		}
 
+		int orientaiton = this->m_borderWidgets[i]->GetOrientation();
+
 		// if user is interacting with that borderwidget, skips that particular widget
 		//if (this->m_borderWidgets[i]->GetRepresentation()->GetInteractionState() == vtkBorderRepresentation::Inside) {
 		//	continue;
 		//}
 
 		// Check if the cursor is within the ROI widget#vtkROIWidgetModified
-		if (m_cursorPos[i] < corner1[i] || m_cursorPos[i] > corner2[i]) {
+		if (m_cursorPos[orientaiton] < corner1[orientaiton] || m_cursorPos[orientaiton] > corner2[orientaiton]) {
 			this->m_borderRep[i]->GetBorderProperty()->SetOpacity(0.4);
 			this->m_borderRep[i]->SetPickable(false);
 			this->m_borderWidgets[i]->GetInteractor()->Render();

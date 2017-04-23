@@ -544,7 +544,7 @@ void Core::slotChangeSliceOrientation(int viewer, int sliceOrientation)
 {
 	currentSliceOrientation[viewer] = sliceOrientation;
 	// Change orientation of border widgets too
-	this->imageInteractorStyle[0]->GetVOI()->GetROIWidget()->SetBorderWidgetOrientation(viewer, sliceOrientation);
+	QInteractorStyleVOI::GetROIWidget()->SetBorderWidgetOrientation(viewer, sliceOrientation);
 	slotUpdateImageViewersToCurrent(viewer);
 }
 
