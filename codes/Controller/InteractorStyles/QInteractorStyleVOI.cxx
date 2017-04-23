@@ -18,6 +18,11 @@ vtkSmartPointer<vtkROIWidget> QInteractorStyleVOI::m_roi = nullptr;
 vtkSmartPointer<vtkRenderWindow> QInteractorStyleVOI::m_renderWindow = nullptr;
 
 
+vtkROIWidget* QInteractorStyleVOI::GetROIWidget()
+{
+	return m_roi;
+}
+
 void QInteractorStyleVOI::SetCustomEnabled(bool flag)
 {
 	QInteractorStyleNavigation::SetCustomEnabled(flag);
