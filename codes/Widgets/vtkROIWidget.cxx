@@ -373,6 +373,12 @@ void vtkROIWidget::SetBorderWidgetsInteractor(int index, vtkRenderWindowInteract
 	}
 }
 
+
+void vtkROIWidget::SetBorderWidgetOrientation(int borderWidgetNumber, int orientation)
+{
+	this->m_borderWidgets[borderWidgetNumber]->SetOrientation(orientation);
+}
+
 void vtkROIWidget::SetPositionPointer(double* pos)
 {
 	this->m_cursorPos = pos;
