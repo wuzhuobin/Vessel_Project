@@ -12,6 +12,7 @@
 #include <qsettings.h>
 #include <qfiledialog.h>
 #include <QVTKInteractor.h>
+#include <qmessagebox.h>
 
 
 #include <vtkRenderWindow.h>
@@ -125,6 +126,8 @@ MainWindow::MainWindow(QWidget *parent)
 		this, SLOT(slotSaveOverlay()));
 	connect(ui->actionExport_Report, SIGNAL(triggered()),
 		this, SLOT(slotExportReport()));
+	connect(ui->actionAbout, SIGNAL(triggered()),
+		this, SLOT(slotAbout()));
 	createRecentImageActions();
 
 }
@@ -224,6 +227,16 @@ void MainWindow::slotImage(bool flag)
 		this->viewerWidgets[3]->getUi()->pushButtonRestore->setChecked(true);
 	}
 	//m_core->RenderAllViewer();
+}
+
+void MainWindow::slotAbout()
+{
+	QMessageBox msgBox;
+	msgBox.setIconPixmap(QPixmap(":/icons/plaqueQuant.png"));
+	msgBox.setText(QString("<h2 align='center'>Plaque Quant - version REPLACE_ME</h2>").replace("REPLACE_ME", "3.0") +
+		QString("<br>This software is a analytical tool designed to diagnose the condition of plaque and blood vessels."));
+	msgBox.setWindowTitle("About");
+	msgBox.exec();
 }
 
 void MainWindow::imageImport(QString path)

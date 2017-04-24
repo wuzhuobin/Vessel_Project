@@ -506,7 +506,7 @@
         <item>
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>Stenosis %</string>
+           <string>STENOSIS %</string>
           </property>
          </widget>
         </item>

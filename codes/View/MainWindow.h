@@ -86,6 +86,7 @@ private slots:
 	*/
 	void slotImage(bool flag);
 
+	void slotAbout();
 
 private:
 	Ui::MainWindow* ui;

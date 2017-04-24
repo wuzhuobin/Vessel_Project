@@ -4,10 +4,11 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_file(VIKEY_LIB ViKey.lib "${CMAKE_CURRENT_SOURCE_DIR}/DLL(X64)")
 
-include_directories(
-    ${PROJECT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
+# include_directories(
+#     ${PROJECT_SOURCE_DIR}
+#     ${CMAKE_CURRENT_SOURCE_DIR}
+# )
+project(EncryptionAuthentication)
 
 file(
     GLOB
