@@ -62,6 +62,7 @@ include_directories(
 target_link_libraries(
 	Main
 	Core
+	EncryptionAuthentication
 	# ${ITK_LIBRARIES}
 	# ${VTK_LIBRARIES}
 	# Qt5::Core

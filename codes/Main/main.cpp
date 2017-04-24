@@ -1,12 +1,12 @@
 
 #include "Core.h"
 #include "MainWindow.h"
-#include "EncryptionAuthentication/EncryptionAuthentication.h"
+#include "EncryptionAuthentication.h"
 #include <QtWidgets/QApplication>
 
-//#define _BUILD_A
-#define _BUILD_B
-#define _DEBUG
+#define _BUILD_A
+//#define _BUILD_B
+//#define _DEBUG
 
 //
 // error output

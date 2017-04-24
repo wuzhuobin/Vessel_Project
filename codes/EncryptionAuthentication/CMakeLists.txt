@@ -4,9 +4,7 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_file(VIKEY_LIB ViKey.lib "${CMAKE_CURRENT_SOURCE_DIR}/DLL(X64)")
 
-include_directories(
-    ${PROJECT_SOURCE_DIR}
-)
+project(EncryptionAuthentication)
 
 file(
     GLOB
@@ -53,12 +51,7 @@ file(
     DESTINATION
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug
 )
-file(
-    COPY
-    EncryptionAuthentication.h
-    DESTINATION
-    ${PROJECT_SOURCE_DIR}/include/EncryptionAuthentication/
-)
+
 
 add_library(
     EncryptionAuthentication
@@ -73,6 +66,12 @@ target_link_libraries(
     EncryptionAuthentication
     ${VIKEY_LIB}
    	Qt5::Widgets
+)
+target_include_directories(
+    EncryptionAuthentication
+    PUBLIC
+    ${PROJECT_BINARY_DIR}
+    ${PROJECT_SOURCE_DIR}
 )
 # set_target_properties(
 #     EncryptionAuthentication
