@@ -235,6 +235,7 @@ Core::Core(QObject * parent)
 	mainWindow.getUi()->actionFind_maximum_radius->setVisible(false);
 	mainWindow.getUi()->actionWay_point_centerline->setVisible(false);
 	mainWindow.getUi()->actionCurved_navigation->setVisible(false);
+	mainWindow.setWindowTitle("PlaqueQuant - v" + QString(PLAQUEQUANT_VER));
 	mainWindow.show();
 }
 

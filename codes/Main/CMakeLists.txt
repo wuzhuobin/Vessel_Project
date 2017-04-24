@@ -55,6 +55,9 @@ add_executable(
 	${VIEW_QRC_CPP}
 	${VIEW_RC}
 )
+include_directories(
+	${CMAKE_SOURCE_DIR}/include
+)
 
 target_link_libraries(
 	Main
