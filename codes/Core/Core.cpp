@@ -19,7 +19,6 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkLookupTable.h>
-#include "vtkROIWidget.h"
 
 Core::Core(QObject * parent)
 	:
@@ -543,8 +542,6 @@ void Core::slotChangeCurved(int viewer, bool curvedFlag)
 void Core::slotChangeSliceOrientation(int viewer, int sliceOrientation)
 {
 	currentSliceOrientation[viewer] = sliceOrientation;
-	// Change orientation of border widgets too
-	QInteractorStyleVOI::GetROIWidget()->SetBorderWidgetOrientation(viewer, sliceOrientation);
 	slotUpdateImageViewersToCurrent(viewer);
 }
 

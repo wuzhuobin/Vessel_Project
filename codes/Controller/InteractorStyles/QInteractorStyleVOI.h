@@ -19,7 +19,7 @@ public:
 	vtkTypeMacro(QInteractorStyleVOI, QInteractorStyleNavigation);
 	static QInteractorStyleVOI* New();
 
-	static vtkROIWidget* GetROIWidget();
+	//static vtkROIWidget* GetROIWidget();
 
 public slots:
 	virtual void SetCustomEnabled(bool flag);
