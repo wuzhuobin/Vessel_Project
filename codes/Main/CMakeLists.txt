@@ -66,6 +66,7 @@ target_link_libraries(
 	# ${VTK_LIBRARIES}
 	# Qt5::Core
 	# Qt5::Widgets
+	EncryptionAuthentication
 )
 target_include_directories(
 	Main

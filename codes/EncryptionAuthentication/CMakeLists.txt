@@ -6,6 +6,7 @@ find_file(VIKEY_LIB ViKey.lib "${CMAKE_CURRENT_SOURCE_DIR}/DLL(X64)")
 
 include_directories(
     ${PROJECT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 file(
