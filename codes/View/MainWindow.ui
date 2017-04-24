@@ -26,7 +26,7 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string>PlaqueQuant</string>
   </property>
   <property name="dockOptions">
    <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks|QMainWindow::VerticalTabs</set>
@@ -194,6 +194,7 @@
     <addaction name="actionNavigation"/>
     <addaction name="actionWindow_level"/>
     <addaction name="actionWindow_level_threshold"/>
+    <addaction name="actionMaximum_wall_thickness"/>
     <addaction name="actionThreshold"/>
     <addaction name="acitonVOI_selection"/>
     <addaction name="actionTubular_VOI"/>
@@ -201,7 +202,6 @@
     <addaction name="actionPolygon_draw"/>
     <addaction name="actionPolygon_draw_series"/>
     <addaction name="actionVessel_segmentation"/>
-    <addaction name="actionMaximum_wall_thickness"/>
     <addaction name="actionDistance_measure"/>
     <addaction name="actionSeeds_placer"/>
    </widget>
@@ -922,6 +922,9 @@
   </action>
   <action name="actionMaximum_wall_thickness">
    <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
     <bool>true</bool>
    </property>
    <property name="icon">

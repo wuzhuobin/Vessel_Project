@@ -30,14 +30,16 @@ Core::Core(QObject * parent)
 	ioManager.enableRegistration(true);
 	//ioManager.enableRegistration(false);
 
-	imageManager.setModalityName(0, "Image 0");
-	imageManager.setModalityName(1, "Image 1");
-	imageManager.setModalityName(2, "Image 2");
-	imageManager.setModalityName(3, "Image 3");
-	mainWindow.addModalityNames("Image 0");
-	mainWindow.addModalityNames("Image 1");
-	mainWindow.addModalityNames("Image 2");
-	mainWindow.addModalityNames("Image 3");
+	imageManager.setModalityName(0, "CUBE T1");
+	imageManager.setModalityName(1, "CUBE T2");
+	imageManager.setModalityName(2, "CUBE T1 + C");
+	imageManager.setModalityName(3, "2D DIR/QIR");
+	imageManager.setModalityName(4, "MPRAGE");
+	mainWindow.addModalityNames("CUBE T1");
+	mainWindow.addModalityNames("CUBE T2");
+	mainWindow.addModalityNames("CUBE T1 + C");
+	mainWindow.addModalityNames("2D DIR/QIR");
+	mainWindow.addModalityNames("MPRAGE");
 
 
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
@@ -279,6 +281,7 @@ void Core::slotIOManagerToImageManager()
 	mainWindow.getMeasurementWidget()->wind1 = imageViewers[2]->GetRenderWindow();
 	mainWindow.getMeasurementWidget()->wind2 = surfaceViewer->GetRenderWindow();
 	mainWindow.getMeasurementWidget()->info = imageManager.getDicomIO(0);
+	mainWindow.getMeasurementWidget()->slotUpdateImformation();
 	mainWindow.initialization();
 	const int* extent = imageViewers[DEFAULT_IMAGE]->GetDisplayExtent();
 	imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->SetCurrentFocalPointWithImageCoordinate(

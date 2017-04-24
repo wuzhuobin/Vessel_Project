@@ -46,7 +46,7 @@ class Core: public QObject
 	Q_OBJECT
 public:
 
-	const static unsigned short NUM_OF_IMAGES = 4;
+	const static unsigned short NUM_OF_IMAGES = 5;
 	const static unsigned short DEFAULT_IMAGE = 0;
 
 	Core(QObject* parent = nullptr);
