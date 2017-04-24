@@ -4,15 +4,15 @@
 #include "EncryptionAuthentication/EncryptionAuthentication.h"
 #include <QtWidgets/QApplication>
 
-#define _BUILD_A
-//#define _BUILD_B
+//#define _BUILD_A
+#define _BUILD_B
 //#define _DEBUG
 
 //
 // error output
 #ifndef _DEBUG
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-extern const bool WARNING = false;
+extern const bool WARNING = true;
 extern const bool ENCRYPTION_AUTHENTICATION_DISABLED = false;
 #else
 #pragma comment(linker, "/SUBSYSTEM:console /ENTRY:mainCRTStartup")
