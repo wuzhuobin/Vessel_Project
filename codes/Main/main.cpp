@@ -1,7 +1,7 @@
 
 #include "Core.h"
 #include "MainWindow.h"
-#include "EncryptionAuthentication.h"
+#include "EncryptionAuthentication/EncryptionAuthentication.h"
 #include <QtWidgets/QApplication>
 
 #define _BUILD_A
