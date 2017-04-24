@@ -54,12 +54,7 @@ file(
     DESTINATION
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug
 )
-file(
-    COPY
-    EncryptionAuthentication.h
-    DESTINATION
-    ${PROJECT_SOURCE_DIR}/include/EncryptionAuthentication/
-)
+
 
 add_library(
     EncryptionAuthentication
@@ -74,6 +69,12 @@ target_link_libraries(
     EncryptionAuthentication
     ${VIKEY_LIB}
    	Qt5::Widgets
+)
+target_include_directories(
+    EncryptionAuthentication
+    PUBLIC
+    ${PROJECT_BINARY_DIR}
+    ${PROJECT_SOURCE_DIR}
 )
 # set_target_properties(
 #     EncryptionAuthentication
