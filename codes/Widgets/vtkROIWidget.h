@@ -68,6 +68,7 @@ public:
 
 	virtual void UpdateBorderWidgets();
 	virtual void SetBorderWidgetsInteractor(int, vtkRenderWindowInteractor*);
+	virtual void SetBorderWidgetOrientation(int borderWidgetNumber, int orientation);
 
 	virtual void SetEnabled(int);
 	virtual void EnabledOn();

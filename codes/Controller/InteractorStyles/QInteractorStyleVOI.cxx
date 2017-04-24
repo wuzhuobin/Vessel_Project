@@ -18,10 +18,17 @@ vtkSmartPointer<vtkROIWidget> QInteractorStyleVOI::m_roi = nullptr;
 vtkSmartPointer<vtkRenderWindow> QInteractorStyleVOI::m_renderWindow = nullptr;
 
 
+//vtkROIWidget* QInteractorStyleVOI::GetROIWidget()
+//{
+//	return m_roi;
+//}
+
 void QInteractorStyleVOI::SetCustomEnabled(bool flag)
 {
 	QInteractorStyleNavigation::SetCustomEnabled(flag);
 	if (flag) {
+		// Change orientation of border widgets too
+		m_roi->SetBorderWidgetOrientation(m_uniqueROIId, GetSliceOrientation());
 		m_roi->SetBorderWidgetsInteractor(m_uniqueROIId, this->Interactor);
 		m_roi->GetRepresentation()->PlaceWidget(
 			GetImageViewer()->GetInput()->GetBounds());

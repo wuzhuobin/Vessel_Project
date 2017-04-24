@@ -18,6 +18,9 @@ class QInteractorStyleVOI :	public QInteractorStyleNavigation
 public:
 	vtkTypeMacro(QInteractorStyleVOI, QInteractorStyleNavigation);
 	static QInteractorStyleVOI* New();
+
+	//static vtkROIWidget* GetROIWidget();
+
 public slots:
 	virtual void SetCustomEnabled(bool flag);
 

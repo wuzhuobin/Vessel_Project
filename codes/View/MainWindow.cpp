@@ -260,10 +260,24 @@ void MainWindow::initialization()
 
 	ui->ActionToolBar->setEnabled(true);
 
+	ui->menuImage->setEnabled(true);
+
+
+	ui->actionImport_segmentation->setEnabled(true);
+
+	ui->actionNew_segmentation->setEnabled(true);
+
+	ui->actionExport_Report->setEnabled(true);
+
+	ui->actionExport_segmentation->setEnabled(true);
+
+	ui->updateBtn->setEnabled(true);
+
+	ui->menuOrientation->setEnabled(true);
+
 	ui->actionMulti_planar_view->trigger();
 	ui->actionNavigation->trigger();
 
-	measurementWidget->slotUpdateImformation();
 }
 
 void MainWindow::enableInteractor(bool flag)

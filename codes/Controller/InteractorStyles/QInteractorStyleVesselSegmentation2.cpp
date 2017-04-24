@@ -55,6 +55,8 @@ public:
 			case InteractionEvent:
 			case EndInteractionEvent:
 				self->SaveContoursToContourMap();
+				self->m_lumenContours->SetWidgetState(ContourWidgetSeries::DEFINE);
+				self->m_vesselWallContours->SetWidgetState(ContourWidgetSeries::DEFINE);
 				break;
 			case MouseMoveEvent:
 				// conducting event to other widgets
@@ -375,11 +377,16 @@ void QInteractorStyleVesselSegmentation2::SetCustomEnabled(bool flag)
 
 void QInteractorStyleVesselSegmentation2::SetCurrentFocalPointWithImageCoordinateByViewer(int i, int j, int k)
 {
+	int ijk[3];
+	GetImageViewer()->GetFocalPointWithImageCoordinate(ijk);
 	InteractorStylePolygonDrawSeries::SetCurrentFocalPointWithImageCoordinateByViewer(i, j, k);
-	m_contourSeries->ResetContours();
-	m_vesselWallContours->ResetContours();
-	m_lumenContours->ResetContours();
-	LoadContoursFromContourMap();
+	if (GetSlice() != ijk[GetSliceOrientation()]) {
+		m_contourSeries->ResetContours();
+		m_vesselWallContours->ResetContours();
+		m_lumenContours->ResetContours();
+		LoadContoursFromContourMap();
+	}
+	
 }
 
 void QInteractorStyleVesselSegmentation2::SetSegmentationMode(int mode)
@@ -395,18 +402,18 @@ void QInteractorStyleVesselSegmentation2::SetSegmentationMode(int mode)
 	case LUMEN_SEGMENTATION:
 		ui->stackedWidgetMode->setCurrentWidget(ui->pageLumenSegmentation);
 		m_lumenContours->EnabledOn();
-		m_lumenContours->SetWidgetState(ContourWidgetSeries::DEFINE);
+		//m_lumenContours->SetWidgetState(ContourWidgetSeries::DEFINE);
 
 		m_vesselWallContours->EnabledOn();
-		m_vesselWallContours->SetWidgetState(ContourWidgetSeries::DEFINE);
+		//m_vesselWallContours->SetWidgetState(ContourWidgetSeries::DEFINE);
 		break;
 	case VESSEL_WALL_SEGMENTATION:
 		ui->stackedWidgetMode->setCurrentWidget(ui->pageVesselWallSegmentation);
 		m_lumenContours->EnabledOn();
-		m_lumenContours->SetWidgetState(ContourWidgetSeries::DEFINE);
+		//m_lumenContours->SetWidgetState(ContourWidgetSeries::DEFINE);
 
 		m_vesselWallContours->EnabledOn();
-		m_vesselWallContours->SetWidgetState(ContourWidgetSeries::DEFINE);
+		//m_vesselWallContours->SetWidgetState(ContourWidgetSeries::DEFINE);
 		break;
 	default:
 		break;

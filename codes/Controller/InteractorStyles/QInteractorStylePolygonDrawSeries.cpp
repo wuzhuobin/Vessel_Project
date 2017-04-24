@@ -290,11 +290,13 @@ void QInteractorStylePolygonDrawSeries::SetCurrentFocalPointWithImageCoordinate(
 
 void QInteractorStylePolygonDrawSeries::SetCurrentFocalPointWithImageCoordinateByViewer(int i, int j, int k)
 {
-	//int ijk[3];
-	//GetImageViewer()->GetFocalPointWithImageCoordinate(ijk); 
+	int ijk[3];
+	GetImageViewer()->GetFocalPointWithImageCoordinate(ijk); 
 	InteractorStylePolygonDrawSeries::SetCurrentFocalPointWithImageCoordinateByViewer(i, j, k);
-	m_contourSeries->ResetContours();
-	LoadContoursFromContourMap();
+	if (GetSlice() != ijk[GetSliceOrientation()]) {
+		m_contourSeries->ResetContours();
+		LoadContoursFromContourMap();
+	}
 }
 
 
