@@ -69,6 +69,7 @@ signals:
 	void signalImageImportLoad(QList<QStringList>*);
 	void signalOverlayImportLoad(QString);
 	void signalOverlayExportSave(QString);
+	void signalCurvedImagesExportSave(QList<QStringList>*);
 	void signalReportExport(QString);
 
 
@@ -79,6 +80,7 @@ private slots:
 
 	void slotOpenOverlay();
 	void slotSaveOverlay();
+	void slotSaveCurvedImages();
 
 	void slotExportReport();
 	/**

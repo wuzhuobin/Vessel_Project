@@ -139,6 +139,8 @@ Core::Core(QObject * parent)
 	// find loading images and overlay
 	connect(&ioManager, SIGNAL(signalFinishOpenMultiImages()),
 		this, SLOT(slotIOManagerToImageManager()));
+	connect(&mainWindow, SIGNAL(signalCurvedImagesExportSave(QList<QStringList>*)),
+		&ioManager, SLOT(slotAddToListOfFileNamesAndSave(QList<QStringList>*)));
 	connect(&ioManager, SIGNAL(signalFinishOpenOverlay()),
 		this, SLOT(slotOverlayToImageManager()));
 
@@ -504,15 +506,20 @@ void Core::slotVBDSmoker()
 }
 #include <qmessagebox.h>
 #include <vtkPolyData.h>
-void Core::slotInitializeCurvedImage()
+bool Core::slotInitializeCurvedImage()
 {
 #ifdef PLAQUEQUANT_VER
 	if (!surfaceViewer->GetCenterline() || surfaceViewer->GetCenterline()->GetNumberOfPoints() < 2) {
 		QMessageBox::critical(&mainWindow, QString("No centerline"),
 			QString("Please Generate centerline first !"));
-		return;
+		return false;
 	}
 	dataProcessor.initializeCurved();
+	ioManager.listOfCurvedImages.clear();
+	for (int i = 0; i < NUM_OF_IMAGES; ++i) {
+		ioManager.listOfCurvedImages << imageManager.getCurvedImage(i);
+	}
+	return true;
 #endif // PLAQUEQUANT_VER
 
 }
@@ -615,14 +622,16 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 void Core::slotCurvedView(bool flag)
 {
 #ifdef PLAQUEQUANT_VER
-	if (!surfaceViewer->GetCenterline() || surfaceViewer->GetCenterline()->GetNumberOfPoints() < 2) {
-		QMessageBox::critical(&mainWindow, QString("No centerline"),
-			QString("Please Generate centerline first !"));
-		return;
+	if (flag) {
+
 	}
+	bool _flag = true;
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		if (!imageManager.getCurvedPlaqueQuantOverlay()) {
-			dataProcessor.initializeCurved();
+			_flag = slotInitializeCurvedImage();
+		}
+		if (!_flag) {
+			return;
 		}
 		currentCurved[i] = flag;
 		slotUpdateImageViewersToCurrent(i);

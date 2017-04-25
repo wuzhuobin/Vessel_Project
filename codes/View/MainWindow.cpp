@@ -124,6 +124,8 @@ MainWindow::MainWindow(QWidget *parent)
 		this, SLOT(slotOpenOverlay()));
 	connect(ui->actionExport_segmentation, SIGNAL(triggered()), 
 		this, SLOT(slotSaveOverlay()));
+	connect(ui->actionExport_curved_images, SIGNAL(triggered()),
+		this, SLOT(slotSaveCurvedImages()));
 	connect(ui->actionExport_Report, SIGNAL(triggered()),
 		this, SLOT(slotExportReport()));
 	connect(ui->actionAbout, SIGNAL(triggered()),
@@ -167,6 +169,27 @@ void MainWindow::slotSaveOverlay()
 		QString(tr("Export Segmentation")), ".", tr("NIFTI Images (*.nii)"));
 	if (path.isEmpty())	return;
 	emit signalOverlayExportSave(path);
+}
+
+void MainWindow::slotSaveCurvedImages()
+{
+	QList<QStringList> _listOfFileNames;
+
+	QString path = QFileDialog::getSaveFileName((this),
+		QString(tr("Export Curved Images")), ".", tr("NIFTI Images (*.nii)"));
+	if (path.isEmpty())	return;
+
+	for (int i = 0; i < modalityNames.size(); ++i) {
+		QStringList _splited = path.split('/');
+		if (!_splited.isEmpty()) {
+			_splited.last().push_front(modalityNames[i] + "_");
+		}
+		_listOfFileNames << QStringList();
+		_listOfFileNames.last() << _splited.join('/');
+	}
+
+	qDebug() << _listOfFileNames;
+	emit signalCurvedImagesExportSave(&_listOfFileNames);
 }
 
 void MainWindow::slotExportReport()
@@ -251,14 +274,11 @@ void MainWindow::imageImport(QString path)
 
 		for (int i = 0; i < modalityNames.size(); ++i) {
 			if (rw.getFileNames(i)) {
-				qDebug() << *rw.getFileNames(i);
 				_listOfFileNames << *rw.getFileNames(i);
 			}
 		}
 
 		emit signalImageImportLoad(&_listOfFileNames);
-
-		qDebug() << rw.getDirectory();
 
 		adjustForCurrentFile(rw.getDirectory());
 
@@ -287,6 +307,8 @@ void MainWindow::initialization()
 	ui->updateBtn->setEnabled(true);
 
 	ui->menuOrientation->setEnabled(true);
+
+	ui->actionExport_curved_images->setEnabled(true);
 
 	ui->actionMulti_planar_view->trigger();
 	ui->actionNavigation->trigger();
