@@ -12,6 +12,12 @@
 #include <vtkParametricFunctionSource.h>
 #include <vtkImageMask.h>
 #include <vtkImageBlend.h>
+#include "vtkLine.h"
+#include "vtkCellArray.h"
+#include "vtkCardinalSpline.h"
+#include "vtkSplineFilter.h"
+#include "vtkMath.h"
+#include "vtkXMLPolyDataWriter.h"
 
 vtkStandardNewMacro(QInteractorStyleTubularVOI);
 QSETUP_UI_SRC(QInteractorStyleTubularVOI);
@@ -114,17 +120,22 @@ vtkPolyData* QInteractorStyleTubularVOI::UpdateSpline(QList<int*>& seed)
 {
 	m_spline = vtkSmartPointer<vtkPolyData>::New();
 
+	vtkSmartPointer<vtkLine> linecell = vtkSmartPointer<vtkLine>::New();
+	linecell->GetPointIds()->DeleteId(0); // For some recent vtkline is created with two points in it, delete them first
 	vtkSmartPointer<vtkPolyData> splinePoints =
 		vtkSmartPointer<vtkPolyData>::New();
 	splinePoints->SetPoints(vtkSmartPointer<vtkPoints>::New());
 	for (QList<int*>::const_iterator cit = seed.cbegin(); cit != seed.cend(); ++cit) {
 		splinePoints->GetPoints()->InsertNextPoint((*cit)[0], (*cit)[1], (*cit)[2]);
+		linecell->GetPointIds()->InsertNextId(splinePoints->GetPoints()->GetNumberOfPoints() - 1);
 		//double worldPos[3];
 		//for (int pos = 0; pos < 3; ++pos) {
 		//	worldPos[pos] = ((*cit)[pos] * GetSpacing()[pos]) + GetOrigin()[pos];
 		//}
 		//splinePoints->GetPoints()->InsertNextPoint(worldPos);
 	}
+	splinePoints->SetLines(vtkSmartPointer<vtkCellArray>::New());
+	splinePoints->GetLines()->InsertNextCell(linecell);
 
 	vtkSmartPointer<vtkTransform> translation =
 		vtkSmartPointer<vtkTransform>::New();
@@ -140,17 +151,34 @@ vtkPolyData* QInteractorStyleTubularVOI::UpdateSpline(QList<int*>& seed)
 	transformFilter->SetTransform(translation);
 	transformFilter->Update();
 
+	vtkSmartPointer<vtkPolyData> transformedPD = transformFilter->GetOutput();
 
-	vtkSmartPointer<vtkParametricSpline> spline =
-		vtkSmartPointer<vtkParametricSpline>::New();
-	//spline->SetPoints(splinePoints->GetPoints());
-	spline->SetPoints(transformFilter->GetOutput()->GetPoints());
+	/* Calculate total length of current polyline */
+	double totalLength = 0;
+	for (int i = 1; i < transformedPD->GetNumberOfPoints(); i++)
+	{
+		double segmentVect[3], prevPoint[3];
+		memcpy(prevPoint, transformedPD->GetPoint(i - 1), sizeof(double) * 3);
+		vtkMath::Subtract(transformedPD->GetPoint(i), prevPoint, segmentVect);
+		totalLength += vtkMath::Norm(segmentVect);
+	}
+	/* Calculate subdivision value, default spacing will be 1mm */
+	double defaultSpacing_mm = *std::min(this->GetImageViewer()->GetInput()->GetSpacing(), this->GetImageViewer()->GetInput()->GetSpacing() + 3);
+	int subdivision = int(ceil(totalLength / defaultSpacing_mm)) + 1;
 
-	vtkSmartPointer<vtkParametricFunctionSource> functionSource =
-		vtkSmartPointer<vtkParametricFunctionSource>::New();
-	functionSource->SetParametricFunction(spline);
-	functionSource->Update();
-	m_spline->ShallowCopy(functionSource->GetOutput());
+	/* Interpolate the polyline */
+	vtkSmartPointer<vtkCardinalSpline> spline = vtkSmartPointer<vtkCardinalSpline>::New();
+	spline->SetLeftConstraint(2);
+	spline->SetLeftValue(0.0);
+	spline->SetRightConstraint(2);
+	spline->SetRightValue(0.0);
+	vtkSmartPointer<vtkSplineFilter> splineFilter = vtkSmartPointer<vtkSplineFilter>::New();
+	splineFilter->SetInputData(transformedPD);
+	splineFilter->SetSpline(spline);
+	splineFilter->SetNumberOfSubdivisions(subdivision);
+	splineFilter->Update();
+
+	m_spline->DeepCopy(splineFilter->GetOutput());
 	return m_spline;
 }
 
