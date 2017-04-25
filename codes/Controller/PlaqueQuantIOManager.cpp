@@ -5,11 +5,11 @@
 
 #include <itkImageFileReader.h>
 #include <itkOrientImageFilter.h>
-
+#include <itkImageFileWriter.h>
 
 using itk::OrientImageFilter;
 using itk::ImageFileReader;
-
+using itk::ImageFileWriter;
 
 
 PlaqueQuantIOManager::PlaqueQuantIOManager(QObject * parent)
@@ -40,6 +40,28 @@ void PlaqueQuantIOManager::slotInitializeOverlay(IVtkImageData::itkImageType::Po
 	emit signalFinishOpenOverlay();
 }
 
+void PlaqueQuantIOManager::slotAddToListOfFileNamesAndSave(QList<QStringList>* listOfFileNames)
+{
+	clearListsOfFileNames();
+
+	for (int i = 0; i < listOfFileNames->size(); ++i) {
+		slotAddToListOfFileNames(listOfFileNames->at(i));
+	}
+	slotSaveMultiImages();
+}
+
+void PlaqueQuantIOManager::slotSaveMultiImages()
+{
+	for (int i = 0; i < listOfCurvedImages.size(); ++i) {
+		if (listOfCurvedImages[i]) {
+			ImageFileWriter<IVtkImageData::itkImageType>::Pointer writer =
+				ImageFileWriter<IVtkImageData::itkImageType >::New();
+			writer->SetFileName(listOfFileNames[i].first().toStdString());
+			writer->SetInput(listOfCurvedImages[i]->GetItkImage());
+			writer->Write();
+		}
+	}
+}
 
 void PlaqueQuantIOManager::slotOpenSegmentation(QString fileName) 
 {

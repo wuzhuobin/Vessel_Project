@@ -87,7 +87,7 @@ private slots:
 	void slotVBDSmoker();
 
 	// Curved image update
-	void slotInitializeCurvedImage();
+	bool slotInitializeCurvedImage();
 
 	void slotChangeImage(QAction* action);
 	void slotChangeImage(int viewer, int image);

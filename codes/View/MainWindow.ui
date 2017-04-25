@@ -131,6 +131,7 @@
     <addaction name="actionNew_segmentation"/>
     <addaction name="actionImport_segmentation"/>
     <addaction name="actionExport_segmentation"/>
+    <addaction name="actionExport_curved_images"/>
     <addaction name="actionExport_Report"/>
     <addaction name="actionExit"/>
    </widget>
@@ -1007,6 +1008,17 @@
    </property>
    <property name="toolTip">
     <string>Stenosis</string>
+   </property>
+  </action>
+  <action name="actionExport_curved_images">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Export curved images</string>
+   </property>
+   <property name="toolTip">
+    <string>Export curved images</string>
    </property>
   </action>
  </widget>

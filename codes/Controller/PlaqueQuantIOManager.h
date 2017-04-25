@@ -10,6 +10,7 @@ class PlaqueQuantIOManager :public IOManager
 public:
 	PlaqueQuantIOManager(QObject* parent = nullptr);
 
+	QList<vtkSmartPointer<IVtkImageData>> listOfCurvedImages;
 
 	public slots:
 	virtual void slotOpenSegmentation(QString fileName) override;
@@ -20,7 +21,12 @@ public:
 
 	virtual void slotGenerateReport(QString path) override {};
 
+	void slotAddToListOfFileNamesAndSave(QList<QStringList>* listOfFileNames);
 
+	void slotSaveMultiImages();
+
+
+protected:
 
 };
 
