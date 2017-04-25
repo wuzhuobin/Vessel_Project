@@ -44,4 +44,10 @@ $RECYCLE.BIN/
 .AppleDesktop
 Network Trash Folder
 Temporary Items
-.apdisk
+.apdiski
+
+#Cmake generated
+build/
+bin/
+include/
+lib/

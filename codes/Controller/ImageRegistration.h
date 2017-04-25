@@ -29,6 +29,9 @@ public:
 	ImageType::Pointer		 GetOutput();
 
 private:
+	/* Check if the moving and fixed image has same spacing */
+	bool CheckSameSpacing();
+
 	ImageType::Pointer	   m_fixedImage;
 	ImageType::Pointer	   m_movingImage;
 	ImageType::Pointer	   m_outputImage;
