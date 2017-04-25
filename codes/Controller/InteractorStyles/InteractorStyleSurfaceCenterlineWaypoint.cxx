@@ -15,7 +15,7 @@ void InteractorStyleSurfaceCenterlineWaypoint::SetCustomEnabled(bool flag)
 
 bool InteractorStyleSurfaceCenterlineWaypoint::CreateCenterLine()
 {
-
+	// Please avoid using these kinds of syntax if you are not making thread, very hard to read, easily causes bugs.
 	std::list<AbstractInteractorStyle*>::const_iterator cit = std::find_if(
 		m_abstractInteractorStyles.cbegin(),
 		m_abstractInteractorStyles.cend(),
