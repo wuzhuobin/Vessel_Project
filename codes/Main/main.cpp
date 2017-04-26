@@ -4,8 +4,8 @@
 #include "EncryptionAuthentication.h"
 #include <QtWidgets/QApplication>
 
-//#define _BUILD_A
-#define _BUILD_B
+#define _BUILD_A
+//#define _BUILD_B
 //#define _DEBUG
 
 //

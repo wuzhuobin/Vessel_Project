@@ -12,8 +12,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1600</width>
-    <height>900</height>
+    <width>1024</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -94,8 +94,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>1195</width>
-           <height>795</height>
+           <width>619</width>
+           <height>495</height>
           </rect>
          </property>
         </widget>
@@ -113,7 +113,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1600</width>
+     <width>1024</width>
      <height>23</height>
     </rect>
    </property>
