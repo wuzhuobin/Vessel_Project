@@ -523,8 +523,6 @@ void Core::slotChangeCurved(int viewer, bool curvedFlag)
 void Core::slotChangeSliceOrientation(int viewer, int sliceOrientation)
 {
 	currentSliceOrientation[viewer] = sliceOrientation;
-	// Change orientation of border widgets too
-	this->imageInteractorStyle[0]->GetVOI()->GetROIWidget()->SetBorderWidgetOrientation(viewer, sliceOrientation);
 	slotUpdateImageViewersToCurrent(viewer);
 }
 
