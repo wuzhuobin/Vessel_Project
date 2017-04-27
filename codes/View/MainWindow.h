@@ -41,7 +41,7 @@ class MainWindow : public QMainWindow
 
 public:
 
-	const static unsigned short NUM_OF_2D_VIEWERS = 9;
+	const static unsigned short NUM_OF_2D_VIEWERS = 3;
 	const static unsigned short NUM_OF_3D_VIEWERS = 1;
 	const static unsigned short NUM_OF_VIEWERS = NUM_OF_3D_VIEWERS + NUM_OF_2D_VIEWERS;
 

@@ -293,6 +293,7 @@ void vtkROIBorderWidget::UpdateROIWidget()
 	parentRep->PlaceWidget(boxBounds);
 	parentRep->Modified();
 	parentRep->SetPlaceFactor(placefactor);
+	parent->InvokeEvent(vtkCommand::InteractionEvent);
 }
 
 //////////////////////////////////////////////////////////////////////////

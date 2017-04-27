@@ -23,6 +23,7 @@ vtkSmartPointer<vtkRenderWindow> QInteractorStyleVOI::m_renderWindow = nullptr;
 void QInteractorStyleVOI::SetCustomEnabled(bool flag)
 {
 	QInteractorStyleNavigation::SetCustomEnabled(flag);
+	uniqueInvoke(flag);
 	if (flag) {
 		// Change orientation of border widgets too
 		m_roi->SetBorderWidgetOrientation(m_uniqueROIId, GetSliceOrientation());
@@ -39,7 +40,6 @@ void QInteractorStyleVOI::SetCustomEnabled(bool flag)
 	GetImageViewer()->Render();
 	// suppose it should able to disappear by the following
 	//m_roi->Render();
-	uniqueInvoke(flag);
 }
 void QInteractorStyleVOI::slotUpdateVOISpinBoxes(double * values)
 {
@@ -129,6 +129,18 @@ void QInteractorStyleVOI::uniqueInitialization()
 		m_roi->GetRepresentation()->SetPlaceFactor(1);
 	}
 	/// ROI
+	vtkSmartPointer<vtkCallbackCommand> callback =
+		vtkSmartPointer<vtkCallbackCommand>::New();
+	callback->SetClientData(this);
+	callback->SetCallback([](vtkObject *caller, unsigned long eid,
+		void *clientdata, void *calldata) {
+		QInteractorStyleVOI* self = reinterpret_cast<QInteractorStyleVOI*>(clientdata);
+		vtkROIWidget* roiWidget = reinterpret_cast<vtkROIWidget*>(caller);
+		vtkBoxRepresentation* roiWidgetRep = reinterpret_cast<vtkBoxRepresentation*>(roiWidget->GetRepresentation());
+		self->slotUpdateVOISpinBoxes(roiWidgetRep->GetBounds());
+	});
+	m_roi->AddObserver(vtkCommand::InteractionEvent, callback);
+	
 	//connect(m_roi, SIGNAL(signalROIBounds(double*)),
 	//	this, SLOT(slotUpdateVOISpinBoxes(double*)));
 }
