@@ -46,7 +46,6 @@ Core::Core(QObject * parent)
 		imageViewers[i] = ImageViewer::New();
 		imageViewers[i]->SetRenderWindow(mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetRenderWindow());
 		imageViewers[i]->SetupInteractor(mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetInteractor());
-		//imageViewers[i]->EnableDepthPeelingOn();
 
 		// Never use below method to set the interactorsyle
 		//imageInteractorStyle[i]->SetInteractor(imageInteractor[i]);
@@ -55,31 +54,50 @@ Core::Core(QObject * parent)
 		mainWindow.getViewerWidget(i)->getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(imageInteractorStyle[i]);
 		
 	}
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; ++i) {
+		surfaceViewer[i] = CenterlineSurfaceViewer::New();
+		surfaceViewer[i]->SetRenderWindow(mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->qvtkWidget2->GetRenderWindow());
+		surfaceViewer[i]->SetupInteractor(mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->qvtkWidget2->GetInteractor());
+		surfaceViewer[i]->EnableDepthPeelingOn();
+
+		// Never use below method to set the interactorsyle
+		//surfaceInteractorStyle[i]->SetInteractor(imageInteractor[i]);
+		surfaceInteractorStyle[i] = StyleSwitch3D::New();
+		surfaceInteractorStyle[i]->SetSurfaceViewer(surfaceViewer[i]);
+		
+		mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle[i]);
+	}
+
+	// find loading images and overlay
+	connect(&mainWindow, SIGNAL(signalImageImportLoad(QList<QStringList>*)),
+		&ioManager, SLOT(slotAddToListOfFileNamesAndOpen(QList<QStringList>*)));
+	connect(&ioManager, SIGNAL(signalFinishOpenMultiImages()),
+		this, SLOT(slotIOManagerToImageManager()));
+	connect(&ioManager, SIGNAL(signalFinishOpenOverlay()),
+		this, SLOT(slotOverlayToImageManager()));
 
 
-	//surfaceInteractor = vtkRenderWindowInteractor::New();
+	// import and export overlay
+	connect(&mainWindow, SIGNAL(signalOverlayImportLoad(QString)),
+		&ioManager, SLOT(slotOpenSegmentation(QString)));
+	connect(&mainWindow, SIGNAL(signalOverlayExportSave(QString)),
+		&ioManager, SLOT(slotSaveSegmentation(QString)));
 
-	surfaceViewer = CenterlineSurfaceViewer::New();
-	surfaceViewer->SetRenderWindow(mainWindow.getViewerWidget(MainWindow::NUM_OF_VIEWERS - MainWindow::NUM_OF_3D_VIEWERS)->getUi()->qvtkWidget2->GetRenderWindow());
-	surfaceViewer->SetupInteractor(mainWindow.getViewerWidget(MainWindow::NUM_OF_VIEWERS - MainWindow::NUM_OF_3D_VIEWERS)->getUi()->qvtkWidget2->GetInteractor());
-	surfaceViewer->EnableDepthPeelingOn();
+	// new overlay
+	connect(mainWindow.getUi()->actionNew_segmentation, SIGNAL(triggered()),
+		&ioManager, SLOT(slotInitializeOverlay()));
 
 
-	//surfaceViewer->EnableDepthSortingOn();
-
-
-	// Never use below method to set the interactorsyle
-	//surfaceInteractorStyle[i]->SetInteractor(imageInteractor[i]);
-	surfaceInteractorStyle = StyleSwitch3D::New();
-	surfaceInteractorStyle->SetSurfaceViewer(surfaceViewer);
-	mainWindow.getViewerWidget(MainWindow::NUM_OF_VIEWERS - MainWindow::NUM_OF_3D_VIEWERS)->getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(surfaceInteractorStyle);
 
 #ifdef PLAQUEQUANT_VER
 	dataProcessor.imageInteractorStyle = imageInteractorStyle;
-	dataProcessor.surfaceInteractorStyle = surfaceInteractorStyle;
+	dataProcessor.surfaceInteractorStyle = surfaceInteractorStyle[0];
 	dataProcessor.imageManager = &imageManager;
 #endif // PLAQUEQUANT_VER
 
+	
+	// ImageViewer
+	// connect changing mode
 	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevelThreshold());
@@ -93,9 +111,7 @@ Core::Core(QObject * parent)
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetMaximumWallThickness());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPolygonDrawSeries());
 	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVesselSegmentation2());
-	
 
-	// connect changing mode
 	connect(mainWindow.getUi()->actionTesting, SIGNAL(triggered()),
 		this, SLOT(slotTesting()));
 	connect(mainWindow.getUi()->actionNavigation, SIGNAL(triggered()),
@@ -129,27 +145,6 @@ Core::Core(QObject * parent)
 
 
 
-
-	connect(&mainWindow, SIGNAL(signalImageImportLoad(QList<QStringList>*)),
-		&ioManager, SLOT(slotAddToListOfFileNamesAndOpen(QList<QStringList>*)));
-	
-	// find loading images and overlay
-	connect(&ioManager, SIGNAL(signalFinishOpenMultiImages()),
-		this, SLOT(slotIOManagerToImageManager()));
-	connect(&ioManager, SIGNAL(signalFinishOpenOverlay()),
-		this, SLOT(slotOverlayToImageManager()));
-
-
-	// import and export overlay
-	connect(&mainWindow, SIGNAL(signalOverlayImportLoad(QString)), 
-		&ioManager, SLOT(slotOpenSegmentation(QString)));
-	connect(&mainWindow, SIGNAL(signalOverlayExportSave(QString)),
-		&ioManager, SLOT(slotSaveSegmentation(QString)));
-
-	// new overlay
-	connect(mainWindow.getUi()->actionNew_segmentation, SIGNAL(triggered()),
-		&ioManager, SLOT(slotInitializeOverlay()));
-
 	// change view mode
 	connect(mainWindow.getUi()->actionCurved_view, SIGNAL(toggled(bool)),
 		this, SLOT(slotCurvedView(bool)));
@@ -163,10 +158,7 @@ Core::Core(QObject * parent)
 		connect(mainWindow.getUi()->actionAll_axial_view, SIGNAL(triggered()),
 			buttons[2], SLOT(click()));
 	}
-	//connect(mainWindow.getUi()->actionAll_axial_view, SIGNAL(triggered()),
-	//	this, SLOT(slotAllAxialView()));
-	//connect(mainWindow.getUi()->actionMulti_planar_view, SIGNAL(triggered()),
-	//	this, SLOT(slotMultiPlanarView()));
+
 	// change image
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		connect(mainWindow.getSelectImgMenu(i), SIGNAL(triggered(QAction*)),
@@ -196,6 +188,35 @@ Core::Core(QObject * parent)
 	connect(sliceOrientationMapperC, SIGNAL(mapped(int)),
 		this, SLOT(slotChangeSliceOrientationToXZ(int)));
 
+	// SurfaceViewer
+	// change orientation
+	QSignalMapper* orientationMapperA = new QSignalMapper(this);
+	QSignalMapper* orientationMapperS = new QSignalMapper(this);
+	QSignalMapper* orientationMapperC = new QSignalMapper(this);
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
+	{
+		orientationMapperA->setMapping(mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->pushButtonAxialView, i);
+		orientationMapperS->setMapping(mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->pushButtonSigitalView, i);
+		orientationMapperC->setMapping(mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->pushButtonCoronalView, i);
+		connect(mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->pushButtonAxialView, SIGNAL(clicked()),
+			orientationMapperA, SLOT(map()));
+		connect(mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->pushButtonSigitalView, SIGNAL(clicked()),
+			orientationMapperS, SLOT(map()));
+		connect(mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->pushButtonCoronalView, SIGNAL(clicked()),
+			orientationMapperC, SLOT(map()));
+		//connect(mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->pushButtonAxialView, SIGNAL(clicked()),
+		//	this, SLOT(slotChangeOrientationToXY()));
+		//connect(mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->pushButtonSigitalView, SIGNAL(clicked()),
+		//	this, SLOT(slotChangeOrientationToYZ()));
+		//connect(mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->pushButtonCoronalView, SIGNAL(clicked()),
+		//	this, SLOT(slotChangeOrientationToXZ()));
+	}
+	connect(orientationMapperA, SIGNAL(mapped(int)),
+		this, SLOT(slotChangeOrientationToXY(int)));
+	connect(orientationMapperS, SIGNAL(mapped(int)),
+		this, SLOT(slotChangeOrientationToYZ(int)));
+	connect(orientationMapperC, SIGNAL(mapped(int)),
+		this, SLOT(slotChangeOrientationToXZ(int)));
 	// surface action
 	connect(mainWindow.getUi()->actionTraceball_camera, SIGNAL(triggered()),
 		this, SLOT(slotTrackballCamera()));
@@ -211,6 +232,7 @@ Core::Core(QObject * parent)
 		this, SLOT(slotWaypoint()));
 	connect(mainWindow.getUi()->actionStenosis, SIGNAL(triggered()),
 		this, SLOT(slotStenosis()));
+
 
 	// update btn
 	connect(mainWindow.getUi()->updateBtn, SIGNAL(clicked()),
@@ -265,7 +287,7 @@ void Core::slotIOManagerToImageManager()
 	}
 	// initialization, and trigger the navigation interactorstyle
 	mainWindow.getMeasurementWidget()->wind1 = imageViewers[2]->GetRenderWindow();
-	mainWindow.getMeasurementWidget()->wind2 = surfaceViewer->GetRenderWindow();
+	mainWindow.getMeasurementWidget()->wind2 = surfaceViewer[0]->GetRenderWindow();
 	mainWindow.getMeasurementWidget()->info = imageManager.getDicomIO(0);
 	mainWindow.initialization();
 	const int* extent = imageViewers[DEFAULT_IMAGE]->GetDisplayExtent();
@@ -317,7 +339,7 @@ void Core::slotUpdateMeasurements()
 		mainWindow.getMeasurementWidget()->slotUpdate3DMeasurements(overlay->Measurements3D);
 	}
 	mainWindow.getMeasurementWidget()->slotUpdateStenosis(
-		surfaceInteractorStyle->GetStenosis()->GetStenosisValue()
+		surfaceInteractorStyle[0]->GetStenosis()->GetStenosisValue()
 	);
 }
 
@@ -445,38 +467,59 @@ void Core::slotVesselSegmentation()
 
 void Core::slotTrackballCamera()
 {
-	surfaceInteractorStyle->SetInteractorStyleTo3DTrackballCamera();
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
+	{
+		surfaceInteractorStyle[i]->SetInteractorStyleTo3DTrackballCamera();
+	}
 }
 
 void Core::slotCenterLine()
 {
-	surfaceInteractorStyle->SetInteractorStyleTo3DCenterLine();
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
+	{
+		surfaceInteractorStyle[i]->SetInteractorStyleTo3DCenterLine();
+	}
 
 }
 
 void Core::slotFindMaximumRadius()
 {
-	surfaceInteractorStyle->SetInteractorStyleTo3DFindMaximumRadius();
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
+	{
+		surfaceInteractorStyle[i]->SetInteractorStyleTo3DFindMaximumRadius();
+	}
 }
 
 void Core::slotPerpendicularMeasurement()
 {
-	surfaceInteractorStyle->SetInteractorStyleTo3DPerpendicularMeasurement();
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
+	{
+		surfaceInteractorStyle[i]->SetInteractorStyleTo3DPerpendicularMeasurement();
+	}
 }
 
 void Core::slotCurvedNavigation()
 {
-	surfaceInteractorStyle->SetInteractorStyleTo3DCurvedNavigation();
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
+	{
+		surfaceInteractorStyle[i]->SetInteractorStyleTo3DCurvedNavigation();
+	}
 }
 
 void Core::slotWaypoint()
 {
-	surfaceInteractorStyle->SetInteractorStyleTo3DWaypoint();
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
+	{
+		surfaceInteractorStyle[i]->SetInteractorStyleTo3DWaypoint();
+	}
 }
 
 void Core::slotStenosis()
 {
-	surfaceInteractorStyle->SetInteractorStyleTo3DStenosis();
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
+	{
+		surfaceInteractorStyle[i]->SetInteractorStyleTo3DStenosis();
+	}
 }
 
 void Core::slotVBDSmoker()
@@ -486,10 +529,19 @@ void Core::slotVBDSmoker()
 	}
 	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
 }
-
-void Core::slotInitializeCurvedImage()
+#include <qmessagebox.h>
+#include <vtkPolyData.h>
+bool Core::slotInitializeCurvedImage()
 {
+#ifdef PLAQUEQUANT_VER
+	if (!surfaceViewer[0]->GetCenterline() || surfaceViewer[0]->GetCenterline()->GetNumberOfPoints() < 2) {
+		QMessageBox::critical(&mainWindow, QString("No centerline"),
+			QString("Please Generate centerline first !"));
+		return false;
+	}
 	dataProcessor.initializeCurved();
+	return true;
+#endif // PLAQUEQUANT_VER
 }
 
 void Core::slotChangeImage(QAction * action)
@@ -586,19 +638,16 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 
 }
 
-#include <qmessagebox.h>
-#include <vtkPolyData.h>
 void Core::slotCurvedView(bool flag)
 {
 #ifdef PLAQUEQUANT_VER
-	if (!surfaceViewer->GetCenterline() || surfaceViewer->GetCenterline()->GetNumberOfPoints() < 2) {
-		QMessageBox::critical(&mainWindow, QString("No centerline"),
-			QString("Please Generate centerline first !"));
-		return;
-	}
+	bool _flag = true;
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		if (!imageManager.getCurvedPlaqueQuantOverlay()) {
-			dataProcessor.initializeCurved();
+			_flag = slotInitializeCurvedImage();
+		}
+		if (!_flag) {
+			return;
 		}
 		currentCurved[i] = flag;
 		slotUpdateImageViewersToCurrent(i);
@@ -622,12 +671,38 @@ void Core::slotUpdateSurfaceView()
 		image->ShallowCopy(imageManager.getOverlay()->getData());
 	}
 	//surfaceViewer->SetInputData(imageManager.getOverlay()->getData());
-	surfaceViewer->SetInputData(image);
-	surfaceViewer->SetLookupTable(imageManager.getOverlay()->getLookupTable());
-	surfaceViewer->SetCenterline(static_cast<OVERLAY*>(imageManager.getOverlay())->getCenterLine());
-	surfaceViewer->GetRenderer()->ResetCameraClippingRange();
-	surfaceViewer->GetRenderer()->ResetCamera();
-	surfaceViewer->Render();
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
+	{
+		surfaceViewer[i]->SetInputData(image);
+		surfaceViewer[i]->SetLookupTable(imageManager.getOverlay()->getLookupTable());
+		surfaceViewer[i]->SetCenterline(static_cast<OVERLAY*>(imageManager.getOverlay())->getCenterLine());
+
+		surfaceViewer[i]->Render();
+	}
+}
+
+void Core::slotChangeOrientationToYZ(int viewer)
+{
+	currentOrientation[viewer] = SurfaceViewer::ORIENTATION_YZ;
+	slotUpdateSurfaceViewersToCurrent(viewer);
+}
+
+void Core::slotChangeOrientationToXZ(int viewer)
+{
+	currentOrientation[viewer] = SurfaceViewer::ORIENTATION_XZ;
+	slotUpdateSurfaceViewersToCurrent(viewer);
+}
+
+void Core::slotChangeOrientationToXY(int viewer)
+{
+	currentOrientation[viewer] = SurfaceViewer::ORIENTATION_XY;
+	slotUpdateSurfaceViewersToCurrent(viewer);
+}
+
+void Core::slotUpdateSurfaceViewersToCurrent(int viewer)
+{
+	surfaceViewer[viewer]->SetOrientation(currentOrientation[viewer]);
+	surfaceViewer[viewer]->Render();
 }
 
 void Core::slotRenderALlViewers()
@@ -635,6 +710,6 @@ void Core::slotRenderALlViewers()
 	imageViewers[0]->Render();
 	imageViewers[1]->Render();
 	imageViewers[2]->Render();
-	surfaceViewer->Render();
+	surfaceViewer[0]->Render();
 }
 

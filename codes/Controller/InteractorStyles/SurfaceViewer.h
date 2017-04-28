@@ -37,6 +37,30 @@ public:
 	virtual void Render(void);
 
 	// Description:
+	// Set/get the slice orientation
+	//BTX
+	enum
+	{
+		ORIENTATION_YZ = 0,
+		ORIENTATION_XZ = 1,
+		ORIENTATION_XY = 2
+	};
+	//ETX
+	vtkGetMacro(Orientation, int);
+	virtual void SetOrientation(int orientation);
+	virtual void SetOrientationToXY()
+	{
+		this->SetOrientation(ORIENTATION_XY);
+	};
+	virtual void SetOrientationToYZ()
+	{
+		this->SetOrientation(ORIENTATION_YZ);
+	};
+	virtual void SetOrientationToXZ()
+	{
+		this->SetOrientation(ORIENTATION_XZ);
+	};
+	// Description:
 	// Set/Get the input image to the viewer.
 	virtual void SetInputData(vtkImageData *in);
 	virtual vtkImageData *GetInput();
@@ -119,6 +143,7 @@ protected:
 
 	virtual void InstallPipeline();
 	virtual void UnInstallPipeline();
+	virtual void UpdateOrientation();
 
 	vtkImageResample* ImageResample = nullptr;
 	vtkDiscreteMarchingCubes* MarchingCubes = nullptr;
@@ -135,6 +160,7 @@ protected:
 
 	vtkLookupTable* LookupTable = nullptr;
 
+	int Orientation = ORIENTATION_XY;
 	bool FirstRender = true;
 	// MaxNoOfPeels maximum number of depth peels(multi - pass rendering)
 	int MaxNoOfPeels = 0;

@@ -73,6 +73,10 @@ private slots:
 	void slotPolygonDraw();
 	void slotPolygonDrawSeries();
 	void slotVesselSegmentation();
+	// IADE specified
+	void slotVBDSmoker();
+
+
 
 	// Surface interactorStyle
 	void slotTrackballCamera();
@@ -83,11 +87,9 @@ private slots:
 	void slotWaypoint();
 	void slotStenosis();
 
-	// IADE specified
-	void slotVBDSmoker();
 
 	// Curved image update
-	void slotInitializeCurvedImage();
+	bool slotInitializeCurvedImage();
 
 	void slotChangeImage(QAction* action);
 	void slotChangeImage(int viewer, int image);
@@ -99,7 +101,14 @@ private slots:
 	void slotUpdateImageViewersToCurrent(int viewer);
 	void slotCurvedView(bool flag);
 
+	// Surface viewers
 	void slotUpdateSurfaceView();
+	void slotChangeOrientationToYZ(int viewer);
+	void slotChangeOrientationToXZ(int viewer);
+	void slotChangeOrientationToXY(int viewer);
+	void slotUpdateSurfaceViewersToCurrent(int viewer);
+
+
 
 	void slotRenderALlViewers();
 
@@ -121,11 +130,11 @@ private:
 	ImageViewer* imageViewers[MainWindow::NUM_OF_2D_VIEWERS];
 	StyleSwitch* imageInteractorStyle[MainWindow::NUM_OF_2D_VIEWERS];
 
-	CenterlineSurfaceViewer* surfaceViewer;
-	StyleSwitch3D* surfaceInteractorStyle;
+	int currentOrientation[MainWindow::NUM_OF_3D_VIEWERS] = {
+		ImageViewer::SLICE_ORIENTATION_XY };
+	CenterlineSurfaceViewer* surfaceViewer[MainWindow::NUM_OF_3D_VIEWERS];
+	StyleSwitch3D* surfaceInteractorStyle[MainWindow::NUM_OF_3D_VIEWERS];
 
-
-	unsigned int m_viewMode = -1;
 };
 
 

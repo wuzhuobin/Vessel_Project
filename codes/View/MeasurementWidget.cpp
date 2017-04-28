@@ -27,11 +27,11 @@ MeasurementWidget::MeasurementWidget(QWidget * parent) : QWidget(parent)
 	//m_mainWnd = MainWindow::GetMainWindow();
 	//Core* core = m_mainWnd->GetCore();
 	// Set table widget properties
-	ui->measurement3DTableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	ui->measurement3DTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-	ui->measurement2DTableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	ui->measurement2DTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-	ui->measurement2DTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	//ui->measurement3DTableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	//ui->measurement3DTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	//ui->measurement2DTableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	//ui->measurement2DTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	//ui->measurement2DTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	ui->measurement2DTableWidget->setColumnHidden(1, true);
 
 	// measurement
