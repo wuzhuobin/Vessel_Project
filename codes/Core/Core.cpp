@@ -26,6 +26,7 @@ Core::Core(QObject * parent)
 	imageManager(NUM_OF_IMAGES, parent),
 	ioManager(parent),
 	dataProcessor(parent),
+	measurement(parent),
 	QObject(parent)
 {
 	ioManager.enableRegistration(true);
@@ -90,6 +91,18 @@ Core::Core(QObject * parent)
 
 
 #ifdef PLAQUEQUANT_VER
+
+	// Measurement
+	connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
+		&measurement, SLOT(setSlice(int)));
+	connect(&measurement, SIGNAL(updated()),
+		mainWindow.getMeasurementWidget(), SLOT(slotUpdateMeasurements()));
+	mainWindow.getMeasurementWidget()->measurements2D = measurement.m_measurements2D;
+	mainWindow.getMeasurementWidget()->measurements3D = measurement.m_measurements3D;
+	mainWindow.getMeasurementWidget()->stenosis = &measurement.m_stenosis;
+	mainWindow.getMeasurementWidget()->wind1 = imageViewers[2]->GetRenderWindow();
+	mainWindow.getMeasurementWidget()->wind2 = surfaceViewer[0]->GetRenderWindow();
+
 	dataProcessor.imageInteractorStyle = imageInteractorStyle;
 	dataProcessor.surfaceInteractorStyle = surfaceInteractorStyle[0];
 	dataProcessor.imageManager = &imageManager;
@@ -286,8 +299,7 @@ void Core::slotIOManagerToImageManager()
 		imageViewers[i]->ResetDisplayExtent();
 	}
 	// initialization, and trigger the navigation interactorstyle
-	mainWindow.getMeasurementWidget()->wind1 = imageViewers[2]->GetRenderWindow();
-	mainWindow.getMeasurementWidget()->wind2 = surfaceViewer[0]->GetRenderWindow();
+
 	mainWindow.getMeasurementWidget()->info = imageManager.getDicomIO(0);
 	mainWindow.initialization();
 	const int* extent = imageViewers[DEFAULT_IMAGE]->GetDisplayExtent();
@@ -317,6 +329,8 @@ void Core::slotOverlayToImageManager()
 		imageManager.getOverlay(), SLOT(slotSetOpacity(int, double)));
 	connect(mainWindow.getLabelWidget(), SIGNAL(signalOpacityChanged(int, double)),
 		this, SLOT(slotRenderALlViewers()));
+
+
 	
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		slotUpdateImageViewersToCurrent(i);
@@ -329,20 +343,6 @@ void Core::slotOverlayToImageManager()
 	// make no different, if it has not been clear
 	//ioManager.clearOverlay();
 }
-
-void Core::slotUpdateMeasurements()
-{
-	//IADEOverlay* overlay = qobject_cast<IADEOverlay*>(sender());
-	OVERLAY* overlay = dynamic_cast<OVERLAY*>(sender());
-	if (overlay && overlay->Measurements2D.contains(overlay->getCurrentSlice())) {
-		mainWindow.getMeasurementWidget()->slotUpdate2DMeasurements(overlay->Measurements2D[overlay->getCurrentSlice()].data());
-		mainWindow.getMeasurementWidget()->slotUpdate3DMeasurements(overlay->Measurements3D);
-	}
-	mainWindow.getMeasurementWidget()->slotUpdateStenosis(
-		surfaceInteractorStyle[0]->GetStenosis()->GetStenosisValue()
-	);
-}
-
 
 void Core::slotNavigation()
 {
@@ -540,8 +540,8 @@ bool Core::slotInitializeCurvedImage()
 		return false;
 	}
 	dataProcessor.initializeCurved();
-	return true;
 #endif // PLAQUEQUANT_VER
+	return true;
 }
 
 void Core::slotChangeImage(QAction * action)
@@ -602,15 +602,7 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 		imageViewers[viewer]->SetOverlay(imageManager.getCurvedPlaqueQuantOverlay()->getData());
 		imageViewers[viewer]->SetInputData(imageManager.getCurvedImage(currentImage[viewer]));
 		// Measurement 
-		// tmp fix
-		disconnect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-			imageManager.getOverlay(), SLOT(setCurrentSlice(int)));
-		disconnect(imageManager.getOverlay(), SIGNAL(signalUpdatedOverlay()),
-			this, SLOT(slotUpdateMeasurements()));
-		connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-			imageManager.getCurvedPlaqueQuantOverlay(), SLOT(setCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
-		connect(imageManager.getCurvedPlaqueQuantOverlay(), SIGNAL(signalUpdatedOverlay()),
-			this, SLOT(slotUpdateMeasurements()), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+		measurement.setOverlay(imageManager.getCurvedPlaqueQuantOverlay());
 #endif // PLAQUEQUANT_VER
 	}
 	else
@@ -619,17 +611,8 @@ void Core::slotUpdateImageViewersToCurrent(int viewer)
 		imageViewers[viewer]->SetInputData(imageManager.getImage(currentImage[viewer]));
 #ifdef PLAQUEQUANT_VER
 		// Measurement 
-		// tmp fix
-		disconnect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-			imageManager.getCurvedPlaqueQuantOverlay(), SLOT(setCurrentSlice(int)));
-		disconnect(imageManager.getCurvedPlaqueQuantOverlay(), SIGNAL(signalUpdatedOverlay()),
-			this, SLOT(slotUpdateMeasurements()));
+		measurement.setOverlay(imageManager.getOverlay());
 #endif // PLAQUEQUANT_VER		
-		connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-			imageManager.getOverlay(), SLOT(setCurrentSlice(int)), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
-		connect(imageManager.getOverlay(), SIGNAL(signalUpdatedOverlay()),
-			this, SLOT(slotUpdateMeasurements()), static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
-
 	}
 	imageViewers[viewer]->SetSliceOrientation(currentSliceOrientation[viewer]);
 	imageViewers[viewer]->Render();

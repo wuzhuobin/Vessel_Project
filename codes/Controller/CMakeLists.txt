@@ -25,18 +25,16 @@ add_subdirectory(InteractorStylePolygonDraw2_test)
 
 SET(
 	CONTROLLER_SRC
-	# ${PROJECT_SOURCE_DIR}/MyImageManager.cpp
 	${PROJECT_SOURCE_DIR}/IOManager.cpp
 	${PROJECT_SOURCE_DIR}/IADEIOManager.cpp
 	${PROJECT_SOURCE_DIR}/PlaqueQuantIOManager.cpp
 	${PROJECT_SOURCE_DIR}/ImageRegistration.cxx
 	${PROJECT_SOURCE_DIR}/DataProcessor.cpp
-	# ${PROJECT_SOURCE_DIR}/Overlay.cxx
-	# ${PROJECT_SOURCE_DIR}/RegistrationWizard.cxx
+	${PROJECT_SOURCE_DIR}/Measurement.cpp
+	${PROJECT_SOURCE_DIR}/PlaqueQuantMeasurement.cpp
 	)
 SET(
 	CONTROLLER_H
-	# ${PROJECT_SOURCE_DIR}/MyImageManager.h
 	${PROJECT_SOURCE_DIR}/IOManager.h
 	${PROJECT_SOURCE_DIR}/IADEIOManager.h
 	${PROJECT_SOURCE_DIR}/PlaqueQuantIOManager.h
@@ -44,8 +42,8 @@ SET(
 	${PROJECT_SOURCE_DIR}/StyleSwitch.h
 	${PROJECT_SOURCE_DIR}/StyleSwitch3D.h
 	${PROJECT_SOURCE_DIR}/DataProcessor.h
-	# ${PROJECT_SOURCE_DIR}/Overlay.h
-	# ${PROJECT_SOURCE_DIR}/RegistrationWizard.h
+	${PROJECT_SOURCE_DIR}/Measurement.h
+	${PROJECT_SOURCE_DIR}/PlaqueQuantMeasurement.h
 	)
 
 qt5_wrap_cpp(

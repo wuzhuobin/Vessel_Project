@@ -75,7 +75,7 @@ double Overlay::getOpacity(int color)
 
 void Overlay::updatedOverlay()
 {
-	qDebug() << "Modified";
+	qDebug() << "Updated";
 	emit signalUpdatedOverlay();
 }
 

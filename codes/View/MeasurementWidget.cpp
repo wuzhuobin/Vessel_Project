@@ -31,21 +31,11 @@ MeasurementWidget::MeasurementWidget(QWidget * parent) : QWidget(parent)
 	//ui->measurement3DTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	//ui->measurement2DTableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	//ui->measurement2DTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-	//ui->measurement2DTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-	ui->measurement2DTableWidget->setColumnHidden(1, true);
+	ui->measurement2DTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	ui->measurement3DTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	ui->MRITableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	ui->patientTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-	// measurement
-	//Overlay* overlay = core->GetMyImageManager()->getOverlay();
-	//connect(overlay, SIGNAL(signalOverlayUpdated()),
-	//	this, SLOT(slotUpdate3DMeasurements()));
-	//connect(overlay, SIGNAL(signalOverlayUpdated()),
-	//	this, SLOT(slotUpdate2DMeasurements()));
-	//connect(core->Get2DInteractorStyle(Core::DEFAULT_IMAGE)->GetNavigation()->
-	//	QAbstractNavigation::getUi()->sliceHorizontalSliderZ, SIGNAL(valueChanged(int)),
-	//	this, SLOT(slotUpdate2DMeasurements(int)));
-
-	// generate report
-	//connect(ui->generateReportPushButton, SIGNAL(clicked()), this, SLOT(slotReportGetInput()));
 }
 
 MeasurementWidget::~MeasurementWidget() {
@@ -57,22 +47,15 @@ Ui::MeasurementWidget* MeasurementWidget::getUi()
 	return ui;
 }
 
-//void MeasurementWidget::UpdateMeasurementsForObliqueSlice(vtkImageData* img)
-//{
-//	// Must be single slice
-//	if (img->GetExtent()[4] != img->GetExtent()[5])
-//	{
-//		return;
-//	}
-//
-//	vtkSmartPointer<MeasurementFor2D> m = vtkSmartPointer<MeasurementFor2D>::New();
-//	m->SetSliceImage(img);
-//	m->Update();
-//}
+void MeasurementWidget::slotUpdateMeasurements()
+{
+	slotUpdate2DMeasurements(measurements2D);
+	slotUpdate3DMeasurements(measurements3D);
+	slotUpdateStenosis(stenosis);
+}
 
 void MeasurementWidget::slotUpdate3DMeasurements(double* Measurements3D)
 {
-	//m_mainWnd->m_core->GetMyImageManager()->getOverlay()->Measure3D();
 	ui->measurement3DTableWidget->clearContents();
 	for (int i = 0; i < 7; ++i) {
 		ui->measurement3DTableWidget->setItem(i, 0,
@@ -82,8 +65,6 @@ void MeasurementWidget::slotUpdate3DMeasurements(double* Measurements3D)
 
 void MeasurementWidget::slotUpdate2DMeasurements(double* Measurements2D)
 {
-	//slotUpdate2DMeasurements(m_mainWnd->ui->zSpinBox->value());
-	//m_mainWnd->m_core->GetMyImageManager()->getOverlay()->Measure3D();
 	ui->measurement2DTableWidget->clearContents();
 	for (int i = 0; i < 4; ++i) {
 		ui->measurement2DTableWidget->setItem(i, 0,
@@ -91,24 +72,9 @@ void MeasurementWidget::slotUpdate2DMeasurements(double* Measurements2D)
 	}
 }
 
-void MeasurementWidget::slotUpdate2DMeasurements(int slice)
+void MeasurementWidget::slotUpdateStenosis(double* stenosis)
 {
-	if (false)
-	{
-		//m_mainWnd->m_core->GetMyImageManager()->getOverlay()->Measure2D(slice);
-		//QStringList _2DMeasurements = m_mainWnd->GetCore()->GetMyImageManager()->getOverlay()->
-		//	Get2DMeasurementsStrings(slice);
-		//for (int i = 0; i < 4; ++i) {
-		//	ui->measurement2DTableWidget->setItem(i, 0, new QTableWidgetItem((_2DMeasurements)[i]));
-		//}
-
-		//ui->MWTTextBrowser->setText((_2DMeasurements)[4]);
-	}
-}
-
-void MeasurementWidget::slotUpdateStenosis(double stenosis)
-{
-	ui->stenosisSpinBox->setValue(stenosis);
+	ui->stenosisSpinBox->setValue(*stenosis);
 }
 
 void MeasurementWidget::slotUpdateImformation()

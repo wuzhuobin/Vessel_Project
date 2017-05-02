@@ -21,14 +21,17 @@ public:
 	Ui::MeasurementWidget* getUi();
 	itk::GDCMImageIO::Pointer info = nullptr;
 	vtkRenderWindow* wind1 = nullptr;
-	vtkRenderWindow* wind2 = nullptr;;
+	vtkRenderWindow* wind2 = nullptr;
+	double* measurements3D = nullptr;
+	double* measurements2D = nullptr;
+	double* stenosis = nullptr;
 
 
 public slots:
+	void slotUpdateMeasurements();
 	void slotUpdate3DMeasurements(double* Measurements3D);
 	void slotUpdate2DMeasurements(double* Measurements2D);
-	void slotUpdate2DMeasurements(int slice);
-	void slotUpdateStenosis(double stenosis);
+	void slotUpdateStenosis(double* stenosis);
 	void slotUpdateImformation();
 
 private:

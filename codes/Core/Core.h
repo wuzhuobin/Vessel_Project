@@ -1,9 +1,9 @@
 #ifndef __CORE_H__
 #define __CORE_H__
 
-//#define PLAQUEQUANT_VER
+#define PLAQUEQUANT_VER
 //#define IADE_VER
-#define DEBUG_VER
+//#define DEBUG_VER
 #ifdef DEBUG_VER
 #define PLAQUEQUANT_VER
 #endif // DEBUG_VER
@@ -12,9 +12,11 @@
 #include "PlaqueQuantIOManager.h"
 #include "PlaqueQuantImageManager.h"
 #include "PlaqueQuantOverlay.h"
+#include "PlaqueQuantMeasurement.h"
 #define IO_MANAGER PlaqueQuantIOManager
 #define IMAGE_MANAGER PlaqueQuantImageManager
 #define OVERLAY PlaqueQuantOverlay
+#define MEASUREMENT PlaqueQuantMeasurement
 #endif // PLAQUEQUANT_VER
 
 
@@ -23,9 +25,11 @@
 #include "IADEIOManager.h"
 #include "IADEImageManager.h"
 #include "IADEOverlay.h"
-#define IO_MANAGER IADEIOManagerIO
+#include "Measurement.h"
+#define IO_MANAGER IADEIOManager
 #define IMAGE_MANAGER IADEImageManager 
 #define OVERLAY IADEOverlay
+#define MEASUREMENT Measurement
 #endif // IADE_VER
 
 #include <qobject.h>
@@ -57,7 +61,6 @@ private slots:
 
 	void slotIOManagerToImageManager();
 	void slotOverlayToImageManager();
-	void slotUpdateMeasurements();
 	// Image interactorstyle
 	void slotNavigation();
 	void slotWindowLevel();
@@ -117,6 +120,7 @@ private:
 	MainWindow mainWindow;
 	IO_MANAGER ioManager;
 	IMAGE_MANAGER imageManager;
+	MEASUREMENT measurement;
 	DataProcessor dataProcessor;
 
 
