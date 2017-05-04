@@ -70,8 +70,8 @@ Core::Core(QObject * parent)
 	}
 
 	// find loading images and overlay
-	connect(&mainWindow, SIGNAL(signalImageImportLoad(QList<QStringList>*)),
-		&ioManager, SLOT(slotAddToListOfFileNamesAndOpen(QList<QStringList>*)));
+	connect(&mainWindow, SIGNAL(signalImageImportLoad(QStringList)),
+		&ioManager, SLOT(slotAddToListOfFileNamesAndOpen(QStringList)));
 	connect(&ioManager, SIGNAL(signalFinishOpenMultiImages()),
 		this, SLOT(slotIOManagerToImageManager()));
 	connect(&ioManager, SIGNAL(signalFinishOpenOverlay()),

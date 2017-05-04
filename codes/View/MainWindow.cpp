@@ -269,18 +269,18 @@ void MainWindow::imageImport(QString path)
 	for (int i = 0; i < modalityNames.size(); ++i) {
 		rw.setImageModalityNames(i, modalityNames[i]);
 	}
-	QList<QStringList> _listOfFileNames;
+	QStringList _listOfFileNames;
 
 	if (QWizard::Accepted == rw.exec()) {
 
 		for (int i = 0; i < modalityNames.size(); ++i) {
-			if (rw.getFileNames(i)) {
-				qDebug() << *rw.getFileNames(i);
-				_listOfFileNames << *rw.getFileNames(i);
-			}
+			//if (!rw.getFileNames(i).isEmpty()) {
+				qDebug() << rw.getFileNames(i);
+				_listOfFileNames << rw.getFileNames(i);
+			//}
 		}
 
-		emit signalImageImportLoad(&_listOfFileNames);
+		emit signalImageImportLoad(_listOfFileNames);
 
 		qDebug() << rw.getDirectory();
 

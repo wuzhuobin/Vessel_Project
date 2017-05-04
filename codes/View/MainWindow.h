@@ -70,7 +70,7 @@ protected:
 
 signals:
 
-	void signalImageImportLoad(QList<QStringList>*);
+	void signalImageImportLoad(QStringList);
 	void signalOverlayImportLoad(QString);
 	void signalOverlayExportSave(QString);
 	void signalReportExport(QString);

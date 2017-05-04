@@ -2,10 +2,8 @@
 #define REGISTRATIONWIZARD_H
 
 #include <QWizard>
-#include <QThread>
+#include <qrunnable.h>
 #include <qlist.h>
-#include <qsharedpointer.h>
-#include <qmutex.h>
 
 class QLabel;
 class QLineEdit;
@@ -13,19 +11,81 @@ class QPushButton;
 class QProgressBar;
 class QTreeWidget;
 class QTableWidget;
-class QThread;
 class QTabWidget;
-class FindImageThread;
+class FindImageRunnable;
+class DirectoryPage;
+class ImagePage;
+class ConclusionPage;
+
+class RegistrationWizard : public QWizard
+{
+	Q_OBJECT
+
+public:
+
+	enum {
+		/// the first page
+		PAGE_DIRECTORY = 0,
+		/// the second page
+		PAGE_IMAGE = 1,
+		/// the last
+		PAGE_CONCLUSION = 2
+	};
+	/**
+	* Constructor.
+	* Constructor of RegistrationWizard.
+	* @param	dir
+	* @param	numOfImages set #m_numOfImages, the number of lineEdits need to be created, these lineEdits
+	*			are for displaying what images are going to load
+	* @param	parent parent widget.
+	*/
+	RegistrationWizard(
+		QString dir = QString(),
+		int numOfImages = 2,
+		QWidget *parent = nullptr);
+	RegistrationWizard(
+		int numOfImages,
+		QWidget *parent = nullptr);
+	RegistrationWizard(
+		QWidget *parent);
+	/**
+	* Destructor.
+	*/
+	~RegistrationWizard();
+
+	void setImageModalityNames(unsigned int i, QString imageModalityName = QString());
+
+	QString getFileNames(unsigned int i);
+	void setDirectory(QString directory);
+	const QString getDirectory();
+	/**
+	* Get the number of images needs to be loaded.
+	* @return	number of images, #m_numberOfImages.
+	*/
+	int getNumberOfImages();
+
+	private slots:
+	void showHelp();
+
+private:
+
+	int m_numOfImages;
+
+	DirectoryPage	*directoryPage;
+	ImagePage		*imagePage;
+	ConclusionPage	*conclusionPage;
+
+};
 
 class DirectoryPage : public QWizardPage
 {
     Q_OBJECT
 
 public:
-	DirectoryPage(QWidget *parent = nullptr);
+	DirectoryPage(QString dir = QString(), QWidget *parent = nullptr);
+	DirectoryPage(QWidget *parent);
 
     int nextId() const;
-	void setDirectory(QString dir);
 
 public slots:
 	void browse();
@@ -46,9 +106,6 @@ public:
 	ImagePage(QWidget *parent);
 	~ImagePage();
 
-	QList<QSharedPointer<QStringList>>* m_imagePaths;
-	QList<int>* m_selectedImages;
-
 	void setImageModalityNames(unsigned int i, QString imageModalityName);
 
     int nextId() const;
@@ -57,11 +114,16 @@ public:
 	virtual bool validatePage();
 
 public slots:
-	void onUpdateProgressBar(int);
+	void updateProgressBar();
 	
 	void setImages();
 
 	void removeImages();
+
+	void updateTreeWidget(QString item);
+
+signals:
+	void finishPrevious();
 
 private:
 	QProgressBar *progressBar;
@@ -69,122 +131,54 @@ private:
 
 	QList<QLabel*> m_imageLabels;
 	QList<QLineEdit*> m_imageLineEdits;
+	QList<QLineEdit*> m_imageLineEdits2;
 	QList<QPushButton*> m_imageSetBtns;
 	QList<QPushButton*> m_imageRemoveBtns;
 
-	QMutex m_mutex;
+	QThreadPool* m_threadPool;
 
-	QString lastDirectory;
-	friend FindImageThread;
-	FindImageThread* thread;
-};
+	QString m_lastDirectory;
 
-class FindImageThread : public QThread
-{
-	Q_OBJECT
-
-public:
-	FindImageThread(ImagePage *parent = 0);
-	void run();
-	void updateTreeWidget(QStringList* imagePath);
-
-	ImagePage* m_imagePage;
-	bool m_stop;
-
-
-signals:
-	void updateProgressBar(int);
 };
 
 class ConclusionPage : public QWizardPage
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    ConclusionPage(int numOfImages = 2, QWidget* parent = nullptr);
+	ConclusionPage(int numOfImages = 2, QWidget* parent = nullptr);
 	ConclusionPage(QWidget* parent);
 
-	QList<QSharedPointer<QStringList>>* m_imagePaths;
-	QList<int>* m_selectedImages;
 
-
-
-    void initializePage();
-    int nextId() const;
+	void initializePage();
+	int nextId() const;
 
 private:
-    QLabel		 *bottomLabel;
+	QLabel		 *bottomLabel;
 	QTabWidget	 *tabWidget;
 
 	QList<QTableWidget*> m_tableWidgets;
 };
 
-
-
-
-
-class RegistrationWizard : public QWizard
+class FindImageRunnable :public QObject, public QRunnable
 {
-	Q_OBJECT
-
+	Q_OBJECT;
 public:
+	FindImageRunnable(QString folderPath, QObject* parent = nullptr);
+	void run();
 
-	enum { 
-		/// the first page
-		PAGE_DIRECTORY = 0, 
-		/// the second page
-		PAGE_IMAGE = 1,
-		/// the last
-		PAGE_CONCLUSION = 2
-	};
-	/**
-	 * Constructor.
-	 * Constructor of RegistrationWizard.
-	 * @param	dir 
-	 * @param	numOfImages set #m_numOfImages, the number of lineEdits need to be created, these lineEdits
-	 *			are for displaying what images are going to load
-	 * @param	parent parent widget.
-	 */
-    RegistrationWizard(
-		QString dir = QString(), 
-		int numOfImages = 2,
-		QWidget *parent = nullptr);
-	RegistrationWizard(
-		int numOfImages,
-		QWidget *parent = nullptr);
-	RegistrationWizard(
-		QWidget *parent);
-	/**
-	 * Destructor. 
-	 */
-	~RegistrationWizard();
+public slots:
+	void forceFinish();
 
-	void setImageModalityNames(unsigned int i, QString imageModalityName = QString());
-    
-	QSharedPointer<QStringList> getFileNames(unsigned int i);
-	void setDirectory(QString directory);
-	const QString getDirectory();
-	/**
-	 * Get the number of images needs to be loaded.
-	 * @return	number of images, #m_numberOfImages. 
-	 */
-	int getNumberOfImages();
-    
-private slots:
-	void showHelp();
-
+signals:
+	void addTreeWidgetItem(QString);
+	void finish();
 private:
-
-
-	int m_numOfImages;
-
-	DirectoryPage	*directoryPage;
-	ImagePage		*imagePage;
-	ConclusionPage	*conclusionPage;
-
-	QList<QSharedPointer<QStringList>> m_imagePaths;
-	QList<int> m_selectedImages;
-
+	void GDCImageIORead(const std::vector<std::string>& files);
+	QString m_folderPath;
+	bool m_forceFinish = false;
 };
+
+
 
 #endif

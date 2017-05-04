@@ -42,7 +42,7 @@ public:
 
 public slots:
 
-	void slotAddToListOfFileNamesAndOpen(QList<QStringList>* listOfFileNames);
+	void slotAddToListOfFileNamesAndOpen(QStringList listOfFileNames);
 	/**
 	 * @brief	add a file name to #listOfFileNames
 	 * @param	fileNames	a image fileName.

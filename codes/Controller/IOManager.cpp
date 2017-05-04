@@ -40,12 +40,14 @@ void IOManager::enableRegistration(bool flag)
 	this->registrationFlag = flag;
 }
 
-void IOManager::slotAddToListOfFileNamesAndOpen(QList<QStringList>* listOfFileNames)
+void IOManager::slotAddToListOfFileNamesAndOpen(QStringList listOfFileNames)
 {
 	clearListsOfFileNames();
 	
-	for (int i = 0; i < listOfFileNames->size(); ++i) {
-		slotAddToListOfFileNames(listOfFileNames->at(i));
+	for (int i = 0; i < listOfFileNames.size(); ++i) {
+		QStringList fileNames = listOfFileNames.at(i).split(';');
+		fileNames.pop_back();
+		slotAddToListOfFileNames(fileNames);
 	}
 
 	slotOpenMultiImages();
