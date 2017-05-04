@@ -12,7 +12,9 @@
 #include <qsettings.h>
 #include <qfiledialog.h>
 #include <QVTKInteractor.h>
-
+#include <qmessagebox.h>
+#include <qevent.h>
+#include <qmimedata.h>
 
 #include <vtkRenderWindow.h>
 #include <vtkGenericOpenGLRenderWindow.h>
@@ -81,7 +83,6 @@ MainWindow::MainWindow(QWidget *parent)
 	QActionGroup* actionGroupView = new QActionGroup(this);
 	actionGroupView->addAction(ui->actionAll_axial_view);
 	actionGroupView->addAction(ui->actionMulti_planar_view);
-	//actionGroupView->addAction(ui->actionCurved_view);
 	actionGroupView->setExclusive(true);
 
 
@@ -118,6 +119,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 	// Connection
 	connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+	connect(ui->actionImport, SIGNAL(triggered()),
+		this, SLOT(slotOpen()));
 	connect(ui->actionImport_images, SIGNAL(triggered()), this, SLOT(slotOpenNewImage()));
 	connect(ui->actionImport_segmentation, SIGNAL(triggered()),
 		this, SLOT(slotOpenOverlay()));
@@ -145,31 +148,66 @@ void MainWindow::slotOpenRecentImage()
 	}
 }
 
-void MainWindow::slotOpenNewImage()
+void MainWindow::slotOpenNewImage(QString path)
 {
-	imageImport("");
+	imageImport(path);
 }
 
-void MainWindow::slotOpenOverlay()
+void MainWindow::slotOpen(QString path)
 {
-		QString path = QFileDialog::getOpenFileName((this), 
-			QString(tr("Import Segmentation")), ".", tr("NIFTI Images (*.nii)"));
-		if (path.isEmpty())	return;
-		emit signalOverlayImportLoad(path);
+	QMessageBox openMessageBox;
+	openMessageBox.setIcon(QMessageBox::Question);
+	openMessageBox.setText("Import.");
+	openMessageBox.setInformativeText("Import images or segmentation?");
+	openMessageBox.setStandardButtons(QMessageBox::Cancel);
+	openMessageBox.setDefaultButton(QMessageBox::Cancel);
+	QPushButton* imagesButton = openMessageBox.addButton(tr("Images"), QMessageBox::ActionRole);
+	QPushButton* segmentationButton = openMessageBox.addButton(tr("Segmentation"), QMessageBox::ActionRole);
+	openMessageBox.exec();
+	if (openMessageBox.clickedButton() == imagesButton)
+	{
+		slotOpenNewImage(path);
+	}
+	else if (openMessageBox.clickedButton() == segmentationButton)
+	{
+		if (QFileInfo(path).completeSuffix() == "nii" || 
+			QFileInfo(path).completeSuffix() == "nii.gz")
+		{
+			slotOpenOverlay(path);
+		}
+		else {
+			QMessageBox::critical(this, tr("Nifti is needed."), tr("Segmentation file is in Nifti format.\n"
+				"Please import \"*.nii\" or \"*.nii.gz\". "), QMessageBox::Ok);
+		}
+	}
 }
 
-void MainWindow::slotSaveOverlay()
+void MainWindow::slotOpenOverlay(QString path)
 {
-	QString path = QFileDialog::getSaveFileName((this),
-		QString(tr("Export Segmentation")), ".", tr("NIFTI Images (*.nii)"));
+	if (path.isEmpty()) {
+		path = QFileDialog::getOpenFileName((this),
+			QString(tr("Import Segmentation")), path, tr("NIFTI Images (*.nii *.nii.gz)"));
+	}
+	if (path.isEmpty())	return;
+	emit signalOverlayImportLoad(path);
+}
+
+void MainWindow::slotSaveOverlay(QString path)
+{
+	if (path.isEmpty()) {
+		path = QFileDialog::getSaveFileName((this),
+			QString(tr("Export Segmentation")), path, tr("NIFTI Images (*.nii *.nii.gz)"));
+	}
 	if (path.isEmpty())	return;
 	emit signalOverlayExportSave(path);
 }
 
-void MainWindow::slotExportReport()
+void MainWindow::slotExportReport(QString path)
 {
-	QString path = QFileDialog::getSaveFileName((this),
-		QString(tr("Export Report")), ".", tr("Report (*.pdf)"));
+	if (path.isEmpty()) {
+		path = QFileDialog::getSaveFileName((this),
+			QString(tr("Export Report")), path, tr("Report (*.pdf)"));
+	}
 	if (path.isEmpty())	return;
 	emit signalReportExport(path);
 
@@ -179,7 +217,6 @@ void MainWindow::slotExportReport()
 void MainWindow::slotImage(bool flag)
 {
 	QAction *action = qobject_cast<QAction *>(sender());
-	//qDebug() << actionGroupActionImage->checkedAction();
 	if (!flag) {
 		if (ui->actionImage1->isChecked() ||
 			ui->actionImage2->isChecked() ||
@@ -330,9 +367,23 @@ QMenu * MainWindow::getSelectImgMenu(unsigned int i)
 	return selectImgMenus[i];
 }
 
-void MainWindow::setEnabled(bool flag)
+void MainWindow::dragEnterEvent(QDragEnterEvent * event)
 {
-	ui->actionAbout->setEnabled(true);
+	if (event->mimeData()->hasUrls()) {
+		// default only count the first one
+		QUrl url = event->mimeData()->urls().first();
+		// only accept local file or local directory
+		if (url.isLocalFile()) {
+			event->acceptProposedAction();
+		}
+	}
+}
+
+void MainWindow::dropEvent(QDropEvent * event)
+{
+	QUrl url = event->mimeData()->urls().first();
+	QFileInfo fileInfo(url.toLocalFile());
+	slotOpen(fileInfo.absoluteFilePath());
 
 }
 

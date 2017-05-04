@@ -64,6 +64,10 @@ public:
 	LabelWidget* getLabelWidget();
 	QMenu* getSelectImgMenu(unsigned int i);
 
+protected:
+	virtual void dragEnterEvent(QDragEnterEvent* event);
+	virtual void dropEvent(QDropEvent* event);
+
 signals:
 
 	void signalImageImportLoad(QList<QStringList>*);
@@ -75,12 +79,12 @@ signals:
 private slots:
 	
 	void slotOpenRecentImage();
-	void slotOpenNewImage();
+	void slotOpenNewImage(QString path = QString());
+	void slotOpen(QString path = QString());
+	void slotOpenOverlay(QString path = QString());
+	void slotSaveOverlay(QString path = QString());
 
-	void slotOpenOverlay();
-	void slotSaveOverlay();
-
-	void slotExportReport();
+	void slotExportReport(QString path = QString());
 	/**
 	* four viewers and maximum
 	*/
@@ -90,9 +94,7 @@ private slots:
 private:
 	Ui::MainWindow* ui;
 
-	void imageImport(QString path);
-
-	void setEnabled(bool flag);
+	void imageImport(QString path = QString());
 
 	//Recent File
 	const static int MAX_RECENT_IMAGE = 10;

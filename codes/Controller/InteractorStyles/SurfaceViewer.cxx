@@ -252,6 +252,7 @@ void SurfaceViewer::SetRenderer(vtkRenderer * arg)
 	}
 
 	this->InstallPipeline();
+	this->UpdateOrientation();
 }
 
 void SurfaceViewer::SetupInteractor(vtkRenderWindowInteractor * arg)

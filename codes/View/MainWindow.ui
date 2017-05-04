@@ -26,7 +26,7 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string>MainWindow</string>
   </property>
   <property name="dockOptions">
    <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks|QMainWindow::VerticalTabs</set>
@@ -129,6 +129,7 @@
       <string>Recent Image</string>
      </property>
     </widget>
+    <addaction name="actionImport"/>
     <addaction name="actionImport_images"/>
     <addaction name="menuRecentImage"/>
     <addaction name="actionNew_segmentation"/>
@@ -261,7 +262,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionOpenImage"/>
+   <addaction name="actionImport"/>
    <addaction name="actionExport_segmentation"/>
    <addaction name="separator"/>
    <addaction name="actionNavigation"/>
@@ -288,14 +289,14 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>0</width>
-     <height>0</height>
+     <width>60</width>
+     <height>40</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>16777215</width>
-     <height>16777215</height>
+     <width>524287</width>
+     <height>524287</height>
     </size>
    </property>
    <property name="features">
@@ -320,14 +321,14 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>0</width>
-     <height>0</height>
+     <width>60</width>
+     <height>40</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>16777215</width>
-     <height>16777215</height>
+     <width>524287</width>
+     <height>524287</height>
     </size>
    </property>
    <property name="features">
@@ -343,16 +344,16 @@
     <layout class="QVBoxLayout" name="verticalLayout"/>
    </widget>
   </widget>
-  <action name="actionOpenImage">
+  <action name="actionImport">
    <property name="icon">
     <iconset resource="../Main/resources/IADE_Analyzer.qrc">
      <normaloff>:/icons/OpenImage.png</normaloff>:/icons/OpenImage.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Open Image</string>
+    <string>Import</string>
    </property>
    <property name="toolTip">
-    <string>Open Image</string>
+    <string>Import</string>
    </property>
   </action>
   <action name="actionExit">
