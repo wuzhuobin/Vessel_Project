@@ -15,7 +15,8 @@ class InteractorStyleSurfaceCenterLineStenosis :
 {
 public:
 
-	const static unsigned int NUM_OF_HANDLES = 2;
+	static const unsigned int NUM_OF_HANDLES = 2;
+	static const char* STENOSIS;
 
 	vtkTypeMacro(InteractorStyleSurfaceCenterLineStenosis,
 		InteractorStyleSurfaceCenterLineSimpleClipping);
@@ -56,7 +57,4 @@ protected:
 private:
 
 };
-
-
-
 #endif // !__INTERACTOR_STYLE_SURFACE_CENTER_LINE_STENOSIS_H__

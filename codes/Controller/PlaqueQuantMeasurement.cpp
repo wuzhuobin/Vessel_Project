@@ -1,6 +1,7 @@
 #include "PlaqueQuantMeasurement.h"
 
 #include "MaximumWallThickness.h"
+#include "InteractorStyleSurfaceCenterLineStenosis.h"
 
 #include <vtkLookupTable.h>
 #include <vtkImageAccumulate.h>
@@ -105,7 +106,7 @@ void PlaqueQuantMeasurement::updateMeasurement2D(int slice)
 
 void PlaqueQuantMeasurement::updateStenosis()
 {
-	vtkDataArray* stenosis = getPlaqueQuantOverlay()->getCenterLine()->GetFieldData()->GetArray("STENOSIS");
+	vtkDataArray* stenosis = getPlaqueQuantOverlay()->getCenterLine()->GetFieldData()->GetArray(InteractorStyleSurfaceCenterLineStenosis::STENOSIS);
 	if (stenosis) {
 		m_stenosis = (stenosis->GetTuple1(0));
 	}

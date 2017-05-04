@@ -28,9 +28,9 @@ public:
 	typedef QSharedPointer<PolyDataList> ContourMapElementPtr;
 	typedef QMap<int, ContourMapElementPtr> ContourMap;
 
-	const char* COLOUR = "Colour";
-	const char* SLICE_ORIENTATION = "Slice orientation";
-	const char* INTERPOLATOR = "Interpolator";
+	static const char* COLOUR;
+	static const char* SLICE_ORIENTATION;
+	static const char* INTERPOLATOR;
 
 public slots:
 	virtual void SetCustomEnabled(bool flag);
