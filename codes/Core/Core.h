@@ -1,8 +1,8 @@
 #ifndef __CORE_H__
 #define __CORE_H__
 
-#define PLAQUEQUANT_VER
-//#define IADE_VER
+//#define PLAQUEQUANT_VER
+#define IADE_VER
 //#define DEBUG_VER
 #ifdef DEBUG_VER
 #define PLAQUEQUANT_VER
@@ -25,11 +25,11 @@
 #include "IADEIOManager.h"
 #include "IADEImageManager.h"
 #include "IADEOverlay.h"
-#include "Measurement.h"
+#include "IADEMeasurement.h"
 #define IO_MANAGER IADEIOManager
 #define IMAGE_MANAGER IADEImageManager 
 #define OVERLAY IADEOverlay
-#define MEASUREMENT Measurement
+#define MEASUREMENT IADEMeasurement
 #endif // IADE_VER
 
 #include <qobject.h>

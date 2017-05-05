@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ModuleWidget</class>
- <widget class="QWidget" name="ModuleWidget">
+ <class>Switch2DWidget</class>
+ <widget class="QWidget" name="Switch2DWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>840</height>
+    <width>94</width>
+    <height>50</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,7 +18,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>300</width>
+    <width>0</width>
     <height>0</height>
    </size>
   </property>

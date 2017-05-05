@@ -57,7 +57,6 @@ public:
 
 	// get ui things for connection 
 	Ui::MainWindow* getUi();
-	//QMainWindow* getCentralWidget();
 	ModuleWidget* getModuleWidget();
 	ViewerWidget* getViewerWidget(unsigned int num);
 	MeasurementWidget* getMeasurementWidget();

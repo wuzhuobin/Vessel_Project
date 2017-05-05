@@ -20,7 +20,6 @@ endif()
 
 add_subdirectory(InteractorStyles)
 add_subdirectory(SurfaceViewer_test)
-# add_subdirectory(ReportGenerator)
 add_subdirectory(InteractorStylePolygonDraw2_test)
 
 SET(
@@ -31,7 +30,7 @@ SET(
 	${PROJECT_SOURCE_DIR}/ImageRegistration.cxx
 	${PROJECT_SOURCE_DIR}/DataProcessor.cpp
 	${PROJECT_SOURCE_DIR}/Measurement.cpp
-	${PROJECT_SOURCE_DIR}/PlaqueQuantMeasurement.cpp
+	${PROJECT_SOURCE_DIR}/IADEMeasurement.cpp
 	)
 SET(
 	CONTROLLER_H
@@ -44,6 +43,7 @@ SET(
 	${PROJECT_SOURCE_DIR}/DataProcessor.h
 	${PROJECT_SOURCE_DIR}/Measurement.h
 	${PROJECT_SOURCE_DIR}/PlaqueQuantMeasurement.h
+	${PROJECT_SOURCE_DIR}/IADEMeasurement.h
 	)
 
 qt5_wrap_cpp(
@@ -76,7 +76,6 @@ target_include_directories(
 	${PROJECT_SOURCE_DIR}
 	${PROJECT_BINARY_DIR}
 )
-
 set_target_properties(
     Controller
     PROPERTIES

@@ -1,3 +1,7 @@
+#ifndef __MEASUREMENT_H__
+#define __MEASUREMENT_H__
+
+
 #include <qobject.h>
 #include <qsharedpointer.h>
 
@@ -23,3 +27,6 @@ protected:
 
 
 };
+
+
+#endif // !__MEASUREMENT_H__

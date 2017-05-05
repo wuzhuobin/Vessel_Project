@@ -337,11 +337,6 @@ Ui::MainWindow * MainWindow::getUi()
 	return this->ui;
 }
 
-//QMainWindow * MainWindow::getCentralWidget()
-//{
-//	return &this->centralWidget;
-//}
-
 ModuleWidget * MainWindow::getModuleWidget()
 {
 	return this->moduleWiget;

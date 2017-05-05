@@ -20,15 +20,6 @@ public:
 	void setWidget(QWidget* style);
 	Ui::ModuleWidget* getUi() { return ui; }
 
-//public slots:
-//	void slotChangeOpacity(int opactiy);
-//	void slotUpdateOpacity(int opacity);
-//
-//signals:
-//
-//	void signalChangeOpacity(int, int);
-
-
     
 private:
 

@@ -657,13 +657,10 @@ Deleting focusing focusing contours.</string>
        </widget>
       </item>
      </layout>
-     <zorder>smoothCurveRadioButton</zorder>
-     <zorder>polygonRadionButton</zorder>
      <zorder>radioButtonLumenSegmentation</zorder>
      <zorder>radioButtonVesselWallSegmentation</zorder>
      <zorder>radioButtonNormal</zorder>
      <zorder>stackedWidgetMode</zorder>
-     <zorder>radioButtonMagnetic</zorder>
      <zorder>frame_6</zorder>
      <zorder>label_2</zorder>
      <zorder></zorder>
