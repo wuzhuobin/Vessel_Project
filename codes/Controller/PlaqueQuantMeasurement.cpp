@@ -27,7 +27,6 @@ void PlaqueQuantMeasurement::update()
 {
 	updateMeasurement3D();
 	updateMeasurement2D();
-	//std::copy_n(m_measurements2DMap[m_currentSlice].data(), 4, m_measurements2D);
 	updateStenosis();
 
 
@@ -136,11 +135,15 @@ void PlaqueQuantMeasurement::updateMeasurement2D()
 		// NMI calculation
 		m_measurements2DMap[j].data()[2] = m_measurements2DMap[j].data()[0] /
 			(m_measurements2DMap[j].data()[0] + m_measurements2DMap[j].data()[1]);
-		cerr << "Measurements2D" << endl;
-		for (int i = 0; i < 3; ++i) {
-			cerr << m_measurements2DMap[j].data()[i] << ' ';
-		}
-		cerr << endl;
+		//cerr << "Measurements2D" << endl;
+		//for (int i = 0; i < 3; ++i) {
+		//	cerr << m_measurements2DMap[j].data()[i] << ' ';
+		//}
+		//cerr << endl;
+
+	}
+	for (int j = getPlaqueQuantOverlay()->getData()->GetExtent()[4]; 
+		j <= getPlaqueQuantOverlay()->getData()->GetExtent()[5]; ++j) {
 		vtkSmartPointer<vtkExtractVOI> extractVOI =
 			vtkSmartPointer<vtkExtractVOI>::New();
 		extractVOI->SetInputData(getPlaqueQuantOverlay()->getData());
@@ -151,6 +154,7 @@ void PlaqueQuantMeasurement::updateMeasurement2D()
 			getPlaqueQuantOverlay()->getData()->GetExtent()[3],
 			j,
 			j);
+		extractVOI->Update();
 		try
 		{
 			vtkSmartPointer<MaximumWallThickness> mwt =

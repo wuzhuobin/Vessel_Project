@@ -35,10 +35,10 @@ public slots:
 	void slotUpdate2DMeasurements(double* Measurements2D);
 	void slotUpdateStenosis(double* stenosis);
 	void slotUpdateImformation();
+	void GenerateReport(QString	path);
 
 private:
 	Ui::MeasurementWidget* ui = nullptr;
-	void GenerateReport(QString	path);
 
 };
 

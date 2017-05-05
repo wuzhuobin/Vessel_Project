@@ -38,9 +38,9 @@ Ui::MeasurementWidget* MeasurementWidget::getUi()
 
 void MeasurementWidget::slotUpdateMeasurements(int slice)
 {
-	if (measurements2DMap->value(slice).isNull()) {
-		return;
-	}
+	//if (measurements2DMap->value(slice).isNull()) {
+	//	return;
+	//}
 	slotUpdate2DMeasurements(measurements2DMap->value(slice).data());
 	slotUpdate3DMeasurements(measurements3D);
 	slotUpdateStenosis(stenosis);
