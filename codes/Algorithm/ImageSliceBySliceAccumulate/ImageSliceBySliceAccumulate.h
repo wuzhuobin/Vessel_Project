@@ -50,6 +50,31 @@ public:
 	void PrintSelf(ostream& os, vtkIndent indent);
 
 	// Description:
+	// Set/get the slice orientation
+	//BTX
+	enum
+	{
+		SLICE_ORIENTATION_YZ = 0,
+		SLICE_ORIENTATION_XZ = 1,
+		SLICE_ORIENTATION_XY = 2
+	};
+	//ETX
+	vtkGetMacro(SliceOrientation, int);
+	vtkSetClampMacro(SliceOrientation, int, 0, 2);
+	virtual void SetSliceOrientationToXY()
+	{
+		this->SetSliceOrientation(SLICE_ORIENTATION_XY);
+	};
+	virtual void SetSliceOrientationToYZ()
+	{
+		this->SetSliceOrientation(SLICE_ORIENTATION_YZ);
+	};
+	virtual void SetSliceOrientationToXZ()
+	{
+		this->SetSliceOrientation(SLICE_ORIENTATION_XZ);
+	};
+
+	// Description:
 	// Set/Get - The component spacing is the dimension of each bin.
 	// This ends up being the spacing of the output "image".
 	// If the number of input scalar components are less than three,
@@ -57,8 +82,8 @@ public:
 	// For a 1D histogram with 10 bins spanning the values 1000 to 2000,
 	// this spacing should be set to 100, 0, 0.
 	// Initial value is (1.0,1.0,1.0).
-	vtkSetVector3Macro(ComponentSpacing, double);
-	vtkGetVector3Macro(ComponentSpacing, double);
+	vtkSetVector3Macro(Spacing, double);
+	vtkGetVector3Macro(Spacing, double);
 
 	// Description:
 	// Set/Get - The component origin is the location of bin (0, 0, 0).
@@ -68,8 +93,8 @@ public:
 	// For a 1D histogram with 10 bins spanning the values 1000 to 2000,
 	// this origin should be set to 1000, 0, 0.
 	// Initial value is (0.0,0.0,0.0).
-	vtkSetVector3Macro(ComponentOrigin, double);
-	vtkGetVector3Macro(ComponentOrigin, double);
+	vtkSetVector3Macro(Origin, double);
+	vtkGetVector3Macro(Origin, double);
 
 	// Description:
 	// Set/Get - The component extent sets the number/extent of the bins.
@@ -78,11 +103,11 @@ public:
 	// The extent specifies inclusive min/max values.
 	// This implies that the top extent should be set to the number of bins - 1.
 	// Initial value is (0,255,0,0,0,0)
-	void SetComponentExtent(int extent[6]);
-	void SetComponentExtent(int minX, int maxX, int minY, int maxY,
+	void SetExtent(int extent[6]);
+	void SetExtent(int minX, int maxX, int minY, int maxY,
 		int minZ, int maxZ);
-	void GetComponentExtent(int extent[6]);
-	int *GetComponentExtent() { return this->ComponentExtent; }
+	void GetExtent(int extent[6]);
+	int *GetExtent() { return this->Extent; }
 
 
 	// Description:
@@ -103,11 +128,11 @@ public:
 	// Get the statistics information for the data.
 	// The values only make sense after the execution of the filter.
 	// Initial values are 0.
-	vtkGetVector3Macro(Min, double);
-	vtkGetVector3Macro(Max, double);
-	vtkGetVector3Macro(Mean, double);
-	vtkGetVector3Macro(StandardDeviation, double);
-	vtkGetMacro(VoxelCount, vtkIdType);
+	//vtkGetVector3Macro(Min, double);
+	//vtkGetVector3Macro(Max, double);
+	//vtkGetVector3Macro(Mean, double);
+	//vtkGetVector3Macro(StandardDeviation, double);
+	//vtkGetMacro(VoxelCount, vtkIdType);
 
 	// Description:
 	// Should the data with value 0 be ignored? Initial value is false.
@@ -117,11 +142,12 @@ public:
 
 protected:
 	ImageSliceBySliceAccumulate();
-	~ImageSliceBySliceAccumulate();
+	virtual ~ImageSliceBySliceAccumulate();
 
-	double ComponentSpacing[3];
-	double ComponentOrigin[3];
-	int ComponentExtent[6];
+	double Spacing[3];
+	double Origin[3];
+	int Extent[6];
+	int SliceOrientation;
 
 	virtual int RequestUpdateExtent(vtkInformation*,
 		vtkInformationVector**,
@@ -134,11 +160,11 @@ protected:
 		vtkInformationVector* outputVector);
 
 	int    IgnoreZero;
-	double Min[3];
-	double Max[3];
-	double Mean[3];
-	double StandardDeviation[3];
-	vtkIdType VoxelCount;
+	//double Min[3];
+	//double Max[3];
+	//double Mean[3];
+	//double StandardDeviation[3];
+	//vtkIdType VoxelCount;
 
 	int ReverseStencil;
 

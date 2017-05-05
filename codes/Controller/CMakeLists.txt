@@ -68,6 +68,7 @@ target_link_libraries(
 	Model
 	InteractorStyles
 	ReportGenerator
+	ImageSliceBySliceAccumulate
 )
 
 target_include_directories(

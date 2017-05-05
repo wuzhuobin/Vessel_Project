@@ -48,8 +48,6 @@ add_executable(
 
 target_link_libraries(
 	ImageSliceBySliceAccumulate_test
-	${ITK_LIBRARIES}  
-	${VTK_LIBRARIES}
 	ImageSliceBySliceAccumulate
 	)
 

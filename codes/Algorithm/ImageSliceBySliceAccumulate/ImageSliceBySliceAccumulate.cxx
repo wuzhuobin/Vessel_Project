@@ -25,6 +25,34 @@ PURPOSE.  See the above copyright notice for more information.
 
 #include <math.h>
 
+
+template<typename DType>
+class MyImageStencilIterator : public vtkImageStencilIterator<DType>
+{
+public:
+	MyImageStencilIterator() {};
+	MyImageStencilIterator(
+		vtkImageData *image, vtkImageStencilData *stencil, int extent[6],
+		vtkAlgorithm *algorithm = 0, int threadId = 0)
+		:vtkImageStencilIterator(image, stencil, extent, algorithm, threadId){}
+	int GetSpanIndexX() { return this->SpanIndexX; }
+	int GetSpanIndexY() { return this->SpanIndexY; }
+	int GetSpanIndexZ() { return this->SpanIndexZ; }
+};
+
+template class MyImageStencilIterator<signed char>;
+template class MyImageStencilIterator<char>;
+template class MyImageStencilIterator<int>;
+template class MyImageStencilIterator<long>;
+template class MyImageStencilIterator<short>;
+template class MyImageStencilIterator<float>;
+template class MyImageStencilIterator<double>;
+template class MyImageStencilIterator<unsigned long>;
+template class MyImageStencilIterator<unsigned short>;
+template class MyImageStencilIterator<unsigned char>;
+template class MyImageStencilIterator<unsigned int>;
+
+
 vtkStandardNewMacro(ImageSliceBySliceAccumulate);
 
 //----------------------------------------------------------------------------
@@ -33,22 +61,24 @@ ImageSliceBySliceAccumulate::ImageSliceBySliceAccumulate()
 {
 	for (int idx = 0; idx < 3; ++idx)
 	{
-		this->ComponentSpacing[idx] = 1.0;
-		this->ComponentOrigin[idx] = 0.0;
-		this->ComponentExtent[idx * 2] = 0;
-		this->ComponentExtent[idx * 2 + 1] = 0;
+		this->Spacing[idx] = 1.0;
+		this->Origin[idx] = 0.0;
+		this->Extent[idx * 2] = 0;
+		this->Extent[idx * 2 + 1] = 0;
 	}
-	this->ComponentExtent[1] = 255;
+	this->Extent[1] = 255;
 
 	this->ReverseStencil = 0;
 
-	this->Min[0] = this->Min[1] = this->Min[2] = 0.0;
-	this->Max[0] = this->Max[1] = this->Max[2] = 0.0;
-	this->Mean[0] = this->Mean[1] = this->Mean[2] = 0.0;
-	this->StandardDeviation[0] = this->StandardDeviation[1] =
-		this->StandardDeviation[2] = 0.0;
-	this->VoxelCount = 0;
+	//this->Min[0] = this->Min[1] = this->Min[2] = 0.0;
+	//this->Max[0] = this->Max[1] = this->Max[2] = 0.0;
+	//this->Mean[0] = this->Mean[1] = this->Mean[2] = 0.0;
+	//this->StandardDeviation[0] = this->StandardDeviation[1] =
+	//	this->StandardDeviation[2] = 0.0;
+	//this->VoxelCount = 0;
 	this->IgnoreZero = 0;
+
+	this->SliceOrientation = SLICE_ORIENTATION_XY;
 
 	// we have the image input and the optional stencil input
 	this->SetNumberOfInputPorts(2);
@@ -61,15 +91,15 @@ ImageSliceBySliceAccumulate::~ImageSliceBySliceAccumulate()
 }
 
 //----------------------------------------------------------------------------
-void ImageSliceBySliceAccumulate::SetComponentExtent(int extent[6])
+void ImageSliceBySliceAccumulate::SetExtent(int extent[6])
 {
 	int idx, modified = 0;
 
 	for (idx = 0; idx < 6; ++idx)
 	{
-		if (this->ComponentExtent[idx] != extent[idx])
+		if (this->Extent[idx] != extent[idx])
 		{
-			this->ComponentExtent[idx] = extent[idx];
+			this->Extent[idx] = extent[idx];
 			modified = 1;
 		}
 	}
@@ -81,7 +111,8 @@ void ImageSliceBySliceAccumulate::SetComponentExtent(int extent[6])
 
 
 //----------------------------------------------------------------------------
-void ImageSliceBySliceAccumulate::SetComponentExtent(int minX, int maxX,
+void ImageSliceBySliceAccumulate::SetExtent(
+	int minX, int maxX,
 	int minY, int maxY,
 	int minZ, int maxZ)
 {
@@ -90,16 +121,16 @@ void ImageSliceBySliceAccumulate::SetComponentExtent(int minX, int maxX,
 	extent[0] = minX;  extent[1] = maxX;
 	extent[2] = minY;  extent[3] = maxY;
 	extent[4] = minZ;  extent[5] = maxZ;
-	this->SetComponentExtent(extent);
+	this->SetExtent(extent);
 }
 
 
 //----------------------------------------------------------------------------
-void ImageSliceBySliceAccumulate::GetComponentExtent(int extent[6])
+void ImageSliceBySliceAccumulate::GetExtent(int extent[6])
 {
 	for (int idx = 0; idx < 6; ++idx)
 	{
-		extent[idx] = this->ComponentExtent[idx];
+		extent[idx] = this->Extent[idx];
 	}
 }
 
@@ -122,28 +153,28 @@ vtkImageStencilData *ImageSliceBySliceAccumulate::GetStencil()
 		this->GetExecutive()->GetInputData(1, 0));
 }
 
-
 //----------------------------------------------------------------------------
 // This templated function executes the filter for any type of data.
 template <class T>
 void ImageSliceBySliceAccumulateExecute(ImageSliceBySliceAccumulate *self,
 	vtkImageData *inData, T *,
 	vtkImageData *outData, vtkIdType *outPtr,
-	double min[3], double max[3],
-	double mean[3],
-	double standardDeviation[3],
-	vtkIdType *voxelCount,
+	int orientation,
+	//double min[3], double max[3],
+	//double mean[3],
+	//double standardDeviation[3],
+	//vtkIdType *voxelCount,
 	int* updateExtent)
 {
-	// variables used to compute statistics (filter handles max 3 components)
-	double sum[3];
-	sum[0] = sum[1] = sum[2] = 0.0;
-	double sumSqr[3];
-	sumSqr[0] = sumSqr[1] = sumSqr[2] = 0.0;
-	min[0] = min[1] = min[2] = VTK_DOUBLE_MAX;
-	max[0] = max[1] = max[2] = VTK_DOUBLE_MIN;
-	standardDeviation[0] = standardDeviation[1] = standardDeviation[2] = 0.0;
-	*voxelCount = 0;
+	// variables used to compute statistics (filter handles max 1 components)
+	//double sum[3];
+	//sum[0] = sum[1] = sum[2] = 0.0;
+	//double sumSqr[3];
+	//sumSqr[0] = sumSqr[1] = sumSqr[2] = 0.0;
+	//min[0] = min[1] = min[2] = VTK_DOUBLE_MAX;
+	//max[0] = max[1] = max[2] = VTK_DOUBLE_MIN;
+	//standardDeviation[0] = standardDeviation[1] = standardDeviation[2] = 0.0;
+	//*voxelCount = 0;
 
 	// input's number of components is used as output dimensionality
 	int numC = inData->GetNumberOfScalarComponents();
@@ -157,6 +188,7 @@ void ImageSliceBySliceAccumulateExecute(ImageSliceBySliceAccumulate *self,
 	outData->GetOrigin(origin);
 	double spacing[3];
 	outData->GetSpacing(spacing);
+
 
 	// zero count in every bin
 	vtkIdType size = 1;
@@ -172,15 +204,25 @@ void ImageSliceBySliceAccumulateExecute(ImageSliceBySliceAccumulate *self,
 	bool reverseStencil = (self->GetReverseStencil() != 0);
 	bool ignoreZero = (self->GetIgnoreZero() != 0);
 
-	vtkImageStencilIterator<T> inIter(inData, stencil, updateExtent, self);
+	MyImageStencilIterator<T> inIter(inData, stencil, updateExtent, self);
 
 	while (!inIter.IsAtEnd())
 	{
+		//cout << "span" << endl;
+		// because it is only capable to get index of a span
+		// a span is contigous region over which nothing but X index changes.
+		// so X index should be increased with the inPtr
+		int currentIndex[3] = {
+			inIter.GetSpanIndexX(),
+			inIter.GetSpanIndexY(),
+			inIter.GetSpanIndexZ() };
+
 		if (inIter.IsInStencil() ^ reverseStencil)
 		{
 			T *inPtr = inIter.BeginSpan();
 			T *spanEndPtr = inIter.EndSpan();
 
+			
 			while (inPtr != spanEndPtr)
 			{
 				// find the bin for this pixel.
@@ -188,30 +230,34 @@ void ImageSliceBySliceAccumulateExecute(ImageSliceBySliceAccumulate *self,
 				vtkIdType *outPtrC = outPtr;
 				for (int idxC = 0; idxC < numC; ++idxC)
 				{
+
 					double v = static_cast<double>(*inPtr++);
+					//cout << "X: " << currentIndex[0] << endl;
+					//cout << "Y: " << currentIndex[1] << endl;
+					//cout << "Z: " << currentIndex[2] << endl;
 					if (!ignoreZero || v != 0)
 					{
 						// gather statistics
-						sum[idxC] += v;
-						sumSqr[idxC] += v*v;
-						if (v > max[idxC])
-						{
-							max[idxC] = v;
-						}
-						if (v < min[idxC])
-						{
-							min[idxC] = v;
-						}
-						(*voxelCount)++;
+						//sum[idxC] += v;
+						//sumSqr[idxC] += v*v;
+						//if (v > max[idxC])
+						//{
+						//	max[idxC] = v;
+						//}
+						//if (v < min[idxC])
+						//{
+						//	min[idxC] = v;
+						//}
+						//(*voxelCount)++;
 					}
 
 					// compute the index
-					int outIdx = vtkMath::Floor((v - origin[idxC]) / spacing[idxC]);
+					int outIdx = vtkMath::Floor((v - origin[0]) / spacing[0]);
 
 					// verify that it is in range
-					if (outIdx >= outExtent[idxC * 2] && outIdx <= outExtent[idxC * 2 + 1])
+					if (outIdx >= outExtent[0] && outIdx <= outExtent[1])
 					{
-						outPtrC += (outIdx - outExtent[idxC * 2]) * outIncs[idxC];
+						outPtrC += (outIdx - outExtent[0]) + currentIndex[orientation] * outIncs[1];
 					}
 					else
 					{
@@ -224,36 +270,38 @@ void ImageSliceBySliceAccumulateExecute(ImageSliceBySliceAccumulate *self,
 				{
 					++(*outPtrC);
 				}
+				++currentIndex[0];
+
 			}
 		}
 
 		inIter.NextSpan();
 	}
 
-	// initialize the statistics
-	mean[0] = 0;
-	mean[1] = 0;
-	mean[2] = 0;
+	//// initialize the statistics
+	//mean[0] = 0;
+	//mean[1] = 0;
+	//mean[2] = 0;
 
-	standardDeviation[0] = 0;
-	standardDeviation[1] = 0;
-	standardDeviation[2] = 0;
+	//standardDeviation[0] = 0;
+	//standardDeviation[1] = 0;
+	//standardDeviation[2] = 0;
 
-	if (*voxelCount != 0) // avoid the div0
-	{
-		double n = static_cast<double>(*voxelCount);
-		mean[0] = sum[0] / n;
-		mean[1] = sum[1] / n;
-		mean[2] = sum[2] / n;
+	//if (*voxelCount != 0) // avoid the div0
+	//{
+	//	double n = static_cast<double>(*voxelCount);
+	//	mean[0] = sum[0] / n;
+	//	mean[1] = sum[1] / n;
+	//	mean[2] = sum[2] / n;
 
-		if (*voxelCount - 1 != 0) // avoid the div0
-		{
-			double m = static_cast<double>(*voxelCount - 1);
-			standardDeviation[0] = sqrt((sumSqr[0] - mean[0] * mean[0] * n) / m);
-			standardDeviation[1] = sqrt((sumSqr[1] - mean[1] * mean[1] * n) / m);
-			standardDeviation[2] = sqrt((sumSqr[2] - mean[2] * mean[2] * n) / m);
-		}
-	}
+	//	if (*voxelCount - 1 != 0) // avoid the div0
+	//	{
+	//		double m = static_cast<double>(*voxelCount - 1);
+	//		standardDeviation[0] = sqrt((sumSqr[0] - mean[0] * mean[0] * n) / m);
+	//		standardDeviation[1] = sqrt((sumSqr[1] - mean[1] * mean[1] * n) / m);
+	//		standardDeviation[2] = sqrt((sumSqr[2] - mean[2] * mean[2] * n) / m);
+	//	}
+	//}
 
 }
 
@@ -294,9 +342,9 @@ int ImageSliceBySliceAccumulate::RequestData(
 	outPtr = outData->GetScalarPointer();
 
 	// Components turned into x, y and z
-	if (inData->GetNumberOfScalarComponents() > 3)
+	if (inData->GetNumberOfScalarComponents() > 1)
 	{
-		vtkErrorMacro("This filter can handle up to 3 components");
+		vtkErrorMacro("This filter can handle up to 1 components");
 		return 1;
 	}
 
@@ -315,10 +363,11 @@ int ImageSliceBySliceAccumulate::RequestData(
 			static_cast<VTK_TT *>(inPtr),
 			outData,
 			static_cast<vtkIdType *>(outPtr),
-			this->Min, this->Max,
-			this->Mean,
-			this->StandardDeviation,
-			&this->VoxelCount,
+			this->SliceOrientation,
+			//this->Min, this->Max,
+			//this->Mean,
+			//this->StandardDeviation,
+			//&this->VoxelCount,
 			uExt));
 	default:
 		vtkErrorMacro(<< "Execute: Unknown ScalarType");
@@ -332,16 +381,32 @@ int ImageSliceBySliceAccumulate::RequestData(
 //----------------------------------------------------------------------------
 int ImageSliceBySliceAccumulate::RequestInformation(
 	vtkInformation* vtkNotUsed(request),
-	vtkInformationVector** vtkNotUsed(inputVector),
+	vtkInformationVector** inputVector,
 	vtkInformationVector* outputVector)
 {
+
+	vtkInformation* inInfo = inputVector[0]->GetInformationObject(0);
+		
+	const int* extent = inInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
+	const double* spacing = inInfo->Get(vtkDataObject::SPACING());
+	const double* origin = inInfo->Get(vtkDataObject::ORIGIN());
+
+	this->Extent[2] = extent[this->SliceOrientation * 2];
+	this->Extent[3] = extent[this->SliceOrientation * 2 + 1];
+	this->Extent[4] = 0;
+	this->Extent[5] = 0;
+	this->Spacing[1] = spacing[this->SliceOrientation];
+	this->Spacing[2] = 0;
+	this->Origin[1] = origin[this->SliceOrientation];
+	this->Origin[2] = 0;
+
 	// get the info objects
 	vtkInformation* outInfo = outputVector->GetInformationObject(0);
 
 	outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),
-		this->ComponentExtent, 6);
-	outInfo->Set(vtkDataObject::ORIGIN(), this->ComponentOrigin, 3);
-	outInfo->Set(vtkDataObject::SPACING(), this->ComponentSpacing, 3);
+		this->Extent, 6);
+	outInfo->Set(vtkDataObject::ORIGIN(), this->Origin, 3);
+	outInfo->Set(vtkDataObject::SPACING(), this->Spacing, 3);
 
 	vtkDataObject::SetPointDataActiveScalarInfo(outInfo, VTK_ID_TYPE, 1);
 	return 1;
@@ -398,41 +463,43 @@ void ImageSliceBySliceAccumulate::PrintSelf(ostream& os, vtkIndent indent)
 {
 	this->Superclass::PrintSelf(os, indent);
 
-	os << indent << "Mean: ("
-		<< this->Mean[0] << ", "
-		<< this->Mean[1] << ", "
-		<< this->Mean[2] << ")\n";
-	os << indent << "Min: ("
-		<< this->Min[0] << ", "
-		<< this->Min[1] << ", "
-		<< this->Min[2] << ")\n";
-	os << indent << "Max: ("
-		<< this->Max[0] << ", "
-		<< this->Max[1] << ", "
-		<< this->Max[2] << ")\n";
-	os << indent << "StandardDeviation: ("
-		<< this->StandardDeviation[0] << ", "
-		<< this->StandardDeviation[1] << ", "
-		<< this->StandardDeviation[2] << ")\n";
-	os << indent << "VoxelCount: " << this->VoxelCount << "\n";
+	//os << indent << "Mean: ("
+	//	<< this->Mean[0] << ", "
+	//	<< this->Mean[1] << ", "
+	//	<< this->Mean[2] << ")\n";
+	//os << indent << "Min: ("
+	//	<< this->Min[0] << ", "
+	//	<< this->Min[1] << ", "
+	//	<< this->Min[2] << ")\n";
+	//os << indent << "Max: ("
+	//	<< this->Max[0] << ", "
+	//	<< this->Max[1] << ", "
+	//	<< this->Max[2] << ")\n";
+	//os << indent << "StandardDeviation: ("
+	//	<< this->StandardDeviation[0] << ", "
+	//	<< this->StandardDeviation[1] << ", "
+	//	<< this->StandardDeviation[2] << ")\n";
+	//os << indent << "VoxelCount: " << this->VoxelCount << "\n";
 	os << indent << "Stencil: " << this->GetStencil() << "\n";
 	os << indent << "ReverseStencil: " << (this->ReverseStencil ?
 		"On\n" : "Off\n");
 	os << indent << "IgnoreZero: " << (this->IgnoreZero ? "On" : "Off") << "\n";
 
-	os << indent << "ComponentOrigin: ( "
-		<< this->ComponentOrigin[0] << ", "
-		<< this->ComponentOrigin[1] << ", "
-		<< this->ComponentOrigin[2] << " )\n";
+	os << indent << "Origin: ( "
+		<< this->Origin[0] << ", "
+		<< this->Origin[1] << ", "
+		<< this->Origin[2] << " )\n";
 
-	os << indent << "ComponentSpacing: ( "
-		<< this->ComponentSpacing[0] << ", "
-		<< this->ComponentSpacing[1] << ", "
-		<< this->ComponentSpacing[2] << " )\n";
+	os << indent << "Spacing: ( "
+		<< this->Spacing[0] << ", "
+		<< this->Spacing[1] << ", "
+		<< this->Spacing[2] << " )\n";
 
-	os << indent << "ComponentExtent: ( "
-		<< this->ComponentExtent[0] << "," << this->ComponentExtent[1] << " "
-		<< this->ComponentExtent[2] << "," << this->ComponentExtent[3] << " "
-		<< this->ComponentExtent[4] << "," << this->ComponentExtent[5] << " }\n";
+	os << indent << "Extent: ( "
+		<< this->Extent[0] << "," << this->Extent[1] << " "
+		<< this->Extent[2] << "," << this->Extent[3] << " "
+		<< this->Extent[4] << "," << this->Extent[5] << " }\n";
+
+	os << indent << "SliceOrientation: " << this->SliceOrientation << "\n";
 }
 
