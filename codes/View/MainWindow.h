@@ -29,7 +29,8 @@ namespace Ui { class MainWindow; }
 class vtkRenderWindow;
 class QMenu;
 class QSettings;
-class ModuleWidget;
+class Switch2DWidget;
+class Switch3DWidget;
 class ViewerWidget;
 class MeasurementWidget;
 class LabelWidget;
@@ -57,7 +58,8 @@ public:
 
 	// get ui things for connection 
 	Ui::MainWindow* getUi();
-	ModuleWidget* getModuleWidget();
+	Switch2DWidget* getSwitch2DWidget();
+	Switch3DWidget* getSwitch3DWidget();
 	ViewerWidget* getViewerWidget(unsigned int num);
 	MeasurementWidget* getMeasurementWidget();
 	LabelWidget* getLabelWidget();
@@ -104,7 +106,9 @@ private:
 	
 	ViewerWidget* viewerWidgets[NUM_OF_VIEWERS] = { nullptr };
 
-	ModuleWidget* moduleWiget = nullptr;
+	Switch2DWidget* switch2DWidget = nullptr;
+
+	Switch3DWidget* switch3DWidget = nullptr;
 
 	MeasurementWidget* measurementWidget = nullptr;
 

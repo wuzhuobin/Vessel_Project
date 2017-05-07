@@ -1,30 +1,30 @@
-#ifndef MODULEWIDGET_H
-#define MODULEWIDGET_H
+#ifndef __SWITCH2D_WIDGET_H__
+#define __SWITCH2D_WIDGET_H__
 
 #include <QWidget>
 
 
 
-namespace Ui { class ModuleWidget; }
+namespace Ui { class Switch2DWidget; }
 
-class ModuleWidget: public QWidget
+class Switch2DWidget: public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ModuleWidget(QWidget *parent = 0);
-    ~ModuleWidget();
+    explicit Switch2DWidget(QWidget *parent = 0);
+    ~Switch2DWidget();
 
 	void ClearWidget();
 	void addWidget(QWidget* style);
 	void setWidget(QWidget* style);
-	Ui::ModuleWidget* getUi() { return ui; }
+	Ui::Switch2DWidget* getUi() { return ui; }
 
     
 private:
 
-    Ui::ModuleWidget *ui;
+    Ui::Switch2DWidget *ui;
 	
 };
 
-#endif // MODULEWIDGET_H
+#endif // __SWITCH2D_WIDGET_H__

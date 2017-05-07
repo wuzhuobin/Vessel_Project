@@ -5,7 +5,8 @@
 #include "ui_ModuleWidget.h"
 #include "ui_ViewerWidget.h"
 #include "ViewerWidget.h"
-#include "ModuleWidget.h"
+#include "Switch2DWidget.h"
+#include "Switch3DWidget.h"
 #include "ui_QAbstractNavigation.h"
 #include "MeasurementWidget.h"
 #include "LabelWidget.h"
@@ -111,18 +112,18 @@ Core::Core(QObject * parent)
 	// ImageViewer
 	// connect changing mode
 	mainWindow.getUi()->sliceScrollArea->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevelThreshold());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetThreshold());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetTubularVOI());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetRuler());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetMaximumWallThickness());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPolygonDrawSeries());
-	mainWindow.getModuleWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVesselSegmentation2());
+	mainWindow.getSwitch2DWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
+	mainWindow.getSwitch2DWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevelThreshold());
+	mainWindow.getSwitch2DWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetThreshold());
+	mainWindow.getSwitch2DWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
+	mainWindow.getSwitch2DWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
+	mainWindow.getSwitch2DWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
+	mainWindow.getSwitch2DWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
+	mainWindow.getSwitch2DWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetTubularVOI());
+	mainWindow.getSwitch2DWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetRuler());
+	mainWindow.getSwitch2DWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetMaximumWallThickness());
+	mainWindow.getSwitch2DWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPolygonDrawSeries());
+	mainWindow.getSwitch2DWidget()->addWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVesselSegmentation2());
 
 	connect(mainWindow.getUi()->actionTesting, SIGNAL(triggered()),
 		this, SLOT(slotTesting()));
@@ -348,7 +349,7 @@ void Core::slotNavigation()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToNavigation();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation());
 }
 
 void Core::slotWindowLevel()
@@ -356,7 +357,7 @@ void Core::slotWindowLevel()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToWindowLevel();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevel());
 }
 
 void Core::slotThreshold()
@@ -364,7 +365,7 @@ void Core::slotThreshold()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToThreshold();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetThreshold());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetThreshold());
 
 }
 
@@ -373,7 +374,7 @@ void Core::slotWindowlevelThreshold()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToWindowLevelThreshold();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevelThreshold());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetWindowLevelThreshold());
 }
 
 void Core::slotPaintBrush()
@@ -382,7 +383,7 @@ void Core::slotPaintBrush()
 		imageInteractorStyle[i]->SetInteractorStyleToPaintBrush();
 		//imageInteractorStyle[i]->GetPaintBrush()->SetOverlay(imageManager.getOverlay()->getData());
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPaintBrush());
 
 }
 
@@ -391,7 +392,7 @@ void Core::slotTesting()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToInteractorStyleTesting();
 	}
-	mainWindow.getModuleWidget()->setWidget(nullptr);
+	mainWindow.getSwitch2DWidget()->setWidget(nullptr);
 
 }
 
@@ -400,7 +401,7 @@ void Core::slotSeedsPlacer()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToLumenSeedsPlacer();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetLumenSeedsPlacer());
 
 }
 
@@ -409,7 +410,7 @@ void Core::slotVOI()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToVOI();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVOI());
 
 }
 
@@ -418,7 +419,7 @@ void Core::slotTubularVOI()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToTubularVOI();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetTubularVOI());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetTubularVOI());
 
 }
 
@@ -427,7 +428,7 @@ void Core::slotRuler()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToRuler();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetRuler());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetRuler());
 
 }
 
@@ -436,7 +437,7 @@ void Core::slotMaximumWallThickness()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToMaximumWallThickness();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetMaximumWallThickness());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetMaximumWallThickness());
 }
 
 void Core::slotPolygonDraw()
@@ -444,7 +445,7 @@ void Core::slotPolygonDraw()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToPolygonDraw();
 	}
-	mainWindow.getModuleWidget()->setWidget(nullptr);
+	mainWindow.getSwitch2DWidget()->setWidget(nullptr);
 }
 
 void Core::slotPolygonDrawSeries()
@@ -452,7 +453,7 @@ void Core::slotPolygonDrawSeries()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToPolygonDrawSeries();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPolygonDrawSeries());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetPolygonDrawSeries());
 
 }
 
@@ -461,7 +462,7 @@ void Core::slotVesselSegmentation()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToVesselSegmentation2();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVesselSegmentation2());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVesselSegmentation2());
 }
 
 void Core::slotTrackballCamera()
@@ -526,7 +527,7 @@ void Core::slotVBDSmoker()
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToVBDSmoker();
 	}
-	mainWindow.getModuleWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
+	mainWindow.getSwitch2DWidget()->setWidget(imageInteractorStyle[DEFAULT_IMAGE]->GetVBDSmoker());
 }
 #include <qmessagebox.h>
 #include <vtkPolyData.h>

@@ -1,30 +1,30 @@
-#ifndef MODULEWIDGET_H
-#define MODULEWIDGET_H
+#ifndef __SWITCH3D_WIDGET_H__
+#define __SWITCH3D_WIDGET_H__
 
 #include <QWidget>
 
 
 
-namespace Ui { class ModuleWidget; }
+namespace Ui { class Switch3DWidget; }
 
-class ModuleWidget: public QWidget
+class Switch3DWidget: public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ModuleWidget(QWidget *parent = 0);
-    ~ModuleWidget();
+    explicit Switch3DWidget(QWidget *parent = 0);
+    ~Switch3DWidget();
 
 	void ClearWidget();
 	void addWidget(QWidget* style);
 	void setWidget(QWidget* style);
-	Ui::ModuleWidget* getUi() { return ui; }
+	Ui::Switch3DWidget* getUi() { return ui; }
 
     
 private:
 
-    Ui::ModuleWidget *ui;
+    Ui::Switch3DWidget *ui;
 	
 };
 
-#endif // MODULEWIDGET_H
+#endif // __SWITCH3D_WIDGET_H__

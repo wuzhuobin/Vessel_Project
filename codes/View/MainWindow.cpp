@@ -2,8 +2,10 @@
 
 #include "ui_MainWindow.h"
 #include "ui_ViewerWidget.h"
-#include "ui_ModuleWidget.h"
-#include "ModuleWidget.h"
+#include "ui_Switch2DWidget.h"
+#include "Switch2DWidget.h"
+#include "ui_Switch3DWidget.h"
+#include "Switch3DWidget.h"
 #include "ViewerWidget.h"
 #include "MeasurementWidget.h"
 #include "LabelWidget.h"
@@ -27,16 +29,20 @@ MainWindow::MainWindow(QWidget *parent)
 	ui = new Ui::MainWindow;
 	ui->setupUi(this);
 
-	this->moduleWiget = new ModuleWidget(this);
-	ui->moduleWidgetDockWidget->setWidget(this->moduleWiget);
+	this->switch2DWidget = new Switch2DWidget(this);
+	ui->dockWidget2D->setWidget(this->switch2DWidget);
+
+	this->switch3DWidget = new Switch3DWidget(this);
+	ui->dockWidget3D->setWidget(this->switch3DWidget);
 
 	this->labelWidget = new LabelWidget(this);
-	this->moduleWiget->getUi()->verticalLayoutModule->addWidget(this->labelWidget);
+	this->switch2DWidget->getUi()->verticalLayoutModule->addWidget(this->labelWidget);
 
 	this->measurementWidget = new MeasurementWidget(this);
-	ui->measurementDockWidget->setWidget(measurementWidget);
+	ui->dockWidgetMeasurement->setWidget(measurementWidget);
 
-	this->tabifyDockWidget(ui->measurementDockWidget, ui->moduleWidgetDockWidget);
+	this->tabifyDockWidget(ui->dockWidgetMeasurement, ui->dockWidget3D);
+	this->tabifyDockWidget(ui->dockWidgetMeasurement, ui->dockWidget2D);
 
 	QMainWindow* centralWidget = new QMainWindow(this);
 	centralWidget->setDockNestingEnabled(true);
@@ -337,9 +343,14 @@ Ui::MainWindow * MainWindow::getUi()
 	return this->ui;
 }
 
-ModuleWidget * MainWindow::getModuleWidget()
+Switch2DWidget * MainWindow::getSwitch2DWidget()
 {
-	return this->moduleWiget;
+	return this->switch2DWidget;
+}
+
+Switch3DWidget * MainWindow::getSwitch3DWidget()
+{
+	return this->switch3DWidget;
 }
 
 ViewerWidget * MainWindow::getViewerWidget(unsigned int num)

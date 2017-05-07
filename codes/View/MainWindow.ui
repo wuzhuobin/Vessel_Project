@@ -781,6 +781,9 @@
    </property>
   </action>
   <action name="actionICDA_diagnosis">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>ICDA diagnosis</string>
    </property>

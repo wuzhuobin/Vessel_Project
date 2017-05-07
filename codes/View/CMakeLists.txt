@@ -17,7 +17,8 @@ set(
 	VIEW_H
 	MainWindow.h
 	LabelWidget.h
-	ModuleWidget.h
+	Switch2DWidget.h
+	Switch3DWidget.h
 	ViewerWidget.h
 	MeasurementWidget.h
 )
@@ -27,7 +28,8 @@ set(
 	VIEW_SRC
 	MainWindow.cpp
 	LabelWidget.cpp
-	ModuleWidget.cpp
+	Switch2DWidget.cpp
+	Switch3DWidget.cpp
 	ViewerWidget.cpp
 	MeasurementWidget.cpp
 )
@@ -36,7 +38,8 @@ set(
 	VIEW_UI
 	MainWindow.ui
 	LabelWidget.ui
-	ModuleWidget.ui
+	Switch2DWidget.ui
+	Switch3DWidget.ui
 	ViewerWidget.ui
 	MeasurementWidget.ui
 )

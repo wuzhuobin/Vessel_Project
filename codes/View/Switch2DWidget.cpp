@@ -1,10 +1,10 @@
-#include "ui_ModuleWidget.h"
+#include "ui_Switch2DWidget.h"
 #include <QSpinBox>
 #include <QTextBrowser>
 #include <qtablewidget.h>
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include "ModuleWidget.h"
+#include "Switch2DWidget.h"
 
 #include "ui_LabelWidget.h"
 
@@ -12,31 +12,31 @@
 connect(ui->##qtObj , SIGNAL(valueChanged(##dataType)), core , SLOT(slotSet##filterName##valueName(##dataType)))
 
 
-ModuleWidget::ModuleWidget(QWidget *parent) :
+Switch2DWidget::Switch2DWidget(QWidget *parent) :
 	QWidget(parent)
 {
 
-	ui = new Ui::ModuleWidget;
+	ui = new Ui::Switch2DWidget;
     ui->setupUi(this);
 
 	ui->styleStackedWidget->setDisabled(true);
 }
 
-ModuleWidget::~ModuleWidget()
+Switch2DWidget::~Switch2DWidget()
 {
     delete ui;
 }
 
-void ModuleWidget::ClearWidget()
+void Switch2DWidget::ClearWidget()
 {
 }
 
-void ModuleWidget::addWidget(QWidget * style)
+void Switch2DWidget::addWidget(QWidget * style)
 {
 	ui->styleStackedWidget->addWidget(style);
 }
 
-void ModuleWidget::setWidget(QWidget * style)
+void Switch2DWidget::setWidget(QWidget * style)
 {
 	int index = ui->styleStackedWidget->indexOf(style);
 	if (index < 0) {
