@@ -17,6 +17,7 @@ void Measurement::setOverlay(Overlay* overlay)
 		m_overlay = overlay;
 		connect(m_overlay, SIGNAL(signalUpdatedOverlay()),
 			this, SLOT(update()));
+		update();
 	}
 }
 

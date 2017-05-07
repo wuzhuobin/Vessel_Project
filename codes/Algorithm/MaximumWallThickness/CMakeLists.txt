@@ -9,10 +9,12 @@ include(${VTK_USE_FILE})
 SET(
 	MAXIMUMWALLTHICKNESS_SRC
 	${CMAKE_CURRENT_SOURCE_DIR}/MaximumWallThickness.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/MaximumWallThickness2.cpp
 	)
 SET(
 	MAXIMUMWALLTHICKNESS_INC
 	${CMAKE_CURRENT_SOURCE_DIR}/MaximumWallThickness.h
+	${CMAKE_CURRENT_SOURCE_DIR}/MaximumWallThickness2.h
 	)
 
 add_library(

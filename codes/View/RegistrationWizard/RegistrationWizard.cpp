@@ -620,8 +620,8 @@ void FindImageRunnable::GDCImageIORead(const std::vector<std::string>& files)
 
 		if (!dicomIO->GetValueFromTag("0020|1002", slice)) {
 			//slice = "/";
+			slice = std::to_string(files.size());
 		}
-		slice = files.size();
 		if (!dicomIO->GetValueFromTag("0008|0020", date)) {
 			//date = "/";
 		}

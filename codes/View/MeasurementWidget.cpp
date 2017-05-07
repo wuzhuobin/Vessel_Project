@@ -13,12 +13,7 @@
 #include <vtkSmartPointer.h>
 
 #include <itkGDCMImageIO.h>
-//#include "MeasurementFor2D.h"
-//#include "MeasurementFor3D.h"
-//#include "Overlay.h"
-//#include "MainWindow.h"
-//#include "ui_MainWindow.h"
-//#include "ui_QAbstractNavigation.h"
+
 
 MeasurementWidget::MeasurementWidget(QWidget * parent) : QWidget(parent) 
 {
@@ -41,9 +36,12 @@ Ui::MeasurementWidget* MeasurementWidget::getUi()
 	return ui;
 }
 
-void MeasurementWidget::slotUpdateMeasurements()
+void MeasurementWidget::slotUpdateMeasurements(int slice)
 {
-	slotUpdate2DMeasurements(measurements2D);
+	//if (measurements2DMap->value(slice).isNull()) {
+	//	return;
+	//}
+	slotUpdate2DMeasurements(measurements2DMap->value(slice).data());
 	slotUpdate3DMeasurements(measurements3D);
 	slotUpdateStenosis(stenosis);
 }

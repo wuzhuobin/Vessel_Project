@@ -23,25 +23,22 @@ public:
 	vtkRenderWindow* wind1 = nullptr;
 	vtkRenderWindow* wind2 = nullptr;
 	double* measurements3D = nullptr;
-	double* measurements2D = nullptr;
+	//double* measurements2D = nullptr;
+	QMap<int, QSharedPointer<double>>* measurements2DMap = nullptr;
+
 	double* stenosis = nullptr;
 
 
 public slots:
-	void slotUpdateMeasurements();
+	void slotUpdateMeasurements(int slice);
 	void slotUpdate3DMeasurements(double* Measurements3D);
 	void slotUpdate2DMeasurements(double* Measurements2D);
 	void slotUpdateStenosis(double* stenosis);
 	void slotUpdateImformation();
+	void GenerateReport(QString	path);
 
 private:
 	Ui::MeasurementWidget* ui = nullptr;
-
-	void GenerateReport(QString	path);
-
-	friend class MainWindow;
-	MainWindow* m_mainWnd;
-
 
 };
 

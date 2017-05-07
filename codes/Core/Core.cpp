@@ -94,10 +94,9 @@ Core::Core(QObject * parent)
 
 	// Measurement
 	connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
-		&measurement, SLOT(setSlice(int)));
-	connect(&measurement, SIGNAL(updated()),
-		mainWindow.getMeasurementWidget(), SLOT(slotUpdateMeasurements()));
-	mainWindow.getMeasurementWidget()->measurements2D = measurement.m_measurements2D;
+		mainWindow.getMeasurementWidget(), SLOT(slotUpdateMeasurements(int)));
+
+	mainWindow.getMeasurementWidget()->measurements2DMap = &measurement.m_measurements2DMap;
 	mainWindow.getMeasurementWidget()->measurements3D = measurement.m_measurements3D;
 	mainWindow.getMeasurementWidget()->stenosis = &measurement.m_stenosis;
 	mainWindow.getMeasurementWidget()->wind1 = imageViewers[2]->GetRenderWindow();
