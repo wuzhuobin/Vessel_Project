@@ -100,7 +100,7 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroupImage->addAction(ui->acitonVOI_selection);
 	actionGroupImage->addAction(ui->actionPaint_brush);
 	actionGroupImage->addAction(ui->actionSeeds_placer);
-	actionGroupImage->addAction(ui->actionVBD_Smoker);
+	actionGroupImage->addAction(ui->actionVBD_Smoker_seed);
 	actionGroupImage->addAction(ui->actionTubular_VOI);
 	actionGroupImage->addAction(ui->actionDistance_measure);
 	actionGroupImage->addAction(ui->actionMaximum_wall_thickness);
@@ -115,12 +115,33 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroupSurface->addAction(ui->actionTraceball_camera);
 	actionGroupSurface->addAction(ui->actionCenter_line);
 	actionGroupSurface->addAction(ui->actionFind_maximum_radius);
+	actionGroupSurface->addAction(ui->actionVBD_Smoker_BA_diameter);
+	actionGroupSurface->addAction(ui->actionICDA_diameter);
 	actionGroupSurface->addAction(ui->actionCurved_navigation);
 	actionGroupSurface->addAction(ui->actionPerpendicular_measurement);
 	actionGroupSurface->addAction(ui->actionWay_point_centerline);
 	actionGroupSurface->addAction(ui->actionStenosis);
-	
 	actionGroupSurface->setExclusive(true);
+
+	connect(ui->actionICDA_standard, SIGNAL(triggered()),
+		ui->actionNavigation, SIGNAL(triggered()));
+	connect(ui->actionICDA_standard, SIGNAL(triggered()),
+		ui->actionICDA_diameter, SIGNAL(triggered()));
+	connect(ui->actionSmoker_standard, SIGNAL(triggered()),
+		ui->actionVBD_Smoker_seed, SIGNAL(triggered()));
+	connect(ui->actionSmoker_standard, SIGNAL(triggered()),
+		ui->actionVBD_Smoker_BA_diameter, SIGNAL(triggered()));
+	connect(ui->actionUbogu_standard, SIGNAL(triggered()),
+		ui->actionNavigation, SIGNAL(triggered()));
+	//connect(ui->actionUbogu_standard, SIGNAL(triggered()),
+	//	ui->actionICDA_actdiameter, SIGNAL(triggered()));
+
+	QActionGroup* actionGroupDiagnosis = new QActionGroup(this);
+	actionGroupDiagnosis->addAction(ui->actionICDA_standard);
+	actionGroupDiagnosis->addAction(ui->actionSmoker_standard);
+	actionGroupDiagnosis->addAction(ui->actionUbogu_standard);
+	actionGroupDiagnosis->setExclusive(true);
+
 
 
 	// Connection

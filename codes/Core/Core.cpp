@@ -153,8 +153,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotPolygonDrawSeries()));
 	connect(mainWindow.getUi()->actionVessel_segmentation, SIGNAL(triggered()),
 		this, SLOT(slotVesselSegmentation()));
-	connect(mainWindow.getUi()->actionVBD_Smoker, SIGNAL(triggered()),
-		this, SLOT(slotVBDSmoker()));
+	connect(mainWindow.getUi()->actionVBD_Smoker_seed, SIGNAL(triggered()),
+		this, SLOT(slotVBDSmokerSeed()));
 
 
 
@@ -232,7 +232,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotChangeOrientationToXZ(int)));
 	// surface action
 
-	mainWindow.getSwitch3DWidget()->addWidget(surfaceInteractorStyle[0]->GetICDAStandard());
+	mainWindow.getSwitch3DWidget()->addWidget(surfaceInteractorStyle[0]->GetICDADiameter());
+	mainWindow.getSwitch3DWidget()->addWidget(surfaceInteractorStyle[0]->GetSmokerBADiameter());
 
 	connect(mainWindow.getUi()->actionTraceball_camera, SIGNAL(triggered()),
 		this, SLOT(slotTrackballCamera()));
@@ -248,8 +249,10 @@ Core::Core(QObject * parent)
 		this, SLOT(slotWaypoint()));
 	connect(mainWindow.getUi()->actionStenosis, SIGNAL(triggered()),
 		this, SLOT(slotStenosis()));
-	connect(mainWindow.getUi()->actionICDA_diagnosis, SIGNAL(triggered()),
-		this, SLOT(slotICDAStandard()));
+	connect(mainWindow.getUi()->actionICDA_diameter, SIGNAL(triggered()),
+		this, SLOT(slotICDADiameter()));
+	connect(mainWindow.getUi()->actionVBD_Smoker_BA_diameter, SIGNAL(triggered()),
+		this, SLOT(slotVBDBADiameter()));
 
 
 	// update btn
@@ -279,6 +282,22 @@ Core::~Core()
 		
 		imageViewers[i]->Delete();
 		imageViewers[i] = nullptr;
+
+		//mainWindow.setRenderWindow(i, nullptr);
+	}
+
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; ++i) {
+
+		surfaceInteractorStyle[i]->Delete();
+		surfaceInteractorStyle[i] = nullptr;
+
+
+		mainWindow.getViewerWidget(MainWindow::NUM_OF_2D_VIEWERS + i)->getUi()->qvtkWidget2->GetInteractor()->SetInteractorStyle(nullptr);
+		//imageInteractor[i]->Delete();
+		//imageInteractor[i] = nullptr;
+
+		surfaceViewer[i]->Delete();
+		surfaceViewer[i] = nullptr;
 
 		//mainWindow.setRenderWindow(i, nullptr);
 	}
@@ -527,16 +546,42 @@ void Core::slotStenosis()
 	}
 }
 
-void Core::slotICDAStandard()
+void Core::slotICDADiameter()
 {
 	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
 	{
-		surfaceInteractorStyle[i]->SetInteractorStyleTo3DICDAStandard();
+		surfaceInteractorStyle[i]->SetInteractorStyleTo3DICDADiameter();
 	}
-	mainWindow.getSwitch3DWidget()->setWidget(surfaceInteractorStyle[0]->GetICDAStandard());
+	mainWindow.getSwitch3DWidget()->setWidget(surfaceInteractorStyle[0]->GetICDADiameter());
 }
 
-void Core::slotVBDSmoker()
+void Core::slotVBDBADiameter()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
+	{
+		surfaceInteractorStyle[i]->SetInteractorStyleTo3DSmokerBADiameter();
+	}
+	mainWindow.getSwitch3DWidget()->setWidget(surfaceInteractorStyle[0]->GetSmokerBADiameter());
+
+}
+
+//void Core::slotSmokerStandard()
+//{
+//	mainWindow.getUi()->actionVBD_Smoker_seed->trigger();
+//	mainWindow.getUi()->actionVBD_Smoker_BA_diameter->trigger();
+//}
+//
+//void Core::slotUboguStandard()
+//{
+//}
+//
+//void Core::slotICDAStandard()
+//{
+//	mainWindow.getUi()->actionICDA_standard->trigger();
+//	mainWindow.getUi()->actionNavigation->trigger();
+//}
+
+void Core::slotVBDSmokerSeed()
 {
 	for (int i = 0; i < MainWindow::NUM_OF_2D_VIEWERS; ++i) {
 		imageInteractorStyle[i]->SetInteractorStyleToVBDSmoker();

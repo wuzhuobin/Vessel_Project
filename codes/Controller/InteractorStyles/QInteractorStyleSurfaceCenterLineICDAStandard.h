@@ -58,7 +58,6 @@ protected:
 	int m_currentMode = 0;
 	
 private:
-	///< ui thing. For integrity.
 	Ui::QInteractorStyleSurfaceCenterLineICDAStandard* ui = nullptr;
 };
 

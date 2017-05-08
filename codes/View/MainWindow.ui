@@ -205,6 +205,7 @@
     <addaction name="actionMaximum_wall_thickness"/>
     <addaction name="actionDistance_measure"/>
     <addaction name="actionSeeds_placer"/>
+    <addaction name="actionVBD_Smoker_seed"/>
    </widget>
    <widget class="QMenu" name="menuDiagnosis">
     <property name="enabled">
@@ -217,9 +218,10 @@
      <property name="title">
       <string>VBD diagnosis</string>
      </property>
-     <addaction name="actionVBD_Smoker"/>
+     <addaction name="actionSmoker_standard"/>
+     <addaction name="actionUbogu_standard"/>
     </widget>
-    <addaction name="actionICDA_diagnosis"/>
+    <addaction name="actionICDA_standard"/>
     <addaction name="menuVBD_diagnosis"/>
    </widget>
    <widget class="QMenu" name="menuSurface">
@@ -230,6 +232,8 @@
     <addaction name="actionCenter_line"/>
     <addaction name="actionWay_point_centerline"/>
     <addaction name="actionFind_maximum_radius"/>
+    <addaction name="actionICDA_diameter"/>
+    <addaction name="actionVBD_Smoker_BA_diameter"/>
     <addaction name="actionPerpendicular_measurement"/>
     <addaction name="actionStenosis"/>
     <addaction name="actionCurved_navigation"/>
@@ -272,7 +276,6 @@
    <addaction name="acitonVOI_selection"/>
    <addaction name="actionTubular_VOI"/>
    <addaction name="actionSeeds_placer"/>
-   <addaction name="actionVBD_Smoker"/>
    <addaction name="actionPolygon_draw"/>
    <addaction name="actionPaint_brush"/>
    <addaction name="separator"/>
@@ -780,25 +783,15 @@
     <string>Export Report</string>
    </property>
   </action>
-  <action name="actionICDA_diagnosis">
+  <action name="actionICDA_standard">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>ICDA diagnosis</string>
+    <string>ICDA standard</string>
    </property>
   </action>
   <action name="actionSmoker_standard">
-   <property name="text">
-    <string>Smoker standard</string>
-   </property>
-  </action>
-  <action name="actionUbogo_standard">
-   <property name="text">
-    <string>Ubogo standard</string>
-   </property>
-  </action>
-  <action name="actionVBD_Smoker">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -807,10 +800,18 @@
      <normaloff>:/icons/cigarette-with-smoke.png</normaloff>:/icons/cigarette-with-smoke.png</iconset>
    </property>
    <property name="text">
-    <string>VBD Smoker</string>
+    <string>Smoker standard</string>
+   </property>
+  </action>
+  <action name="actionVBD_Smoker_seed">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>VBD Smoker seed</string>
    </property>
    <property name="toolTip">
-    <string>VBD Smoker</string>
+    <string>VBD Smoker seed</string>
    </property>
   </action>
   <action name="actionNew_segmentation">
@@ -1023,6 +1024,39 @@
    </property>
    <property name="toolTip">
     <string>Stenosis</string>
+   </property>
+  </action>
+  <action name="actionUbogu_standard">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ubogu standard</string>
+   </property>
+   <property name="toolTip">
+    <string>Ubogu standard</string>
+   </property>
+  </action>
+  <action name="actionICDA_diameter">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>ICDA diameter</string>
+   </property>
+   <property name="toolTip">
+    <string>ICDA diameter</string>
+   </property>
+  </action>
+  <action name="actionVBD_Smoker_BA_diameter">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>VBD Smoker BA diameter</string>
+   </property>
+   <property name="toolTip">
+    <string>VBD Smoker BA diameter</string>
    </property>
   </action>
  </widget>

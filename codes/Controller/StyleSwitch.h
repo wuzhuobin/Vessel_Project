@@ -125,7 +125,6 @@ protected:
 		allStyles.push_back(VesselSegmentation2);
 		MaximumWallThickness = QInteractorStyleMaximumWallThickness::New();
 		allStyles.push_back(MaximumWallThickness);
-		// IADE specified
 		VBDSmoker = QInteractorStyleVBDSmokerSeeds::New();
 		allStyles.push_back(VBDSmoker);
 	}
@@ -143,8 +142,6 @@ protected:
 	InteractorStylePolygonDraw* PolygonDraw;
 	QInteractorStylePolygonDrawSeries* PolygonDrawSeries;
 	QInteractorStyleVesselSegmentation2* VesselSegmentation2;
-
-	// IADE specified 
 	QInteractorStyleVBDSmokerSeeds* VBDSmoker;
 
 	//QInteractorStyleRuler* Ruler;

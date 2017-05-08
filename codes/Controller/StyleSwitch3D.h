@@ -9,6 +9,7 @@
 #include "InteractorStyleSurfaceCenterlineWaypoint.h"
 #include "InteractorStyleSurfaceCenterLineStenosis.h"
 #include "QInteractorStyleSurfaceCenterLineICDAStandard.h"
+#include "QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter.h"
 
 class StyleSwitch3D: public InteractorStyleSwitch3D
 {
@@ -40,11 +41,13 @@ public:
 	SetInteractorStyle3DMacro(Stenosis);
 	CurrentStyle3DMacro(Stenosis);
 
-	vtkGetMacro(ICDAStandard, QInteractorStyleSurfaceCenterLineICDAStandard*);
-	SetInteractorStyle3DMacro(ICDAStandard);
-	CurrentStyle3DMacro(ICDAStandard);
+	vtkGetMacro(ICDADiameter, QInteractorStyleSurfaceCenterLineICDAStandard*);
+	SetInteractorStyle3DMacro(ICDADiameter);
+	CurrentStyle3DMacro(ICDADiameter);
 
-	//virtual void SetCenterLine(vtkPolyData* centerline);
+	vtkGetMacro(SmokerBADiameter, QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter*);
+	SetInteractorStyle3DMacro(SmokerBADiameter);
+	CurrentStyle3DMacro(SmokerBADiameter);
 
 protected:
 	StyleSwitch3D() {
@@ -67,8 +70,11 @@ protected:
 		this->Stenosis = InteractorStyleSurfaceCenterLineStenosis::New();
 		allStyles.push_back(this->Stenosis);
 
-		this->ICDAStandard = QInteractorStyleSurfaceCenterLineICDAStandard::New();
-		allStyles.push_back(this->ICDAStandard);
+		this->ICDADiameter = QInteractorStyleSurfaceCenterLineICDAStandard::New();
+		allStyles.push_back(this->ICDADiameter);
+
+		this->SmokerBADiameter = QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter::New();
+		allStyles.push_back(this->SmokerBADiameter);
 	}
 
 	InteractorStyleSurfaceCenterLineSimpleClipping* CenterLine;
@@ -77,7 +83,8 @@ protected:
 	InteractorStyleSurfaceCenterLineCurvedNavigation* CurvedNavigation;
 	InteractorStyleSurfaceCenterlineWaypoint* Waypoint;
 	InteractorStyleSurfaceCenterLineStenosis* Stenosis;
-	QInteractorStyleSurfaceCenterLineICDAStandard* ICDAStandard;
+	QInteractorStyleSurfaceCenterLineICDAStandard* ICDADiameter;
+	QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter* SmokerBADiameter;
 
 private:
 

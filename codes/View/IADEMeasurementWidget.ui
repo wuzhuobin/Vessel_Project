@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>280</width>
-    <height>621</height>
+    <width>380</width>
+    <height>884</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>IADEMeasurementWidget</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -23,27 +23,12 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-224</y>
-        <width>324</width>
-        <height>808</height>
+        <y>-6</y>
+        <width>343</width>
+        <height>870</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
        <item>
         <layout class="QFormLayout" name="formLayout_2">
          <item row="0" column="0" colspan="2">
@@ -305,62 +290,11 @@ dolichoectasia disease:</string>
        </item>
        <item>
         <layout class="QFormLayout" name="formLayout_3">
-         <item row="0" column="0" colspan="2">
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string>VBD-Ubogu diagnosis standard</string>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_12">
            <property name="text">
             <string>Length of basilar 
 artery:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>Length of intracranial 
-segment of left vetrabral 
-artery:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_14">
-           <property name="text">
-            <string>Length of intracranial 
-segment of right 
-vetrabral artery:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxLengthOfIntracranialSegmentOfRightVetrabralArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-           <property name="maximum">
-            <double>10000000000000000.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxLengthOfIntracranialSegmentOfLeftVetrabralArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-           <property name="maximum">
-            <double>10000000000000000.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -377,26 +311,58 @@ vetrabral artery:</string>
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_15">
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_13">
            <property name="text">
-            <string>Distance between centerline 
-and connection lead 
-of 2 terminals 
-(left intracranial segment
- of vetrabral artery 
-and basilar artery)</string>
+            <string>Length of intracranial 
+segment of left vetrabral 
+artery:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QDoubleSpinBox" name="doubleSpinBoxLengthOfIntracranialSegmentOfLeftVetrabralArtery">
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="suffix">
+            <string> mm</string>
+           </property>
+           <property name="maximum">
+            <double>10000000000000000.000000000000000</double>
            </property>
           </widget>
          </item>
          <item row="3" column="0">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>Length of intracranial 
+segment of right 
+vetrabral artery:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QDoubleSpinBox" name="doubleSpinBoxLengthOfIntracranialSegmentOfRightVetrabralArtery">
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="suffix">
+            <string> mm</string>
+           </property>
+           <property name="maximum">
+            <double>10000000000000000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
           <widget class="QLabel" name="label_16">
            <property name="text">
             <string>Elongation:</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item row="4" column="1">
           <widget class="QComboBox" name="comboBoxUboguElongation">
            <item>
             <property name="text">
@@ -410,13 +376,13 @@ and basilar artery)</string>
            </item>
           </widget>
          </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="label_17">
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_15">
            <property name="text">
             <string>Distance between centerline 
 and connection lead 
 of 2 terminals 
-(right intracranial segment
+(left intracranial segment
  of vetrabral artery 
 and basilar artery)</string>
            </property>
@@ -432,6 +398,18 @@ and basilar artery)</string>
            </property>
            <property name="maximum">
             <double>10000000000000000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="label_17">
+           <property name="text">
+            <string>Distance between centerline 
+and connection lead 
+of 2 terminals 
+(right intracranial segment
+ of vetrabral artery 
+and basilar artery)</string>
            </property>
           </widget>
          </item>
@@ -469,40 +447,11 @@ and basilar artery)</string>
            </item>
           </widget>
          </item>
-         <item row="10" column="0">
-          <widget class="QLabel" name="label_19">
-           <property name="text">
-            <string>Expansion:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="1">
-          <widget class="QComboBox" name="comboBoxUboguExpansion">
-           <item>
-            <property name="text">
-             <string>NO</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>YES</string>
-            </property>
-           </item>
-          </widget>
-         </item>
          <item row="8" column="0">
           <widget class="QLabel" name="label_21">
            <property name="text">
             <string>Minimum diameter of 
 basilar artery</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="0">
-          <widget class="QLabel" name="label_22">
-           <property name="text">
-            <string>Minimum diameter of 
-vetebral artery</string>
            </property>
           </widget>
          </item>
@@ -522,8 +471,16 @@ vetebral artery</string>
            </property>
           </widget>
          </item>
+         <item row="9" column="0">
+          <widget class="QLabel" name="label_22">
+           <property name="text">
+            <string>Minimum diameter of 
+left vetebral artery</string>
+           </property>
+          </widget>
+         </item>
          <item row="9" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxUboguMinimumDiameterOfVetebralArtery">
+          <widget class="QDoubleSpinBox" name="doubleSpinBoxUboguMinimumDiameterOfLeftVetebralArtery">
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::NoButtons</enum>
            </property>
@@ -538,6 +495,52 @@ vetebral artery</string>
            </property>
           </widget>
          </item>
+         <item row="11" column="1">
+          <widget class="QComboBox" name="comboBoxUboguExpansion">
+           <item>
+            <property name="text">
+             <string>NO</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>YES</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="11" column="0">
+          <widget class="QLabel" name="label_19">
+           <property name="text">
+            <string>Expansion:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="2">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>VBD-Ubogu diagnosis standard</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="0">
+          <widget class="QLabel" name="label_23">
+           <property name="text">
+            <string>Minimum diameter of 
+right vetebral artery</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="1">
+          <widget class="QDoubleSpinBox" name="doubleSpinBoxUboguMinimumDiameterOfRightVetebralArtery">
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="suffix">
+            <string> mm</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>
@@ -547,6 +550,7 @@ vetebral artery</string>
       <zorder>gridLayoutWidget</zorder>
       <zorder>formLayoutWidget_2</zorder>
       <zorder>formLayoutWidget</zorder>
+      <zorder>formLayoutWidget_2</zorder>
      </widget>
     </widget>
    </item>

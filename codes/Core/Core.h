@@ -76,8 +76,7 @@ private slots:
 	void slotPolygonDraw();
 	void slotPolygonDrawSeries();
 	void slotVesselSegmentation();
-	// IADE specified
-	void slotVBDSmoker();
+	void slotVBDSmokerSeed();
 
 
 
@@ -85,12 +84,17 @@ private slots:
 	void slotTrackballCamera();
 	void slotCenterLine();
 	void slotFindMaximumRadius();
+	void slotICDADiameter();
+	void slotVBDBADiameter();
 	void slotPerpendicularMeasurement();
 	void slotCurvedNavigation();
 	void slotWaypoint();
 	void slotStenosis();
-	void slotICDAStandard();
 
+	////Diagnosis
+	//void slotSmokerStandard();
+	//void slotUboguStandard();
+	//void slotICDAStandard();
 
 	// Curved image update
 	bool slotInitializeCurvedImage();

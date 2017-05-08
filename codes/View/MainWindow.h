@@ -20,9 +20,6 @@
 
 #include <QtWidgets/QMainWindow>
 
-//#include "ModuleWidget.h"
-//#include "ViewerWidget.h"
-
 
 
 namespace Ui { class MainWindow; }
