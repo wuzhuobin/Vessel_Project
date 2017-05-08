@@ -16,9 +16,12 @@ public:
 
 	enum MEASURE_MODE
 	{
-		CAVERNOUS_SEGMENT_OF_INTERNAL_CAROTID_ARTERY = 0,
-		MIDDLE_CEREBRAL_ARTERY = 1,
-		ANTERIOR_CEREBRAL_ARTERY = 2
+		LEFT_CAVERNOUS_SEGMENT_OF_INTERNAL_CAROTID_ARTERY = 0,
+		RIGHT_CAVERNOUS_SEGMENT_OF_INTERNAL_CAROTID_ARTERY = 1,
+		LEFT_MIDDLE_CEREBRAL_ARTERY = 2,
+		RIGHT_MIDDLE_CEREBRAL_ARTERY = 3,
+		LEFT_ANTERIOR_CEREBRAL_ARTERY = 4,
+		RIGHT_ANTERIOR_CEREBRAL_ARTERY = 5
 	};
 
 
@@ -27,6 +30,18 @@ public:
 	vtkTypeMacro(QInteractorStyleSurfaceCenterLineICDAStandard, InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius);
 
 
+	virtual void FindMaximumRadius() override;
+
+	public slots:
+
+	virtual void setCurrentMode(int mode);
+	virtual void SetCurrentModeToLeftCavernousSegmentOfInternalCarotidArtery() { setCurrentMode(LEFT_CAVERNOUS_SEGMENT_OF_INTERNAL_CAROTID_ARTERY); }
+	virtual void SetCurrentModeToRightCavernousSegmentOfInternalCarotidArtery() { setCurrentMode(RIGHT_CAVERNOUS_SEGMENT_OF_INTERNAL_CAROTID_ARTERY); }
+	virtual void SetCurrentModeToLeftMiddleCerebralArtery() { setCurrentMode(LEFT_MIDDLE_CEREBRAL_ARTERY); }
+	virtual void SetCurrentModeToRightMiddleCerebralArtery() { setCurrentMode(RIGHT_MIDDLE_CEREBRAL_ARTERY); }
+	virtual void SetCurrentModeToLeftAnteriorCerebralArtery() { setCurrentMode(LEFT_ANTERIOR_CEREBRAL_ARTERY); }
+	virtual void SetCurrentModeToRightAnteriorCerebralArtery() { setCurrentMode(RIGHT_ANTERIOR_CEREBRAL_ARTERY); }
+
 protected:
 	QInteractorStyleSurfaceCenterLineICDAStandard(int uiType = MULTIPLE_UI, QWidget* parent = Q_NULLPTR);
 	virtual ~QInteractorStyleSurfaceCenterLineICDAStandard() override;
@@ -34,6 +49,13 @@ protected:
 
 
 	void initialization();
+	virtual void uniqueDisable() override {};
+	virtual void uniqueEnable() override {};
+	virtual void uniqueCall() override {};
+
+
+
+	int m_currentMode = 0;
 	
 private:
 	///< ui thing. For integrity.

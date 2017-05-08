@@ -89,6 +89,7 @@ private slots:
 	void slotCurvedNavigation();
 	void slotWaypoint();
 	void slotStenosis();
+	void slotICDAStandard();
 
 
 	// Curved image update

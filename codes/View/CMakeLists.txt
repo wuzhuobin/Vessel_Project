@@ -21,6 +21,7 @@ set(
 	Switch3DWidget.h
 	ViewerWidget.h
 	MeasurementWidget.h
+	IADEMeasurementWidget.h
 )
 
 
@@ -32,6 +33,7 @@ set(
 	Switch3DWidget.cpp
 	ViewerWidget.cpp
 	MeasurementWidget.cpp
+	IADEMeasurementWidget.cpp
 )
 
 set(
@@ -42,6 +44,7 @@ set(
 	Switch3DWidget.ui
 	ViewerWidget.ui
 	MeasurementWidget.ui
+	IADEMeasurementWidget.ui
 )
 #Generate moc and ui file
 qt5_wrap_cpp(

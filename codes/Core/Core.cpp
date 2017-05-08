@@ -231,6 +231,9 @@ Core::Core(QObject * parent)
 	connect(orientationMapperC, SIGNAL(mapped(int)),
 		this, SLOT(slotChangeOrientationToXZ(int)));
 	// surface action
+
+	mainWindow.getSwitch3DWidget()->addWidget(surfaceInteractorStyle[0]->GetICDAStandard());
+
 	connect(mainWindow.getUi()->actionTraceball_camera, SIGNAL(triggered()),
 		this, SLOT(slotTrackballCamera()));
 	connect(mainWindow.getUi()->actionCenter_line, SIGNAL(triggered()),
@@ -245,6 +248,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotWaypoint()));
 	connect(mainWindow.getUi()->actionStenosis, SIGNAL(triggered()),
 		this, SLOT(slotStenosis()));
+	connect(mainWindow.getUi()->actionICDA_diagnosis, SIGNAL(triggered()),
+		this, SLOT(slotICDAStandard()));
 
 
 	// update btn
@@ -520,6 +525,15 @@ void Core::slotStenosis()
 	{
 		surfaceInteractorStyle[i]->SetInteractorStyleTo3DStenosis();
 	}
+}
+
+void Core::slotICDAStandard()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
+	{
+		surfaceInteractorStyle[i]->SetInteractorStyleTo3DICDAStandard();
+	}
+	mainWindow.getSwitch3DWidget()->setWidget(surfaceInteractorStyle[0]->GetICDAStandard());
 }
 
 void Core::slotVBDSmoker()

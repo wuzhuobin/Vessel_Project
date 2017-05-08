@@ -8,7 +8,6 @@
 
 namespace Ui { class MeasurementWidget; }
 
-class MainWindow;
 class vtkRenderWindow;
 
 class MeasurementWidget : public QWidget {

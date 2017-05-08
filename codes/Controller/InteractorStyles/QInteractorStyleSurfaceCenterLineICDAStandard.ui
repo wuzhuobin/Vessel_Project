@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>214</width>
-    <height>211</height>
+    <width>243</width>
+    <height>453</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,26 +23,19 @@
       <item>
        <layout class="QGridLayout" name="gridLayout">
         <item row="1" column="0">
-         <widget class="QPushButton" name="pushButtonCavernousSegmentOfInternalCarotidArtery">
+         <widget class="QPushButton" name="pushButtonCavernousSegmentOfLeftInternalCarotidArtery">
           <property name="text">
-           <string>Measure radius</string>
+           <string>Left</string>
           </property>
           <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
            <bool>true</bool>
           </property>
           <attribute name="buttonGroup">
            <string notr="true">buttonGroup</string>
           </attribute>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QDoubleSpinBox" name="doubleSpinBox">
-          <property name="buttonSymbols">
-           <enum>QAbstractSpinBox::NoButtons</enum>
-          </property>
-          <property name="suffix">
-           <string> mm</string>
-          </property>
          </widget>
         </item>
         <item row="0" column="0" colspan="2">
@@ -51,8 +44,38 @@
            <string>Cavernous segment of 
 internal carotid artery:</string>
           </property>
-          <property name="buddy">
-           <cstring>pushButtonCavernousSegmentOfInternalCarotidArtery</cstring>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxCavernousSegmentOfLeftInternalCarotidArtery">
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="suffix">
+           <string> mm</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QPushButton" name="pushButtonCavernousSegmentOfRightInternalCarotidArtery">
+          <property name="text">
+           <string>Right</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxCavernousSegmentOfRightInternalCarotidArtery">
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string> mm</string>
+          </property>
+          <property name="maximum">
+           <double>99999999999.000000000000000</double>
           </property>
          </widget>
         </item>
@@ -60,20 +83,10 @@ internal carotid artery:</string>
       </item>
       <item>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0" colspan="2">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Middle cerebral artery:</string>
-          </property>
-          <property name="buddy">
-           <cstring>pushButtonMiddleCerebralArtery</cstring>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="0">
-         <widget class="QPushButton" name="pushButtonMiddleCerebralArtery">
+         <widget class="QPushButton" name="pushButtonLeftMiddleCerebralArteryM1">
           <property name="text">
-           <string>Measure radius</string>
+           <string>Left</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -84,12 +97,42 @@ internal carotid artery:</string>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxLeftMiddleCerebralArteryM1">
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
           </property>
           <property name="suffix">
            <string> mm</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Middle cerebral artery M1:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QPushButton" name="pushButtonRightMiddleCerebralArteryM1">
+          <property name="text">
+           <string>Right</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxRightMiddleCerebralArteryM1">
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string> mm</string>
+          </property>
+          <property name="maximum">
+           <double>99999999999.000000000000000</double>
           </property>
          </widget>
         </item>
@@ -98,9 +141,9 @@ internal carotid artery:</string>
       <item>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="1" column="0">
-         <widget class="QPushButton" name="pushButtonAnteriorCerebralArtery">
+         <widget class="QPushButton" name="pushButtonLeftAnteriorCerebralArtery">
           <property name="text">
-           <string>Measure radius</string>
+           <string>Left</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -110,8 +153,15 @@ internal carotid artery:</string>
           </attribute>
          </widget>
         </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Anterior cerebral artery:</string>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="1">
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxLeftAnteriorCerebralArtery">
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
           </property>
@@ -120,13 +170,26 @@ internal carotid artery:</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="QLabel" name="label_3">
+        <item row="2" column="0">
+         <widget class="QPushButton" name="pushButtonRightAnteriorCerebralArtery">
           <property name="text">
-           <string>Anterior cerebral artery:</string>
+           <string>Right</string>
           </property>
-          <property name="buddy">
-           <cstring>pushButtonAnteriorCerebralArtery</cstring>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxRightAnteriorCerebralArtery">
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string> mm</string>
+          </property>
+          <property name="maximum">
+           <double>99999999999.000000000000000</double>
           </property>
          </widget>
         </item>

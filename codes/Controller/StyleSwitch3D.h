@@ -8,6 +8,7 @@
 #include "InteractorStyleSurfaceCenterLineCurvedNavigation.h"
 #include "InteractorStyleSurfaceCenterlineWaypoint.h"
 #include "InteractorStyleSurfaceCenterLineStenosis.h"
+#include "QInteractorStyleSurfaceCenterLineICDAStandard.h"
 
 class StyleSwitch3D: public InteractorStyleSwitch3D
 {
@@ -39,6 +40,10 @@ public:
 	SetInteractorStyle3DMacro(Stenosis);
 	CurrentStyle3DMacro(Stenosis);
 
+	vtkGetMacro(ICDAStandard, QInteractorStyleSurfaceCenterLineICDAStandard*);
+	SetInteractorStyle3DMacro(ICDAStandard);
+	CurrentStyle3DMacro(ICDAStandard);
+
 	//virtual void SetCenterLine(vtkPolyData* centerline);
 
 protected:
@@ -61,6 +66,9 @@ protected:
 
 		this->Stenosis = InteractorStyleSurfaceCenterLineStenosis::New();
 		allStyles.push_back(this->Stenosis);
+
+		this->ICDAStandard = QInteractorStyleSurfaceCenterLineICDAStandard::New();
+		allStyles.push_back(this->ICDAStandard);
 	}
 
 	InteractorStyleSurfaceCenterLineSimpleClipping* CenterLine;
@@ -69,6 +77,7 @@ protected:
 	InteractorStyleSurfaceCenterLineCurvedNavigation* CurvedNavigation;
 	InteractorStyleSurfaceCenterlineWaypoint* Waypoint;
 	InteractorStyleSurfaceCenterLineStenosis* Stenosis;
+	QInteractorStyleSurfaceCenterLineICDAStandard* ICDAStandard;
 
 private:
 
