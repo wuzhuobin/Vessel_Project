@@ -90,6 +90,7 @@ private slots:
 	void slotCurvedNavigation();
 	void slotWaypoint();
 	void slotStenosis();
+	void slotVBDUboguMeasure();
 
 	////Diagnosis
 	//void slotSmokerStandard();

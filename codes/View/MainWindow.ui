@@ -234,6 +234,7 @@
     <addaction name="actionFind_maximum_radius"/>
     <addaction name="actionICDA_diameter"/>
     <addaction name="actionVBD_Smoker_BA_diameter"/>
+    <addaction name="actionVBD_ubogu_measure"/>
     <addaction name="actionPerpendicular_measurement"/>
     <addaction name="actionStenosis"/>
     <addaction name="actionCurved_navigation"/>
@@ -1057,6 +1058,17 @@
    </property>
    <property name="toolTip">
     <string>VBD Smoker BA diameter</string>
+   </property>
+  </action>
+  <action name="actionVBD_ubogu_measure">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>VBD ubogu measure</string>
+   </property>
+   <property name="toolTip">
+    <string>VBD ubogu measure</string>
    </property>
   </action>
  </widget>

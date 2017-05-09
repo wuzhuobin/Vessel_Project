@@ -16,9 +16,10 @@ public:
 	static QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter* New();
 	vtkTypeMacro(QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter, InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius);
 
-
+public slots:
 	virtual void FindMaximumRadius() override;
 
+protected:
 	QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter(int uiType = MULTIPLE_UI, QWidget* parent = Q_NULLPTR);
 	virtual ~QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter() override;
 

@@ -10,6 +10,7 @@
 #include "InteractorStyleSurfaceCenterLineStenosis.h"
 #include "QInteractorStyleSurfaceCenterLineICDAStandard.h"
 #include "QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter.h"
+#include "QInteractorStyleSurfaceCenterLineVBDUboguStandard.h"
 
 class StyleSwitch3D: public InteractorStyleSwitch3D
 {
@@ -49,6 +50,10 @@ public:
 	SetInteractorStyle3DMacro(SmokerBADiameter);
 	CurrentStyle3DMacro(SmokerBADiameter);
 
+	vtkGetMacro(UboguMeasure, QInteractorStyleSurfaceCenterLineVBDUboguStandard*);
+	SetInteractorStyle3DMacro(UboguMeasure);
+	CurrentStyle3DMacro(UboguMeasure);
+
 protected:
 	StyleSwitch3D() {
 
@@ -75,6 +80,9 @@ protected:
 
 		this->SmokerBADiameter = QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter::New();
 		allStyles.push_back(this->SmokerBADiameter);
+
+		this->UboguMeasure = QInteractorStyleSurfaceCenterLineVBDUboguStandard::New();
+		allStyles.push_back(this->UboguMeasure);
 	}
 
 	InteractorStyleSurfaceCenterLineSimpleClipping* CenterLine;
@@ -85,6 +93,7 @@ protected:
 	InteractorStyleSurfaceCenterLineStenosis* Stenosis;
 	QInteractorStyleSurfaceCenterLineICDAStandard* ICDADiameter;
 	QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter* SmokerBADiameter;
+	QInteractorStyleSurfaceCenterLineVBDUboguStandard* UboguMeasure;
 
 private:
 

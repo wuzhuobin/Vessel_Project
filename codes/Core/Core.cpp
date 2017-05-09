@@ -2,7 +2,8 @@
 
 #include "IADEOverlay.h"
 #include "ui_MainWindow.h"
-#include "ui_ModuleWidget.h"
+#include "ui_Switch2DWidget.h"
+#include "ui_Switch3DWidget.h"
 #include "ui_ViewerWidget.h"
 #include "ViewerWidget.h"
 #include "Switch2DWidget.h"
@@ -234,6 +235,7 @@ Core::Core(QObject * parent)
 
 	mainWindow.getSwitch3DWidget()->addWidget(surfaceInteractorStyle[0]->GetICDADiameter());
 	mainWindow.getSwitch3DWidget()->addWidget(surfaceInteractorStyle[0]->GetSmokerBADiameter());
+	mainWindow.getSwitch3DWidget()->addWidget(surfaceInteractorStyle[0]->GetUboguMeasure());
 
 	connect(mainWindow.getUi()->actionTraceball_camera, SIGNAL(triggered()),
 		this, SLOT(slotTrackballCamera()));
@@ -253,6 +255,8 @@ Core::Core(QObject * parent)
 		this, SLOT(slotICDADiameter()));
 	connect(mainWindow.getUi()->actionVBD_Smoker_BA_diameter, SIGNAL(triggered()),
 		this, SLOT(slotVBDBADiameter()));
+	connect(mainWindow.getUi()->actionVBD_ubogu_measure, SIGNAL(triggered()),
+		this, SLOT(slotVBDUboguMeasure()));
 
 
 	// update btn
@@ -544,6 +548,16 @@ void Core::slotStenosis()
 	{
 		surfaceInteractorStyle[i]->SetInteractorStyleTo3DStenosis();
 	}
+}
+
+void Core::slotVBDUboguMeasure()
+{
+	for (int i = 0; i < MainWindow::NUM_OF_3D_VIEWERS; i++)
+	{
+		surfaceInteractorStyle[i]->SetInteractorStyleTo3DUboguMeasure();
+	}
+	mainWindow.getSwitch3DWidget()->setWidget(surfaceInteractorStyle[0]->GetUboguMeasure());
+
 }
 
 void Core::slotICDADiameter()

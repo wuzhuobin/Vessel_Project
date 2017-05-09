@@ -133,8 +133,9 @@ MainWindow::MainWindow(QWidget *parent)
 		ui->actionVBD_Smoker_BA_diameter, SIGNAL(triggered()));
 	connect(ui->actionUbogu_standard, SIGNAL(triggered()),
 		ui->actionNavigation, SIGNAL(triggered()));
-	//connect(ui->actionUbogu_standard, SIGNAL(triggered()),
-	//	ui->actionICDA_actdiameter, SIGNAL(triggered()));
+	connect(ui->actionUbogu_standard, SIGNAL(triggered()),
+		ui->actionVBD_ubogu_measure, SIGNAL(triggered()));
+
 
 	QActionGroup* actionGroupDiagnosis = new QActionGroup(this);
 	actionGroupDiagnosis->addAction(ui->actionICDA_standard);
