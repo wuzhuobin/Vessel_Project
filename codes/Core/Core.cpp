@@ -9,7 +9,7 @@
 #include "Switch2DWidget.h"
 #include "Switch3DWidget.h"
 #include "ui_QAbstractNavigation.h"
-#include "MeasurementWidget.h"
+#include "IADEMeasurementWidget.h"
 #include "LabelWidget.h"
 
 

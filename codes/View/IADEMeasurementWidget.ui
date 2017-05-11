@@ -14,6 +14,21 @@
    <string>IADEMeasurementWidget</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>2</number>
+   </property>
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
+    <number>2</number>
+   </property>
    <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="widgetResizable">
@@ -24,11 +39,26 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>343</width>
-        <height>870</height>
+        <width>357</width>
+        <height>840</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="1" column="0">
@@ -544,14 +574,187 @@ right vetebral artery</string>
         </layout>
        </item>
       </layout>
-      <zorder>gridLayoutWidget</zorder>
-      <zorder>formLayoutWidget_2</zorder>
-      <zorder>formLayoutWidget</zorder>
-      <zorder>gridLayoutWidget</zorder>
-      <zorder>formLayoutWidget_2</zorder>
-      <zorder>formLayoutWidget</zorder>
-      <zorder>formLayoutWidget_2</zorder>
      </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_25">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Image Information</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="tableWidgetImage">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustToContents</enum>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::AllEditTriggers</set>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <row>
+      <property name="text">
+       <string>ScanDate</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>ReportDate</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Dr'sName</string>
+      </property>
+     </row>
+     <column>
+      <property name="text">
+       <string>Data</string>
+      </property>
+     </column>
+     <item row="0" column="0">
+      <property name="text">
+       <string>yyyymmdd</string>
+      </property>
+     </item>
+     <item row="1" column="0">
+      <property name="text">
+       <string>yyyymmdd</string>
+      </property>
+     </item>
+     <item row="2" column="0">
+      <property name="text">
+       <string>Dr. (who)</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_24">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Patient Imformation</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="patientTableWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustToContents</enum>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::AllEditTriggers</set>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <row>
+      <property name="text">
+       <string>Name</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>ID</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>DOB</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Gender</string>
+      </property>
+     </row>
+     <column>
+      <property name="text">
+       <string>Data</string>
+      </property>
+     </column>
+     <item row="0" column="0">
+      <property name="text">
+       <string>(who)</string>
+      </property>
+     </item>
+     <item row="1" column="0">
+      <property name="text">
+       <string>???????</string>
+      </property>
+     </item>
+     <item row="2" column="0">
+      <property name="text">
+       <string>yyyymmdd</string>
+      </property>
+     </item>
+     <item row="3" column="0">
+      <property name="text">
+       <string>(M/F/Trans)</string>
+      </property>
+     </item>
     </widget>
    </item>
   </layout>

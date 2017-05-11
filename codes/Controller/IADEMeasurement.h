@@ -2,7 +2,7 @@
 #define __IADE_MEASUREMENT_H__
 
 #include "Measurement.h"
-
+ 
 class IADEMeasurement: public Measurement
 {
 
@@ -11,6 +11,13 @@ public:
 
 	IADEMeasurement(QObject* parent = nullptr);
 	virtual ~IADEMeasurement() override;
+
+public slots:
+
+	virtual void update() override;
+	virtual void updateICDAStandard();
+	virtual void updateVBDSmoker();
+	virtual void updateVBDUbogu();
 
 };
 

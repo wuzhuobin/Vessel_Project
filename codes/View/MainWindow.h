@@ -29,7 +29,7 @@ class QSettings;
 class Switch2DWidget;
 class Switch3DWidget;
 class ViewerWidget;
-class MeasurementWidget;
+class IADEMeasurementWidget;
 class LabelWidget;
 
 class MainWindow : public QMainWindow
@@ -47,7 +47,6 @@ public:
 	~MainWindow();
 
 	void initialization();
-	void enableInteractor(bool flag);
 
 	void addModalityNames(QString name);
 	void setSelectImgMenuVisible(unsigned int num, bool flag);
@@ -58,7 +57,7 @@ public:
 	Switch2DWidget* getSwitch2DWidget();
 	Switch3DWidget* getSwitch3DWidget();
 	ViewerWidget* getViewerWidget(unsigned int num);
-	MeasurementWidget* getMeasurementWidget();
+	IADEMeasurementWidget* getMeasurementWidget();
 	LabelWidget* getLabelWidget();
 	QMenu* getSelectImgMenu(unsigned int i);
 
@@ -107,7 +106,7 @@ private:
 
 	Switch3DWidget* switch3DWidget = nullptr;
 
-	MeasurementWidget* measurementWidget = nullptr;
+	IADEMeasurementWidget* measurementWidget = nullptr;
 
 	LabelWidget* labelWidget = nullptr;
 

@@ -35,12 +35,12 @@ protected:
 	QInteractorStyleTubularVOI(int uiType = UNIQUE_UI, QWidget* parent = Q_NULLPTR);
 	~QInteractorStyleTubularVOI();
 
-	virtual void ExtractSegmentation(QList<int*>& seed);
-	virtual void ExtractVOI(QList<int*> &seed);
-	virtual void UpdateWidgetToSeeds(
-		QList<int*>& seeds,
-		int* newImagePos,
-		int* oldImagePos = nullptr);
+	void ExtractSegmentation(QList<int*>& seed);
+	void ExtractVOI(QList<int*> &seed);
+	//void UpdateWidgetToSeeds(
+	//	QList<int*>& seeds,
+	//	int* newImagePos,
+	//	int* oldImagePos = nullptr);
 	virtual vtkPolyData* UpdateSpline(QList<int*> &seed);
 
 	void uniqueInitialization();
