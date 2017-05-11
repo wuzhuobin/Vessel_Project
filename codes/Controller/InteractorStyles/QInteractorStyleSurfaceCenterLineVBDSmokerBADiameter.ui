@@ -25,7 +25,7 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Minimum diameter of 
+           <string>Maximum diameter of 
 basilar artery:</string>
           </property>
          </widget>

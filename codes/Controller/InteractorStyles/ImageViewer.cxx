@@ -407,10 +407,10 @@ void ImageViewer::UpdateOrientation()
 //----------------------------------------------------------------------------
 void ImageViewer::Render()
 {
-	if (this->FirstRender)
-	{
-		this->ResetDisplayExtent();
-	}
+	//if (this->FirstRender)
+	//{
+	//	this->ResetDisplayExtent();
+	//}
 
 	vtkImageViewer2::Render();
 
@@ -421,16 +421,21 @@ void ImageViewer::SetInputData(vtkImageData *in)
 	// when there is a new input, Update the member DisplayExtent 
 	if (in != GetInput()) {
 		// when input is a different extent, First Render
-		if (GetInput() == nullptr || 
+		if (GetInput() == nullptr ||
 			!std::equal(in->GetExtent(), in->GetExtent() + 6, GetInput()->GetExtent())) {
 			this->FirstRender = true;
 		}
 		this->ImageActor->VisibilityOn();
+		vtkImageData* _oldImage = GetInput();
 		vtkImageViewer2::SetInputData(in);
 		//Color Map
 		double* range = in->GetScalarRange();
 		this->SetColorWindow(range[1] - range[0]);
 		this->SetColorLevel((range[1] + range[0])*0.5);
+		// when input is a different extent, call#ResetDisplayExtent()
+		if (FirstRender){
+			ResetDisplayExtent();
+		}
 		this->InvokeEvent(vtkCommand::UpdateDataEvent);
 	}
 }
