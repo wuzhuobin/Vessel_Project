@@ -143,12 +143,13 @@ void SurfaceViewer::UpdateDisplayExtent()
 			this->Renderer->ResetCameraClippingRange();
 			this->Renderer->ResetCamera();
 		}
+		else
+		{
+			this->Renderer->ResetCameraClippingRange(w_bounds);
+			this->Renderer->ResetCamera();
+		}
 	}
-	else
-	{
-		this->Renderer->ResetCameraClippingRange(w_bounds);
-		this->Renderer->ResetCamera();
-	}
+
 }
 
 //----------------------------------------------------------------------------

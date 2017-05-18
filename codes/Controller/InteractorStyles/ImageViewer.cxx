@@ -176,7 +176,6 @@ void ImageViewer::SetDisplayExtent(int * displayExtent)
 		displayExtent[3],
 		displayExtent[4],
 		displayExtent[5] );
-	UpdateDisplayExtent();
 }
 
 //----------------------------------------------------------------------------
@@ -426,7 +425,6 @@ void ImageViewer::SetInputData(vtkImageData *in)
 			this->FirstRender = true;
 		}
 		this->ImageActor->VisibilityOn();
-		vtkImageData* _oldImage = GetInput();
 		vtkImageViewer2::SetInputData(in);
 		//Color Map
 		double* range = in->GetScalarRange();

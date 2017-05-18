@@ -1,6 +1,6 @@
 #include "PlaqueQuantMeasurement.h"
 
-#include "MaximumWallThickness.h"
+#include "MaximumWallThickness2.h"
 #include "InteractorStyleSurfaceCenterLineStenosis.h"
 #include "ImageSliceBySliceAccumulate.h"
 
@@ -124,6 +124,14 @@ void PlaqueQuantMeasurement::updateMeasurement2D()
 	imageSliceBySliceAccumulate->SetSpacing(1, 0, 0);
 	imageSliceBySliceAccumulate->Update();
 
+
+	vtkSmartPointer<MaximumWallThickness2> mwt =
+		vtkSmartPointer<MaximumWallThickness2>::New();
+	mwt->SetInputData(getPlaqueQuantOverlay()->getData());
+	mwt->SetLumenIntensity(2);
+	mwt->SetVesselWallIntensity(1);
+	mwt->Update();
+
 	for (int j = getPlaqueQuantOverlay()->getData()->GetExtent()[4];
 		j <= getPlaqueQuantOverlay()->getData()->GetExtent()[5]; j++)
 	{
@@ -132,6 +140,7 @@ void PlaqueQuantMeasurement::updateMeasurement2D()
 			m_measurements2DMap[j].data()[i] = *static_cast<int*>(
 				imageSliceBySliceAccumulate->GetOutput()->GetScalarPointer(i, j, 0)) * pixelSize;
 		}
+		m_measurements2DMap[j].data()[3] = mwt->MaxDistances[j];
 		// NMI calculation
 		m_measurements2DMap[j].data()[2] = m_measurements2DMap[j].data()[0] /
 			(m_measurements2DMap[j].data()[0] + m_measurements2DMap[j].data()[1]);
@@ -142,34 +151,36 @@ void PlaqueQuantMeasurement::updateMeasurement2D()
 		//cerr << endl;
 
 	}
-	for (int j = getPlaqueQuantOverlay()->getData()->GetExtent()[4]; 
-		j <= getPlaqueQuantOverlay()->getData()->GetExtent()[5]; ++j) {
-		vtkSmartPointer<vtkExtractVOI> extractVOI =
-			vtkSmartPointer<vtkExtractVOI>::New();
-		extractVOI->SetInputData(getPlaqueQuantOverlay()->getData());
-		extractVOI->SetVOI(
-			getPlaqueQuantOverlay()->getData()->GetExtent()[0],
-			getPlaqueQuantOverlay()->getData()->GetExtent()[1],
-			getPlaqueQuantOverlay()->getData()->GetExtent()[2],
-			getPlaqueQuantOverlay()->getData()->GetExtent()[3],
-			j,
-			j);
-		extractVOI->Update();
-		try
-		{
-			vtkSmartPointer<MaximumWallThickness> mwt =
-				vtkSmartPointer<MaximumWallThickness>::New();
-			mwt->SetSliceImage(extractVOI->GetOutput());
-			mwt->SetLumemIntensity(2);
-			mwt->SetVesselIntensity(1);
-			mwt->Update();
-			m_measurements2DMap[j].data()[3] = mwt->GetDistanceLoopPairVect().at(0).Distance;
-		}
-		catch (...)
-		{
-			m_measurements2DMap[j].data()[3] = -1;
-		}
-	}
+
+
+	//for (int j = getPlaqueQuantOverlay()->getData()->GetExtent()[4]; 
+	//	j <= getPlaqueQuantOverlay()->getData()->GetExtent()[5]; ++j) {
+	//	vtkSmartPointer<vtkExtractVOI> extractVOI =
+	//		vtkSmartPointer<vtkExtractVOI>::New();
+	//	extractVOI->SetInputData(getPlaqueQuantOverlay()->getData());
+	//	extractVOI->SetVOI(
+	//		getPlaqueQuantOverlay()->getData()->GetExtent()[0],
+	//		getPlaqueQuantOverlay()->getData()->GetExtent()[1],
+	//		getPlaqueQuantOverlay()->getData()->GetExtent()[2],
+	//		getPlaqueQuantOverlay()->getData()->GetExtent()[3],
+	//		j,
+	//		j);
+	//	extractVOI->Update();
+	//	try
+	//	{
+	//		vtkSmartPointer<MaximumWallThickness> mwt =
+	//			vtkSmartPointer<MaximumWallThickness>::New();
+	//		mwt->SetSliceImage(extractVOI->GetOutput());
+	//		mwt->SetLumemIntensity(2);
+	//		mwt->SetVesselIntensity(1);
+	//		mwt->Update();
+	//		m_measurements2DMap[j].data()[3] = mwt->GetDistanceLoopPairVect().at(0).Distance;
+	//	}
+	//	catch (...)
+	//	{
+	//		m_measurements2DMap[j].data()[3] = -1;
+	//	}
+	//}
 }
 
 void PlaqueQuantMeasurement::updateStenosis()

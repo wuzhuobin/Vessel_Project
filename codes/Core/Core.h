@@ -1,8 +1,8 @@
 #ifndef __CORE_H__
 #define __CORE_H__
 
-//#define PLAQUEQUANT_VER
-#define IADE_VER
+#define PLAQUEQUANT_VER
+//#define IADE_VER
 //#define DEBUG_VER
 #ifdef DEBUG_VER
 #define PLAQUEQUANT_VER
