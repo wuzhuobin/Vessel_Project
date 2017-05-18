@@ -154,9 +154,6 @@ double MaximumWallThickness2::MaximumWallThicknessOneLoopExcutation(vtkPolyData 
 		vtkIdType iD = bspTree->IntersectWithLine(center, _p, 0.001, t, _p2, pcoords, subId);
 		if (iD > 0) {
 			double _distance = sqrt(vtkMath::Distance2BetweenPoints(_p, _p2));
-			//cout << "distance " << _distance << endl;
-			//cout << "_p " << _p[0] << ' ' << _p[1] << ' ' << _p[2] << endl;
-			//cout << "_p2 " << _p2[0] << ' ' << _p2[1] << ' ' << _p2[2] << endl;
 
 			if (_distance > maxDistance) {
 				maxDistance = _distance;
