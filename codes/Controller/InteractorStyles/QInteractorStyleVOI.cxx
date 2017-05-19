@@ -81,16 +81,23 @@ void QInteractorStyleVOI::slotUpdateVOISpinBoxes(double * values)
 
 void QInteractorStyleVOI::ExtractVOI()
 {
-	int extent[6];
 	const double* bounds = m_roi->GetRepresentation()->GetBounds();
 	for (int i = 0; i < 3; ++i) {
-		extent[i*2] = (bounds[i*2] - GetOrigin()[i]) / GetSpacing()[i];
-		extent[i*2 + 1] = (bounds[i*2 + 1] - GetOrigin()[i]) / GetSpacing()[i];
+		m_voi[i*2] = (bounds[i*2] - GetOrigin()[i]) / GetSpacing()[i];
+		m_voi[i*2 + 1] = (bounds[i*2 + 1] - GetOrigin()[i]) / GetSpacing()[i];
 		// not voi clamping, the extraction can be more flexible
 		//extent[i*2] = extent[i*2] > GetExtent()[i*2] ? extent[i*2] : GetExtent()[i*2];
 		//extent[i*2 + 1] = extent[i*2 + 1] < GetExtent()[i*2 + 1] ? extent[i*2 + 1] : GetExtent()[i*2 +1];
 	}
-	GetImageViewer()->SetDisplayExtent(extent);
+	RestoreVOI();
+	//GetImageViewer()->SetDisplayExtent(m_voi);
+	//SetExtentRange(GetImageViewer()->GetDisplayExtent());
+	//GetImageViewer()->Render();
+}
+
+void QInteractorStyleVOI::RestoreVOI()
+{
+	GetImageViewer()->SetDisplayExtent(m_voi);
 	SetExtentRange(GetImageViewer()->GetDisplayExtent());
 	GetImageViewer()->Render();
 }
@@ -151,6 +158,8 @@ void QInteractorStyleVOI::initialization()
 	m_roi->SetNumbeOfBorderWidgets(numOfMyself);
 	connect(ui->pushButtonResetVOI, SIGNAL(clicked()),
 		this, SLOT(ResetVOI()));
+	connect(ui->pushButtonRestoreVOI, SIGNAL(clicked()),
+		this, SLOT(RestoreVOI()));
 	connect(ui->pushButtonExtractVOI, SIGNAL(clicked()),
 		this, SLOT(ExtractVOI()));
 }
