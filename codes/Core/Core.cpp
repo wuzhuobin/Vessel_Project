@@ -9,7 +9,9 @@
 #include "Switch2DWidget.h"
 #include "Switch3DWidget.h"
 #include "ui_QAbstractNavigation.h"
-#include "MeasurementWidget.h"
+#include "IADEMeasurementWidget.h"
+#include "ui_IADEMeasurementWidget.h"
+//#include "MeasurementWidget.h"
 #include "LabelWidget.h"
 
 
@@ -110,6 +112,32 @@ Core::Core(QObject * parent)
 	dataProcessor.surfaceInteractorStyle = surfaceInteractorStyle[0];
 	dataProcessor.imageManager = &imageManager;
 #endif // PLAQUEQUANT_VER
+
+#ifdef IADE_VER
+	connect(surfaceInteractorStyle[0]->GetUboguMeasure(), SIGNAL(valueChangedLengthOfBasilarArtery(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxLengthBA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetUboguMeasure(), SIGNAL(valueChangedLengthOfIntracranialSegmentOfLeftVertebralArtery(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxLengthLVA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetUboguMeasure(), SIGNAL(valueChangedLengthOfIntracranialSegmentOfRightVertebralArtery(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxLengthRVA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetUboguMeasure(), SIGNAL(valueChangedDistanceBetweenCenterlineAndTheLead(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxDeviationBA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetUboguMeasure(), SIGNAL(valueChangedDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsLeft(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxDeviationLVA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetUboguMeasure(), SIGNAL(valueChangedDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsRight(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxDeviationRVA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetUboguMeasure(), SIGNAL(valueChangedMaximumDiameterOfBasilarArtery(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxMaxDiameterBA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetUboguMeasure(), SIGNAL(valueChangedMaximumDiameterOfLeftVertebralArtery(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxMaxDiameterLVA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetUboguMeasure(), SIGNAL(valueChangedMaximumDiameterOfRightVertebralArtery(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxMaxDiameterRVA, SLOT(setValue(double)));
+
+
+
+
+#endif // IADE_VER
+
 
 	
 	// ImageViewer

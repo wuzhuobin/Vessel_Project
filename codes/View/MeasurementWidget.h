@@ -33,7 +33,7 @@ public slots:
 	void slotUpdate3DMeasurements(double* Measurements3D);
 	void slotUpdate2DMeasurements(double* Measurements2D);
 	void slotUpdateStenosis(double* stenosis);
-	void slotUpdateImformation();
+	void slotUpdateInformation();
 	void GenerateReport(QString	path);
 	void GenerateCSV(QString path);
 

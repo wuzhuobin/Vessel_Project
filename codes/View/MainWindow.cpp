@@ -7,7 +7,8 @@
 #include "ui_Switch3DWidget.h"
 #include "Switch3DWidget.h"
 #include "ViewerWidget.h"
-#include "MeasurementWidget.h"
+//#include "MeasurementWidget.h"
+#include "IADEMeasurementWidget.h"
 #include "LabelWidget.h"
 
 #include <qdebug.h>
@@ -38,7 +39,8 @@ MainWindow::MainWindow(QWidget *parent)
 	this->labelWidget = new LabelWidget(this);
 	this->switch2DWidget->getUi()->verticalLayoutModule->addWidget(this->labelWidget);
 
-	this->measurementWidget = new MeasurementWidget(this);
+	//this->measurementWidget = new MeasurementWidget(this);
+	this->measurementWidget = new IADEMeasurementWidget(this);
 	ui->dockWidgetMeasurement->setWidget(measurementWidget);
 
 	this->tabifyDockWidget(ui->dockWidgetMeasurement, ui->dockWidget3D);
@@ -342,7 +344,7 @@ void MainWindow::initialization()
 	ui->actionMulti_planar_view->trigger();
 	ui->actionNavigation->trigger();
 
-	measurementWidget->slotUpdateImformation();
+	measurementWidget->slotUpdateInformation();
 }
 
 void MainWindow::enableInteractor(bool flag)
@@ -394,10 +396,15 @@ ViewerWidget * MainWindow::getViewerWidget(unsigned int num)
 	return this->viewerWidgets[num];
 }
 
-MeasurementWidget * MainWindow::getMeasurementWidget()
+IADEMeasurementWidget * MainWindow::getMeasurementWidget()
 {
 	return this->measurementWidget;
 }
+
+//MeasurementWidget * MainWindow::getMeasurementWidget()
+//{
+//	return this->measurementWidget;
+//}
 
 LabelWidget * MainWindow::getLabelWidget()
 {

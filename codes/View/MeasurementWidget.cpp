@@ -69,7 +69,7 @@ void MeasurementWidget::slotUpdateStenosis(double* stenosis)
 	ui->stenosisSpinBox->setValue(*stenosis);
 }
 
-void MeasurementWidget::slotUpdateImformation()
+void MeasurementWidget::slotUpdateInformation()
 {
 
 	if (info.IsNull()) {
@@ -298,6 +298,8 @@ void MeasurementWidget::GenerateReport(QString	path)
 
 }
 
+#define VARIANT_DATA_ADD_ROW(PARAM1, PARAM2) \
+PARAM1.addRow(QStringList() << #PARAM2 << ##PARAM2);
 void MeasurementWidget::GenerateCSV(QString path)
 {
 	QString PatientName = ui->tableWidgetDicom->item(0, 0)->text();
@@ -331,7 +333,8 @@ void MeasurementWidget::GenerateCSV(QString path)
 	varData.addRow(QStringList() << "PatientID" << PatientID);
 	varData.addRow(QStringList() << "PatientDOB" << PatientDOB);
 	varData.addRow(QStringList() << "PatientGender" << PatientGender);
-	varData.addRow(QStringList() << "ScanData" << ScanDate);
+	//varData.addRow(QStringList() << "ScanData" << ScanDate);
+	VARIANT_DATA_ADD_ROW(varData, ScanDate);
 	varData.addEmptyRow();
 
 	varData.addRow(QStringList() << "ReportData" << ReportDate);

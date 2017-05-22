@@ -22,7 +22,20 @@ public:
 
 	public slots:
 
+	void slotUpdateLengthBA();
+	void slotUpdateLengthVA();
+	void slotUpdateDeviationBA();
+	void slotUpdateDeviationVA();
+	void slotUpdateMaxDiameterBA();
+	void slotUpdateMaxDiameterVA();
+	void slotUpdateUboguElongation();
+	void slotUpdateUboguDeviation();
+	void slotUpdateUboguExpansion();
+	void slotUpdateUbogu();
+
 	void slotUpdateInformation();
+	void GenerateReport(QString path);
+	void GenerateCSV(QString path);
 
 private:
 
