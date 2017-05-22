@@ -83,6 +83,7 @@ private slots:
 	void slotSaveOverlay(QString path = QString());
 
 	void slotExportReport(QString path = QString());
+	void slotExportCSV(QString path = QString());
 	/**
 	* four viewers and maximum
 	*/

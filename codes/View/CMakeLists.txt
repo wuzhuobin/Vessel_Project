@@ -13,6 +13,7 @@ find_package(Qt5OpenGL)
 
 add_subdirectory(RegistrationWizard)
 add_subdirectory(ReportGenerator)
+add_subdirectory(qtcsv)
 set(
 	VIEW_H
 	MainWindow.h
@@ -66,7 +67,7 @@ add_library(
 	${VIEW_MOC}
 	${VIEW_UI_H}
 )
-qt5_use_modules(View Core Widgets OpenGL PrintSupport)
+# qt5_use_modules(View Core Widgets OpenGL PrintSupport)
 
 #link libraries
 target_link_libraries(
@@ -76,6 +77,7 @@ target_link_libraries(
 	Qt5::OpenGL
 	RegistrationWizard
 	ReportGenerator
+	qtcsv
 	)
 
 target_include_directories(

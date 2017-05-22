@@ -68,6 +68,3 @@ add_subdirectory(codes/Controller)
 add_subdirectory(codes/Model)
 add_subdirectory(codes/Widgets)
 add_subdirectory(codes/Algorithm)
-
-
-

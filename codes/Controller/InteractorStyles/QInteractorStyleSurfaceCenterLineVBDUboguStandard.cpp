@@ -76,21 +76,27 @@ void QInteractorStyleSurfaceCenterLineVBDUboguStandard::FindMaximumRadius()
 	{
 	case LENGTH_OF_BASILAR_ARTERY:
 		ui->doubleSpinBoxLengthOfBasilaarArtery->setValue(m_distance);
+		emit valueChanged(LENGTH_OF_BASILAR_ARTERY, m_distance);
 		break;
 	case LENGTH_OF_INTRACRANIAL_SEGMENT_OF_LEFT_VERTEBRAL_ARTERY:
 		ui->doubleSpinBoxLengthOfIntracranialSegmentOfLeftVetrabralArtery->setValue(m_distance);
+		emit valueChanged(LENGTH_OF_INTRACRANIAL_SEGMENT_OF_LEFT_VERTEBRAL_ARTERY, m_distance);
 		break;
 	case LENGTH_OF_INTRACRAINAL_SEGMENT_OF_RIGHT_VERTEBRAL_ARTERY:
 		ui->doubleSpinBoxLengthOfIntracranialSegmentOfRightVetrabralArtery->setValue(m_distance);
+		emit valueChanged(LENGTH_OF_INTRACRAINAL_SEGMENT_OF_RIGHT_VERTEBRAL_ARTERY, m_distance);
 		break;
 	case MINIMUM_DIAMETER_OF_BASILAR_ARTERY:
 		ui->doubleSpinBoxMinimumDiameterOfBasilarArtery->setValue(m_minRadius * 2);
+		emit valueChanged(MINIMUM_DIAMETER_OF_BASILAR_ARTERY, m_distance);
 		break;
 	case MINIMUM_DIAMETER_OF_LEFT_VERTEBRAL_ARTERY:
 		ui->doubleSpinBoxMinimumDiameterOfLeftVetebralArtery->setValue(m_minRadius * 2);
+		emit valueChanged(MINIMUM_DIAMETER_OF_LEFT_VERTEBRAL_ARTERY, m_distance);
 		break;
 	case MINIMUM_DIAMETER_OF_RIGHT_VERTEBRAL_ARTERY:
 		ui->doubleSpinBoxMinimumDiameterOfRightVetebralArtery->setValue(m_minRadius * 2);
+		emit valueChanged(MINIMUM_DIAMETER_OF_RIGHT_VERTEBRAL_ARTERY, m_distance);
 		break;
 	default:
 		break;
@@ -105,9 +111,11 @@ void QInteractorStyleSurfaceCenterLineVBDUboguStandard::FindMaxiMumPerpendicular
 	{
 	case DISTANCE_BETWEEN_CENTERLINE_AND_CONNECTION_LEAD_OF_2_TERMINALS_LEFT:
 		ui->doubleSpinBoxDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsLeftIntracranialSegmentOfVertebralArteryAndBasilarArtery->setValue(distance);
+		emit valueChanged(DISTANCE_BETWEEN_CENTERLINE_AND_CONNECTION_LEAD_OF_2_TERMINALS_LEFT, distance);
 		break;
 	case DISTANCE_BETWEEN_CENTERLINE_AND_CONNECTION_LEAD_OF_2_TERMINALS_RIGHT:
 		ui->doubleSpinBoxDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsRightIntracranialSegmentOfVertebralArteryAndBasilarArtery->setValue(distance);
+		emit valueChanged(DISTANCE_BETWEEN_CENTERLINE_AND_CONNECTION_LEAD_OF_2_TERMINALS_RIGHT, distance);
 		break;
 	default:
 		break;

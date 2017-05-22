@@ -156,6 +156,8 @@ MainWindow::MainWindow(QWidget *parent)
 		this, SLOT(slotSaveOverlay()));
 	connect(ui->actionExport_Report, SIGNAL(triggered()),
 		this, SLOT(slotExportReport()));
+	connect(ui->actionExport_CSV, SIGNAL(triggered()),
+		this, SLOT(slotExportCSV()));
 	createRecentImageActions();
 
 }
@@ -240,6 +242,18 @@ void MainWindow::slotExportReport(QString path)
 	emit signalReportExport(path);
 
 	measurementWidget->GenerateReport(path);
+}
+
+void MainWindow::slotExportCSV(QString path)
+{
+		if (path.isEmpty()) {
+		path = QFileDialog::getSaveFileName((this),
+			QString(tr("Export CSV")), path, tr("Comma-Seperated Values (*.csv)"));
+	}
+	if (path.isEmpty())	return;
+	emit signalReportExport(path);
+
+	measurementWidget->GenerateCSV(path);
 }
 
 void MainWindow::slotImage(bool flag)

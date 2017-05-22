@@ -35,6 +35,7 @@ public slots:
 	void slotUpdateStenosis(double* stenosis);
 	void slotUpdateImformation();
 	void GenerateReport(QString	path);
+	void GenerateCSV(QString path);
 
 private:
 	Ui::MeasurementWidget* ui = nullptr;

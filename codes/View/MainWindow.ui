@@ -136,6 +136,7 @@
     <addaction name="actionImport_segmentation"/>
     <addaction name="actionExport_segmentation"/>
     <addaction name="actionExport_Report"/>
+    <addaction name="actionExport_CSV"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -1069,6 +1070,14 @@
    </property>
    <property name="toolTip">
     <string>VBD ubogu measure</string>
+   </property>
+  </action>
+  <action name="actionExport_CSV">
+   <property name="text">
+    <string>Export CSV</string>
+   </property>
+   <property name="toolTip">
+    <string>Export CSV</string>
    </property>
   </action>
  </widget>

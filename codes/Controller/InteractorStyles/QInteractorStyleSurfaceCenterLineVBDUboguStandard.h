@@ -47,6 +47,9 @@ public:
 	virtual void FindMaximumRadius() override;
 	virtual void FindMaxiMumPerpendicularDistance();
 
+signals:
+	void valueChanged(int mode, double value);
+
 protected:
 	QInteractorStyleSurfaceCenterLineVBDUboguStandard(int uiType = MULTIPLE_UI, QWidget* parent = Q_NULLPTR);
 	virtual ~QInteractorStyleSurfaceCenterLineVBDUboguStandard() override;
