@@ -1,3 +1,4 @@
+
 #ifndef __STYLE_SWITCH3D_H__
 #define __STYLE_SWITCH3D_H__
 
@@ -7,7 +8,7 @@
 #include "InteractorStyleSurfaceCenterLinePerpendicularMeasurement.h"
 #include "InteractorStyleSurfaceCenterLineCurvedNavigation.h"
 #include "InteractorStyleSurfaceCenterlineWaypoint.h"
-#include "InteractorStyleSurfaceCenterLineStenosis.h"
+#include "QInteractorStyleSurfaceCenterLineStenosis.h"
 #include "QInteractorStyleSurfaceCenterLineICDAStandard.h"
 #include "QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter.h"
 #include "QInteractorStyleSurfaceCenterLineVBDUboguStandard.h"
@@ -38,7 +39,7 @@ public:
 	SetInteractorStyle3DMacro(Waypoint);
 	CurrentStyle3DMacro(Waypoint);
 
-	vtkGetMacro(Stenosis, InteractorStyleSurfaceCenterLineStenosis*);
+	vtkGetMacro(Stenosis, QInteractorStyleSurfaceCenterLineStenosis*);
 	SetInteractorStyle3DMacro(Stenosis);
 	CurrentStyle3DMacro(Stenosis);
 
@@ -72,7 +73,7 @@ protected:
 		this->Waypoint = InteractorStyleSurfaceCenterlineWaypoint::New();
 		allStyles.push_back(this->Waypoint);
 
-		this->Stenosis = InteractorStyleSurfaceCenterLineStenosis::New();
+		this->Stenosis = QInteractorStyleSurfaceCenterLineStenosis::New();
 		allStyles.push_back(this->Stenosis);
 
 		this->ICDADiameter = QInteractorStyleSurfaceCenterLineICDAStandard::New();
@@ -90,7 +91,7 @@ protected:
 	InteractorStyleSurfaceCenterLinePerpendicularMeasurement* PerpendicularMeasurement;
 	InteractorStyleSurfaceCenterLineCurvedNavigation* CurvedNavigation;
 	InteractorStyleSurfaceCenterlineWaypoint* Waypoint;
-	InteractorStyleSurfaceCenterLineStenosis* Stenosis;
+	QInteractorStyleSurfaceCenterLineStenosis* Stenosis;
 	QInteractorStyleSurfaceCenterLineICDAStandard* ICDADiameter;
 	QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter* SmokerBADiameter;
 	QInteractorStyleSurfaceCenterLineVBDUboguStandard* UboguMeasure;

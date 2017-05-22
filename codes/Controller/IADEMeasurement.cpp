@@ -24,12 +24,3 @@ void IADEMeasurement::updateVBDSmoker()
 void IADEMeasurement::updateVBDUbogu()
 {
 }
-
-void IADEMeasurement::update()
-{
-	updateICDAStandard();
-	updateVBDSmoker();
-	updateVBDUbogu();
-
-	Measurement::update();
-}

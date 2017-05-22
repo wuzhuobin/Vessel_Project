@@ -1,14 +1,13 @@
 #include "Measurement.h"
 #include "PlaqueQuantOverlay.h"
 
+class QInteractorStyleSurfaceCenterLineStenosis;
 class PlaqueQuantMeasurement: public Measurement
 {
 	Q_OBJECT;
 public:
 	PlaqueQuantMeasurement(QObject* parent);
 	~PlaqueQuantMeasurement();
-
-	virtual PlaqueQuantOverlay* getPlaqueQuantOverlay();
 
 	// total plaque, vessel wall, lumen, calcification, hemorrhage, lrnc, lm,
 	double m_measurements3D[PlaqueQuantOverlay::NUMBER_OF_COLOR] = { 0 };
@@ -22,11 +21,11 @@ public slots:
 	virtual void update() override;
 	virtual void updateMeasurement3D();
 	virtual void updateMeasurement2D();
+	virtual void updateStenosis(double stenosis);
 	/**
 	 * @deprecated
 	 */
 	virtual void updateMeasurement2D(int slice);
-	virtual void updateStenosis();
 	/**
 	 * @deprecated
 	 */

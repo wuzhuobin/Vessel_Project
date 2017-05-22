@@ -41,9 +41,6 @@ Ui::MeasurementWidget* MeasurementWidget::getUi()
 
 void MeasurementWidget::slotUpdateMeasurements(int slice)
 {
-	//if (measurements2DMap->value(slice).isNull()) {
-	//	return;
-	//}
 	slotUpdate2DMeasurements(measurements2DMap->value(slice).data());
 	slotUpdate3DMeasurements(measurements3D);
 	slotUpdateStenosis(stenosis);
@@ -138,11 +135,11 @@ void MeasurementWidget::GenerateReport(QString	path)
 	double hemorrhageNum = ui->measurement3DTableWidget->item(4, 0)->data(Qt::DisplayRole).toDouble();
 	double LRNCNum = ui->measurement3DTableWidget->item(5, 0)->data(Qt::DisplayRole).toDouble();
 	QString Calcification = ui->measurement3DTableWidget->item(3, 0)->text();
-	QString CalcificationPercent = QString::number(calcificationNum / plaqueVolumeNum) + "%";
+	QString CalcificationPercent = QString::number(calcificationNum / plaqueVolumeNum * 100) + "%";
 	QString Hemorrhage = ui->measurement3DTableWidget->item(4, 0)->text();
-	QString HemorrhagePercent = QString::number(hemorrhageNum / plaqueVolumeNum) + "%";
+	QString HemorrhagePercent = QString::number(hemorrhageNum / plaqueVolumeNum * 100) + "%";
 	QString LRNC = ui->measurement3DTableWidget->item(5, 0)->text();
-	QString LRNCPercent = QString::number(LRNCNum / plaqueVolumeNum) + "%";
+	QString LRNCPercent = QString::number(LRNCNum / plaqueVolumeNum * 100) + "%";
 	// Screen Shot
 	QString _2dResult = "./2dResult.png";
 	QString _3dResult = "./3dResult.png";
@@ -232,7 +229,7 @@ void MeasurementWidget::GenerateReport(QString	path)
 	reportGenerator->SetTableItemRowSpan(2, 1, 1, 2);
 	reportGenerator->SetTableItem(2, 3, 1, VesselWallArea);
 	reportGenerator->SetTableItemRowSpan(2, 2, 1, 2);
-	reportGenerator->SetTableItem(2, 1, 2, "Wall Thickness\n(mm)");
+	reportGenerator->SetTableItem(2, 1, 2, "Maximum Wall Thickness\n(mm)");
 	reportGenerator->SetTableItemRowSpan(2, 1, 2, 2);
 	reportGenerator->SetTableItem(2, 3, 2, WallThickness);
 	reportGenerator->SetTableItemRowSpan(2, 2, 2, 2);
@@ -251,9 +248,9 @@ void MeasurementWidget::GenerateReport(QString	path)
 	reportGenerator->SetTableItem(3, 1, 1, "Lumen(mm^3)");
 	reportGenerator->SetTableItem(3, 2, 1, LumenVolume);
 
-	reportGenerator->SetTableItem(3, 1, 2, "Wall(mm^3)");
+	reportGenerator->SetTableItem(3, 1, 2, "Vessel Wall(mm^3)");
 	reportGenerator->SetTableItem(3, 2, 2, VesselWallVolume);
-	reportGenerator->SetTableItem(3, 1, 3, "Plaque(mm^3)");
+	reportGenerator->SetTableItem(3, 1, 3, "Total Plaque(mm^3)");
 	reportGenerator->SetTableItem(3, 2, 3, PlaqueVolume);
 
 	reportGenerator->AddTable(4, "Plaque Composition", QStringList(), QStringList(), 4, 4);
