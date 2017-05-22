@@ -29,19 +29,19 @@ void IADEMeasurementWidget::slotUpdateInformation()
 	info->GetValueFromTag("0010|0040", patientGender);
 	info->GetValueFromTag("0008|0020", scanDate);
 	if (!patientName.empty()) {
-		ui->patientTableWidget->setItem(0, 0, new QTableWidgetItem(QString::fromStdString(patientName)));
+		ui->tableWidgetDicom->setItem(0, 0, new QTableWidgetItem(QString::fromStdString(patientName)));
 	}
 	if (!patientID.empty()) {
-		ui->patientTableWidget->setItem(1, 0, new QTableWidgetItem(QString::fromStdString(patientID)));
+		ui->tableWidgetDicom->setItem(1, 0, new QTableWidgetItem(QString::fromStdString(patientID)));
 	}
 	if (!patientDOB.empty()) {
-		ui->patientTableWidget->setItem(2, 0, new QTableWidgetItem(QString::fromStdString(patientDOB)));
+		ui->tableWidgetDicom->setItem(2, 0, new QTableWidgetItem(QString::fromStdString(patientDOB)));
 	}
 	if (!patientGender.empty()) {
-		ui->patientTableWidget->setItem(3, 0, new QTableWidgetItem(QString::fromStdString(patientGender)));
+		ui->tableWidgetDicom->setItem(3, 0, new QTableWidgetItem(QString::fromStdString(patientGender)));
 	}
 	if (!scanDate.empty()) {
-		ui->tableWidgetImage->setItem(0, 0, new QTableWidgetItem(QString::fromStdString(scanDate)));
+		ui->tableWidgetDicom->setItem(4, 0, new QTableWidgetItem(QString::fromStdString(scanDate)));
 	}
 
 }

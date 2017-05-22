@@ -18,6 +18,9 @@ public:
 
 public slots:
 	virtual void FindMaximumRadius() override;
+	
+signals:
+	void diameterChanged(double diameter);
 
 protected:
 	QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter(int uiType = MULTIPLE_UI, QWidget* parent = Q_NULLPTR);

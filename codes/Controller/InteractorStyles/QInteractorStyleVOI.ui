@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>196</width>
-    <height>354</height>
+    <width>188</width>
+    <height>523</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,30 +45,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_19">
-        <property name="text">
-         <string>VOI size (x,y,z)</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QDoubleSpinBox" name="volumeDoubleSpinBox">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-          <property name="buttonSymbols">
-           <enum>QAbstractSpinBox::NoButtons</enum>
-          </property>
-          <property name="suffix">
-           <string> cm3</string>
-          </property>
-          <property name="maximum">
-           <double>65535.000000000000000</double>
+         <widget class="QLabel" name="label_19">
+          <property name="text">
+           <string>size:</string>
           </property>
          </widget>
         </item>
@@ -84,6 +65,25 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="volumeDoubleSpinBox">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="suffix">
+           <string> cm3</string>
+          </property>
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -321,11 +321,18 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
          <widget class="QPushButton" name="pushButtonExtractVOI">
           <property name="text">
            <string>Extract VOI</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonRestoreVOI">
+          <property name="text">
+           <string>Restore VOI</string>
           </property>
          </widget>
         </item>
@@ -341,7 +348,6 @@
      </layout>
      <zorder>label_9</zorder>
      <zorder>label_10</zorder>
-     <zorder>label_19</zorder>
      <zorder></zorder>
     </widget>
    </item>

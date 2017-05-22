@@ -21,21 +21,27 @@ void QInteractorStyleSurfaceCenterLineICDAStandard::FindMaximumRadius()
 	{
 	case LEFT_CAVERNOUS_SEGMENT_OF_INTERNAL_CAROTID_ARTERY:
 		ui->doubleSpinBoxCavernousSegmentOfLeftInternalCarotidArtery->setValue(m_maxRadius * 2);
+		emit diameterChanged(LEFT_CAVERNOUS_SEGMENT_OF_INTERNAL_CAROTID_ARTERY, m_maxRadius * 2);
 		break;
 	case RIGHT_CAVERNOUS_SEGMENT_OF_INTERNAL_CAROTID_ARTERY:
 		ui->doubleSpinBoxCavernousSegmentOfRightInternalCarotidArtery->setValue(m_maxRadius * 2);
+		emit diameterChanged(RIGHT_CAVERNOUS_SEGMENT_OF_INTERNAL_CAROTID_ARTERY, m_maxRadius * 2);
 		break;
 	case LEFT_MIDDLE_CEREBRAL_ARTERY:
 		ui->doubleSpinBoxLeftMiddleCerebralArteryM1->setValue(m_maxRadius * 2);
+		emit diameterChanged(LEFT_MIDDLE_CEREBRAL_ARTERY, m_maxRadius * 2);
 		break;
 	case RIGHT_MIDDLE_CEREBRAL_ARTERY:
 		ui->doubleSpinBoxRightMiddleCerebralArteryM1->setValue(m_maxRadius * 2);
+		emit diameterChanged(RIGHT_MIDDLE_CEREBRAL_ARTERY, m_maxRadius * 2);
 		break;
 	case LEFT_ANTERIOR_CEREBRAL_ARTERY:
 		ui->doubleSpinBoxLeftAnteriorCerebralArtery->setValue(m_maxRadius * 2);
+		emit diameterChanged(LEFT_ANTERIOR_CEREBRAL_ARTERY, m_maxRadius * 2);
 		break;
 	case RIGHT_ANTERIOR_CEREBRAL_ARTERY:
 		ui->doubleSpinBoxRightAnteriorCerebralArtery->setValue(m_maxRadius * 2);
+		emit diameterChanged(RIGHT_ANTERIOR_CEREBRAL_ARTERY, m_maxRadius * 2);
 		break;
 	default:
 		break;

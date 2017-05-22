@@ -14,7 +14,6 @@ public:
 
 public slots:
 
-	virtual void update() override;
 	virtual void updateICDAStandard();
 	virtual void updateVBDSmoker();
 	virtual void updateVBDUbogu();

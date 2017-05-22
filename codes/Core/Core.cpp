@@ -9,7 +9,7 @@
 #include "Switch2DWidget.h"
 #include "Switch3DWidget.h"
 #include "ui_QAbstractNavigation.h"
-#include "IADEMeasurementWidget.h"
+#include "MeasurementWidget.h"
 #include "LabelWidget.h"
 
 
@@ -95,6 +95,8 @@ Core::Core(QObject * parent)
 #ifdef PLAQUEQUANT_VER
 
 	// Measurement
+	connect(surfaceInteractorStyle[0]->GetStenosis(), SIGNAL(calculatedStenosis(double)), 
+		&measurement, SLOT(updateStenosis(double)));
 	connect(imageInteractorStyle[DEFAULT_IMAGE]->GetNavigation()->QAbstractNavigation::getUi()->sliceSpinBoxZ, SIGNAL(valueChanged(int)),
 		mainWindow.getMeasurementWidget(), SLOT(slotUpdateMeasurements(int)));
 

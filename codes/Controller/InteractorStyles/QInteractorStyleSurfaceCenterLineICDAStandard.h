@@ -42,6 +42,10 @@ public:
 	virtual void SetCurrentModeToLeftAnteriorCerebralArtery() { setCurrentMode(LEFT_ANTERIOR_CEREBRAL_ARTERY); }
 	virtual void SetCurrentModeToRightAnteriorCerebralArtery() { setCurrentMode(RIGHT_ANTERIOR_CEREBRAL_ARTERY); }
 
+signals:
+
+	void diameterChanged(int mode, double diameter);
+
 protected:
 	QInteractorStyleSurfaceCenterLineICDAStandard(int uiType = MULTIPLE_UI, QWidget* parent = Q_NULLPTR);
 	virtual ~QInteractorStyleSurfaceCenterLineICDAStandard() override;

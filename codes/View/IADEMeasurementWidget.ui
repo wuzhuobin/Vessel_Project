@@ -6,44 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>380</width>
-    <height>884</height>
+    <width>344</width>
+    <height>870</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>IADEMeasurementWidget</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="spacing">
-    <number>2</number>
-   </property>
-   <property name="leftMargin">
-    <number>2</number>
-   </property>
-   <property name="topMargin">
-    <number>2</number>
-   </property>
-   <property name="rightMargin">
-    <number>2</number>
-   </property>
-   <property name="bottomMargin">
-    <number>2</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QScrollArea" name="scrollArea">
-     <property name="widgetResizable">
-      <bool>true</bool>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>3</number>
      </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>357</width>
-        <height>840</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>ICDA</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -60,518 +40,911 @@
         <number>0</number>
        </property>
        <item>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Maximum diameter of 
-cavernous segment C4 
-of internal carotid 
-artery:</string>
+        <widget class="QScrollArea" name="scrollArea_2">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_3">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>318</width>
+            <height>503</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <property name="leftMargin">
+            <number>1</number>
            </property>
-           <property name="buddy">
-            <cstring>doubleSpinBoxCavernousSegmentOfInternalCarotidArtery</cstring>
+           <property name="rightMargin">
+            <number>1</number>
            </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxCavernousSegmentOfInternalCarotidArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Maximum diameter of 
-middle cerebral artery 
-M1:</string>
-           </property>
-           <property name="buddy">
-            <cstring>doubleSpinBoxMiddleCerebralArteryM1</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxMiddleCerebralArteryM1">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Maximum diameter of 
-Anterior cerebral artery:</string>
-           </property>
-           <property name="buddy">
-            <cstring>doubleSpinBoxAnteriorCerebralArtery</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxAnteriorCerebralArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>Intracranial dolichoectatic 
-carotid artery disease:</string>
-           </property>
-           <property name="buddy">
-            <cstring>comboBoxIntracranialDolichoestaticCarotidArteryDisease</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QComboBox" name="comboBoxIntracranialDolichoestaticCarotidArteryDisease">
-           <property name="editable">
-            <bool>false</bool>
-           </property>
-           <item>
-            <property name="text">
-             <string>NO</string>
-            </property>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_50">
+             <property name="text">
+              <string>Max diameter MCA M1 &gt; 4mm</string>
+             </property>
+            </widget>
            </item>
-           <item>
-            <property name="text">
-             <string>YES</string>
-            </property>
+           <item row="3" column="2">
+            <widget class="QComboBox" name="comboBoxMCAM1">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
            </item>
-          </widget>
-         </item>
-         <item row="0" column="0" colspan="2">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>ICDA diagnosis standard</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+           <item row="0" column="0" colspan="2">
+            <widget class="QLabel" name="label_53">
+             <property name="text">
+              <string>ICDA diagnosis standard</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_51">
+             <property name="text">
+              <string>Max diameter ACA &gt; 4mm</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QComboBox" name="comboBoxACA">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="0" rowspan="2">
+            <widget class="QLabel" name="label_49">
+             <property name="text">
+              <string>Max diameter ICA &gt; 7mm</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QComboBox" name="comboBoxICA">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxLICA">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="prefix">
+                <string>L: </string>
+               </property>
+               <property name="suffix">
+                <string> mm</string>
+               </property>
+               <property name="maximum">
+                <double>999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxRICA">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="prefix">
+                <string>R: </string>
+               </property>
+               <property name="suffix">
+                <string> mm</string>
+               </property>
+               <property name="maximum">
+                <double>999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="4" column="1">
+            <layout class="QVBoxLayout" name="verticalLayout_10">
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxLACA">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="prefix">
+                <string>L: </string>
+               </property>
+               <property name="suffix">
+                <string> mm</string>
+               </property>
+               <property name="maximum">
+                <double>999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxRACA">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="prefix">
+                <string>R: </string>
+               </property>
+               <property name="suffix">
+                <string> mm</string>
+               </property>
+               <property name="maximum">
+                <double>999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="3" column="1">
+            <layout class="QVBoxLayout" name="verticalLayout_9">
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxLMCA">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="prefix">
+                <string>L: </string>
+               </property>
+               <property name="suffix">
+                <string> mm</string>
+               </property>
+               <property name="maximum">
+                <double>999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxRMCA">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="prefix">
+                <string>R: </string>
+               </property>
+               <property name="suffix">
+                <string> mm</string>
+               </property>
+               <property name="maximum">
+                <double>999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="5" column="2">
+            <widget class="QComboBox" name="comboBoxICDA">
+             <property name="editable">
+              <bool>false</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_52">
+             <property name="text">
+              <string>ICDA diagnosis</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0" colspan="2">
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </widget>
        </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>VBD-Smoker</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0" colspan="2">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>VBD-Smoker diagnosis standard</string>
+        <widget class="QScrollArea" name="scrollArea_3">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_4">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>318</width>
+            <height>503</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <property name="leftMargin">
+            <number>1</number>
            </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>Elongation(Basilar artery 
-bifurcation location):</string>
+           <property name="rightMargin">
+            <number>1</number>
            </property>
-           <property name="buddy">
-            <cstring>comboBoxSmokerElongation</cstring>
+           <property name="horizontalSpacing">
+            <number>6</number>
            </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="comboBoxSmokerElongation">
-           <item>
-            <property name="text">
-             <string>CLASS 0</string>
-            </property>
+           <item row="5" column="2">
+            <widget class="QComboBox" name="comboBoxVBDSmoker">
+             <property name="editable">
+              <bool>false</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
            </item>
-           <item>
-            <property name="text">
-             <string>CLASS 1</string>
-            </property>
+           <item row="2" column="2">
+            <widget class="QComboBox" name="comboBoxTortuosity">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
            </item>
-           <item>
-            <property name="text">
-             <string>CLASS 2</string>
-            </property>
+           <item row="1" column="2">
+            <widget class="QComboBox" name="comboBoxElongation">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
            </item>
-           <item>
-            <property name="text">
-             <string>CLASS 3</string>
-            </property>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="comboBoxTortuosityClass">
+             <item>
+              <property name="text">
+               <string>0</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3</string>
+              </property>
+             </item>
+            </widget>
            </item>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_7">
-           <property name="text">
-            <string>Detour(Pons central 
-section location):</string>
-           </property>
-           <property name="buddy">
-            <cstring>comboBoxSmokerDetour</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QComboBox" name="comboBoxSmokerDetour">
-           <item>
-            <property name="text">
-             <string>CLASS 0</string>
-            </property>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_55">
+             <property name="text">
+              <string>Elongation</string>
+             </property>
+            </widget>
            </item>
-           <item>
-            <property name="text">
-             <string>CLASS 1</string>
-            </property>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="comboBoxElongationClass">
+             <item>
+              <property name="text">
+               <string>0</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3</string>
+              </property>
+             </item>
+            </widget>
            </item>
-           <item>
-            <property name="text">
-             <string>CLASS 2</string>
-            </property>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_57">
+             <property name="text">
+              <string>Max diameter BA &gt; 4.5mm</string>
+             </property>
+            </widget>
            </item>
-           <item>
-            <property name="text">
-             <string>CLASS 3</string>
-            </property>
+           <item row="3" column="1">
+            <widget class="QDoubleSpinBox" name="doubleSpinBoxSmokerMaxDiameterBA">
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="suffix">
+              <string> mm</string>
+             </property>
+             <property name="maximum">
+              <double>999.000000000000000</double>
+             </property>
+            </widget>
            </item>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>Minimum diameter of 
-basilar artery:</string>
-           </property>
-           <property name="buddy">
-            <cstring>doubleSpinBoxSmokerMinimumDiameterOfBasilarArtery</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxSmokerMinimumDiameterOfBasilarArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-           <property name="maximum">
-            <double>9999999999.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_20">
-           <property name="text">
-            <string>Expansion:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QComboBox" name="comboBoxSmokerExpansion">
-           <item>
-            <property name="text">
-             <string>NO</string>
-            </property>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_56">
+             <property name="text">
+              <string>Tortuosity</string>
+             </property>
+            </widget>
            </item>
-           <item>
-            <property name="text">
-             <string>YES</string>
-            </property>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_58">
+             <property name="text">
+              <string>Ectasia</string>
+             </property>
+            </widget>
            </item>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_10">
-           <property name="text">
-            <string>Vertebrobasilar 
-dolichoectasia disease:</string>
-           </property>
-           <property name="buddy">
-            <cstring>comboBoxVertebrobasilarDolichoectasiaDisease</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QComboBox" name="comboBoxVertebrobasilarDolichoectasiaDisease">
-           <property name="editable">
-            <bool>false</bool>
-           </property>
-           <item>
-            <property name="text">
-             <string>NO</string>
-            </property>
+           <item row="6" column="0">
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
            </item>
-           <item>
-            <property name="text">
-             <string>YES</string>
-            </property>
+           <item row="4" column="2">
+            <widget class="QComboBox" name="comboBoxEctasia">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
            </item>
-          </widget>
-         </item>
-        </layout>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_59">
+             <property name="text">
+              <string>VBD-Smoker diagnosis</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
        </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>VBD-Ubogu</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_12">
-           <property name="text">
-            <string>Length of basilar 
-artery:</string>
+        <widget class="QScrollArea" name="scrollArea_4">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_5">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>318</width>
+            <height>503</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <property name="leftMargin">
+            <number>1</number>
            </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxLengthOfBasilarArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
+           <property name="rightMargin">
+            <number>1</number>
            </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-           <property name="maximum">
-            <double>10000000000000000.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>Length of intracranial 
-segment of left vetrabral 
-artery:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxLengthOfIntracranialSegmentOfLeftVetrabralArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-           <property name="maximum">
-            <double>10000000000000000.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_14">
-           <property name="text">
-            <string>Length of intracranial 
-segment of right 
-vetrabral artery:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxLengthOfIntracranialSegmentOfRightVetrabralArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-           <property name="maximum">
-            <double>10000000000000000.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_16">
-           <property name="text">
-            <string>Elongation:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QComboBox" name="comboBoxUboguElongation">
-           <item>
-            <property name="text">
-             <string>NO</string>
-            </property>
+           <item row="8" column="1">
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxMaxDiameterLVA">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="prefix">
+                <string>L: </string>
+               </property>
+               <property name="suffix">
+                <string> mm</string>
+               </property>
+               <property name="maximum">
+                <double>999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxMaxDiameterRVA">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="prefix">
+                <string>R: </string>
+               </property>
+               <property name="suffix">
+                <string> mm</string>
+               </property>
+               <property name="maximum">
+                <double>999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
-           <item>
-            <property name="text">
-             <string>YES</string>
-            </property>
+           <item row="2" column="1">
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxLengthLVA">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="prefix">
+                <string>L: </string>
+               </property>
+               <property name="suffix">
+                <string> mm</string>
+               </property>
+               <property name="maximum">
+                <double>999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxLengthRVA">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="prefix">
+                <string>R: </string>
+               </property>
+               <property name="suffix">
+                <string> mm</string>
+               </property>
+               <property name="maximum">
+                <double>999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_15">
-           <property name="text">
-            <string>Distance between centerline 
-and connection lead 
-of 2 terminals 
-(left intracranial segment
- of vetrabral artery 
-and basilar artery)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsLeftIntracranialSegmentOfVertebralArteryAndBasilarArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-           <property name="maximum">
-            <double>10000000000000000.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="label_17">
-           <property name="text">
-            <string>Distance between centerline 
-and connection lead 
-of 2 terminals 
-(right intracranial segment
- of vetrabral artery 
-and basilar artery)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsRightIntracranialSegmentOfVertebralArteryAndBasilarArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-           <property name="maximum">
-            <double>10000000000000000.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="label_18">
-           <property name="text">
-            <string>Detour: </string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="1">
-          <widget class="QComboBox" name="comboBoxUboguDetour">
-           <item>
-            <property name="text">
-             <string>NO</string>
-            </property>
+           <item row="5" column="1">
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxDeviationLVA">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="prefix">
+                <string>L: </string>
+               </property>
+               <property name="suffix">
+                <string> mm</string>
+               </property>
+               <property name="maximum">
+                <double>999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxDeviation_RVA">
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="prefix">
+                <string>R: </string>
+               </property>
+               <property name="suffix">
+                <string> mm</string>
+               </property>
+               <property name="maximum">
+                <double>999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
-           <item>
-            <property name="text">
-             <string>YES</string>
-            </property>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="doubleSpinBoxLength_BA">
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="suffix">
+              <string> mm</string>
+             </property>
+             <property name="maximum">
+              <double>999.000000000000000</double>
+             </property>
+            </widget>
            </item>
-          </widget>
-         </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="label_21">
-           <property name="text">
-            <string>Minimum diameter of 
-basilar artery</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxUboguMinimumDiameterOfBasilarArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="prefix">
-            <string/>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-           <property name="maximum">
-            <double>10000000000000000.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="0">
-          <widget class="QLabel" name="label_22">
-           <property name="text">
-            <string>Minimum diameter of 
-left vetebral artery</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxUboguMinimumDiameterOfLeftVetebralArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="prefix">
-            <string/>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-           <property name="maximum">
-            <double>10000000000000000.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="0">
-          <widget class="QLabel" name="label_23">
-           <property name="text">
-            <string>Minimum diameter of 
-right vetebral artery</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxUboguMinimumDiameterOfRightVetebralArtery">
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="suffix">
-            <string> mm</string>
-           </property>
-          </widget>
-         </item>
-         <item row="11" column="0">
-          <widget class="QLabel" name="label_19">
-           <property name="text">
-            <string>Expansion:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="11" column="1">
-          <widget class="QComboBox" name="comboBoxUboguExpansion">
-           <item>
-            <property name="text">
-             <string>NO</string>
-            </property>
+           <item row="2" column="2">
+            <widget class="QComboBox" name="comboBoxVAElongation">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
            </item>
-           <item>
-            <property name="text">
-             <string>YES</string>
-            </property>
+           <item row="10" column="0">
+            <widget class="QLabel" name="label_71">
+             <property name="text">
+              <string>VBD-Ubogu diagnosis</string>
+             </property>
+            </widget>
            </item>
-          </widget>
-         </item>
-         <item row="0" column="0" colspan="2">
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string>VBD-Ubogu diagnosis standard</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_63">
+             <property name="text">
+              <string>Elongation</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_60">
+             <property name="text">
+              <string>Length BA &gt; 29.5mm</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QComboBox" name="comboBoxUboguElongation">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_65">
+             <property name="text">
+              <string>Deviation VA &gt; 10mm</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_66">
+             <property name="text">
+              <string>Tortuosity</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2">
+            <widget class="QComboBox" name="comboBoxUboguDeviation">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_61">
+             <property name="text">
+              <string>Length VA &gt; 23.5mm</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QComboBox" name="comboBoxBAElongation">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_64">
+             <property name="text">
+              <string>Deviation BA &gt; 10mm</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QComboBox" name="comboBoxDeviationVA">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QDoubleSpinBox" name="doubleSpinBoxDeviation_BA">
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="suffix">
+              <string> mm</string>
+             </property>
+             <property name="maximum">
+              <double>999.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QComboBox" name="comboBoxDeviationBA">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="label_68">
+             <property name="text">
+              <string>Max diameter VA &gt; 4.5</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_67">
+             <property name="text">
+              <string>Max diameter BA &gt; 4.5</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="2">
+            <widget class="QComboBox" name="comboBoxUboguExpansion">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="8" column="2">
+            <widget class="QComboBox" name="comboBoxMaxDiameterVA">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QDoubleSpinBox" name="doubleSpinBoxMaxDiameterBA">
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="prefix">
+              <string/>
+             </property>
+             <property name="suffix">
+              <string> mm</string>
+             </property>
+             <property name="maximum">
+              <double>999.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="2">
+            <widget class="QComboBox" name="comboBoxMaxDiameterBA">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="9" column="0">
+            <widget class="QLabel" name="label_70">
+             <property name="text">
+              <string>Expansion</string>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="1">
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>17</width>
+               <height>152</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="10" column="2">
+            <widget class="QComboBox" name="comboBoxVBDUbogu">
+             <item>
+              <property name="text">
+               <string>N</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Y</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_4">
+      <attribute name="title">
+       <string>Comment</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_11">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTextBrowser" name="textBrowser">
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -586,12 +959,12 @@ right vetebral artery</string>
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Image Information</string>
+      <string>Report information</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QTableWidget" name="tableWidgetImage">
+    <widget class="QTableWidget" name="tableWidgetReport">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -627,17 +1000,12 @@ right vetebral artery</string>
      </attribute>
      <row>
       <property name="text">
-       <string>ScanDate</string>
+       <string>Report date</string>
       </property>
      </row>
      <row>
       <property name="text">
-       <string>ReportDate</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>Dr'sName</string>
+       <string>Dr's name</string>
       </property>
      </row>
      <column>
@@ -651,11 +1019,6 @@ right vetebral artery</string>
       </property>
      </item>
      <item row="1" column="0">
-      <property name="text">
-       <string>yyyymmdd</string>
-      </property>
-     </item>
-     <item row="2" column="0">
       <property name="text">
        <string>Dr. (who)</string>
       </property>
@@ -671,12 +1034,12 @@ right vetebral artery</string>
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Patient Imformation</string>
+      <string>Dicom information</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QTableWidget" name="patientTableWidget">
+    <widget class="QTableWidget" name="tableWidgetDicom">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -730,6 +1093,11 @@ right vetebral artery</string>
        <string>Gender</string>
       </property>
      </row>
+     <row>
+      <property name="text">
+       <string>Scan date</string>
+      </property>
+     </row>
      <column>
       <property name="text">
        <string>Data</string>
@@ -753,6 +1121,11 @@ right vetebral artery</string>
      <item row="3" column="0">
       <property name="text">
        <string>(M/F/Trans)</string>
+      </property>
+     </item>
+     <item row="4" column="0">
+      <property name="text">
+       <string>yyyymmdd</string>
       </property>
      </item>
     </widget>

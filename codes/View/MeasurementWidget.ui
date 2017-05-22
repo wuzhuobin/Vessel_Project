@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>132</width>
-    <height>420</height>
+    <width>507</width>
+    <height>821</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -290,12 +290,12 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>MRI Imformation</string>
+      <string>Report information</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QTableWidget" name="MRITableWidget">
+    <widget class="QTableWidget" name="tableWidgetReport">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -331,22 +331,17 @@
      </attribute>
      <row>
       <property name="text">
-       <string>ScanDate</string>
+       <string>Report date</string>
       </property>
      </row>
      <row>
       <property name="text">
-       <string>ReportDate</string>
+       <string>L/R side</string>
       </property>
      </row>
      <row>
       <property name="text">
-       <string>L/RSide</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>Dr'sName</string>
+       <string>Dr's name</string>
       </property>
      </row>
      <column>
@@ -361,15 +356,10 @@
      </item>
      <item row="1" column="0">
       <property name="text">
-       <string>yyyymmdd</string>
-      </property>
-     </item>
-     <item row="2" column="0">
-      <property name="text">
        <string>(L/R)</string>
       </property>
      </item>
-     <item row="3" column="0">
+     <item row="2" column="0">
       <property name="text">
        <string>Dr. (who)</string>
       </property>
@@ -385,12 +375,12 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Patient Imformation</string>
+      <string>Dicom information</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QTableWidget" name="patientTableWidget">
+    <widget class="QTableWidget" name="tableWidgetDicom">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -444,6 +434,11 @@
        <string>Gender</string>
       </property>
      </row>
+     <row>
+      <property name="text">
+       <string>Scan date</string>
+      </property>
+     </row>
      <column>
       <property name="text">
        <string>Data</string>
@@ -467,6 +462,11 @@
      <item row="3" column="0">
       <property name="text">
        <string>(M/F/Trans)</string>
+      </property>
+     </item>
+     <item row="4" column="0">
+      <property name="text">
+       <string>yyyymmdd</string>
       </property>
      </item>
     </widget>

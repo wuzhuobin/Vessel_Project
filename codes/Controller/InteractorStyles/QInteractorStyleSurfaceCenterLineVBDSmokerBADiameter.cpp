@@ -9,6 +9,7 @@ void QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter::FindMaximumRadius()
 {
 	InteractorStyleSurfaceCenterLineDistanceFindMaximumRadius::FindMaximumRadius();
 	ui->doubleSpinBoxMinimumDiameterOfBasilarArtery->setValue(m_maxRadius * 2);
+	emit diameterChanged(m_maxRadius * 2);
 }
 
 QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter::QInteractorStyleSurfaceCenterLineVBDSmokerBADiameter(int uiType, QWidget * parent)

@@ -7,7 +7,7 @@
 #include "ui_Switch3DWidget.h"
 #include "Switch3DWidget.h"
 #include "ViewerWidget.h"
-#include "IADEMeasurementWidget.h"
+#include "MeasurementWidget.h"
 #include "LabelWidget.h"
 
 #include <qdebug.h>
@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
 	this->labelWidget = new LabelWidget(this);
 	this->switch2DWidget->getUi()->verticalLayoutModule->addWidget(this->labelWidget);
 
-	this->measurementWidget = new IADEMeasurementWidget(this);
+	this->measurementWidget = new MeasurementWidget(this);
 	ui->dockWidgetMeasurement->setWidget(measurementWidget);
 
 	this->tabifyDockWidget(ui->dockWidgetMeasurement, ui->dockWidget3D);
@@ -124,17 +124,17 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroupSurface->setExclusive(true);
 
 	connect(ui->actionICDA_standard, SIGNAL(triggered()),
-		ui->actionNavigation, SLOT(trigger()));
+		ui->actionNavigation, SIGNAL(triggered()));
 	connect(ui->actionICDA_standard, SIGNAL(triggered()),
-		ui->actionICDA_diameter, SLOT(trigger()));
+		ui->actionICDA_diameter, SIGNAL(triggered()));
 	connect(ui->actionSmoker_standard, SIGNAL(triggered()),
-		ui->actionVBD_Smoker_seed, SLOT(trigger()));
+		ui->actionVBD_Smoker_seed, SIGNAL(triggered()));
 	connect(ui->actionSmoker_standard, SIGNAL(triggered()),
-		ui->actionVBD_Smoker_BA_diameter, SLOT(trigger()));
+		ui->actionVBD_Smoker_BA_diameter, SIGNAL(triggered()));
 	connect(ui->actionUbogu_standard, SIGNAL(triggered()),
-		ui->actionNavigation, SLOT(trigger()));
+		ui->actionNavigation, SIGNAL(triggered()));
 	connect(ui->actionUbogu_standard, SIGNAL(triggered()),
-		ui->actionVBD_ubogu_measure, SLOT(trigger()));
+		ui->actionVBD_ubogu_measure, SIGNAL(triggered()));
 
 
 	QActionGroup* actionGroupDiagnosis = new QActionGroup(this);
@@ -156,6 +156,8 @@ MainWindow::MainWindow(QWidget *parent)
 		this, SLOT(slotSaveOverlay()));
 	connect(ui->actionExport_Report, SIGNAL(triggered()),
 		this, SLOT(slotExportReport()));
+	connect(ui->actionExport_CSV, SIGNAL(triggered()),
+		this, SLOT(slotExportCSV()));
 	createRecentImageActions();
 
 }
@@ -239,7 +241,19 @@ void MainWindow::slotExportReport(QString path)
 	if (path.isEmpty())	return;
 	emit signalReportExport(path);
 
-	//measurementWidget->GenerateReport(path);
+	measurementWidget->GenerateReport(path);
+}
+
+void MainWindow::slotExportCSV(QString path)
+{
+		if (path.isEmpty()) {
+		path = QFileDialog::getSaveFileName((this),
+			QString(tr("Export CSV")), path, tr("Comma-Seperated Values (*.csv)"));
+	}
+	if (path.isEmpty())	return;
+	emit signalReportExport(path);
+
+	measurementWidget->GenerateCSV(path);
 }
 
 void MainWindow::slotImage(bool flag)
@@ -328,7 +342,12 @@ void MainWindow::initialization()
 	ui->actionMulti_planar_view->trigger();
 	ui->actionNavigation->trigger();
 
-	measurementWidget->slotUpdateInformation();
+	measurementWidget->slotUpdateImformation();
+}
+
+void MainWindow::enableInteractor(bool flag)
+{
+
 }
 
 void MainWindow::addModalityNames(QString name)
@@ -375,7 +394,7 @@ ViewerWidget * MainWindow::getViewerWidget(unsigned int num)
 	return this->viewerWidgets[num];
 }
 
-IADEMeasurementWidget * MainWindow::getMeasurementWidget()
+MeasurementWidget * MainWindow::getMeasurementWidget()
 {
 	return this->measurementWidget;
 }

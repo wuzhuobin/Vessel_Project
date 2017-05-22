@@ -31,6 +31,7 @@ SET(
 	${PROJECT_SOURCE_DIR}/DataProcessor.cpp
 	${PROJECT_SOURCE_DIR}/Measurement.cpp
 	${PROJECT_SOURCE_DIR}/IADEMeasurement.cpp
+	${PROJECT_SOURCE_DIR}/PlaqueQuantMeasurement.cpp
 	)
 SET(
 	CONTROLLER_H

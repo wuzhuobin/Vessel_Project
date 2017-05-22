@@ -2,14 +2,11 @@
 #define __MAXIMUM_WALL_THICKNESS2_H__
 
 #include <vtkThreadedImageAlgorithm.h>
-#include <memory>
-#include <vector>
-
+#include <map>
+class vtkPolyData;
 class MaximumWallThickness2: public vtkThreadedImageAlgorithm
 {
 public:
-
-	typedef std::vector<std::unique_ptr<double>> WallThicknessVector;
 
 	static MaximumWallThickness2* New();
 	vtkTypeMacro(MaximumWallThickness2, vtkThreadedImageAlgorithm);
@@ -20,6 +17,8 @@ public:
 
 	vtkGetMacro(LumenIntensity, int);
 	vtkSetMacro(LumenIntensity, int);
+
+	std::map<int, double> MaxDistances;
 
 protected:
 
@@ -32,11 +31,12 @@ protected:
 		vtkImageData ***inData, vtkImageData **outData,
 		int extent[6], int id) override;
 
+	double MaximumWallThicknessOneLoopExcutation(vtkPolyData* vesselWall, vtkPolyData* lumen);
 
-
-	WallThicknessVector m_wallThicknessVector;
 	int VesselWallIntensity = 1;
 	int LumenIntensity = 2;
+
+
 
 private:
 

@@ -35,6 +35,16 @@ target_include_directories(
 	${PROJECT_BINARY_DIR}	
 )
 
+add_executable(
+	MaximumWallThickness_test
+	main.cpp
+)
+
+target_link_libraries(
+	MaximumWallThickness_test
+	MaximumWallThickness
+)
+
 source_group(
 	"Header Files" 
 	FILES 

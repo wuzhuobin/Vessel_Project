@@ -168,8 +168,6 @@ void InteractorStyleSurfaceCenterLineStenosis::CalculateStenosis()
 	stenosis->InsertNextTuple1(StenosisValue);
 	stenosis->SetName(STENOSIS);
 	GetCenterlineSurfaceViewer()->GetCenterline()->GetFieldData()->AddArray(stenosis);
-	GetCenterlineSurfaceViewer()->GetCenterline()->InvokeEvent(vtkCommand::UpdateDataEvent);
-	//this->GetSurfaceViewer()->Render();
 }
 
 void InteractorStyleSurfaceCenterLineStenosis::OnKeyPress()
