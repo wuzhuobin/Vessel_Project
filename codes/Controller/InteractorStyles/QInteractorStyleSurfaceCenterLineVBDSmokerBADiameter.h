@@ -29,6 +29,7 @@ protected:
 	virtual void uniqueDisable() override {};
 	virtual void uniqueEnable() override {};
 	virtual void uniqueCall() override {};
+	void initialization();
 
 private:
 	///< ui thing. For integrity.

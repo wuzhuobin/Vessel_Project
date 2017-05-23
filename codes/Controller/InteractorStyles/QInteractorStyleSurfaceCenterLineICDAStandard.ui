@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>243</width>
+    <width>251</width>
     <height>453</height>
    </rect>
   </property>
@@ -61,6 +61,12 @@ internal carotid artery:</string>
           <property name="text">
            <string>Right</string>
           </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGroup</string>
+          </attribute>
          </widget>
         </item>
         <item row="2" column="1">
@@ -91,6 +97,9 @@ internal carotid artery:</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
           <attribute name="buttonGroup">
            <string notr="true">buttonGroup</string>
           </attribute>
@@ -118,6 +127,12 @@ internal carotid artery:</string>
           <property name="text">
            <string>Right</string>
           </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGroup</string>
+          </attribute>
          </widget>
         </item>
         <item row="2" column="1">
@@ -148,6 +163,9 @@ internal carotid artery:</string>
           <property name="checkable">
            <bool>true</bool>
           </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
           <attribute name="buttonGroup">
            <string notr="true">buttonGroup</string>
           </attribute>
@@ -175,6 +193,12 @@ internal carotid artery:</string>
           <property name="text">
            <string>Right</string>
           </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGroup</string>
+          </attribute>
          </widget>
         </item>
         <item row="2" column="1">

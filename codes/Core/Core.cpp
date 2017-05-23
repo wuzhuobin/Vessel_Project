@@ -114,6 +114,7 @@ Core::Core(QObject * parent)
 #endif // PLAQUEQUANT_VER
 
 #ifdef IADE_VER
+	// VBD-Ubogu
 	connect(surfaceInteractorStyle[0]->GetUboguMeasure(), SIGNAL(valueChangedLengthOfBasilarArtery(double)),
 		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxLengthBA, SLOT(setValue(double)));
 	connect(surfaceInteractorStyle[0]->GetUboguMeasure(), SIGNAL(valueChangedLengthOfIntracranialSegmentOfLeftVertebralArtery(double)),
@@ -132,8 +133,26 @@ Core::Core(QObject * parent)
 		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxMaxDiameterLVA, SLOT(setValue(double)));
 	connect(surfaceInteractorStyle[0]->GetUboguMeasure(), SIGNAL(valueChangedMaximumDiameterOfRightVertebralArtery(double)),
 		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxMaxDiameterRVA, SLOT(setValue(double)));
-
-
+	//VBD-Smoker
+	connect(imageInteractorStyle[0]->GetVBDSmoker(), SIGNAL(elongationChanged(int)),
+		mainWindow.getMeasurementWidget()->getUi()->comboBoxElongationClass, SLOT(setCurrentIndex(int)));
+	connect(imageInteractorStyle[0]->GetVBDSmoker(), SIGNAL(detourChanged(int)),
+		mainWindow.getMeasurementWidget()->getUi()->comboBoxTortuosityClass, SLOT(setCurrentIndex(int)));
+	connect(surfaceInteractorStyle[0]->GetSmokerBADiameter(), SIGNAL(diameterChanged(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxSmokerMaxDiameterBA, SLOT(setValue(double)));
+	//ICDA
+	connect(surfaceInteractorStyle[0]->GetICDADiameter(), SIGNAL(diameterChangedLeftCavernousSegmentOfInternalCarotidArtery(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxLICA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetICDADiameter(), SIGNAL(diameterChangedRightCavernousSegmentOfInternalCarotidArtery(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxRICA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetICDADiameter(), SIGNAL(diameterChangedLeftMiddleCerebralArtery(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxLMCA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetICDADiameter(), SIGNAL(diameterChangedRightMiddleCerebralArtery(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxRMCA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetICDADiameter(), SIGNAL(diameterChangedLeftAnteriorCerebralArtery(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxLACA, SLOT(setValue(double)));
+	connect(surfaceInteractorStyle[0]->GetICDADiameter(), SIGNAL(diameterChangedRightAnteriorCerebralArtery(double)),
+		mainWindow.getMeasurementWidget()->getUi()->doubleSpinBoxRACA, SLOT(setValue(double)));
 
 
 #endif // IADE_VER

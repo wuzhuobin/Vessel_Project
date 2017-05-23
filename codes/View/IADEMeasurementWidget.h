@@ -22,6 +22,7 @@ public:
 
 	public slots:
 
+	// Ubogu
 	void slotUpdateLengthBA();
 	void slotUpdateLengthVA();
 	void slotUpdateDeviationBA();
@@ -32,6 +33,17 @@ public:
 	void slotUpdateUboguDeviation();
 	void slotUpdateUboguExpansion();
 	void slotUpdateUbogu();
+	// Smoker
+	void slotUpdateSmokerElongation();
+	void slotUpdateSmokerTortuosity();
+	void slotUpdateSmokerEctasia();
+	void slotUpdateSmoker();
+	//ICDA
+	void slotUpdateICA();
+	void slotUpdateMCA();
+	void slotUpdateACA();
+	void slotUpdateICDA();
+
 
 	void slotUpdateInformation();
 	void GenerateReport(QString path);

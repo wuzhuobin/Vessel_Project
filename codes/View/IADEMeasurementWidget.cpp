@@ -14,6 +14,7 @@ IADEMeasurementWidget::IADEMeasurementWidget(QWidget * parent)
 {
 	ui->setupUi(this);
 
+	//Ubogu
 	connect(ui->doubleSpinBoxLengthBA, SIGNAL(valueChanged(double)), 
 		this, SLOT(slotUpdateLengthBA()));
 	connect(ui->doubleSpinBoxLengthLVA, SIGNAL(valueChanged(double)),
@@ -46,14 +47,48 @@ IADEMeasurementWidget::IADEMeasurementWidget(QWidget * parent)
 	connect(ui->comboBoxMaxDiameterVA, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(slotUpdateUboguExpansion()));
 
-
-
 	connect(ui->comboBoxUboguElongation, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(slotUpdateUbogu()));
 	connect(ui->comboBoxUboguDeviation, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(slotUpdateUbogu()));
 	connect(ui->comboBoxUboguExpansion, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(slotUpdateUbogu()));
+
+	//Smoker
+	connect(ui->comboBoxElongationClass, SIGNAL(currentIndexChanged(int)),
+		this, SLOT(slotUpdateSmokerElongation()));
+	connect(ui->comboBoxTortuosityClass, SIGNAL(currentIndexChanged(int)),
+		this, SLOT(slotUpdateSmokerTortuosity()));
+	connect(ui->doubleSpinBoxSmokerMaxDiameterBA, SIGNAL(valueChanged(double)),
+		this, SLOT(slotUpdateSmokerEctasia()));
+
+	connect(ui->comboBoxElongation, SIGNAL(currentIndexChanged(int)),
+		this, SLOT(slotUpdateSmoker()));
+	connect(ui->comboBoxTortuosity, SIGNAL(currentIndexChanged(int)),
+		this, SLOT(slotUpdateSmoker()));
+	connect(ui->comboBoxEctasia, SIGNAL(currentIndexChanged(int)),
+		this, SLOT(slotUpdateSmoker()));
+
+	//ICDA
+	connect(ui->doubleSpinBoxLICA, SIGNAL(valueChanged(double)),
+		this, SLOT(slotUpdateICA()));
+	connect(ui->doubleSpinBoxRICA, SIGNAL(valueChanged(double)),
+		this, SLOT(slotUpdateICA()));
+	connect(ui->doubleSpinBoxLMCA, SIGNAL(valueChanged(double)),
+		this, SLOT(slotUpdateMCA()));
+	connect(ui->doubleSpinBoxRMCA, SIGNAL(valueChanged(double)),
+		this, SLOT(slotUpdateMCA()));
+	connect(ui->doubleSpinBoxLACA, SIGNAL(valueChanged(double)),
+		this, SLOT(slotUpdateMCA()));
+	connect(ui->doubleSpinBoxRACA, SIGNAL(valueChanged(double)),
+		this, SLOT(slotUpdateMCA()));
+
+	connect(ui->comboBoxICA, SIGNAL(currentIndexChanged(int)),
+		this, SLOT(slotUpdateICDA()));
+	connect(ui->comboBoxMCAM1, SIGNAL(currentIndexChanged(int)),
+		this, SLOT(slotUpdateICDA()));
+	connect(ui->comboBoxACA, SIGNAL(currentIndexChanged(int)),
+		this, SLOT(slotUpdateICDA()));
 
 }
 
@@ -166,6 +201,94 @@ void IADEMeasurementWidget::slotUpdateUbogu()
 	}
 	else {
 		ui->comboBoxVBDUbogu->setCurrentIndex(0);
+	}
+}
+
+void IADEMeasurementWidget::slotUpdateSmokerElongation()
+{
+	if (ui->comboBoxElongationClass->currentIndex() > 1) {
+		ui->comboBoxElongation->setCurrentIndex(1);
+	}
+	else {
+		ui->comboBoxElongation->setCurrentIndex(0);
+	}
+}
+
+void IADEMeasurementWidget::slotUpdateSmokerTortuosity()
+{
+	if (ui->comboBoxTortuosityClass->currentIndex() > 1) {
+		ui->comboBoxTortuosity->setCurrentIndex(1);
+	}
+	else {
+		ui->comboBoxTortuosity->setCurrentIndex(0);
+	}
+}
+
+void IADEMeasurementWidget::slotUpdateSmokerEctasia()
+{
+	if (ui->doubleSpinBoxSmokerMaxDiameterBA->value() > 4.5) {
+		ui->comboBoxEctasia->setCurrentIndex(1);
+	}
+	else {
+		ui->comboBoxEctasia->setCurrentIndex(0);
+	}
+}
+
+void IADEMeasurementWidget::slotUpdateSmoker()
+{
+	if (ui->comboBoxElongation->currentIndex() ||
+		ui->comboBoxTortuosity->currentIndex() ||
+		ui->comboBoxEctasia->currentIndex()) {
+		ui->comboBoxVBDSmoker->setCurrentIndex(1);
+	}
+	else {
+		ui->comboBoxVBDSmoker->setCurrentIndex(0);
+	}
+}
+
+void IADEMeasurementWidget::slotUpdateICA()
+{
+	if (ui->doubleSpinBoxLICA->value() > 7 ||
+		ui->doubleSpinBoxRICA->value() > 7) {
+		ui->comboBoxICA->setCurrentIndex(1);
+	}
+	else {
+		ui->comboBoxICA->setCurrentIndex(0);
+	}
+}
+
+void IADEMeasurementWidget::slotUpdateMCA()
+{
+	if (ui->doubleSpinBoxLMCA->value() > 4 ||
+		ui->doubleSpinBoxRMCA->value() > 4) {
+		ui->comboBoxMCAM1->setCurrentIndex(1);
+	}
+	else {
+		ui->comboBoxMCAM1->setCurrentIndex(0);
+	}
+}
+
+void IADEMeasurementWidget::slotUpdateACA()
+{
+	if (ui->doubleSpinBoxLACA->value() > 4 ||
+		ui->doubleSpinBoxRACA->value() > 4) {
+		ui->comboBoxACA->setCurrentIndex(1);
+	}
+	else {
+		ui->comboBoxACA->setCurrentIndex(0);
+	}
+
+}
+
+void IADEMeasurementWidget::slotUpdateICDA()
+{
+	if (ui->comboBoxICA->currentIndex() ||
+		ui->comboBoxMCAM1->currentIndex() ||
+		ui->comboBoxACA->currentIndex()) {
+		ui->comboBoxICDA->setCurrentIndex(1);
+	}
+	else {
+		ui->comboBoxICDA->setCurrentIndex(0);
 	}
 }
 
