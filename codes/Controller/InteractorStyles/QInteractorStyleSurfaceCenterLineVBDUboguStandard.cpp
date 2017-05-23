@@ -29,7 +29,7 @@ void QInteractorStyleSurfaceCenterLineVBDUboguStandard::SetCustomEnabled(bool fl
 
 void QInteractorStyleSurfaceCenterLineVBDUboguStandard::setCurrentMode(int mode)
 {
-	if (mode < 0 || mode > 7) {
+	if (mode < 0 || mode > 8) {
 		return;
 	}
 	m_currentMode = mode;
@@ -38,9 +38,9 @@ void QInteractorStyleSurfaceCenterLineVBDUboguStandard::setCurrentMode(int mode)
 	case LENGTH_OF_BASILAR_ARTERY:
 	case LENGTH_OF_INTRACRANIAL_SEGMENT_OF_LEFT_VERTEBRAL_ARTERY:
 	case LENGTH_OF_INTRACRAINAL_SEGMENT_OF_RIGHT_VERTEBRAL_ARTERY:
-	case MINIMUM_DIAMETER_OF_BASILAR_ARTERY:
-	case MINIMUM_DIAMETER_OF_LEFT_VERTEBRAL_ARTERY:
-	case MINIMUM_DIAMETER_OF_RIGHT_VERTEBRAL_ARTERY:
+	case MAXIMUM_DIAMETER_OF_BASILAR_ARTERY:
+	case MAXIMUM_DIAMETER_OF_LEFT_VERTEBRAL_ARTERY:
+	case MAXIMUM_DIAMETER_OF_RIGHT_VERTEBRAL_ARTERY:
 		if (m_lineWidget) {
 			m_lineWidget->SetInteractor(nullptr);
 			m_lineWidget->EnabledOff();
@@ -49,6 +49,7 @@ void QInteractorStyleSurfaceCenterLineVBDUboguStandard::setCurrentMode(int mode)
 		InitializeHandleWidgets();
 		GetSurfaceViewer()->GetRenderer()->AddActor(m_measurementText);
 		break;
+	case DISTANCE_BETWEEN_CENTERLINE_AND_THE_LEAD:
 	case DISTANCE_BETWEEN_CENTERLINE_AND_CONNECTION_LEAD_OF_2_TERMINALS_LEFT:
 	case DISTANCE_BETWEEN_CENTERLINE_AND_CONNECTION_LEAD_OF_2_TERMINALS_RIGHT:
 		for (int i = 0; i < NUM_OF_HANDLES; ++i) {
@@ -76,27 +77,21 @@ void QInteractorStyleSurfaceCenterLineVBDUboguStandard::FindMaximumRadius()
 	{
 	case LENGTH_OF_BASILAR_ARTERY:
 		ui->doubleSpinBoxLengthOfBasilaarArtery->setValue(m_distance);
-		emit valueChanged(LENGTH_OF_BASILAR_ARTERY, m_distance);
 		break;
 	case LENGTH_OF_INTRACRANIAL_SEGMENT_OF_LEFT_VERTEBRAL_ARTERY:
 		ui->doubleSpinBoxLengthOfIntracranialSegmentOfLeftVetrabralArtery->setValue(m_distance);
-		emit valueChanged(LENGTH_OF_INTRACRANIAL_SEGMENT_OF_LEFT_VERTEBRAL_ARTERY, m_distance);
 		break;
 	case LENGTH_OF_INTRACRAINAL_SEGMENT_OF_RIGHT_VERTEBRAL_ARTERY:
 		ui->doubleSpinBoxLengthOfIntracranialSegmentOfRightVetrabralArtery->setValue(m_distance);
-		emit valueChanged(LENGTH_OF_INTRACRAINAL_SEGMENT_OF_RIGHT_VERTEBRAL_ARTERY, m_distance);
 		break;
-	case MINIMUM_DIAMETER_OF_BASILAR_ARTERY:
-		ui->doubleSpinBoxMinimumDiameterOfBasilarArtery->setValue(m_minRadius * 2);
-		emit valueChanged(MINIMUM_DIAMETER_OF_BASILAR_ARTERY, m_distance);
+	case MAXIMUM_DIAMETER_OF_BASILAR_ARTERY:
+		ui->doubleSpinBoxMaximumDiameterOfBasilarArtery->setValue(m_maxRadius * 2);
 		break;
-	case MINIMUM_DIAMETER_OF_LEFT_VERTEBRAL_ARTERY:
-		ui->doubleSpinBoxMinimumDiameterOfLeftVetebralArtery->setValue(m_minRadius * 2);
-		emit valueChanged(MINIMUM_DIAMETER_OF_LEFT_VERTEBRAL_ARTERY, m_distance);
+	case MAXIMUM_DIAMETER_OF_LEFT_VERTEBRAL_ARTERY:
+		ui->doubleSpinBoxMaximumDiameterOfLeftVetebralArtery->setValue(m_maxRadius * 2);
 		break;
-	case MINIMUM_DIAMETER_OF_RIGHT_VERTEBRAL_ARTERY:
-		ui->doubleSpinBoxMinimumDiameterOfRightVetebralArtery->setValue(m_minRadius * 2);
-		emit valueChanged(MINIMUM_DIAMETER_OF_RIGHT_VERTEBRAL_ARTERY, m_distance);
+	case MAXIMUM_DIAMETER_OF_RIGHT_VERTEBRAL_ARTERY:
+		ui->doubleSpinBoxMaximumDiameterOfRightVetebralArtery->setValue(m_maxRadius * 2);
 		break;
 	default:
 		break;
@@ -109,13 +104,14 @@ void QInteractorStyleSurfaceCenterLineVBDUboguStandard::FindMaxiMumPerpendicular
 
 	switch (m_currentMode)
 	{
+	case DISTANCE_BETWEEN_CENTERLINE_AND_THE_LEAD:
+		ui->doubleSpinBoxDistanceBetweenCenterlineAndTheLeadOfStartPointAndFockOfBasilarArtery->setValue(distance);
+		break;
 	case DISTANCE_BETWEEN_CENTERLINE_AND_CONNECTION_LEAD_OF_2_TERMINALS_LEFT:
 		ui->doubleSpinBoxDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsLeftIntracranialSegmentOfVertebralArteryAndBasilarArtery->setValue(distance);
-		emit valueChanged(DISTANCE_BETWEEN_CENTERLINE_AND_CONNECTION_LEAD_OF_2_TERMINALS_LEFT, distance);
 		break;
 	case DISTANCE_BETWEEN_CENTERLINE_AND_CONNECTION_LEAD_OF_2_TERMINALS_RIGHT:
 		ui->doubleSpinBoxDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsRightIntracranialSegmentOfVertebralArteryAndBasilarArtery->setValue(distance);
-		emit valueChanged(DISTANCE_BETWEEN_CENTERLINE_AND_CONNECTION_LEAD_OF_2_TERMINALS_RIGHT, distance);
 		break;
 	default:
 		break;
@@ -180,14 +176,37 @@ void QInteractorStyleSurfaceCenterLineVBDUboguStandard::initialization()
 		this, SLOT(setCurrentModeToLengthOfIntracranialSegmentOfLeftVertebralArtery()));
 	connect(ui->pushButtonLengthOfIntracranialSegmentOfRightVetrabralArtery, SIGNAL(clicked()),
 		this, SLOT(setCurrentModeToLengthOfIntracranialSegmentOfRightVertebralArtery()));
+	connect(ui->pushButtonDistanceBetweenCenterlineAndTheLeadOfStartPointAndFockOfBasilarArtery, SIGNAL(clicked()),
+		this, SLOT(setCurrentModeToDistanceBetweenCenterlineAndTheLead()));
 	connect(ui->pushButtonDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsLeftIntracranialSegmentOfVertebralArteryAndBasilarArtery, SIGNAL(clicked()),
 		this, SLOT(setCurrentModeToDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsLeft()));
 	connect(ui->pushButtonDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsRightIntracranialSegmentOfVertebralArteryAndBasilarArtery, SIGNAL(clicked()),
 		this, SLOT(setCurrentModeToDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsRight()));
-	connect(ui->pushButtonMinimumDiameterOfBasilarArtery, SIGNAL(clicked()),
-		this, SLOT(setCurrentModeToMinimunDiameterOfBasilarArtery()));
-	connect(ui->pushButtonMinimumDiameterOfLeftVetebralArtery, SIGNAL(clicked()),
-		this, SLOT(setCurrentModeToMinimumDiameterOfLeftVertebralArtery()));
-	connect(ui->pushButtonMinimumDiameterOfRightVetebralArtery, SIGNAL(clicked()),
-		this, SLOT(setCurrentModeToMinimumDiameterOfRightVertebralArtery()));
+	connect(ui->pushButtonMaximumDiameterOfBasilarArtery, SIGNAL(clicked()),
+		this, SLOT(setCurrentModeToMaximumDiameterOfBasilarArtery()));
+	connect(ui->pushButtonMaximumDiameterOfLeftVetebralArtery, SIGNAL(clicked()),
+		this, SLOT(setCurrentModeToMaximumDiameterOfLeftVertebralArtery()));
+	connect(ui->pushButtonMaximumDiameterOfRightVetebralArtery, SIGNAL(clicked()),
+		this, SLOT(setCurrentModeToMaximumDiameterOfRightVertebralArtery()));
+
+
+	connect(ui->doubleSpinBoxLengthOfBasilaarArtery, SIGNAL(valueChanged(double)),
+		this, SIGNAL(valueChangedLengthOfBasilarArtery(double)));
+	connect(ui->doubleSpinBoxLengthOfIntracranialSegmentOfLeftVetrabralArtery, SIGNAL(valueChanged(double)),
+		this, SIGNAL(valueChangedLengthOfIntracranialSegmentOfLeftVertebralArtery(double)));
+	connect(ui->doubleSpinBoxLengthOfIntracranialSegmentOfRightVetrabralArtery, SIGNAL(valueChanged(double)),
+		this, SIGNAL(valueChangedLengthOfIntracranialSegmentOfRightVertebralArtery(double)));
+	connect(ui->doubleSpinBoxDistanceBetweenCenterlineAndTheLeadOfStartPointAndFockOfBasilarArtery, SIGNAL(valueChanged(double)),
+		this, SIGNAL(valueChangedDistanceBetweenCenterlineAndTheLead(double)));
+	connect(ui->doubleSpinBoxDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsLeftIntracranialSegmentOfVertebralArteryAndBasilarArtery, SIGNAL(valueChanged(double)),
+		this, SIGNAL(valueChangedDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsLeft(double)));
+	connect(ui->doubleSpinBoxDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsRightIntracranialSegmentOfVertebralArteryAndBasilarArtery, SIGNAL(valueChanged(double)),
+		this, SIGNAL(valueChangedDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsRight(double)));
+	connect(ui->doubleSpinBoxMaximumDiameterOfBasilarArtery, SIGNAL(valueChanged(double)),
+		this, SIGNAL(valueChangedMaximumDiameterOfBasilarArtery(double)));
+	connect(ui->doubleSpinBoxMaximumDiameterOfLeftVetebralArtery, SIGNAL(valueChanged(double)),
+		this, SIGNAL(valueChangedMaximumDiameterOfLeftVertebralArtery(double)));
+	connect(ui->doubleSpinBoxMaximumDiameterOfRightVetebralArtery, SIGNAL(valueChanged(double)),
+		this, SIGNAL(valueChangedMaximumDiameterOfRightVertebralArtery(double)));
+
 }

@@ -22,7 +22,32 @@ public:
 
 	public slots:
 
+	// Ubogu
+	void slotUpdateLengthBA();
+	void slotUpdateLengthVA();
+	void slotUpdateDeviationBA();
+	void slotUpdateDeviationVA();
+	void slotUpdateMaxDiameterBA();
+	void slotUpdateMaxDiameterVA();
+	void slotUpdateUboguElongation();
+	void slotUpdateUboguDeviation();
+	void slotUpdateUboguExpansion();
+	void slotUpdateUbogu();
+	// Smoker
+	void slotUpdateSmokerElongation();
+	void slotUpdateSmokerTortuosity();
+	void slotUpdateSmokerEctasia();
+	void slotUpdateSmoker();
+	//ICDA
+	void slotUpdateICA();
+	void slotUpdateMCA();
+	void slotUpdateACA();
+	void slotUpdateICDA();
+
+
 	void slotUpdateInformation();
+	void GenerateReport(QString path);
+	void GenerateCSV(QString path);
 
 private:
 

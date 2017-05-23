@@ -342,7 +342,7 @@ void MainWindow::initialization()
 	ui->actionMulti_planar_view->trigger();
 	ui->actionNavigation->trigger();
 
-	measurementWidget->slotUpdateImformation();
+	measurementWidget->slotUpdateInformation();
 }
 
 void MainWindow::enableInteractor(bool flag)

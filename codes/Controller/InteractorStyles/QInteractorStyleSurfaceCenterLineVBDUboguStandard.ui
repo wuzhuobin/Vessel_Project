@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>212</width>
-    <height>498</height>
+    <width>267</width>
+    <height>645</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,31 +20,8 @@
       <string>VBD Ubogu standard</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="9" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBoxMinimumDiameterOfBasilarArtery">
-        <property name="buttonSymbols">
-         <enum>QAbstractSpinBox::NoButtons</enum>
-        </property>
-        <property name="suffix">
-         <string> mm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="0">
-       <widget class="QPushButton" name="pushButtonMinimumDiameterOfLeftVetebralArtery">
-        <property name="text">
-         <string>Left</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">buttonGroup</string>
-        </attribute>
-       </widget>
-      </item>
-      <item row="9" column="0">
-       <widget class="QPushButton" name="pushButtonMinimumDiameterOfBasilarArtery">
+      <item row="6" column="0">
+       <widget class="QPushButton" name="pushButtonDistanceBetweenCenterlineAndTheLeadOfStartPointAndFockOfBasilarArtery">
         <property name="text">
          <string>Measure</string>
         </property>
@@ -56,8 +33,21 @@
         </attribute>
        </widget>
       </item>
-      <item row="11" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBoxMinimumDiameterOfLeftVetebralArtery">
+      <item row="11" column="0">
+       <widget class="QPushButton" name="pushButtonMaximumDiameterOfBasilarArtery">
+        <property name="text">
+         <string>Measure</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">buttonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+      <item row="13" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBoxMaximumDiameterOfLeftVetebralArtery">
         <property name="buttonSymbols">
          <enum>QAbstractSpinBox::NoButtons</enum>
         </property>
@@ -66,11 +56,54 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="0" colspan="2">
-       <widget class="QLabel" name="label_3">
+      <item row="11" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBoxMaximumDiameterOfBasilarArtery">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="suffix">
+         <string> mm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="0">
+       <widget class="QPushButton" name="pushButtonMaximumDiameterOfLeftVetebralArtery">
         <property name="text">
-         <string>Minimum diameter of 
-basilar artery:</string>
+         <string>Left</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">buttonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+      <item row="14" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBoxMaximumDiameterOfRightVetebralArtery">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="suffix">
+         <string> mm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBoxLengthOfBasilaarArtery">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="suffix">
+         <string> mm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Length of intracranial 
+segment of vertebral artery: </string>
         </property>
        </widget>
       </item>
@@ -84,8 +117,73 @@ basilar artery:</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QPushButton" name="pushButtonLengthOfIntracranialSegmentOfRightVetrabralArtery">
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Length of basilar 
+artery: </string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QPushButton" name="pushButtonDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsRightIntracranialSegmentOfVertebralArteryAndBasilarArtery">
+        <property name="text">
+         <string>Right</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">buttonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBoxDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsLeftIntracranialSegmentOfVertebralArteryAndBasilarArtery">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="suffix">
+         <string> mm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QPushButton" name="pushButtonDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsLeftIntracranialSegmentOfVertebralArteryAndBasilarArtery">
+        <property name="text">
+         <string>Left</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">buttonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="pushButtonLengthOfIntracranialSegmentOfLeftVetrabralArtery">
+        <property name="text">
+         <string>Left</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">buttonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+      <item row="12" column="0" colspan="2">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Maximum diameter of 
+ vertebral artery:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="0">
+       <widget class="QPushButton" name="pushButtonMaximumDiameterOfRightVetebralArtery">
         <property name="text">
          <string>Right</string>
         </property>
@@ -107,59 +205,15 @@ basilar artery:</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QPushButton" name="pushButtonLengthOfIntracranialSegmentOfLeftVetrabralArtery">
-        <property name="text">
-         <string>Left</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">buttonGroup</string>
-        </attribute>
-       </widget>
-      </item>
       <item row="10" column="0" colspan="2">
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Minimum diameter of 
- vertebral artery:</string>
+         <string>Maximum diameter of 
+basilar artery:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Length of basilar 
-artery: </string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="0">
-       <widget class="QPushButton" name="pushButtonDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsRightIntracranialSegmentOfVertebralArteryAndBasilarArtery">
-        <property name="text">
-         <string>Right</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">buttonGroup</string>
-        </attribute>
-       </widget>
-      </item>
-      <item row="7" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBoxDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsRightIntracranialSegmentOfVertebralArteryAndBasilarArtery">
-        <property name="buttonSymbols">
-         <enum>QAbstractSpinBox::NoButtons</enum>
-        </property>
-        <property name="suffix">
-         <string> mm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0" colspan="2">
+      <item row="7" column="0" colspan="2">
        <widget class="QLabel" name="label_15">
         <property name="text">
          <string>Distance between centerline 
@@ -171,10 +225,10 @@ and basilar artery)</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
-       <widget class="QPushButton" name="pushButtonDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsLeftIntracranialSegmentOfVertebralArteryAndBasilarArtery">
+      <item row="4" column="0">
+       <widget class="QPushButton" name="pushButtonLengthOfIntracranialSegmentOfRightVetrabralArtery">
         <property name="text">
-         <string>Left</string>
+         <string>Right</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -184,18 +238,8 @@ and basilar artery)</string>
         </attribute>
        </widget>
       </item>
-      <item row="6" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBoxDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsLeftIntracranialSegmentOfVertebralArteryAndBasilarArtery">
-        <property name="buttonSymbols">
-         <enum>QAbstractSpinBox::NoButtons</enum>
-        </property>
-        <property name="suffix">
-         <string> mm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBoxLengthOfBasilaarArtery">
+      <item row="9" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBoxDistanceBetweenCenterlineAndConnectionLeadOf2TerminalsRightIntracranialSegmentOfVertebralArteryAndBasilarArtery">
         <property name="buttonSymbols">
          <enum>QAbstractSpinBox::NoButtons</enum>
         </property>
@@ -220,34 +264,30 @@ and basilar artery)</string>
         </attribute>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QLabel" name="label_2">
+      <item row="5" column="0" colspan="2">
+       <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Length of intracranial 
-segment of vertebral artery: </string>
+         <string>Distance between centernline 
+and the lead 
+of start point 
+and fock of 
+basilary artery </string>
         </property>
        </widget>
       </item>
-      <item row="12" column="0">
-       <widget class="QPushButton" name="pushButtonMinimumDiameterOfRightVetebralArtery">
-        <property name="text">
-         <string>Right</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">buttonGroup</string>
-        </attribute>
-       </widget>
-      </item>
-      <item row="12" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBoxMinimumDiameterOfRightVetebralArtery">
+      <item row="6" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBoxDistanceBetweenCenterlineAndTheLeadOfStartPointAndFockOfBasilarArtery">
         <property name="buttonSymbols">
          <enum>QAbstractSpinBox::NoButtons</enum>
         </property>
+        <property name="prefix">
+         <string/>
+        </property>
         <property name="suffix">
          <string> mm</string>
+        </property>
+        <property name="maximum">
+         <double>999.000000000000000</double>
         </property>
        </widget>
       </item>

@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -50,7 +50,7 @@
             <x>0</x>
             <y>0</y>
             <width>318</width>
-            <height>503</height>
+            <height>554</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
@@ -312,7 +312,7 @@
             <x>0</x>
             <y>0</y>
             <width>318</width>
-            <height>503</height>
+            <height>554</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_3">
@@ -530,7 +530,7 @@
             <x>0</x>
             <y>0</y>
             <width>318</width>
-            <height>503</height>
+            <height>554</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout">
@@ -631,7 +631,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QDoubleSpinBox" name="doubleSpinBoxDeviation_RVA">
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxDeviationRVA">
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::NoButtons</enum>
                </property>
@@ -649,7 +649,7 @@
             </layout>
            </item>
            <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinBoxLength_BA">
+            <widget class="QDoubleSpinBox" name="doubleSpinBoxLengthBA">
              <property name="buttonSymbols">
               <enum>QAbstractSpinBox::NoButtons</enum>
              </property>
@@ -781,7 +781,7 @@
             </widget>
            </item>
            <item row="4" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinBoxDeviation_BA">
+            <widget class="QDoubleSpinBox" name="doubleSpinBoxDeviationBA">
              <property name="buttonSymbols">
               <enum>QAbstractSpinBox::NoButtons</enum>
              </property>

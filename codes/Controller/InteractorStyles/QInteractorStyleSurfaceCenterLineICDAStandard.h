@@ -44,7 +44,13 @@ public:
 
 signals:
 
-	void diameterChanged(int mode, double diameter);
+	void diameterChangedLeftCavernousSegmentOfInternalCarotidArtery(double diameter);
+	void diameterChangedRightCavernousSegmentOfInternalCarotidArtery(double diameter);
+	void diameterChangedLeftMiddleCerebralArtery(double diameter);
+	void diameterChangedRightMiddleCerebralArtery(double diameter);
+	void diameterChangedLeftAnteriorCerebralArtery(double diameter);
+	void diameterChangedRightAnteriorCerebralArtery(double diameter);
+
 
 protected:
 	QInteractorStyleSurfaceCenterLineICDAStandard(int uiType = MULTIPLE_UI, QWidget* parent = Q_NULLPTR);
